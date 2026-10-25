@@ -34,10 +34,10 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
         justifyContent: 'center',
         padding: '3.5rem 2rem',
         textAlign: 'center',
-        backgroundColor: '#FFFFFF',
-        borderRadius: '24px',
-        border: '1px solid #EBE6DE',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.03)',
+        backgroundColor: 'var(--surface-card)',
+        borderRadius: 'var(--radius-card, 24px)',
+        border: '1px solid var(--border-subtle)',
+        boxShadow: 'var(--shadow-sm)',
         margin: '1.5rem 0',
       }}
     >
@@ -48,11 +48,12 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
             alt={imageAlt}
             width={160}
             height={160}
+            loading="lazy"
             style={{
               objectFit: 'contain',
               width: '100%',
               height: 'auto',
-              borderRadius: '16px',
+              borderRadius: 'var(--radius-control, 16px)',
             }}
           />
         </div>
@@ -62,17 +63,17 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
             width: '64px',
             height: '64px',
             borderRadius: '50%',
-            backgroundColor: '#F9F6F0',
+            backgroundColor: 'var(--surface-recessed)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: 'var(--text-muted)',
+            color: 'var(--action-primary)',
             marginBottom: '1.25rem',
-            border: '1px solid #EBE6DE',
+            border: '1px solid var(--border-subtle)',
           }}
           aria-hidden="true"
         >
-          {icon || <FolderOpen size={30} style={{ color: '#B72301' }} />}
+          {icon || <FolderOpen size={30} strokeWidth={2} />}
         </div>
       )}
 
@@ -80,6 +81,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
         style={{
           fontSize: '1.25rem',
           fontWeight: 700,
+          fontFamily: 'var(--font-family-base)',
           color: 'var(--color-foreground)',
           marginBottom: '0.5rem',
           letterSpacing: '-0.015em',
@@ -91,6 +93,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       <p
         style={{
           fontSize: '0.9375rem',
+          fontFamily: 'var(--font-family-base)',
           color: 'var(--color-foreground-muted)',
           maxWidth: '460px',
           lineHeight: 1.6,
@@ -116,3 +119,5 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
     </div>
   );
 };
+
+export default EmptyState;

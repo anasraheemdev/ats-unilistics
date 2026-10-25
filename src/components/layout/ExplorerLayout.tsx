@@ -23,7 +23,7 @@ export const ExplorerLayout: React.FC<ExplorerLayoutProps> = ({ currentRole, onR
   // 1. Signed-out Visitor: Public Navbar + Public Footer (no sidebar)
   if (currentRole === 'visitor') {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: '#FBF9F5' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: 'var(--color-background)' }}>
         <SkipLink targetId="main-content" />
         <PublicNavbar currentRole={currentRole} onRoleChange={onRoleChange} />
 

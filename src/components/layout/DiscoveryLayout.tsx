@@ -6,16 +6,17 @@ import { ErrorBoundary } from '@/components/common/ErrorBoundary';
 import { UserRole } from '@/types';
 import { api } from '@/lib/api';
 import {
-  Building2,
   GraduationCap,
-  Award,
+  FileText,
+  Heart,
   Bookmark,
-  HelpCircle,
+  CircleHelp,
   Menu,
   X,
   LogOut,
   Mail,
   Clock,
+  Sparkles,
 } from 'lucide-react';
 import { AccessRequest } from '@/types';
 
@@ -28,7 +29,6 @@ export const DiscoveryLayout: React.FC<DiscoveryLayoutProps> = ({ currentRole, o
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userName, setUserName] = useState<string>('');
   const [userEmail, setUserEmail] = useState<string>('');
-  const [userStatus, setUserStatus] = useState<string>('');
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -39,7 +39,6 @@ export const DiscoveryLayout: React.FC<DiscoveryLayoutProps> = ({ currentRole, o
       if (u) {
         setUserName(u.fullName || '');
         setUserEmail(u.email || '');
-        setUserStatus(u.status || 'active');
       }
     });
 
@@ -52,6 +51,7 @@ export const DiscoveryLayout: React.FC<DiscoveryLayoutProps> = ({ currentRole, o
     }
   }, [currentRole, location.pathname]);
 
+  // Close mobile drawer on route change
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
@@ -62,58 +62,33 @@ export const DiscoveryLayout: React.FC<DiscoveryLayoutProps> = ({ currentRole, o
     navigate('/universities');
   };
 
-  const displayName = userName || userEmail?.split('@')[0] || 'Account';
+  const displayName = userName || userEmail?.split('@')[0] || (currentRole === 'explorer' ? 'Explorer' : 'Visitor');
   const initial = displayName.charAt(0).toUpperCase();
 
-  const isPendingReview =
-    userStatus === 'pending_review' ||
-    (activeGuidanceReq &&
-      ['submitted', 'pending_review', 'email_verification_pending', 'needs_information'].includes(
-        activeGuidanceReq.status
-      ));
-
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: 'var(--surface-canvas)' }}>
-      <SkipLink targetId="main-content" />
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+        backgroundColor: 'var(--surface-canvas)',
+        color: 'var(--color-foreground)',
+        fontFamily: 'var(--font-family-base)',
+      }}
+    >
+      <SkipLink targetId="discovery-main-content" />
 
-      {/* Account Review Notice for Pending Users */}
-      {isPendingReview && (
-        <aside
-          role="status"
-          style={{
-            backgroundColor: '#FFF8E1',
-            borderBottom: '1px solid #FFE082',
-            padding: '0.625rem 1rem',
-            textAlign: 'center',
-            fontSize: '0.8125rem',
-            color: '#8D6E00',
-            fontWeight: 600,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '0.5rem',
-            flexWrap: 'wrap',
-          }}
-        >
-          <Clock size={16} className="text-[#B78103]" />
-          <span>
-            <strong>Guidance Request Awaiting Review:</strong> Your request for managed application support is being evaluated by Unilistics admissions counsellors. Full published catalogue browsing remains active.
-          </span>
-          <Link to="/request-status" style={{ color: '#8D6E00', textDecoration: 'underline', fontWeight: 700 }}>
-            Check status
-          </Link>
-        </aside>
-      )}
-
-      {/* Top Header */}
+      {/* Top Application Header */}
       <header
         style={{
-          height: '64px',
-          backgroundColor: '#ffffff',
-          borderBottom: '1px solid var(--border-subtle)',
           position: 'sticky',
           top: 0,
           zIndex: 40,
+          backgroundColor: 'var(--surface-card)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          borderBottom: '1px solid var(--border-subtle)',
+          boxShadow: 'var(--shadow-sm)',
         }}
         role="banner"
       >
@@ -121,38 +96,43 @@ export const DiscoveryLayout: React.FC<DiscoveryLayoutProps> = ({ currentRole, o
           style={{
             maxWidth: '1440px',
             margin: '0 auto',
-            height: '100%',
             padding: '0 1.25rem',
+            height: '68px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
             gap: '1rem',
           }}
         >
-          {/* Logo & Mobile Drawer Toggle */}
+          {/* Logo Brand */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <button
               type="button"
               onClick={() => setMobileMenuOpen(true)}
               className="md:hidden"
-              aria-label="Open catalogue navigation"
+              aria-label="Open discovery navigation"
               style={{
-                padding: '0.375rem',
-                borderRadius: 'var(--radius-sm)',
-                color: 'var(--text-charcoal)',
+                padding: '0.5rem',
+                borderRadius: 'var(--radius-control)',
+                color: 'var(--color-foreground)',
+                backgroundColor: 'var(--surface-recessed)',
+                border: '1px solid var(--border-subtle)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                minHeight: '44px',
+                minWidth: '44px',
+                cursor: 'pointer',
               }}
             >
-              <Menu size={20} />
+              <Menu size={20} strokeWidth={2} />
             </button>
             <BrandWordmark size="sm" showTagline={false} />
           </div>
 
           {/* Desktop Navigation Links */}
           <nav
-            style={{ display: 'none', alignItems: 'center', gap: '0.5rem' }}
+            style={{ display: 'none', alignItems: 'center', gap: '0.375rem' }}
             className="md:flex"
             aria-label="Discovery Header Navigation"
           >
@@ -161,17 +141,21 @@ export const DiscoveryLayout: React.FC<DiscoveryLayoutProps> = ({ currentRole, o
               style={({ isActive }) => ({
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '0.35rem',
-                padding: '0.4rem 0.75rem',
+                gap: '0.375rem',
+                padding: '0.5rem 0.875rem',
                 fontSize: '0.875rem',
-                fontWeight: 500,
+                fontWeight: isActive ? 600 : 500,
                 textDecoration: 'none',
-                borderRadius: 'var(--radius-sm)',
-                color: isActive ? 'var(--action-primary)' : 'var(--text-charcoal)',
-                backgroundColor: isActive ? 'var(--accent-peach-bg)' : 'transparent',
+                borderRadius: 'var(--radius-control)',
+                color: isActive ? 'var(--action-primary)' : 'var(--color-foreground)',
+                backgroundColor: isActive ? 'var(--surface-selected)' : 'transparent',
+                border: '1px solid',
+                borderColor: isActive ? 'var(--border-subtle)' : 'transparent',
+                minHeight: '44px',
+                transition: 'all var(--transition-fast)',
               })}
             >
-              <Building2 size={16} aria-hidden="true" />
+              <GraduationCap size={16} strokeWidth={2} aria-hidden="true" />
               <span>Universities</span>
             </NavLink>
 
@@ -180,17 +164,21 @@ export const DiscoveryLayout: React.FC<DiscoveryLayoutProps> = ({ currentRole, o
               style={({ isActive }) => ({
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '0.35rem',
-                padding: '0.4rem 0.75rem',
+                gap: '0.375rem',
+                padding: '0.5rem 0.875rem',
                 fontSize: '0.875rem',
-                fontWeight: 500,
+                fontWeight: isActive ? 600 : 500,
                 textDecoration: 'none',
-                borderRadius: 'var(--radius-sm)',
-                color: isActive ? 'var(--action-primary)' : 'var(--text-charcoal)',
-                backgroundColor: isActive ? 'var(--accent-peach-bg)' : 'transparent',
+                borderRadius: 'var(--radius-control)',
+                color: isActive ? 'var(--action-primary)' : 'var(--color-foreground)',
+                backgroundColor: isActive ? 'var(--surface-selected)' : 'transparent',
+                border: '1px solid',
+                borderColor: isActive ? 'var(--border-subtle)' : 'transparent',
+                minHeight: '44px',
+                transition: 'all var(--transition-fast)',
               })}
             >
-              <GraduationCap size={16} aria-hidden="true" />
+              <FileText size={16} strokeWidth={2} aria-hidden="true" />
               <span>Programs</span>
             </NavLink>
 
@@ -199,17 +187,21 @@ export const DiscoveryLayout: React.FC<DiscoveryLayoutProps> = ({ currentRole, o
               style={({ isActive }) => ({
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '0.35rem',
-                padding: '0.4rem 0.75rem',
+                gap: '0.375rem',
+                padding: '0.5rem 0.875rem',
                 fontSize: '0.875rem',
-                fontWeight: 500,
+                fontWeight: isActive ? 600 : 500,
                 textDecoration: 'none',
-                borderRadius: 'var(--radius-sm)',
-                color: isActive ? 'var(--action-primary)' : 'var(--text-charcoal)',
-                backgroundColor: isActive ? 'var(--accent-peach-bg)' : 'transparent',
+                borderRadius: 'var(--radius-control)',
+                color: isActive ? 'var(--action-primary)' : 'var(--color-foreground)',
+                backgroundColor: isActive ? 'var(--surface-selected)' : 'transparent',
+                border: '1px solid',
+                borderColor: isActive ? 'var(--border-subtle)' : 'transparent',
+                minHeight: '44px',
+                transition: 'all var(--transition-fast)',
               })}
             >
-              <Award size={16} aria-hidden="true" />
+              <Heart size={16} strokeWidth={2} aria-hidden="true" />
               <span>Scholarships</span>
             </NavLink>
 
@@ -219,17 +211,21 @@ export const DiscoveryLayout: React.FC<DiscoveryLayoutProps> = ({ currentRole, o
                 style={({ isActive }) => ({
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '0.35rem',
-                  padding: '0.4rem 0.75rem',
+                  gap: '0.375rem',
+                  padding: '0.5rem 0.875rem',
                   fontSize: '0.875rem',
-                  fontWeight: 500,
+                  fontWeight: isActive ? 600 : 500,
                   textDecoration: 'none',
-                  borderRadius: 'var(--radius-sm)',
-                  color: isActive ? 'var(--action-primary)' : 'var(--text-charcoal)',
-                  backgroundColor: isActive ? 'var(--accent-peach-bg)' : 'transparent',
+                  borderRadius: 'var(--radius-control)',
+                  color: isActive ? 'var(--action-primary)' : 'var(--color-foreground)',
+                  backgroundColor: isActive ? 'var(--surface-selected)' : 'transparent',
+                  border: '1px solid',
+                  borderColor: isActive ? 'var(--border-subtle)' : 'transparent',
+                  minHeight: '44px',
+                  transition: 'all var(--transition-fast)',
                 })}
               >
-                <Bookmark size={16} aria-hidden="true" />
+                <Bookmark size={16} strokeWidth={2} aria-hidden="true" />
                 <span>Saved</span>
               </NavLink>
             )}
@@ -239,18 +235,22 @@ export const DiscoveryLayout: React.FC<DiscoveryLayoutProps> = ({ currentRole, o
               style={({ isActive }) => ({
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '0.35rem',
-                padding: '0.4rem 0.75rem',
+                gap: '0.375rem',
+                padding: '0.5rem 0.875rem',
                 fontSize: '0.875rem',
-                fontWeight: 500,
+                fontWeight: isActive ? 600 : 500,
                 textDecoration: 'none',
-                borderRadius: 'var(--radius-sm)',
-                color: isActive ? 'var(--action-primary)' : 'var(--text-charcoal)',
-                backgroundColor: isActive ? 'var(--accent-peach-bg)' : 'transparent',
+                borderRadius: 'var(--radius-control)',
+                color: isActive ? 'var(--action-primary)' : 'var(--color-foreground)',
+                backgroundColor: isActive ? 'var(--surface-selected)' : 'transparent',
+                border: '1px solid',
+                borderColor: isActive ? 'var(--border-subtle)' : 'transparent',
+                minHeight: '44px',
+                transition: 'all var(--transition-fast)',
               })}
             >
-              <HelpCircle size={16} aria-hidden="true" />
-              <span>Help</span>
+              <CircleHelp size={16} strokeWidth={2} aria-hidden="true" />
+              <span>Help Centre</span>
             </NavLink>
 
             <NavLink
@@ -258,109 +258,153 @@ export const DiscoveryLayout: React.FC<DiscoveryLayoutProps> = ({ currentRole, o
               style={({ isActive }) => ({
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '0.35rem',
-                padding: '0.4rem 0.75rem',
+                gap: '0.375rem',
+                padding: '0.5rem 0.875rem',
                 fontSize: '0.875rem',
-                fontWeight: 500,
+                fontWeight: isActive ? 600 : 500,
                 textDecoration: 'none',
-                borderRadius: 'var(--radius-sm)',
-                color: isActive ? 'var(--action-primary)' : 'var(--text-charcoal)',
-                backgroundColor: isActive ? 'var(--accent-peach-bg)' : 'transparent',
+                borderRadius: 'var(--radius-control)',
+                color: isActive ? 'var(--action-primary)' : 'var(--color-foreground)',
+                backgroundColor: isActive ? 'var(--surface-selected)' : 'transparent',
+                border: '1px solid',
+                borderColor: isActive ? 'var(--border-subtle)' : 'transparent',
+                minHeight: '44px',
+                transition: 'all var(--transition-fast)',
               })}
             >
-              <Mail size={16} aria-hidden="true" />
+              <Mail size={16} strokeWidth={2} aria-hidden="true" />
               <span>Contact</span>
             </NavLink>
+
+            {currentRole === 'explorer' && (
+              <NavLink
+                to="/request-support"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.375rem',
+                  padding: '0.5rem 0.875rem',
+                  fontSize: '0.875rem',
+                  fontWeight: 600,
+                  textDecoration: 'none',
+                  borderRadius: 'var(--radius-control)',
+                  color: 'var(--action-primary)',
+                  backgroundColor: 'var(--surface-selected)',
+                  border: '1px solid var(--border-subtle)',
+                  minHeight: '44px',
+                  transition: 'all var(--transition-fast)',
+                }}
+              >
+                <Sparkles size={16} strokeWidth={2} aria-hidden="true" />
+                <span>Managed Guidance</span>
+              </NavLink>
+            )}
           </nav>
 
-          {/* Right Action / Account */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
+          {/* Right: Auth / Explorer Identity Profile */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
             {currentRole === 'visitor' ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <Link
-                  to="/request-access"
-                  style={{
-                    fontSize: '0.8125rem',
-                    fontWeight: 600,
-                    padding: '0.4rem 0.875rem',
-                    borderRadius: 'var(--radius-pill)',
-                    backgroundColor: 'var(--accent-peach-bg)',
-                    color: 'var(--action-primary)',
-                    border: '1px solid var(--accent-peach-border)',
-                    textDecoration: 'none',
-                  }}
-                >
-                  Request Full Access
-                </Link>
-                <Link
                   to="/sign-in"
-                  className="btn-pill btn-pill-primary"
                   style={{
-                    fontSize: '0.8125rem',
-                    padding: '0.4rem 0.875rem',
-                    minHeight: '34px',
+                    padding: '0.5rem 1rem',
+                    fontSize: '0.875rem',
+                    fontWeight: 600,
+                    color: 'var(--color-foreground)',
+                    textDecoration: 'none',
+                    borderRadius: 'var(--radius-control)',
+                    minHeight: '44px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
                   }}
                 >
                   Sign In
                 </Link>
+                <Link
+                  to="/sign-up"
+                  style={{
+                    padding: '0.5rem 1.125rem',
+                    fontSize: '0.875rem',
+                    fontWeight: 700,
+                    color: 'var(--color-on-primary)',
+                    backgroundColor: 'var(--action-primary)',
+                    borderRadius: 'var(--radius-control)',
+                    textDecoration: 'none',
+                    boxShadow: 'var(--shadow-sm)',
+                    minHeight: '44px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  Create Account
+                </Link>
               </div>
             ) : (
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  padding: '0.2rem 0.5rem 0.2rem 0.25rem',
-                  backgroundColor: 'var(--surface-recessed)',
-                  borderRadius: 'var(--radius-pill)',
-                  border: '1px solid var(--border-subtle)',
-                }}
-              >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                 <div
                   style={{
-                    width: '26px',
-                    height: '26px',
-                    borderRadius: 'var(--radius-full)',
-                    backgroundColor: 'var(--action-primary)',
-                    color: '#ffffff',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '0.75rem',
-                    fontWeight: 700,
+                    gap: '0.5rem',
+                    padding: '0.25rem 0.75rem 0.25rem 0.35rem',
+                    backgroundColor: 'var(--surface-recessed)',
+                    borderRadius: 'var(--radius-pill)',
+                    border: '1px solid var(--border-subtle)',
                   }}
-                  aria-hidden="true"
                 >
-                  {initial}
+                  <div
+                    style={{
+                      width: '28px',
+                      height: '28px',
+                      borderRadius: 'var(--radius-pill)',
+                      backgroundColor: 'var(--action-primary)',
+                      color: 'var(--color-on-primary)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '0.75rem',
+                      fontWeight: 700,
+                    }}
+                    aria-hidden="true"
+                  >
+                    {initial}
+                  </div>
+                  <span
+                    style={{
+                      fontSize: '0.8125rem',
+                      fontWeight: 600,
+                      color: 'var(--color-foreground)',
+                      maxWidth: '120px',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {displayName}
+                  </span>
                 </div>
-                <span
-                  style={{
-                    fontSize: '0.75rem',
-                    fontWeight: 600,
-                    color: 'var(--text-charcoal)',
-                    maxWidth: '110px',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  {displayName}
-                </span>
+
                 <button
                   type="button"
                   onClick={handleSignOut}
-                  title="Sign out"
+                  title="Sign out of account"
                   aria-label="Sign out"
                   style={{
-                    color: 'var(--text-muted)',
+                    color: 'var(--color-foreground-muted)',
                     display: 'flex',
                     alignItems: 'center',
-                    padding: '0.2rem',
-                    borderRadius: 'var(--radius-full)',
+                    justifyContent: 'center',
+                    padding: '0.5rem',
+                    borderRadius: 'var(--radius-pill)',
+                    border: 'none',
+                    background: 'none',
                     cursor: 'pointer',
+                    minHeight: '44px',
+                    minWidth: '44px',
                   }}
                 >
-                  <LogOut size={15} />
+                  <LogOut size={18} strokeWidth={2} />
                 </button>
               </div>
             )}
@@ -368,228 +412,326 @@ export const DiscoveryLayout: React.FC<DiscoveryLayoutProps> = ({ currentRole, o
         </div>
       </header>
 
-      {/* Main Content Area */}
-      <main id="main-content" tabIndex={-1} style={{ flex: 1, outline: 'none' }}>
-        <ErrorBoundary>
+      {/* Guidance Request Pending Review Banner (if applicable) */}
+      {activeGuidanceReq &&
+        (activeGuidanceReq.status === 'pending_review' || activeGuidanceReq.status === 'submitted') && (
+        <aside
+          role="region"
+          aria-label="Guidance request status notice"
+          style={{
+            backgroundColor: 'var(--surface-selected)',
+            borderBottom: '1px solid var(--border-subtle)',
+            padding: '0.75rem 1.25rem',
+            textAlign: 'center',
+            fontSize: '0.875rem',
+            color: 'var(--action-primary)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.5rem',
+          }}
+        >
+          <Clock size={16} strokeWidth={2} aria-hidden="true" />
+          <span>
+            <strong>Guidance Request Under Review:</strong> Your request for counsellor managed casework is currently being vetted by admissions staff. Full catalogue search remains unlocked.
+          </span>
+          <Link
+            to="/request-status"
+            style={{
+              marginLeft: '0.5rem',
+              color: 'var(--action-primary)',
+              fontWeight: 700,
+              textDecoration: 'underline',
+            }}
+          >
+            View Status →
+          </Link>
+        </aside>
+      )}
+
+      {/* Main Page Slot */}
+      <main id="discovery-main-content" style={{ flex: 1 }}>
+        <ErrorBoundary fallbackTitle="Error loading directory content">
           <Outlet />
         </ErrorBoundary>
       </main>
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex' }} className="md:hidden">
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 100,
+            backgroundColor: 'rgba(13, 21, 17, 0.72)',
+            backdropFilter: 'blur(4px)',
+          }}
+          onClick={() => setMobileMenuOpen(false)}
+          aria-hidden="true"
+        >
           <div
-            style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(26,28,30,0.4)', backdropFilter: 'blur(2px)' }}
-            onClick={() => setMobileMenuOpen(false)}
-            aria-hidden="true"
-          />
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-label="Catalogue navigation"
             style={{
               position: 'relative',
               width: '280px',
               maxWidth: '85vw',
               height: '100%',
-              backgroundColor: '#ffffff',
-              boxShadow: '0 10px 25px rgba(0,0,0,0.15)',
-              zIndex: 101,
+              backgroundColor: 'var(--surface-card)',
+              boxShadow: 'var(--shadow-floating)',
+              padding: '1.5rem',
               display: 'flex',
               flexDirection: 'column',
-              padding: '1.25rem',
+              justifyContent: 'space-between',
+              overflowY: 'auto',
+              borderRight: '1px solid var(--border-subtle)',
             }}
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Discovery mobile navigation"
           >
-            <div style={{ display: 'flex', alignItems: 'center', justifySelf: 'space-between', marginBottom: '1.5rem' }}>
-              <BrandWordmark size="sm" showTagline={false} />
-              <button
-                type="button"
-                onClick={() => setMobileMenuOpen(false)}
-                aria-label="Close menu"
-                style={{ marginLeft: 'auto', padding: '0.375rem', color: 'var(--text-muted)' }}
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', flex: 1 }}>
-              <NavLink
-                to="/universities"
-                style={({ isActive }) => ({
+            <div>
+              <div
+                style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.5rem',
-                  padding: '0.625rem 0.75rem',
-                  borderRadius: 'var(--radius-sm)',
-                  fontSize: '0.875rem',
-                  fontWeight: 500,
-                  color: isActive ? 'var(--action-primary)' : 'var(--text-charcoal)',
-                  backgroundColor: isActive ? 'var(--accent-peach-bg)' : 'transparent',
-                  textDecoration: 'none',
-                })}
+                  justifyContent: 'space-between',
+                  paddingBottom: '1.25rem',
+                  borderBottom: '1px solid var(--border-subtle)',
+                }}
               >
-                <Building2 size={18} />
-                <span>Universities</span>
-              </NavLink>
-
-              <NavLink
-                to="/programs"
-                style={({ isActive }) => ({
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  padding: '0.625rem 0.75rem',
-                  borderRadius: 'var(--radius-sm)',
-                  fontSize: '0.875rem',
-                  fontWeight: 500,
-                  color: isActive ? 'var(--action-primary)' : 'var(--text-charcoal)',
-                  backgroundColor: isActive ? 'var(--accent-peach-bg)' : 'transparent',
-                  textDecoration: 'none',
-                })}
-              >
-                <GraduationCap size={18} />
-                <span>Degree Programs</span>
-              </NavLink>
-
-              <NavLink
-                to="/scholarships"
-                style={({ isActive }) => ({
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  padding: '0.625rem 0.75rem',
-                  borderRadius: 'var(--radius-sm)',
-                  fontSize: '0.875rem',
-                  fontWeight: 500,
-                  color: isActive ? 'var(--action-primary)' : 'var(--text-charcoal)',
-                  backgroundColor: isActive ? 'var(--accent-peach-bg)' : 'transparent',
-                  textDecoration: 'none',
-                })}
-              >
-                <Award size={18} />
-                <span>Scholarships</span>
-              </NavLink>
-
-              {currentRole === 'explorer' && (
-                <NavLink
-                  to="/saved"
-                  style={({ isActive }) => ({
+                <BrandWordmark size="sm" showTagline={false} />
+                <button
+                  type="button"
+                  onClick={() => setMobileMenuOpen(false)}
+                  style={{
+                    padding: '0.375rem',
+                    borderRadius: 'var(--radius-pill)',
+                    color: 'var(--color-foreground-muted)',
+                    border: 'none',
+                    background: 'none',
+                    cursor: 'pointer',
+                    minHeight: '44px',
+                    minWidth: '44px',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '0.5rem',
-                    padding: '0.625rem 0.75rem',
-                    borderRadius: 'var(--radius-sm)',
-                    fontSize: '0.875rem',
-                    fontWeight: 500,
-                    color: isActive ? 'var(--action-primary)' : 'var(--text-charcoal)',
-                    backgroundColor: isActive ? 'var(--accent-peach-bg)' : 'transparent',
-                    textDecoration: 'none',
-                  })}
+                    justifyContent: 'center',
+                  }}
+                  aria-label="Close navigation"
                 >
-                  <Bookmark size={18} />
-                  <span>Saved Programs</span>
+                  <X size={20} strokeWidth={2} />
+                </button>
+              </div>
+
+              <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem', paddingTop: '1.5rem' }}>
+                <NavLink
+                  to="/universities"
+                  style={({ isActive }) => ({
+                    padding: '0.75rem 1rem',
+                    borderRadius: 'var(--radius-control)',
+                    fontSize: '0.9375rem',
+                    fontWeight: 600,
+                    textDecoration: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    color: isActive ? 'var(--color-on-primary)' : 'var(--color-foreground)',
+                    backgroundColor: isActive ? 'var(--action-primary)' : 'transparent',
+                    minHeight: '44px',
+                  })}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <GraduationCap size={18} strokeWidth={2} aria-hidden="true" />
+                  <span>Universities</span>
                 </NavLink>
-              )}
 
-              <NavLink
-                to="/help"
-                style={({ isActive }) => ({
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  padding: '0.625rem 0.75rem',
-                  borderRadius: 'var(--radius-sm)',
-                  fontSize: '0.875rem',
-                  fontWeight: 500,
-                  color: isActive ? 'var(--action-primary)' : 'var(--text-charcoal)',
-                  backgroundColor: isActive ? 'var(--accent-peach-bg)' : 'transparent',
-                  textDecoration: 'none',
-                })}
-              >
-                <HelpCircle size={18} />
-                <span>Help Centre</span>
-              </NavLink>
+                <NavLink
+                  to="/programs"
+                  style={({ isActive }) => ({
+                    padding: '0.75rem 1rem',
+                    borderRadius: 'var(--radius-control)',
+                    fontSize: '0.9375rem',
+                    fontWeight: 600,
+                    textDecoration: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    color: isActive ? 'var(--color-on-primary)' : 'var(--color-foreground)',
+                    backgroundColor: isActive ? 'var(--action-primary)' : 'transparent',
+                    minHeight: '44px',
+                  })}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <FileText size={18} strokeWidth={2} aria-hidden="true" />
+                  <span>Programs</span>
+                </NavLink>
 
-              <NavLink
-                to="/contact"
-                style={({ isActive }) => ({
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  padding: '0.625rem 0.75rem',
-                  borderRadius: 'var(--radius-sm)',
-                  fontSize: '0.875rem',
-                  fontWeight: 500,
-                  color: isActive ? 'var(--action-primary)' : 'var(--text-charcoal)',
-                  backgroundColor: isActive ? 'var(--accent-peach-bg)' : 'transparent',
-                  textDecoration: 'none',
-                })}
-              >
-                <Mail size={18} />
-                <span>Contact Desk</span>
-              </NavLink>
+                <NavLink
+                  to="/scholarships"
+                  style={({ isActive }) => ({
+                    padding: '0.75rem 1rem',
+                    borderRadius: 'var(--radius-control)',
+                    fontSize: '0.9375rem',
+                    fontWeight: 600,
+                    textDecoration: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    color: isActive ? 'var(--color-on-primary)' : 'var(--color-foreground)',
+                    backgroundColor: isActive ? 'var(--action-primary)' : 'transparent',
+                    minHeight: '44px',
+                  })}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <Heart size={18} strokeWidth={2} aria-hidden="true" />
+                  <span>Scholarships</span>
+                </NavLink>
 
-              {currentRole === 'visitor' && (
-                <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  <Link
-                    to="/request-access"
-                    style={{
-                      textAlign: 'center',
-                      padding: '0.5rem',
-                      borderRadius: 'var(--radius-pill)',
-                      backgroundColor: 'var(--accent-peach-bg)',
-                      color: 'var(--action-primary)',
-                      border: '1px solid var(--accent-peach-border)',
-                      fontSize: '0.875rem',
+                {currentRole === 'explorer' && (
+                  <NavLink
+                    to="/saved"
+                    style={({ isActive }) => ({
+                      padding: '0.75rem 1rem',
+                      borderRadius: 'var(--radius-control)',
+                      fontSize: '0.9375rem',
                       fontWeight: 600,
                       textDecoration: 'none',
-                    }}
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.75rem',
+                      color: isActive ? 'var(--color-on-primary)' : 'var(--color-foreground)',
+                      backgroundColor: isActive ? 'var(--action-primary)' : 'transparent',
+                      minHeight: '44px',
+                    })}
+                    onClick={() => setMobileMenuOpen(false)}
                   >
-                    Request Full Access
-                  </Link>
+                    <Bookmark size={18} strokeWidth={2} aria-hidden="true" />
+                    <span>Saved Items</span>
+                  </NavLink>
+                )}
+
+                <NavLink
+                  to="/help"
+                  style={({ isActive }) => ({
+                    padding: '0.75rem 1rem',
+                    borderRadius: 'var(--radius-control)',
+                    fontSize: '0.9375rem',
+                    fontWeight: 600,
+                    textDecoration: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    color: isActive ? 'var(--color-on-primary)' : 'var(--color-foreground)',
+                    backgroundColor: isActive ? 'var(--action-primary)' : 'transparent',
+                    minHeight: '44px',
+                  })}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <CircleHelp size={18} strokeWidth={2} aria-hidden="true" />
+                  <span>Help Centre</span>
+                </NavLink>
+
+                <NavLink
+                  to="/contact"
+                  style={({ isActive }) => ({
+                    padding: '0.75rem 1rem',
+                    borderRadius: 'var(--radius-control)',
+                    fontSize: '0.9375rem',
+                    fontWeight: 600,
+                    textDecoration: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    color: isActive ? 'var(--color-on-primary)' : 'var(--color-foreground)',
+                    backgroundColor: isActive ? 'var(--action-primary)' : 'transparent',
+                    minHeight: '44px',
+                  })}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <Mail size={18} strokeWidth={2} aria-hidden="true" />
+                  <span>Contact</span>
+                </NavLink>
+              </nav>
+            </div>
+
+            <div style={{ paddingTop: '1.5rem', borderTop: '1px solid var(--border-subtle)' }}>
+              {currentRole === 'visitor' ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   <Link
                     to="/sign-in"
-                    className="btn-pill btn-pill-primary"
-                    style={{ textAlign: 'center', fontSize: '0.875rem' }}
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem 1rem',
+                      borderRadius: 'var(--radius-control)',
+                      textAlign: 'center',
+                      fontSize: '0.875rem',
+                      fontWeight: 600,
+                      color: 'var(--color-foreground)',
+                      backgroundColor: 'var(--surface-card)',
+                      border: '1px solid var(--border-subtle)',
+                      textDecoration: 'none',
+                      minHeight: '44px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                    onClick={() => setMobileMenuOpen(false)}
                   >
                     Sign In
                   </Link>
+                  <Link
+                    to="/sign-up"
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem 1rem',
+                      borderRadius: 'var(--radius-control)',
+                      textAlign: 'center',
+                      fontSize: '0.875rem',
+                      fontWeight: 700,
+                      color: 'var(--color-on-primary)',
+                      backgroundColor: 'var(--action-primary)',
+                      boxShadow: 'var(--shadow-sm)',
+                      textDecoration: 'none',
+                      minHeight: '44px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Create Free Account
+                  </Link>
                 </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleSignOut}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem 1rem',
+                    borderRadius: 'var(--radius-control)',
+                    fontSize: '0.875rem',
+                    fontWeight: 600,
+                    color: 'var(--color-foreground-muted)',
+                    backgroundColor: 'var(--surface-recessed)',
+                    border: '1px solid var(--border-subtle)',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.5rem',
+                    minHeight: '44px',
+                  }}
+                >
+                  <LogOut size={16} strokeWidth={2} />
+                  <span>Sign Out</span>
+                </button>
               )}
-            </nav>
+            </div>
           </div>
         </div>
       )}
-
-      {/* Grounded Accessible Footer */}
-      <footer
-        style={{
-          backgroundColor: '#ffffff',
-          borderTop: '1px solid var(--border-subtle)',
-          padding: '1.5rem 1rem',
-          marginTop: 'auto',
-          fontSize: '0.8125rem',
-          color: 'var(--text-muted)',
-        }}
-      >
-        <div
-          style={{
-            maxWidth: '1440px',
-            margin: '0 auto',
-            display: 'flex',
-            flexWrap: 'wrap',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '1rem',
-          }}
-        >
-          <div>
-            <strong>Unilistics:</strong> University application and visa tracking for Pakistani students.
-            Supported destinations: Germany, France, Italy, Romania.
-          </div>
-          <div>WCAG 2.1 AA Compliant • Source material is draft procedural guide, subject to embassy review.</div>
-        </div>
-      </footer>
     </div>
   );
 };
+
+export default DiscoveryLayout;

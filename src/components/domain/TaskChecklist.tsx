@@ -37,7 +37,7 @@ export const TaskChecklist: React.FC<TaskChecklistProps> = ({
   title = 'Active Action Items & Attestation Tasks',
 }) => {
   return (
-    <Card padding="md" style={{ marginBottom: '1.5rem' }}>
+    <Card padding="md" style={{ marginBottom: '1.5rem', borderRadius: 'var(--radius-card, 24px)' }}>
       <div
         style={{
           display: 'flex',
@@ -45,12 +45,12 @@ export const TaskChecklist: React.FC<TaskChecklistProps> = ({
           justifyContent: 'space-between',
           marginBottom: '1rem',
           paddingBottom: '0.75rem',
-          borderBottom: '1px solid var(--color-border)',
+          borderBottom: '1px solid var(--border-subtle)',
         }}
       >
-        <h3 style={{ fontSize: '1.125rem', fontWeight: 700, margin: 0 }}>{title}</h3>
-        <span style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted)' }}>
-          {tasks.filter((t) => t.status === 'completed').length} of {tasks.length} Completed
+        <h3 style={{ fontSize: '1.125rem', fontWeight: 700, margin: 0, color: 'var(--color-foreground)' }}>{title}</h3>
+        <span style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted)', fontWeight: 500 }}>
+          {tasks.filter((t) => t.status === 'completed').length} of {tasks.length} completed
         </span>
       </div>
 
@@ -67,12 +67,12 @@ export const TaskChecklist: React.FC<TaskChecklistProps> = ({
                 display: 'flex',
                 alignItems: 'flex-start',
                 gap: '0.875rem',
-                padding: '0.875rem',
-                borderRadius: 'var(--radius-md)',
+                padding: '0.875rem 1rem',
+                borderRadius: 'var(--radius-control, 16px)',
                 marginBottom: '0.5rem',
-                backgroundColor: isDone ? 'var(--color-surface-hover)' : 'var(--color-surface)',
-                border: '1px solid var(--color-border)',
-                transition: 'background-color var(--transition-fast)',
+                backgroundColor: isDone ? 'var(--surface-recessed)' : 'var(--surface-card)',
+                border: '1px solid var(--border-subtle)',
+                transition: 'background-color var(--transition-fast), border-color var(--transition-fast)',
               }}
             >
               {/* Accessible Checkbox */}
@@ -83,10 +83,12 @@ export const TaskChecklist: React.FC<TaskChecklistProps> = ({
                 onChange={() => onToggleTask?.(task.id)}
                 style={{
                   marginTop: '0.25rem',
-                  width: '18px',
-                  height: '18px',
+                  width: '20px',
+                  height: '20px',
+                  minWidth: '20px',
                   cursor: 'pointer',
-                  accentColor: 'var(--color-primary)',
+                  accentColor: 'var(--action-primary)',
+                  borderRadius: 'var(--radius-xs)',
                 }}
                 aria-label={`Mark "${task.title}" as ${isDone ? 'incomplete' : 'complete'}`}
               />
@@ -103,6 +105,7 @@ export const TaskChecklist: React.FC<TaskChecklistProps> = ({
                       textDecoration: isDone ? 'line-through' : 'none',
                       cursor: 'pointer',
                       marginBottom: '0.25rem',
+                      lineHeight: 1.4,
                     }}
                   >
                     {task.title}
@@ -117,12 +120,15 @@ export const TaskChecklist: React.FC<TaskChecklistProps> = ({
                         border: 'none',
                         cursor: 'pointer',
                         color: 'var(--color-foreground-muted)',
-                        padding: '2px',
+                        padding: '4px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                       }}
                       title="Delete case-specific task"
                       aria-label={`Delete custom task ${task.title}`}
                     >
-                      <Trash2 size={14} />
+                      <Trash2 size={16} strokeWidth={2} aria-hidden="true" />
                     </button>
                   )}
                 </div>
@@ -155,16 +161,16 @@ export const TaskChecklist: React.FC<TaskChecklistProps> = ({
                     {/* Assignee Badge */}
                     <Badge variant={isStudent ? 'info' : 'primary'} size="sm">
                       {isStudent ? (
-                        <UserCheck size={12} aria-hidden="true" />
+                        <UserCheck size={12} strokeWidth={2} aria-hidden="true" />
                       ) : (
-                        <ShieldAlert size={12} aria-hidden="true" />
+                        <ShieldAlert size={12} strokeWidth={2} aria-hidden="true" />
                       )}
                       <span>{isStudent ? 'Student Task' : 'Counsellor Action'}</span>
                     </Badge>
 
                     {/* Due Date */}
                     <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
-                      <Calendar size={12} aria-hidden="true" />
+                      <Calendar size={12} strokeWidth={2} aria-hidden="true" />
                       <span>Due: {task.dueDate}</span>
                     </span>
 
@@ -190,3 +196,5 @@ export const TaskChecklist: React.FC<TaskChecklistProps> = ({
     </Card>
   );
 };
+
+export default TaskChecklist;

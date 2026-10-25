@@ -5,11 +5,12 @@ import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { Select } from '@/components/ui/Select';
 import { Alert } from '@/components/ui/Alert';
+import { Checkbox } from '@/components/ui/Checkbox';
 import { InAppNotification, NotificationPreference } from '@/types';
 import {
   Bell,
   Check,
-  Sliders,
+  SlidersHorizontal,
   X,
   ShieldCheck,
   Clock,
@@ -83,13 +84,13 @@ export const NotificationDrawer: React.FC = () => {
   const getEventIcon = (eventType?: string | null) => {
     switch (eventType) {
       case 'document_review':
-        return <FileCheck2 size={14} style={{ color: '#10b981' }} />;
+        return <FileCheck2 size={14} style={{ color: 'var(--color-success)' }} aria-hidden="true" />;
       case 'task_due':
-        return <Clock size={14} style={{ color: '#f59e0b' }} />;
+        return <Clock size={14} style={{ color: 'var(--color-warning)' }} aria-hidden="true" />;
       case 'stage_change':
-        return <ShieldCheck size={14} style={{ color: 'var(--color-primary)' }} />;
+        return <ShieldCheck size={14} style={{ color: 'var(--color-primary)' }} aria-hidden="true" />;
       default:
-        return <AlertCircle size={14} style={{ color: 'var(--color-primary)' }} />;
+        return <AlertCircle size={14} style={{ color: 'var(--color-primary)' }} aria-hidden="true" />;
     }
   };
 
@@ -111,17 +112,19 @@ export const NotificationDrawer: React.FC = () => {
           justifyContent: 'center',
           color: 'var(--color-foreground)',
           borderRadius: 'var(--radius-full)',
+          minWidth: '44px',
+          minHeight: '44px',
         }}
       >
-        <Bell size={18} />
+        <Bell size={20} strokeWidth={2} aria-hidden="true" />
         {unreadCount > 0 && (
           <span
             style={{
               position: 'absolute',
               top: '4px',
               right: '4px',
-              backgroundColor: '#dc2626',
-              color: '#ffffff',
+              backgroundColor: 'var(--color-destructive)',
+              color: 'var(--color-destructive-foreground, #ffffff)',
               borderRadius: '50%',
               fontSize: '0.625rem',
               fontWeight: 800,
@@ -150,8 +153,8 @@ export const NotificationDrawer: React.FC = () => {
             maxWidth: '90vw',
             backgroundColor: 'var(--color-surface)',
             border: '1px solid var(--color-border)',
-            borderRadius: 'var(--radius-lg)',
-            boxShadow: 'var(--shadow-lg)',
+            borderRadius: 'var(--radius-panel)',
+            boxShadow: 'var(--shadow-floating)',
             zIndex: 100,
             display: 'flex',
             flexDirection: 'column',
@@ -161,7 +164,7 @@ export const NotificationDrawer: React.FC = () => {
           {/* Header */}
           <div
             style={{
-              padding: '0.75rem 1rem',
+              padding: '0.875rem 1rem',
               borderBottom: '1px solid var(--color-border)',
               display: 'flex',
               justifyContent: 'space-between',
@@ -170,7 +173,7 @@ export const NotificationDrawer: React.FC = () => {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span style={{ fontSize: '0.875rem', fontWeight: 700 }}>Notifications</span>
+              <span style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--color-foreground)' }}>Notifications</span>
               {unreadCount > 0 && (
                 <Badge variant="primary" size="sm">
                   {unreadCount} New
@@ -189,12 +192,13 @@ export const NotificationDrawer: React.FC = () => {
                   border: 'none',
                   cursor: 'pointer',
                   color: 'var(--color-foreground-muted)',
-                  padding: '4px',
+                  padding: '6px',
                   display: 'flex',
                   alignItems: 'center',
+                  borderRadius: 'var(--radius-full)',
                 }}
               >
-                <Sliders size={15} aria-hidden="true" />
+                <SlidersHorizontal size={16} strokeWidth={2} aria-hidden="true" />
               </button>
               <button
                 type="button"
@@ -205,9 +209,10 @@ export const NotificationDrawer: React.FC = () => {
                   border: 'none',
                   cursor: 'pointer',
                   color: 'var(--color-foreground-muted)',
-                  padding: '4px',
+                  padding: '6px',
                   display: 'flex',
                   alignItems: 'center',
+                  borderRadius: 'var(--radius-full)',
                 }}
               >
                 <X size={16} aria-hidden="true" />
@@ -224,17 +229,17 @@ export const NotificationDrawer: React.FC = () => {
           {/* Timezone Indicator Banner */}
           <div
             style={{
-              padding: '0.375rem 1rem',
-              backgroundColor: 'rgba(56, 189, 248, 0.08)',
+              padding: '0.5rem 1rem',
+              backgroundColor: 'var(--color-primary-light)',
               borderBottom: '1px solid var(--color-border)',
-              fontSize: '0.6875rem',
-              color: 'var(--color-foreground-muted)',
+              fontSize: '0.75rem',
+              color: 'var(--color-foreground)',
               display: 'flex',
               alignItems: 'center',
               gap: '0.375rem',
             }}
           >
-            <Globe size={11} style={{ color: 'var(--color-primary)' }} />
+            <Globe size={13} style={{ color: 'var(--color-primary)' }} aria-hidden="true" />
             <span>
               Displaying times in <strong>{currentTimezone}</strong>
             </span>
@@ -253,7 +258,7 @@ export const NotificationDrawer: React.FC = () => {
                   style={{
                     padding: '0.75rem 1rem',
                     borderBottom: '1px solid var(--color-border)',
-                    backgroundColor: n.isRead ? 'transparent' : 'rgba(56, 189, 248, 0.04)',
+                    backgroundColor: n.isRead ? 'transparent' : 'rgba(36, 91, 66, 0.04)',
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '0.25rem',
@@ -263,7 +268,7 @@ export const NotificationDrawer: React.FC = () => {
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.5rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
                       {getEventIcon(n.eventType)}
-                      <strong style={{ fontSize: '0.8125rem' }}>{n.title}</strong>
+                      <strong style={{ fontSize: '0.8125rem', color: 'var(--color-foreground)' }}>{n.title}</strong>
                     </div>
 
                     {!n.isRead && (
@@ -271,6 +276,7 @@ export const NotificationDrawer: React.FC = () => {
                         type="button"
                         onClick={() => markReadMutation.mutate(n.id)}
                         title="Mark as read"
+                        aria-label="Mark notification as read"
                         style={{
                           background: 'none',
                           border: 'none',
@@ -281,7 +287,7 @@ export const NotificationDrawer: React.FC = () => {
                           alignItems: 'center',
                         }}
                       >
-                        <Check size={14} />
+                        <Check size={14} strokeWidth={2} />
                       </button>
                     )}
                   </div>
@@ -306,7 +312,8 @@ export const NotificationDrawer: React.FC = () => {
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            backgroundColor: 'rgba(13, 21, 17, 0.72)',
+            backdropFilter: 'blur(4px)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -318,26 +325,30 @@ export const NotificationDrawer: React.FC = () => {
           <div
             style={{
               backgroundColor: 'var(--color-surface)',
-              borderRadius: 'var(--radius-lg)',
+              borderRadius: 'var(--radius-panel)',
               maxWidth: '480px',
               width: '100%',
-              padding: '1.5rem',
+              padding: '1.75rem',
               display: 'flex',
               flexDirection: 'column',
               gap: '1.25rem',
-              boxShadow: 'var(--shadow-xl)',
+              boxShadow: 'var(--shadow-floating)',
+              border: '1px solid var(--color-border)',
             }}
             onClick={(e) => e.stopPropagation()}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Sliders size={18} style={{ color: 'var(--color-primary)' }} />
-                <h3 style={{ fontSize: '1.125rem', fontWeight: 800, margin: 0 }}>Notification Preferences</h3>
+                <SlidersHorizontal size={18} strokeWidth={2} style={{ color: 'var(--color-primary)' }} aria-hidden="true" />
+                <h3 style={{ fontSize: '1.125rem', fontWeight: 800, margin: 0, color: 'var(--color-foreground)', fontFamily: 'var(--font-family-base)' }}>
+                  Notification Preferences
+                </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setIsPreferencesOpen(false)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-foreground-muted)' }}
+                aria-label="Close preferences"
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-foreground-muted)', padding: '0.25rem' }}
               >
                 <X size={18} />
               </button>
@@ -350,45 +361,29 @@ export const NotificationDrawer: React.FC = () => {
 
             {/* Preferences Form */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
-              <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.8125rem', cursor: 'pointer' }}>
-                <span>Email Notifications (Transactional Summaries)</span>
-                <input
-                  type="checkbox"
-                  checked={localPrefs.emailNotifications !== false}
-                  onChange={(e) => setLocalPrefs({ ...localPrefs, emailNotifications: e.target.checked })}
-                  style={{ width: '16px', height: '16px', accentColor: 'var(--color-primary)' }}
-                />
-              </label>
+              <Checkbox
+                label="Email Notifications (Transactional Summaries)"
+                checked={localPrefs.emailNotifications !== false}
+                onChange={(e) => setLocalPrefs({ ...localPrefs, emailNotifications: e.target.checked })}
+              />
 
-              <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.8125rem', cursor: 'pointer' }}>
-                <span>In-App Notification Alerts</span>
-                <input
-                  type="checkbox"
-                  checked={localPrefs.inAppNotifications !== false}
-                  onChange={(e) => setLocalPrefs({ ...localPrefs, inAppNotifications: e.target.checked })}
-                  style={{ width: '16px', height: '16px', accentColor: 'var(--color-primary)' }}
-                />
-              </label>
+              <Checkbox
+                label="In-App Notification Alerts"
+                checked={localPrefs.inAppNotifications !== false}
+                onChange={(e) => setLocalPrefs({ ...localPrefs, inAppNotifications: e.target.checked })}
+              />
 
-              <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.8125rem', cursor: 'pointer' }}>
-                <span>Action Task & Attestation Reminders</span>
-                <input
-                  type="checkbox"
-                  checked={localPrefs.taskReminders !== false}
-                  onChange={(e) => setLocalPrefs({ ...localPrefs, taskReminders: e.target.checked })}
-                  style={{ width: '16px', height: '16px', accentColor: 'var(--color-primary)' }}
-                />
-              </label>
+              <Checkbox
+                label="Action Task & Attestation Reminders"
+                checked={localPrefs.taskReminders !== false}
+                onChange={(e) => setLocalPrefs({ ...localPrefs, taskReminders: e.target.checked })}
+              />
 
-              <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.8125rem', cursor: 'pointer' }}>
-                <span>Case Stage Updates & Admission Decisions</span>
-                <input
-                  type="checkbox"
-                  checked={localPrefs.caseUpdates !== false}
-                  onChange={(e) => setLocalPrefs({ ...localPrefs, caseUpdates: e.target.checked })}
-                  style={{ width: '16px', height: '16px', accentColor: 'var(--color-primary)' }}
-                />
-              </label>
+              <Checkbox
+                label="Case Stage Updates & Admission Decisions"
+                checked={localPrefs.caseUpdates !== false}
+                onChange={(e) => setLocalPrefs({ ...localPrefs, caseUpdates: e.target.checked })}
+              />
 
               {/* Timezone Selector */}
               <div style={{ marginTop: '0.5rem' }}>

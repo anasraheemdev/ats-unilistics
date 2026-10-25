@@ -25,8 +25,9 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
         textAlign: 'center',
         backgroundColor: 'var(--color-destructive-bg)',
         border: '1px solid var(--color-destructive-border)',
-        borderRadius: 'var(--radius-lg)',
+        borderRadius: 'var(--radius-card, 24px)',
         margin: '1.5rem 0',
+        fontFamily: 'var(--font-family-base)',
       }}
     >
       <div
@@ -36,7 +37,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
         }}
         aria-hidden="true"
       >
-        <AlertCircle size={36} />
+        <AlertCircle size={36} strokeWidth={2} />
       </div>
 
       <h3
@@ -55,6 +56,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
           fontSize: '0.875rem',
           color: 'var(--color-foreground)',
           maxWidth: '460px',
+          lineHeight: 1.5,
           marginBottom: onRetry ? '1.5rem' : 0,
         }}
       >
@@ -66,7 +68,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
           variant="outline"
           size="md"
           onClick={onRetry}
-          leftIcon={<RotateCcw size={16} />}
+          leftIcon={<RotateCcw size={16} strokeWidth={2} />}
         >
           Try Again
         </Button>
@@ -74,3 +76,5 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
     </div>
   );
 };
+
+export default ErrorState;

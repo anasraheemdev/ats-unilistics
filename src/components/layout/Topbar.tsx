@@ -39,8 +39,8 @@ export const Topbar: React.FC<TopbarProps> = ({
   return (
     <header
       style={{
-        height: '60px',
-        backgroundColor: '#ffffff',
+        height: '64px',
+        backgroundColor: 'var(--surface-card)',
         borderBottom: '1px solid var(--border-subtle)',
         display: 'flex',
         alignItems: 'center',
@@ -49,6 +49,8 @@ export const Topbar: React.FC<TopbarProps> = ({
         position: 'sticky',
         top: 0,
         zIndex: 30,
+        fontFamily: 'var(--font-family-base)',
+        color: 'var(--color-foreground)',
       }}
       role="banner"
     >
@@ -61,17 +63,19 @@ export const Topbar: React.FC<TopbarProps> = ({
           aria-label="Open navigation drawer"
           style={{
             padding: '0.5rem',
-            borderRadius: 'var(--radius-sm)',
-            color: 'var(--text-charcoal)',
+            borderRadius: 'var(--radius-control, 16px)',
+            color: 'var(--color-foreground)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: 'var(--surface-recessed)',
             border: '1px solid var(--border-subtle)',
             cursor: 'pointer',
+            minHeight: '44px',
+            minWidth: '44px',
           }}
         >
-          <Menu size={18} />
+          <Menu size={20} strokeWidth={2} />
         </button>
 
         {/* Breadcrumb Trail */}
@@ -80,14 +84,14 @@ export const Topbar: React.FC<TopbarProps> = ({
             const isLast = idx === derivedCrumbs.length - 1;
             return (
               <React.Fragment key={crumb.label + idx}>
-                {idx > 0 && <ChevronRight size={14} style={{ color: 'var(--text-muted)', flexShrink: 0 }} aria-hidden="true" />}
+                {idx > 0 && <ChevronRight size={14} strokeWidth={2} style={{ color: 'var(--color-foreground-muted)', flexShrink: 0 }} aria-hidden="true" />}
                 {crumb.path && !isLast ? (
                   <Link
                     to={crumb.path}
                     style={{
                       fontSize: '0.8125rem',
                       fontWeight: 500,
-                      color: 'var(--text-muted)',
+                      color: 'var(--color-foreground-muted)',
                       textDecoration: 'none',
                       whiteSpace: 'nowrap',
                     }}
@@ -99,7 +103,7 @@ export const Topbar: React.FC<TopbarProps> = ({
                     style={{
                       fontSize: '0.8125rem',
                       fontWeight: 600,
-                      color: 'var(--text-charcoal)',
+                      color: 'var(--color-foreground)',
                       whiteSpace: 'nowrap',
                     }}
                     aria-current={isLast ? 'page' : undefined}
@@ -126,7 +130,7 @@ export const Topbar: React.FC<TopbarProps> = ({
               display: 'flex',
               alignItems: 'center',
               gap: '0.5rem',
-              padding: '0.2rem 0.6rem 0.2rem 0.25rem',
+              padding: '0.25rem 0.75rem 0.25rem 0.35rem',
               backgroundColor: 'var(--surface-recessed)',
               borderRadius: 'var(--radius-pill)',
               border: '1px solid var(--border-subtle)',
@@ -134,15 +138,15 @@ export const Topbar: React.FC<TopbarProps> = ({
           >
             <div
               style={{
-                width: '24px',
-                height: '24px',
-                borderRadius: 'var(--radius-full)',
+                width: '28px',
+                height: '28px',
+                borderRadius: 'var(--radius-pill)',
                 backgroundColor: 'var(--action-primary)',
-                color: '#ffffff',
+                color: 'var(--color-on-primary)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '0.6875rem',
+                fontSize: '0.75rem',
                 fontWeight: 700,
               }}
               aria-hidden="true"
@@ -153,7 +157,7 @@ export const Topbar: React.FC<TopbarProps> = ({
               style={{
                 fontSize: '0.75rem',
                 fontWeight: 600,
-                color: 'var(--text-charcoal)',
+                color: 'var(--color-foreground)',
                 maxWidth: '120px',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
@@ -168,3 +172,5 @@ export const Topbar: React.FC<TopbarProps> = ({
     </header>
   );
 };
+
+export default Topbar;

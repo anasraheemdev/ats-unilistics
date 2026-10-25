@@ -20,8 +20,9 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({ document, onView }) 
         flexDirection: 'column',
         justifyContent: 'space-between',
         height: '100%',
-        backgroundColor: 'var(--color-surface)',
-        border: '1px solid var(--color-border)',
+        backgroundColor: 'var(--surface-card)',
+        borderRadius: 'var(--radius-card, 24px)',
+        border: '1px solid var(--border-subtle)',
       }}
     >
       <div>
@@ -38,9 +39,9 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({ document, onView }) 
             style={{
               width: '40px',
               height: '40px',
-              borderRadius: 'var(--radius-md)',
-              backgroundColor: 'var(--color-primary-light)',
-              color: 'var(--color-primary)',
+              borderRadius: 'var(--radius-control, 16px)',
+              backgroundColor: 'var(--surface-selected)',
+              color: 'var(--action-primary)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -48,7 +49,7 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({ document, onView }) 
             }}
             aria-hidden="true"
           >
-            <FileText size={20} />
+            <FileText size={20} strokeWidth={2} />
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
@@ -57,9 +58,9 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({ document, onView }) 
                 fontSize: '0.6875rem',
                 fontWeight: 700,
                 padding: '2px 6px',
-                borderRadius: 'var(--radius-sm)',
-                backgroundColor: 'var(--color-surface-hover)',
-                border: '1px solid var(--color-border)',
+                borderRadius: 'var(--radius-pill)',
+                backgroundColor: 'var(--surface-recessed)',
+                border: '1px solid var(--border-subtle)',
                 color: 'var(--color-foreground-muted)',
               }}
             >
@@ -73,6 +74,7 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({ document, onView }) 
           style={{
             fontSize: '0.9375rem',
             fontWeight: 700,
+            fontFamily: 'var(--font-family-base)',
             marginBottom: '0.25rem',
             color: 'var(--color-foreground)',
           }}
@@ -97,17 +99,17 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({ document, onView }) 
           <div
             style={{
               padding: '0.625rem 0.75rem',
-              borderRadius: 'var(--radius-sm)',
+              borderRadius: 'var(--radius-control, 16px)',
               fontSize: '0.75rem',
               marginBottom: '0.75rem',
-              backgroundColor: 'rgba(217, 119, 6, 0.08)',
-              border: '1px solid rgba(217, 119, 6, 0.3)',
-              color: '#92400e',
+              backgroundColor: 'var(--color-warning-bg)',
+              border: '1px solid var(--color-warning-border)',
+              color: 'var(--color-warning)',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontWeight: 700, marginBottom: '2px' }}>
-              <AlertCircle size={14} aria-hidden="true" />
-              <span>Replacement Action Required</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', fontWeight: 700, marginBottom: '2px' }}>
+              <AlertCircle size={14} strokeWidth={2} aria-hidden="true" />
+              <span>Replacement action required</span>
             </div>
             <p style={{ margin: 0, lineHeight: 1.4 }}>{document.replacementInstructions}</p>
           </div>
@@ -118,7 +120,7 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({ document, onView }) 
           <div
             style={{
               padding: '0.5rem 0.75rem',
-              borderRadius: 'var(--radius-sm)',
+              borderRadius: 'var(--radius-control, 16px)',
               fontSize: '0.75rem',
               marginBottom: '0.75rem',
               backgroundColor:
@@ -126,13 +128,13 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({ document, onView }) 
                   ? 'var(--color-success-bg)'
                   : document.verificationStatus === 'rejected'
                   ? 'var(--color-destructive-bg)'
-                  : 'var(--color-surface-hover)',
+                  : 'var(--surface-recessed)',
               border: `1px solid ${
                 document.verificationStatus === 'verified'
                   ? 'var(--color-success-border)'
                   : document.verificationStatus === 'rejected'
                   ? 'var(--color-destructive-border)'
-                  : 'var(--color-border)'
+                  : 'var(--border-subtle)'
               }`,
               color:
                 document.verificationStatus === 'verified'
@@ -142,14 +144,14 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({ document, onView }) 
                   : 'var(--color-foreground)',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontWeight: 600, marginBottom: '2px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', fontWeight: 600, marginBottom: '2px' }}>
               {document.verificationStatus === 'verified' ? (
-                <CheckCircle2 size={12} aria-hidden="true" />
+                <CheckCircle2 size={14} strokeWidth={2} aria-hidden="true" />
               ) : (
-                <AlertCircle size={12} aria-hidden="true" />
+                <AlertCircle size={14} strokeWidth={2} aria-hidden="true" />
               )}
               <span>
-                {document.verifiedBy ? `Reviewed by ${document.verifiedBy}` : 'Counsellor Review Note'}
+                {document.verifiedBy ? `Reviewed by ${document.verifiedBy}` : 'Counsellor review note'}
               </span>
             </div>
             <span>{document.verificationNotes}</span>
@@ -163,7 +165,7 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({ document, onView }) 
           alignItems: 'center',
           justifyContent: 'space-between',
           paddingTop: '0.75rem',
-          borderTop: '1px solid var(--color-border-subtle)',
+          borderTop: '1px solid var(--border-subtle)',
           fontSize: '0.75rem',
           color: 'var(--color-foreground-muted)',
         }}
@@ -174,7 +176,7 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({ document, onView }) 
             type="button"
             onClick={() => onView(document)}
             style={{
-              color: 'var(--color-secondary)',
+              color: 'var(--action-primary)',
               fontWeight: 600,
               textDecoration: 'underline',
               cursor: 'pointer',
@@ -190,3 +192,5 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({ document, onView }) 
     </Card>
   );
 };
+
+export default DocumentCard;

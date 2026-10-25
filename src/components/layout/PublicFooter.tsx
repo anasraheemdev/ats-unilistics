@@ -7,11 +7,12 @@ export const PublicFooter: React.FC = () => {
   return (
     <footer
       style={{
-        backgroundColor: '#ffffff',
-        borderTop: '1px solid var(--border-subtle, #ebe6de)',
+        backgroundColor: 'var(--surface-card)',
+        borderTop: '1px solid var(--border-subtle)',
         marginTop: 'auto',
         fontSize: '0.8125rem',
-        color: 'var(--text-muted, #636b78)',
+        color: 'var(--color-foreground-muted)',
+        fontFamily: 'var(--font-family-base)',
       }}
       role="contentinfo"
       aria-label="Site footer"
@@ -29,7 +30,7 @@ export const PublicFooter: React.FC = () => {
         {/* Brand & Positioning Column */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem', gridColumn: 'span 1' }}>
           <BrandWordmark size="md" showTagline={false} />
-          <p style={{ lineHeight: 1.5, margin: 0, color: 'var(--text-charcoal, #1a1a1a)' }}>
+          <p style={{ lineHeight: 1.5, margin: 0, color: 'var(--color-foreground)' }}>
             Staff-managed higher education application and visa tracking platform for Pakistani students.
           </p>
           <div
@@ -38,15 +39,16 @@ export const PublicFooter: React.FC = () => {
               alignItems: 'center',
               gap: '0.35rem',
               fontSize: '0.75rem',
-              color: '#2e7d32',
-              backgroundColor: '#e8f5e9',
-              padding: '0.25rem 0.5rem',
-              borderRadius: 'var(--radius-pill, 9999px)',
+              color: 'var(--action-primary)',
+              backgroundColor: 'var(--surface-selected)',
+              padding: '0.25rem 0.625rem',
+              borderRadius: 'var(--radius-pill)',
               width: 'fit-content',
+              fontWeight: 600,
             }}
           >
-            <ShieldCheck size={14} aria-hidden="true" />
-            <span>WCAG 2.1 AA Accessible • Synthetic Dev Safe</span>
+            <ShieldCheck size={14} strokeWidth={2} aria-hidden="true" />
+            <span>WCAG 2.2 AA Accessible • Verified Dev Safe</span>
           </div>
         </div>
 
@@ -58,7 +60,7 @@ export const PublicFooter: React.FC = () => {
               fontWeight: 700,
               textTransform: 'uppercase',
               letterSpacing: '0.06em',
-              color: 'var(--text-charcoal, #1a1a1a)',
+              color: 'var(--color-foreground)',
               margin: 0,
             }}
           >
@@ -96,7 +98,7 @@ export const PublicFooter: React.FC = () => {
               fontWeight: 700,
               textTransform: 'uppercase',
               letterSpacing: '0.06em',
-              color: 'var(--text-charcoal, #1a1a1a)',
+              color: 'var(--color-foreground)',
               margin: 0,
             }}
           >
@@ -139,7 +141,7 @@ export const PublicFooter: React.FC = () => {
               fontWeight: 700,
               textTransform: 'uppercase',
               letterSpacing: '0.06em',
-              color: 'var(--text-charcoal, #1a1a1a)',
+              color: 'var(--color-foreground)',
               margin: 0,
             }}
           >
@@ -173,9 +175,9 @@ export const PublicFooter: React.FC = () => {
       {/* Grounded Disclaimer & Copyright */}
       <div
         style={{
-          borderTop: '1px solid var(--border-subtle, #ebe6de)',
+          borderTop: '1px solid var(--border-subtle)',
           padding: '1.25rem',
-          backgroundColor: 'var(--surface-canvas, #fdfbf7)',
+          backgroundColor: 'var(--surface-canvas)',
         }}
       >
         <div
@@ -191,9 +193,9 @@ export const PublicFooter: React.FC = () => {
           }}
         >
           <div>
-            © {new Date().getFullYear()} Unilistics. All rights reserved. Active corridors: Germany, France, Italy, Romania. (Hungary deferred future scope).
+            © {new Date().getFullYear()} unilistics. All rights reserved. Active corridors: Germany, France, Italy, Romania. (Hungary deferred future scope).
           </div>
-          <div style={{ color: 'var(--text-muted, #636b78)' }}>
+          <div style={{ color: 'var(--color-foreground-muted)' }}>
             Application guides are draft procedural reference material, subject to official consular and embassy statutory review.
           </div>
         </div>
@@ -201,3 +203,5 @@ export const PublicFooter: React.FC = () => {
     </footer>
   );
 };
+
+export default PublicFooter;

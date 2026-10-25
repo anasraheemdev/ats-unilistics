@@ -40,7 +40,7 @@ export const DISCOVERY_NAV_GROUPS: NavGroupConfig[] = [
     items: [
       { id: 'disc-saved', label: 'Saved Programs', path: '/saved', iconName: 'Bookmark' },
       { id: 'disc-support', label: 'Request Managed Support', path: '/request-support', iconName: 'Sparkles' },
-      { id: 'disc-help', label: 'Help Centre', path: '/help', iconName: 'HelpCircle' },
+      { id: 'disc-help', label: 'Help Centre', path: '/help', iconName: 'CircleHelp' },
     ],
   },
 ];
@@ -71,7 +71,7 @@ export const STUDENT_NAV_GROUPS: NavGroupConfig[] = [
     id: 'account',
     label: 'Account',
     items: [
-      { id: 'stu-help', label: 'Help & Support', path: '/student/help', iconName: 'HelpCircle' },
+      { id: 'stu-help', label: 'Help & Support', path: '/student/help', iconName: 'CircleHelp' },
       { id: 'stu-account', label: 'Account Settings', path: '/student/account', iconName: 'Settings' },
     ],
   },

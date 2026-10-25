@@ -8,6 +8,7 @@ import { UserRole } from '@/types';
 import { api } from '@/lib/api';
 import { ExpiredSessionModal } from '@/components/common/ExpiredSessionModal';
 import { ThemeProvider } from '@/lib/theme';
+import { ToastProvider } from '@/components/ui/Toast';
 
 export const App: React.FC = () => {
   const [currentRole, setCurrentRole] = useState<UserRole>('visitor');
@@ -80,12 +81,14 @@ export const App: React.FC = () => {
   return (
     <ErrorBoundary fallbackTitle="Unilistics System Exception">
       <ThemeProvider>
-        <QueryClientProvider client={queryClient}>
-          <BrowserRouter>
-            <AppRoutes currentRole={currentRole} onRoleChange={setCurrentRole} />
-            <ExpiredSessionModal onReauthenticated={setCurrentRole} />
-          </BrowserRouter>
-        </QueryClientProvider>
+        <ToastProvider>
+          <QueryClientProvider client={queryClient}>
+            <BrowserRouter>
+              <AppRoutes currentRole={currentRole} onRoleChange={setCurrentRole} />
+              <ExpiredSessionModal onReauthenticated={setCurrentRole} />
+            </BrowserRouter>
+          </QueryClientProvider>
+        </ToastProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );

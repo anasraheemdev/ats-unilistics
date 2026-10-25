@@ -37,14 +37,14 @@ export const StageTimeline: React.FC<StageTimelineProps> = ({ currentStage }) =>
           const isPassed = currentIndex > idx;
           const stageName = en.stages[stageKey] || stageKey;
 
-          let badgeBg = 'var(--color-surface-hover)';
-          let badgeBorder = 'var(--color-border)';
+          let badgeBg = 'var(--surface-recessed)';
+          let badgeBorder = 'var(--border-subtle)';
           let textColor = 'var(--color-foreground-muted)';
 
           if (isCurrent) {
-            badgeBg = 'var(--color-primary-light)';
-            badgeBorder = 'var(--color-primary)';
-            textColor = 'var(--color-primary)';
+            badgeBg = 'var(--surface-selected)';
+            badgeBorder = 'var(--action-primary)';
+            textColor = 'var(--action-primary)';
           } else if (isPassed) {
             badgeBg = 'var(--color-success-bg)';
             badgeBorder = 'var(--color-success-border)';
@@ -59,11 +59,12 @@ export const StageTimeline: React.FC<StageTimelineProps> = ({ currentStage }) =>
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '0.375rem',
-                padding: '0.75rem',
-                borderRadius: 'var(--radius-md)',
+                padding: '0.75rem 0.875rem',
+                borderRadius: 'var(--radius-control, 16px)',
                 backgroundColor: badgeBg,
                 border: `1.5px solid ${badgeBorder}`,
                 transition: 'all var(--transition-fast)',
+                fontFamily: 'var(--font-family-base)',
               }}
             >
               <div
@@ -77,16 +78,17 @@ export const StageTimeline: React.FC<StageTimelineProps> = ({ currentStage }) =>
                 }}
               >
                 <span>Step {idx + 1}</span>
-                {isPassed && <Check size={14} aria-hidden="true" />}
+                {isPassed && <Check size={14} strokeWidth={2.5} aria-hidden="true" />}
                 {isCurrent && (
                   <span
                     style={{
                       fontSize: '0.625rem',
                       textTransform: 'uppercase',
-                      padding: '0.125rem 0.25rem',
-                      backgroundColor: 'var(--color-primary)',
+                      padding: '0.125rem 0.375rem',
+                      backgroundColor: 'var(--action-primary)',
                       color: 'var(--color-on-primary)',
-                      borderRadius: 'var(--radius-sm)',
+                      borderRadius: 'var(--radius-pill)',
+                      fontWeight: 700,
                     }}
                   >
                     Current
@@ -98,7 +100,7 @@ export const StageTimeline: React.FC<StageTimelineProps> = ({ currentStage }) =>
                 style={{
                   fontSize: '0.8125rem',
                   fontWeight: isCurrent ? 700 : 500,
-                  color: isCurrent ? 'var(--color-primary)' : 'var(--color-foreground)',
+                  color: isCurrent ? 'var(--action-primary)' : 'var(--color-foreground)',
                   lineHeight: 1.3,
                 }}
               >
@@ -111,3 +113,5 @@ export const StageTimeline: React.FC<StageTimelineProps> = ({ currentStage }) =>
     </nav>
   );
 };
+
+export default StageTimeline;

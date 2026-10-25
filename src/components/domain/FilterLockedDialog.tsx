@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, LogIn, UserPlus, X } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
 
 interface FilterLockedDialogProps {
   isOpen: boolean;
@@ -89,8 +90,8 @@ export const FilterLockedDialog: React.FC<FilterLockedDialogProps> = ({
         style={{
           position: 'fixed',
           inset: 0,
-          backgroundColor: 'rgba(26, 28, 30, 0.45)',
-          backdropFilter: 'blur(3px)',
+          backgroundColor: 'rgba(13, 21, 17, 0.72)',
+          backdropFilter: 'blur(4px)',
         }}
         onClick={onClose}
         aria-hidden="true"
@@ -107,10 +108,10 @@ export const FilterLockedDialog: React.FC<FilterLockedDialogProps> = ({
           position: 'relative',
           width: '100%',
           maxWidth: '460px',
-          backgroundColor: '#ffffff',
-          borderRadius: 'var(--radius-card, 16px)',
-          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.2)',
-          border: '1px solid var(--border-subtle, #ebe6de)',
+          backgroundColor: 'var(--color-surface)',
+          borderRadius: 'var(--radius-panel)',
+          boxShadow: 'var(--shadow-floating)',
+          border: '1px solid var(--color-border)',
           padding: '2rem 1.75rem',
           zIndex: 101,
         }}
@@ -123,15 +124,17 @@ export const FilterLockedDialog: React.FC<FilterLockedDialogProps> = ({
             position: 'absolute',
             top: '1rem',
             right: '1rem',
-            padding: '0.35rem',
-            borderRadius: 'var(--radius-full, 9999px)',
+            padding: '0.5rem',
+            borderRadius: 'var(--radius-full)',
             border: 'none',
             backgroundColor: 'transparent',
-            color: 'var(--text-muted, #636b78)',
+            color: 'var(--color-foreground-muted)',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            minWidth: '36px',
+            minHeight: '36px',
           }}
         >
           <X size={18} />
@@ -143,8 +146,8 @@ export const FilterLockedDialog: React.FC<FilterLockedDialogProps> = ({
               width: '48px',
               height: '48px',
               borderRadius: '50%',
-              backgroundColor: 'var(--accent-peach-bg, #ffefea)',
-              color: 'var(--action-primary, #b72301)',
+              backgroundColor: 'var(--color-primary-light)',
+              color: 'var(--color-primary)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -152,7 +155,7 @@ export const FilterLockedDialog: React.FC<FilterLockedDialogProps> = ({
             }}
             aria-hidden="true"
           >
-            <Lock size={24} />
+            <Lock size={24} strokeWidth={2} />
           </div>
 
           <h2
@@ -160,8 +163,9 @@ export const FilterLockedDialog: React.FC<FilterLockedDialogProps> = ({
             style={{
               fontSize: '1.25rem',
               fontWeight: 800,
-              color: 'var(--text-charcoal, #1a1a1a)',
+              color: 'var(--color-foreground)',
               marginBottom: '0.5rem',
+              fontFamily: 'var(--font-family-base)',
             }}
           >
             Catalogue Filters Locked
@@ -171,7 +175,7 @@ export const FilterLockedDialog: React.FC<FilterLockedDialogProps> = ({
             id="locked-dialog-desc"
             style={{
               fontSize: '0.9375rem',
-              color: 'var(--text-muted, #636b78)',
+              color: 'var(--color-foreground-muted)',
               lineHeight: 1.5,
               margin: 0,
             }}
@@ -181,64 +185,32 @@ export const FilterLockedDialog: React.FC<FilterLockedDialogProps> = ({
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          <button
+          <Button
             ref={primaryButtonRef}
-            type="button"
+            variant="primary"
             onClick={handleSignUp}
-            className="btn-pill btn-pill-primary"
-            style={{
-              width: '100%',
-              padding: '0.75rem 1rem',
-              fontSize: '0.9375rem',
-              fontWeight: 700,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.5rem',
-              cursor: 'pointer',
-            }}
+            leftIcon={<UserPlus size={18} />}
+            style={{ width: '100%', minHeight: '48px' }}
           >
-            <UserPlus size={18} aria-hidden="true" />
-            <span>Create Free Account (Sign Up)</span>
-          </button>
+            Create Free Account (Sign Up)
+          </Button>
 
-          <button
-            type="button"
+          <Button
+            variant="outline"
             onClick={handleSignIn}
-            className="btn-pill btn-pill-outline"
-            style={{
-              width: '100%',
-              padding: '0.75rem 1rem',
-              fontSize: '0.9375rem',
-              fontWeight: 600,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.5rem',
-              cursor: 'pointer',
-            }}
+            leftIcon={<LogIn size={18} />}
+            style={{ width: '100%', minHeight: '48px' }}
           >
-            <LogIn size={18} aria-hidden="true" />
-            <span>Sign In to Existing Account</span>
-          </button>
+            Sign In to Existing Account
+          </Button>
 
-          <button
-            type="button"
+          <Button
+            variant="ghost"
             onClick={onClose}
-            style={{
-              width: '100%',
-              padding: '0.5rem 1rem',
-              fontSize: '0.875rem',
-              fontWeight: 500,
-              color: 'var(--text-muted, #636b78)',
-              backgroundColor: 'transparent',
-              border: 'none',
-              cursor: 'pointer',
-              marginTop: '0.25rem',
-            }}
+            style={{ width: '100%', minHeight: '40px', color: 'var(--color-foreground-muted)' }}
           >
             Continue browsing preview
-          </button>
+          </Button>
         </div>
       </div>
     </div>

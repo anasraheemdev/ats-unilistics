@@ -2,12 +2,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import { UserRole } from '@/types';
 import { ROUTES } from '@/config/routes';
+import { BrandWordmark } from '@/components/ui/BrandWordmark';
 import {
   Menu,
   X,
   Compass,
   Mail,
-  Home,
+  House,
   LogIn,
   UserPlus,
 } from 'lucide-react';
@@ -17,13 +18,8 @@ interface PublicNavbarProps {
   onRoleChange?: (newRole: UserRole) => void;
 }
 
-const LOCAL_LOGO = '/images/unilistics/unilistics-logo.png';
-const FALLBACK_LOGO =
-  'https://lh3.googleusercontent.com/aida/AEtjO1XZO1prPEcg9JZ7p5bs_YGqOXor3IiGvli7iEnlFMk-lBAQZE8Ljo_0_u5Ljx3BRtoVrjKmvtp6xEgQcN8Zs9ajrhGd4Kyi55QMS8slvDM2xS6950IfaeqfQFPLFT78_3FHSgzNk19R4CBSJ8CDR-du8zCcxRH0FdLAtirwHO-UME2_Ve9jzZuKbswwg1xGp1guNigeRxRC41avkLu0Ys1WNzvhrv3CiBqBBt9x25H4cOQ_B6-qu-3oMyI';
-
 export const PublicNavbar: React.FC<PublicNavbarProps> = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [logoFailed, setLogoFailed] = useState(false);
 
   const location = useLocation();
   const drawerRef = useRef<HTMLDivElement>(null);
@@ -61,54 +57,52 @@ export const PublicNavbar: React.FC<PublicNavbarProps> = () => {
   return (
     <>
       <header
-        className="fixed top-0 left-0 right-0 z-50 bg-[#FBF9F5]/90 backdrop-blur-xl border-b border-[#E8E8EA] shadow-[0_2px_12px_rgba(26,28,30,0.04)]"
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 50,
+          backgroundColor: 'var(--surface-canvas)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          borderBottom: '1px solid var(--border-subtle)',
+          boxShadow: 'var(--shadow-sm)',
+          fontFamily: 'var(--font-family-base)',
+        }}
         role="banner"
       >
-        <div className="h-20 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+        <div
+          style={{
+            height: '72px',
+            maxWidth: '1440px',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            paddingLeft: 'var(--space-4)',
+            paddingRight: 'var(--space-4)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '1rem',
+          }}
+        >
           {/* 1. Brand Logo & Home */}
-          <Link
-            to={ROUTES.HOME}
-            id="public-nav-brand-logo"
-            className="flex items-center gap-2.5 no-underline flex-shrink-0 group focus-visible:outline-2 focus-visible:outline-primary rounded-lg p-1"
-            aria-label="Unilistics Home"
-          >
-            {!logoFailed ? (
-              <img
-                alt="Unilistics Logo"
-                className="h-8 w-auto object-contain transition-transform group-hover:scale-105"
-                src={LOCAL_LOGO}
-                onError={() => {
-                  const img = new Image();
-                  img.src = FALLBACK_LOGO;
-                  img.onload = () => {
-                    const el = document.getElementById('public-unilistics-nav-logo') as HTMLImageElement;
-                    if (el) el.src = FALLBACK_LOGO;
-                  };
-                  img.onerror = () => setLogoFailed(true);
-                }}
-                id="public-unilistics-nav-logo"
-              />
-            ) : (
-              <div
-                className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#FF5E36] to-[#B42901] flex items-center justify-center text-white font-black text-sm shadow-sm"
-                aria-hidden="true"
-              >
-                U
-              </div>
-            )}
-            <div className="flex flex-col">
-              <span className="font-headline-sm text-headline-sm text-on-surface tracking-tight font-bold leading-none">
-                Unilistics
-              </span>
-              <span className="text-[10px] uppercase font-bold tracking-wider text-on-surface-variant/70 leading-tight mt-0.5 hidden sm:block">
-                Europe Higher Ed
-              </span>
-            </div>
-          </Link>
+          <div id="public-nav-brand-logo">
+            <BrandWordmark size="md" showTagline={false} />
+          </div>
 
           {/* 2. Desktop Primary Navigation Pills */}
           <nav
-            className="hidden md:flex items-center gap-1.5 p-1 bg-surface-container-low/80 rounded-full border border-surface-container shadow-[0_1px_3px_rgba(26,28,30,0.02)]"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.375rem',
+              padding: '0.25rem 0.375rem',
+              backgroundColor: 'var(--surface-panel)',
+              borderRadius: 'var(--radius-pill)',
+              border: '1px solid var(--border-subtle)',
+            }}
+            className="hidden md:flex"
             aria-label="Public Navigation"
           >
             {/* Home */}
@@ -116,66 +110,115 @@ export const PublicNavbar: React.FC<PublicNavbarProps> = () => {
               to={ROUTES.HOME}
               end
               id="public-nav-home-link"
-              className={({ isActive }) =>
-                `px-4 py-2 rounded-full transition-all text-sm font-semibold no-underline focus-visible:ring-2 focus-visible:ring-primary ${
-                  isActive
-                    ? 'bg-primary text-white shadow-[0_4px_16px_-2px_rgba(255,94,54,0.3)]'
-                    : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest'
-                }`
-              }
+              style={({ isActive }) => ({
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.375rem',
+                padding: '0.5rem 1rem',
+                borderRadius: 'var(--radius-pill)',
+                fontSize: '0.875rem',
+                fontWeight: isActive ? 600 : 500,
+                textDecoration: 'none',
+                color: isActive ? 'var(--color-on-primary)' : 'var(--color-foreground)',
+                backgroundColor: isActive ? 'var(--action-primary)' : 'transparent',
+                transition: 'all var(--transition-fast)',
+              })}
             >
-              Home
+              <House size={16} strokeWidth={2} aria-hidden="true" />
+              <span>Home</span>
             </NavLink>
 
             {/* Explore Universities */}
             <NavLink
               to={ROUTES.UNIVERSITIES}
               id="public-nav-universities-link"
-              className={({ isActive }) =>
-                `px-4 py-2 rounded-full transition-all text-sm font-semibold no-underline focus-visible:ring-2 focus-visible:ring-primary ${
-                  isActive
-                    ? 'bg-primary text-white shadow-[0_4px_16px_-2px_rgba(255,94,54,0.3)]'
-                    : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest'
-                }`
-              }
+              style={({ isActive }) => ({
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.375rem',
+                padding: '0.5rem 1rem',
+                borderRadius: 'var(--radius-pill)',
+                fontSize: '0.875rem',
+                fontWeight: isActive ? 600 : 500,
+                textDecoration: 'none',
+                color: isActive ? 'var(--color-on-primary)' : 'var(--color-foreground)',
+                backgroundColor: isActive ? 'var(--action-primary)' : 'transparent',
+                transition: 'all var(--transition-fast)',
+              })}
             >
-              Explore Universities
+              <Compass size={16} strokeWidth={2} aria-hidden="true" />
+              <span>Explore Universities</span>
             </NavLink>
 
             {/* Contact */}
             <NavLink
               to={ROUTES.CONTACT}
               id="public-nav-contact-link"
-              className={({ isActive }) =>
-                `px-4 py-2 rounded-full transition-all text-sm font-semibold no-underline focus-visible:ring-2 focus-visible:ring-primary ${
-                  isActive
-                    ? 'bg-primary text-white shadow-[0_4px_16px_-2px_rgba(255,94,54,0.3)]'
-                    : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest'
-                }`
-              }
+              style={({ isActive }) => ({
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.375rem',
+                padding: '0.5rem 1rem',
+                borderRadius: 'var(--radius-pill)',
+                fontSize: '0.875rem',
+                fontWeight: isActive ? 600 : 500,
+                textDecoration: 'none',
+                color: isActive ? 'var(--color-on-primary)' : 'var(--color-foreground)',
+                backgroundColor: isActive ? 'var(--action-primary)' : 'transparent',
+                transition: 'all var(--transition-fast)',
+              })}
             >
-              Contact
+              <Mail size={16} strokeWidth={2} aria-hidden="true" />
+              <span>Contact</span>
             </NavLink>
           </nav>
 
           {/* 3. Desktop Authentication Actions */}
-          <div className="hidden sm:flex items-center gap-3 flex-shrink-0">
+          <div className="hidden sm:flex" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
             {/* Sign in */}
             <Link
               to={ROUTES.SIGN_IN}
               id="public-nav-signin-btn"
-              className="px-4 py-2 text-sm font-bold text-on-surface hover:text-primary transition-colors no-underline rounded-full hover:bg-surface-container-low focus-visible:ring-2 focus-visible:ring-primary"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.375rem',
+                padding: '0.5rem 1rem',
+                fontSize: '0.875rem',
+                fontWeight: 600,
+                color: 'var(--color-foreground)',
+                textDecoration: 'none',
+                borderRadius: 'var(--radius-control)',
+                minHeight: '44px',
+                transition: 'background-color var(--transition-fast), color var(--transition-fast)',
+              }}
             >
-              Sign in
+              <LogIn size={16} strokeWidth={2} aria-hidden="true" />
+              <span>Sign in</span>
             </Link>
 
-            {/* Sign up (Visually Prominent) */}
+            {/* Sign up */}
             <Link
               to={ROUTES.SIGN_UP}
               id="public-nav-signup-btn"
-              className="px-5 py-2.5 rounded-full text-sm font-bold text-white bg-gradient-to-r from-[#FF5E36] to-[#B42901] hover:opacity-95 shadow-[0_3px_10px_rgba(255,87,51,0.25)] hover:shadow-[0_6px_16px_rgba(255,87,51,0.35)] active:scale-95 transition-all no-underline focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.375rem',
+                padding: '0.625rem 1.25rem',
+                borderRadius: 'var(--radius-control)',
+                fontSize: '0.875rem',
+                fontWeight: 700,
+                color: 'var(--color-on-primary)',
+                backgroundColor: 'var(--action-primary)',
+                boxShadow: 'var(--shadow-sm)',
+                textDecoration: 'none',
+                minHeight: '44px',
+                transition: 'all var(--transition-fast)',
+              }}
             >
-              Sign up
+              <UserPlus size={16} strokeWidth={2} aria-hidden="true" />
+              <span>Sign up</span>
             </Link>
           </div>
 
@@ -185,12 +228,25 @@ export const PublicNavbar: React.FC<PublicNavbarProps> = () => {
             type="button"
             id="public-nav-mobile-menu-btn"
             onClick={() => setMobileMenuOpen(true)}
-            className="md:hidden p-2 rounded-full text-on-surface hover:bg-surface-container-low transition-colors focus-visible:ring-2 focus-visible:ring-primary"
+            className="md:hidden"
             aria-label="Open navigation menu"
             aria-expanded={mobileMenuOpen}
             aria-controls="public-mobile-drawer"
+            style={{
+              padding: '0.5rem',
+              borderRadius: 'var(--radius-control)',
+              color: 'var(--color-foreground)',
+              backgroundColor: 'var(--surface-panel)',
+              border: '1px solid var(--border-subtle)',
+              cursor: 'pointer',
+              minHeight: '44px',
+              minWidth: '44px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
           >
-            <Menu size={24} aria-hidden="true" />
+            <Menu size={20} strokeWidth={2} aria-hidden="true" />
           </button>
         </div>
       </header>
@@ -198,7 +254,13 @@ export const PublicNavbar: React.FC<PublicNavbarProps> = () => {
       {/* 5. Accessible Mobile Navigation Drawer */}
       {mobileMenuOpen && (
         <div
-          className="fixed inset-0 z-50 md:hidden bg-black/40 backdrop-blur-sm animate-in fade-in duration-150"
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 100,
+            backgroundColor: 'rgba(13, 21, 17, 0.72)',
+            backdropFilter: 'blur(4px)',
+          }}
           onClick={() => setMobileMenuOpen(false)}
           aria-hidden="true"
         >
@@ -208,97 +270,195 @@ export const PublicNavbar: React.FC<PublicNavbarProps> = () => {
             role="dialog"
             aria-modal="true"
             aria-label="Site navigation"
-            className="w-[300px] max-w-[85vw] h-full bg-[#FBF9F5] shadow-2xl p-6 flex flex-col justify-between overflow-y-auto animate-in slide-in-from-left duration-200"
+            style={{
+              width: '300px',
+              maxWidth: '85vw',
+              height: '100%',
+              backgroundColor: 'var(--surface-canvas)',
+              boxShadow: 'var(--shadow-floating)',
+              padding: '1.5rem',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              overflowY: 'auto',
+              borderRight: '1px solid var(--border-subtle)',
+            }}
             onClick={(e) => e.stopPropagation()}
           >
             <div>
               {/* Drawer Top Header */}
-              <div className="flex items-center justify-between pb-5 border-b border-surface-container">
-                <Link
-                  to={ROUTES.HOME}
-                  className="flex items-center gap-2 no-underline"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <img alt="Unilistics Logo" className="h-7 w-auto object-contain" src={LOCAL_LOGO} />
-                  <span className="font-headline-sm text-base text-on-surface font-bold">Unilistics</span>
-                </Link>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  paddingBottom: '1.25rem',
+                  borderBottom: '1px solid var(--border-subtle)',
+                }}
+              >
+                <BrandWordmark size="sm" showTagline={false} />
 
                 <button
                   type="button"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="p-1.5 rounded-full text-on-surface-variant hover:bg-surface-container focus-visible:ring-2 focus-visible:ring-primary"
+                  style={{
+                    padding: '0.375rem',
+                    borderRadius: 'var(--radius-pill)',
+                    color: 'var(--color-foreground-muted)',
+                    border: 'none',
+                    background: 'none',
+                    cursor: 'pointer',
+                    minHeight: '44px',
+                    minWidth: '44px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
                   aria-label="Close navigation menu"
                 >
-                  <X size={20} />
+                  <X size={20} strokeWidth={2} />
                 </button>
               </div>
 
               {/* Mobile Primary Navigation Links */}
-              <nav className="flex flex-col gap-1.5 py-6" aria-label="Mobile Navigation">
+              <nav
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.375rem',
+                  paddingTop: '1.5rem',
+                  paddingBottom: '1.5rem',
+                }}
+                aria-label="Mobile Navigation"
+              >
                 <NavLink
                   to={ROUTES.HOME}
                   end
                   id="mobile-nav-home-link"
-                  className={({ isActive }) =>
-                    `px-4 py-3 rounded-xl text-sm font-bold no-underline flex items-center gap-3 transition-colors ${
-                      isActive ? 'bg-primary text-white shadow-sm' : 'text-on-surface hover:bg-surface-container'
-                    }`
-                  }
+                  style={({ isActive }) => ({
+                    padding: '0.75rem 1rem',
+                    borderRadius: 'var(--radius-control)',
+                    fontSize: '0.9375rem',
+                    fontWeight: 600,
+                    textDecoration: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    color: isActive ? 'var(--color-on-primary)' : 'var(--color-foreground)',
+                    backgroundColor: isActive ? 'var(--action-primary)' : 'transparent',
+                    minHeight: '44px',
+                  })}
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <Home size={18} aria-hidden="true" />
+                  <House size={18} strokeWidth={2} aria-hidden="true" />
                   <span>Home</span>
                 </NavLink>
 
                 <NavLink
                   to={ROUTES.UNIVERSITIES}
                   id="mobile-nav-universities-link"
-                  className={({ isActive }) =>
-                    `px-4 py-3 rounded-xl text-sm font-bold no-underline flex items-center gap-3 transition-colors ${
-                      isActive ? 'bg-primary text-white shadow-sm' : 'text-on-surface hover:bg-surface-container'
-                    }`
-                  }
+                  style={({ isActive }) => ({
+                    padding: '0.75rem 1rem',
+                    borderRadius: 'var(--radius-control)',
+                    fontSize: '0.9375rem',
+                    fontWeight: 600,
+                    textDecoration: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    color: isActive ? 'var(--color-on-primary)' : 'var(--color-foreground)',
+                    backgroundColor: isActive ? 'var(--action-primary)' : 'transparent',
+                    minHeight: '44px',
+                  })}
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <Compass size={18} aria-hidden="true" />
+                  <Compass size={18} strokeWidth={2} aria-hidden="true" />
                   <span>Explore Universities</span>
                 </NavLink>
 
                 <NavLink
                   to={ROUTES.CONTACT}
                   id="mobile-nav-contact-link"
-                  className={({ isActive }) =>
-                    `px-4 py-3 rounded-xl text-sm font-bold no-underline flex items-center gap-3 transition-colors ${
-                      isActive ? 'bg-primary text-white shadow-sm' : 'text-on-surface hover:bg-surface-container'
-                    }`
-                  }
+                  style={({ isActive }) => ({
+                    padding: '0.75rem 1rem',
+                    borderRadius: 'var(--radius-control)',
+                    fontSize: '0.9375rem',
+                    fontWeight: 600,
+                    textDecoration: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    color: isActive ? 'var(--color-on-primary)' : 'var(--color-foreground)',
+                    backgroundColor: isActive ? 'var(--action-primary)' : 'transparent',
+                    minHeight: '44px',
+                  })}
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <Mail size={18} aria-hidden="true" />
+                  <Mail size={18} strokeWidth={2} aria-hidden="true" />
                   <span>Contact</span>
                 </NavLink>
               </nav>
             </div>
 
             {/* Mobile Authentication Actions */}
-            <div className="pt-6 border-t border-surface-container flex flex-col gap-2.5">
+            <div
+              style={{
+                paddingTop: '1.5rem',
+                borderTop: '1px solid var(--border-subtle)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.75rem',
+              }}
+            >
               <Link
                 to={ROUTES.SIGN_IN}
                 id="mobile-nav-signin-btn"
-                className="w-full py-2.5 rounded-xl text-center text-sm font-bold text-on-surface bg-white border border-surface-container hover:bg-surface-container transition-colors no-underline flex items-center justify-center gap-2"
+                style={{
+                  width: '100%',
+                  padding: '0.75rem 1rem',
+                  borderRadius: 'var(--radius-control)',
+                  textAlign: 'center',
+                  fontSize: '0.875rem',
+                  fontWeight: 600,
+                  color: 'var(--color-foreground)',
+                  backgroundColor: 'var(--surface-card)',
+                  border: '1px solid var(--border-subtle)',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem',
+                  minHeight: '44px',
+                }}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <LogIn size={16} />
+                <LogIn size={16} strokeWidth={2} />
                 <span>Sign in</span>
               </Link>
 
               <Link
                 to={ROUTES.SIGN_UP}
                 id="mobile-nav-signup-btn"
-                className="w-full py-2.5 rounded-xl text-center text-sm font-bold text-white bg-gradient-to-r from-[#FF5E36] to-[#B42901] shadow-sm hover:opacity-95 transition-opacity no-underline flex items-center justify-center gap-2"
+                style={{
+                  width: '100%',
+                  padding: '0.75rem 1rem',
+                  borderRadius: 'var(--radius-control)',
+                  textAlign: 'center',
+                  fontSize: '0.875rem',
+                  fontWeight: 700,
+                  color: 'var(--color-on-primary)',
+                  backgroundColor: 'var(--action-primary)',
+                  boxShadow: 'var(--shadow-sm)',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem',
+                  minHeight: '44px',
+                }}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <UserPlus size={16} />
+                <UserPlus size={16} strokeWidth={2} />
                 <span>Sign up</span>
               </Link>
             </div>
@@ -308,3 +468,5 @@ export const PublicNavbar: React.FC<PublicNavbarProps> = () => {
     </>
   );
 };
+
+export default PublicNavbar;

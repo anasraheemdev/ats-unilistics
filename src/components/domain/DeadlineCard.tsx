@@ -24,7 +24,10 @@ export const DeadlineCard: React.FC<DeadlineCardProps> = ({
       padding="lg"
       style={{
         marginBottom: '1.5rem',
-        backgroundColor: 'var(--color-surface)',
+        backgroundColor: 'var(--surface-card)',
+        borderRadius: 'var(--radius-card, 24px)',
+        border: '1px solid var(--border-subtle)',
+        borderLeft: '4px solid var(--action-primary)',
       }}
     >
       <div
@@ -32,25 +35,26 @@ export const DeadlineCard: React.FC<DeadlineCardProps> = ({
           display: 'flex',
           alignItems: 'center',
           gap: '0.5rem',
-          color: 'var(--color-primary)',
+          color: 'var(--action-primary)',
           fontSize: '0.8125rem',
-          fontWeight: 700,
-          textTransform: 'uppercase',
-          letterSpacing: '0.04em',
+          fontWeight: 600,
+          letterSpacing: '0.02em',
           marginBottom: '0.5rem',
+          fontFamily: 'var(--font-family-base)',
         }}
       >
-        <AlertCircle size={18} aria-hidden="true" />
-        <span>Action Required Now • Stage: {currentStage}</span>
+        <AlertCircle size={18} strokeWidth={2} aria-hidden="true" />
+        <span>Action required now • Stage: {currentStage}</span>
       </div>
 
       <h2
         style={{
-          fontSize: '1.375rem',
+          fontSize: '1.25rem',
           fontWeight: 700,
           color: 'var(--color-foreground)',
           lineHeight: 1.35,
           marginBottom: '1.25rem',
+          fontFamily: 'var(--font-family-base)',
         }}
       >
         {nextRequiredAction}
@@ -62,21 +66,24 @@ export const DeadlineCard: React.FC<DeadlineCardProps> = ({
           gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
           gap: '1rem',
           paddingTop: '1rem',
-          borderTop: '1px solid var(--color-border)',
+          borderTop: '1px solid var(--border-subtle)',
         }}
       >
         {/* Due Date */}
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.625rem' }}>
           <div
             style={{
-              padding: '0.375rem',
-              borderRadius: 'var(--radius-sm)',
+              padding: '0.5rem',
+              borderRadius: 'var(--radius-control, 16px)',
               backgroundColor: 'var(--color-destructive-bg)',
               color: 'var(--color-destructive)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
             aria-hidden="true"
           >
-            <Calendar size={18} />
+            <Calendar size={18} strokeWidth={2} />
           </div>
           <div>
             <span style={{ display: 'block', fontSize: '0.75rem', color: 'var(--color-foreground-muted)', fontWeight: 600 }}>
@@ -92,14 +99,17 @@ export const DeadlineCard: React.FC<DeadlineCardProps> = ({
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.625rem' }}>
           <div
             style={{
-              padding: '0.375rem',
-              borderRadius: 'var(--radius-sm)',
-              backgroundColor: 'var(--color-primary-light)',
-              color: 'var(--color-primary)',
+              padding: '0.5rem',
+              borderRadius: 'var(--radius-control, 16px)',
+              backgroundColor: 'var(--surface-selected)',
+              color: 'var(--action-primary)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
             aria-hidden="true"
           >
-            <User size={18} />
+            <User size={18} strokeWidth={2} />
           </div>
           <div>
             <span style={{ display: 'block', fontSize: '0.75rem', color: 'var(--color-foreground-muted)', fontWeight: 600 }}>
@@ -115,14 +125,17 @@ export const DeadlineCard: React.FC<DeadlineCardProps> = ({
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.625rem' }}>
           <div
             style={{
-              padding: '0.375rem',
-              borderRadius: 'var(--radius-sm)',
-              backgroundColor: 'var(--color-surface-hover)',
+              padding: '0.5rem',
+              borderRadius: 'var(--radius-control, 16px)',
+              backgroundColor: 'var(--surface-recessed)',
               color: 'var(--color-foreground-muted)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
             aria-hidden="true"
           >
-            <Clock size={18} />
+            <Clock size={18} strokeWidth={2} />
           </div>
           <div>
             <span style={{ display: 'block', fontSize: '0.75rem', color: 'var(--color-foreground-muted)', fontWeight: 600 }}>
@@ -137,3 +150,5 @@ export const DeadlineCard: React.FC<DeadlineCardProps> = ({
     </Card>
   );
 };
+
+export default DeadlineCard;

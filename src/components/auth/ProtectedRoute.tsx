@@ -11,12 +11,12 @@ import { ROUTES, validateInternalReturnUrl } from '@/config/routes';
 import {
   LogIn,
   UserPlus,
-  Home,
+  House,
   Compass,
   Clock,
   Sparkles,
   ShieldAlert,
-  FileCheck2,
+  FileText,
 } from 'lucide-react';
 
 interface ProtectedRouteProps {
@@ -58,7 +58,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   // 1. Neutral loading state while checking session and permissions
   if (isSessionLoading || isCheckingGuidance) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#FBF9F5' }}>
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--color-background)' }}>
         <PublicNavbar currentRole={currentRole} onRoleChange={onRoleChange} />
         <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
           <LoadingState message="Verifying account permissions & authorization..." minHeight="40vh" />
@@ -79,7 +79,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   // 3. Case A: Signed-out person (visitor) accessing protected route
   if (currentRole === 'visitor') {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#FBF9F5' }}>
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--color-background)' }}>
         <PublicNavbar currentRole={currentRole} onRoleChange={onRoleChange} />
 
         <main
@@ -170,7 +170,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
                       gap: '0.35rem',
                     }}
                   >
-                    <Home size={14} />
+                    <House size={14} />
                     <span>Back to Home</span>
                   </Link>
                 </div>
@@ -201,7 +201,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       : '';
 
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#FBF9F5' }}>
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--color-background)' }}>
         <PublicNavbar currentRole={currentRole} onRoleChange={onRoleChange} />
 
         <main
@@ -315,7 +315,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   // 5. Case C: Student or explorer attempting to access staff/admin routes
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#FBF9F5' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--color-background)' }}>
       <PublicNavbar currentRole={currentRole} onRoleChange={onRoleChange} />
 
       <main
@@ -375,7 +375,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               {currentRole === 'managed_student' ? (
                 <Link to={ROUTES.STUDENT.ROOT} style={{ textDecoration: 'none' }}>
-                  <Button variant="primary" size="lg" leftIcon={<FileCheck2 size={16} />} style={{ width: '100%' }}>
+                  <Button variant="primary" size="lg" leftIcon={<FileText size={16} />} style={{ width: '100%' }}>
                     Return to My Student Workspace
                   </Button>
                 </Link>
@@ -388,7 +388,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
               )}
 
               <Link to={ROUTES.HOME} style={{ textDecoration: 'none' }}>
-                <Button variant="outline" size="lg" leftIcon={<Home size={16} />} style={{ width: '100%' }}>
+                <Button variant="outline" size="lg" leftIcon={<House size={16} />} style={{ width: '100%' }}>
                   Back to Home
                 </Button>
               </Link>

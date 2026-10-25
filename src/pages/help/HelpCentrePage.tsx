@@ -20,7 +20,7 @@ import {
   MessageSquare,
   Bot,
   Send,
-  HelpCircle,
+  CircleHelp,
   X,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -245,7 +245,7 @@ export const HelpCentrePage: React.FC<HelpCentrePageProps> = ({ currentRole = 'v
           <ErrorState message="Could not load help articles." onRetry={() => refetch()} />
         ) : (articles || []).length === 0 ? (
           <Card padding="lg" style={{ textAlign: 'center', padding: '3rem 1rem' }}>
-            <HelpCircle size={40} style={{ margin: '0 auto 1rem', color: 'var(--color-foreground-muted)' }} />
+            <CircleHelp size={40} strokeWidth={2} style={{ margin: '0 auto 1rem', color: 'var(--color-foreground-muted)' }} aria-hidden="true" />
             <h3 style={{ fontSize: '1.125rem', fontWeight: 700 }}>No Reviewed Articles Match Your Criteria</h3>
             <p style={{ color: 'var(--color-foreground-muted)', fontSize: '0.875rem', maxWidth: '480px', margin: '0.5rem auto 1.5rem' }}>
               We could not find published guidance matching "{searchQuery}". Unpublished internal guide drafts are strictly excluded to prevent procedural misinformation.

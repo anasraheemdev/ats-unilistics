@@ -5,15 +5,15 @@ import { BrandWordmark } from '@/components/ui/BrandWordmark';
 import { UserRole } from '@/types';
 import { api } from '@/lib/api';
 import {
-  LayoutDashboard,
+  House,
   GraduationCap,
-  FileCheck2,
   Clock,
   MessageSquare,
   Compass,
-  Award,
+  Heart,
   Bookmark,
-  HelpCircle,
+  Map,
+  CircleHelp,
   Settings,
   Users,
   BookOpen,
@@ -21,12 +21,15 @@ import {
   Database,
   Inbox,
   ShieldAlert,
+  ShieldCheck,
   FileText,
-  Building2,
   LogOut,
   ChevronLeft,
   ChevronRight,
   X,
+  SlidersHorizontal,
+  Bell,
+  ArrowRight,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -43,16 +46,21 @@ interface SidebarProps {
   onRoleChange: (role: UserRole) => void;
 }
 
+// Semantic Lucide outline icon mapping matching DESIGN_SYSTEM_V2
 const ICON_MAP: Record<string, React.ComponentType<any>> = {
-  LayoutDashboard,
+  House,
+  LayoutDashboard: House, // Map Today/Home/Overview to House
   GraduationCap,
-  FileCheck2,
+  FileCheck2: FileText,   // Semantic file-text mapping
   Clock,
   MessageSquare,
   Compass,
-  Award,
+  Award: Heart,           // Semantic heart mapping for scholarships
+  Heart,
   Bookmark,
-  HelpCircle,
+  Map,
+  HelpCircle: CircleHelp, // Semantic circle-help
+  CircleHelp,
   Settings,
   Users,
   BookOpen,
@@ -60,8 +68,12 @@ const ICON_MAP: Record<string, React.ComponentType<any>> = {
   Database,
   Inbox,
   ShieldAlert,
+  ShieldCheck,
   FileText,
-  Building2,
+  Building2: GraduationCap,
+  SlidersHorizontal,
+  Bell,
+  ArrowRight,
 };
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -118,8 +130,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
           display: 'flex',
           flexDirection: 'column',
           height: '100%',
-          backgroundColor: '#ffffff',
-          color: 'var(--text-body)',
+          backgroundColor: 'var(--surface-panel)',
+          color: 'var(--color-foreground)',
+          borderRight: '1px solid var(--border-subtle)',
+          fontFamily: 'var(--font-family-base)',
         }}
       >
         {/* Top Header / Branding */}
@@ -139,18 +153,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
               style={{
                 width: '36px',
                 height: '36px',
-                borderRadius: '8px',
+                borderRadius: 'var(--radius-control)',
                 backgroundColor: 'var(--action-primary)',
-                color: '#ffffff',
+                color: 'var(--color-on-primary)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontWeight: 800,
+                fontWeight: 700,
                 fontSize: '1rem',
               }}
-              title="Unilistics"
+              title="unilistics"
             >
-              U
+              u
             </div>
           ) : (
             <div>
@@ -158,7 +172,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <div
                 style={{
                   fontSize: '0.6875rem',
-                  fontWeight: 700,
+                  fontWeight: 600,
                   textTransform: 'uppercase',
                   letterSpacing: '0.06em',
                   color: 'var(--action-primary)',
@@ -176,15 +190,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onClick={onCloseMobile}
               aria-label="Close navigation menu"
               style={{
-                padding: '0.375rem',
+                padding: '0.5rem',
                 borderRadius: 'var(--radius-pill)',
-                color: 'var(--text-muted)',
+                color: 'var(--color-foreground-muted)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                minHeight: '44px',
+                minWidth: '44px',
               }}
             >
-              <X size={20} />
+              <X size={20} strokeWidth={2} />
             </button>
           ) : (
             <button
@@ -193,18 +209,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
               aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
               title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
               style={{
-                padding: '0.375rem',
-                borderRadius: 'var(--radius-full)',
-                color: 'var(--text-muted)',
-                backgroundColor: 'var(--surface-recessed)',
+                padding: '0.5rem',
+                borderRadius: 'var(--radius-pill)',
+                color: 'var(--color-foreground-muted)',
+                backgroundColor: 'var(--surface-card)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 border: '1px solid var(--border-subtle)',
                 cursor: 'pointer',
+                minHeight: '36px',
+                minWidth: '36px',
               }}
             >
-              {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
+              {collapsed ? <ChevronRight size={16} strokeWidth={2} /> : <ChevronLeft size={16} strokeWidth={2} />}
             </button>
           )}
         </div>
@@ -227,20 +245,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <div
                   style={{
                     fontSize: '0.6875rem',
-                    fontWeight: 700,
+                    fontWeight: 600,
                     textTransform: 'uppercase',
                     letterSpacing: '0.06em',
-                    color: 'var(--text-muted)',
-                    padding: '0 0.625rem 0.5rem',
+                    color: 'var(--color-foreground-muted)',
+                    padding: '0 0.75rem 0.5rem',
                   }}
                 >
                   {group.label}
                 </div>
               )}
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
                 {group.items.map((item) => {
-                  const Icon = ICON_MAP[item.iconName] || LayoutDashboard;
+                  const Icon = ICON_MAP[item.iconName] || House;
                   const badgeCount = item.badgeKey ? badges[item.badgeKey] : undefined;
 
                   return (
@@ -254,19 +272,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         alignItems: 'center',
                         justifyContent: isCollapsed ? 'center' : 'space-between',
                         gap: '0.625rem',
-                        padding: isCollapsed ? '0.625rem 0' : '0.55rem 0.75rem',
-                        borderRadius: 'var(--radius-sm)',
+                        padding: isCollapsed ? '0.625rem 0' : '0.625rem 0.875rem',
+                        minHeight: 'var(--touch-target-min, 44px)',
+                        borderRadius: 'var(--radius-control, 16px)',
                         fontSize: '0.875rem',
                         fontWeight: isActive ? 600 : 500,
                         textDecoration: 'none',
-                        color: isActive ? 'var(--action-primary)' : 'var(--text-charcoal)',
-                        backgroundColor: isActive ? 'var(--accent-peach-bg)' : 'transparent',
-                        borderLeft: isActive && !isCollapsed ? '3px solid var(--action-primary)' : '3px solid transparent',
+                        color: isActive ? 'var(--action-primary)' : 'var(--color-foreground)',
+                        backgroundColor: isActive ? 'var(--surface-selected)' : 'transparent',
+                        border: '1px solid',
+                        borderColor: isActive ? 'var(--border-subtle)' : 'transparent',
                         transition: 'all var(--transition-fast)',
                       })}
                     >
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
-                        <Icon size={18} aria-hidden={true} />
+                        <Icon size={20} strokeWidth={2} aria-hidden={true} />
                         {!isCollapsed && <span>{item.label}</span>}
                       </div>
 
@@ -275,10 +295,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                           style={{
                             fontSize: '0.6875rem',
                             fontWeight: 700,
-                            padding: '0.125rem 0.45rem',
+                            padding: '0.125rem 0.5rem',
                             borderRadius: 'var(--radius-pill)',
                             backgroundColor: 'var(--action-primary)',
-                            color: '#ffffff',
+                            color: 'var(--color-on-primary)',
                           }}
                         >
                           {badgeCount}
@@ -297,7 +317,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           style={{
             padding: isCollapsed ? '0.75rem 0.375rem' : '0.875rem 1rem',
             borderTop: '1px solid var(--border-subtle)',
-            backgroundColor: 'var(--surface-recessed)',
+            backgroundColor: 'var(--surface-panel)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: isCollapsed ? 'center' : 'space-between',
@@ -311,32 +331,32 @@ export const Sidebar: React.FC<SidebarProps> = ({
               title={`Sign out (${displayName})`}
               aria-label={`Sign out of account (${displayName})`}
               style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: 'var(--radius-full)',
+                width: '40px',
+                height: '40px',
+                borderRadius: 'var(--radius-control)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: 'var(--text-muted)',
+                color: 'var(--color-foreground-muted)',
                 cursor: 'pointer',
               }}
             >
-              <LogOut size={16} />
+              <LogOut size={18} strokeWidth={2} />
             </button>
           ) : (
             <>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', overflow: 'hidden' }}>
                 <div
                   style={{
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: 'var(--radius-full)',
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: 'var(--radius-control, 16px)',
                     backgroundColor: 'var(--action-primary)',
-                    color: '#ffffff',
+                    color: 'var(--color-on-primary)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: '0.8125rem',
+                    fontSize: '0.875rem',
                     fontWeight: 700,
                     flexShrink: 0,
                   }}
@@ -349,7 +369,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     style={{
                       fontSize: '0.8125rem',
                       fontWeight: 600,
-                      color: 'var(--text-charcoal)',
+                      color: 'var(--color-foreground)',
                       textOverflow: 'ellipsis',
                       overflow: 'hidden',
                       whiteSpace: 'nowrap',
@@ -360,7 +380,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   <span
                     style={{
                       fontSize: '0.6875rem',
-                      color: 'var(--text-muted)',
+                      color: 'var(--color-foreground-muted)',
                       textOverflow: 'ellipsis',
                       overflow: 'hidden',
                       whiteSpace: 'nowrap',
@@ -377,17 +397,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 title="Sign out of account"
                 aria-label="Sign out"
                 style={{
-                  color: 'var(--text-muted)',
+                  color: 'var(--color-foreground-muted)',
                   display: 'flex',
                   alignItems: 'center',
-                  padding: '0.375rem',
-                  borderRadius: 'var(--radius-full)',
+                  justifyContent: 'center',
+                  padding: '0.5rem',
+                  borderRadius: 'var(--radius-pill)',
                   transition: 'color var(--transition-fast)',
                   cursor: 'pointer',
+                  minHeight: '44px',
+                  minWidth: '44px',
                   flexShrink: 0,
                 }}
               >
-                <LogOut size={16} />
+                <LogOut size={18} strokeWidth={2} />
               </button>
             </>
           )}
@@ -398,17 +421,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <>
-      {/* Desktop Sticky Sidebar (248-264px, or ~72px collapsed) */}
+      {/* Desktop Sticky Sidebar */}
       <aside
         className="hidden md:block"
         style={{
-          width: collapsed ? '72px' : '256px',
-          minWidth: collapsed ? '72px' : '256px',
+          width: collapsed ? '72px' : '260px',
+          minWidth: collapsed ? '72px' : '260px',
           height: '100vh',
           position: 'sticky',
           top: 0,
-          borderRight: '1px solid var(--border-subtle)',
-          backgroundColor: '#ffffff',
           zIndex: 40,
           transition: 'width 200ms ease, min-width 200ms ease',
         }}
@@ -433,8 +454,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
             style={{
               position: 'fixed',
               inset: 0,
-              backgroundColor: 'rgba(26, 28, 30, 0.4)',
-              backdropFilter: 'blur(2px)',
+              backgroundColor: 'rgba(13, 21, 17, 0.72)',
+              backdropFilter: 'blur(4px)',
             }}
             onClick={onCloseMobile}
             aria-hidden="true"
@@ -451,8 +472,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
               width: '280px',
               maxWidth: '85vw',
               height: '100%',
-              backgroundColor: '#ffffff',
-              boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)',
+              backgroundColor: 'var(--surface-panel)',
+              boxShadow: 'var(--shadow-floating)',
               zIndex: 101,
             }}
           >
@@ -463,3 +484,5 @@ export const Sidebar: React.FC<SidebarProps> = ({
     </>
   );
 };
+
+export default Sidebar;

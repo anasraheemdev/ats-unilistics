@@ -18,7 +18,7 @@ interface PublicLayoutProps {
  */
 export const PublicLayout: React.FC<PublicLayoutProps> = ({ currentRole, onRoleChange }) => {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: '#FBF9F5' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: 'var(--color-background)' }}>
       <SkipLink targetId="main-content" />
       <PublicNavbar currentRole={currentRole} onRoleChange={onRoleChange} />
 

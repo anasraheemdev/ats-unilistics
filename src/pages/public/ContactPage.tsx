@@ -13,7 +13,7 @@ import {
   Building2,
   Clock,
   ShieldCheck,
-  HelpCircle,
+  CircleHelp,
   Sparkles,
   ArrowRight,
 } from 'lucide-react';
@@ -236,7 +236,7 @@ export const ContactPage: React.FC = () => {
                 textDecoration: 'none',
               }}
             >
-              <HelpCircle size={15} />
+              <CircleHelp size={16} strokeWidth={2} aria-hidden="true" />
               <span>Browse Help Centre Guides</span>
             </Link>
           </div>

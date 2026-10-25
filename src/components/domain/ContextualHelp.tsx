@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { Alert } from '@/components/ui/Alert';
 import {
-  HelpCircle,
+  CircleHelp,
   ExternalLink,
   MessageSquare,
   X,
@@ -86,7 +86,7 @@ export const ContextualHelp: React.FC<ContextualHelpProps> = ({
           }}
           title={`View official guide advice for ${helpItem?.title || 'this step'}`}
         >
-          <HelpCircle size={13} aria-hidden="true" />
+          <CircleHelp size={13} aria-hidden="true" />
           <span>{buttonLabel || 'Guide Advice'}</span>
         </button>
       ) : inlineVariant === 'card' ? (
@@ -95,7 +95,7 @@ export const ContextualHelp: React.FC<ContextualHelpProps> = ({
             padding: '0.75rem 1rem',
             backgroundColor: 'var(--color-surface-hover)',
             border: '1px solid var(--color-border)',
-            borderRadius: 'var(--radius-md)',
+            borderRadius: 'var(--radius-control)',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -103,7 +103,7 @@ export const ContextualHelp: React.FC<ContextualHelpProps> = ({
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <BookOpen size={16} style={{ color: 'var(--color-primary)', flexShrink: 0 }} />
+            <BookOpen size={16} style={{ color: 'var(--color-primary)', flexShrink: 0 }} aria-hidden="true" />
             <div style={{ fontSize: '0.8125rem' }}>
               <span style={{ fontWeight: 600 }}>{helpItem?.title || 'Procedural Guide Advice'}</span>
               <p style={{ margin: 0, color: 'var(--color-foreground-muted)', fontSize: '0.75rem' }}>
@@ -120,8 +120,8 @@ export const ContextualHelp: React.FC<ContextualHelpProps> = ({
           variant="ghost"
           size="sm"
           onClick={() => setIsOpen(true)}
-          leftIcon={<HelpCircle size={14} />}
-          style={{ fontSize: '0.75rem', height: '28px', padding: '0 0.5rem' }}
+          leftIcon={<CircleHelp size={14} />}
+          style={{ fontSize: '0.75rem', height: '32px', padding: '0 0.5rem' }}
         >
           {buttonLabel || 'Procedural Help'}
         </Button>
@@ -133,7 +133,8 @@ export const ContextualHelp: React.FC<ContextualHelpProps> = ({
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.6)',
+            backgroundColor: 'rgba(13, 21, 17, 0.72)',
+            backdropFilter: 'blur(4px)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -145,14 +146,15 @@ export const ContextualHelp: React.FC<ContextualHelpProps> = ({
           <div
             style={{
               backgroundColor: 'var(--color-surface)',
-              borderRadius: 'var(--radius-lg)',
+              borderRadius: 'var(--radius-panel)',
               maxWidth: '620px',
               width: '100%',
               padding: '1.75rem',
               display: 'flex',
               flexDirection: 'column',
               gap: '1.25rem',
-              boxShadow: 'var(--shadow-xl)',
+              boxShadow: 'var(--shadow-floating)',
+              border: '1px solid var(--color-border)',
               maxHeight: '90vh',
               overflowY: 'auto',
             }}
@@ -174,14 +176,15 @@ export const ContextualHelp: React.FC<ContextualHelpProps> = ({
                     </Badge>
                   )}
                 </div>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, margin: 0 }}>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, margin: 0, color: 'var(--color-foreground)', fontFamily: 'var(--font-family-base)' }}>
                   {helpItem.title}
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-foreground-muted)' }}
+                aria-label="Close guidance"
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-foreground-muted)', padding: '0.25rem' }}
               >
                 <X size={20} />
               </button>
@@ -191,11 +194,12 @@ export const ContextualHelp: React.FC<ContextualHelpProps> = ({
             <div
               style={{
                 padding: '0.875rem 1rem',
-                backgroundColor: 'rgba(56, 189, 248, 0.08)',
+                backgroundColor: 'var(--color-primary-light)',
                 borderLeft: '4px solid var(--color-primary)',
-                borderRadius: 'var(--radius-sm)',
+                borderRadius: 'var(--radius-control)',
                 fontSize: '0.875rem',
                 lineHeight: 1.5,
+                color: 'var(--color-foreground)',
               }}
             >
               {helpItem.summary}
