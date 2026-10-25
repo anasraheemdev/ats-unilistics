@@ -55,7 +55,7 @@ export const BrandWordmark: React.FC<BrandWordmarkProps> = ({
         textDecoration: 'none',
         color: 'var(--text-charcoal)',
       }}
-      aria-label="unilistics home"
+      aria-label="Unilistics Home"
     >
       {!imgError && (
         <img

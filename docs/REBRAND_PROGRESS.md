@@ -1,11 +1,12 @@
 # Unilistics ATS Presentation Rebrand Progress Tracker
 
-**Document Version**: 2.0.0  
+**Document Version**: 2.2.0  
 **Last Updated**: October 25, 2026  
-**Active Phase**: Phase 6 — Desktop Journey Map & Casework Rebrand (COMPLETED)  
+**Active Phase**: Phase 8 — Post-Rebrand Verification & Full-System Audit (COMPLETED)  
 **Git Checkpoint**: Branch `master`  
 **Design Authority**: [docs/REBRAND_SCOPE.md](file:///c:/Users/anasr/OneDrive/Desktop/ats-unilistics/docs/REBRAND_SCOPE.md)  
 **Token & Design System Specification**: [docs/DESIGN_SYSTEM_V2.md](file:///c:/Users/anasr/OneDrive/Desktop/ats-unilistics/docs/DESIGN_SYSTEM_V2.md)  
+**Verification & Audit Report**: [docs/POST_REBRAND_VERIFICATION_REPORT.md](file:///c:/Users/anasr/OneDrive/Desktop/ats-unilistics/docs/POST_REBRAND_VERIFICATION_REPORT.md)  
 
 ---
 
@@ -274,3 +275,206 @@ All brand assets from `theme/v1.0.zip` have been safely extracted into `theme/ex
      - `npx vitest run src/test/RemainingRoutesAndSettingsRebrand.test.tsx`: **11/11 passed** (100%).
      - Full test suite `npm test`: **23 test files passed, 340 tests passed, 0 failed** (100%).
      - Production build `npm run build`: **compiled dist/ in 8.62s with 0 errors** (1,768 modules transformed).
+
+### Phase 6: Desktop Journey Map & Casework Rebrand (COMPLETED)
+- **Status**: Completed  
+- **Authority**: Desktop Journey Reference Screenshot (`theme/WhatsApp Image 2026-10-24 at 1.50.13 AM.jpeg`)
+- **Actions Executed**:
+  1. **Interactive SVG Desktop Journey Map (`JourneyMap.tsx`)**:
+     - Visual macro-regions: Restrained **Prepare**, **Choose**, and **Move** terrain bands with subtle green tint fills (`rgba(36, 91, 66, 0.08)` to `rgba(36, 91, 66, 0.16)`) and low-contrast decorative vector contour lines.
+     - Dotted/dashed bezier dependency paths (`stroke-dasharray="4 6"`) showing step progression and parallel branches without visual clutter.
+     - Citron checkmark button nodes (`#D7EE83`, dark text `#19261F`) for completed milestones.
+     - Concentric animated location ring with floating `"You are here"` badge over the current active step.
+     - Failure states preservation: blocked and reopened steps render distinct red/amber warning nodes with `"Review required"` alerts; never collapsed into "complete".
+     - Fully accessible keyboard navigation (`tabIndex={0}`, `role="button"`, Enter/Space activation, and explicit focus rings).
+     - Compact bottom status legend: Completed, In Progress, Review required, Skipped, Locked.
+  2. **Accessible Vertical Ordered List Tracks (`JourneyTracks.tsx`)**:
+     - Semantic `<ol>` grouped into Prepare, Choose, and Move macro-phases.
+     - Displays status badges, required evidence tags, contextual guidance notes, and direct casework action buttons (`/student/documents`, `/student/tasks`, `/student/messages`).
+     - Functions as the automatic mobile default on viewports `< md` (`< 768px`) to ensure small screens never suffer unreadable SVG scaling, while still allowing user toggle.
+  3. **Floating Step Detail Bento Panel (`JourneyStepDetailPanel.tsx`)**:
+     - 24px rounded dark bento card (`#16241b`, border `#203327`) displaying selected step title, stage, responsible actor, required evidence checklist from `requiredEvidence`, procedural benchmark flags (`FLAG-xxx`), and blocked/reopened alert banners with recorded justification.
+     - Direct Citron action button routing to the appropriate casework surface.
+  4. **Master Student Journey Workspace (`StudentJourneyPage.tsx`)**:
+     - Quiet page header: "Your journey" with real target country and intake subtitle.
+     - Location pin banner: "You are here: [Active Step Title]" with direct "Continue" action.
+     - Multi-application selector: Allows switching between university applications (e.g. TUM vs PoliMi) with isolated workflow step states, preventing timeline conflation.
+     - Top-right view switcher: Seamlessly toggles between `Map` and `Tracks` presentations over the exact same underlying `case_workflow_steps` records.
+     - Genuine empty state: Displays honest "No Active Case Journey" screen with prompt to contact staff when no student case is assigned.
+  5. **Casework Surfaces Rebrand to DESIGN_SYSTEM_V2**:
+     - `MyApplicationsPage.tsx`: Overhauled with 24px cards, Forest/Citron tokens, removed legacy coral `#FFEFEA`, added direct "Interactive Journey Map" header CTA and per-card map links.
+     - `ApplicationDetailPage.tsx`: Overhauled with 24px cards, removed `#accent-peach-bg`, linked to Journey Map.
+     - `StudentTasksPage.tsx`: Rebranded accountability banner and task dialog with DESIGN_SYSTEM_V2 surfaces.
+     - `StudentMessagesPage.tsx`: Rebranded header badge, adviser header, message bubbles, and paperclip icon.
+     - `StudentDocumentsPage.tsx`: Rebranded dropzone, verification cards, adviser card, and ephemeral ticket colors.
+     - `StudentJourneyNav.tsx`: Added `Journey Map` (`/student/journey`) tab with Map icon alongside Applications, Documents, Tasks, and Messages.
+     - `StudentBottomDock.tsx`: Routed `Journey` dock destination directly to `/student/journey`.
+     - `navigation.ts`: Added `Journey Map` item to `STUDENT_NAV_GROUPS`.
+  6. **Comprehensive Automated Verification & Testing**:
+     - Created `src/test/JourneyMapAndCaseworkRebrand.test.tsx` (15 unit/integration test cases covering SVG map rendering, Prepare/Choose/Move regions, "You are here" badge, status mapping integrity, keyboard navigation, tracks list, detail panel, multi-application isolation, view toggle, and empty state).
+     - `npx tsc --noEmit`: **0 errors**.
+     - `npx vitest run src/test/JourneyMapAndCaseworkRebrand.test.tsx`: **15/15 passed** (100%).
+     - Full test suite `npm test`: **22 test files passed, 329 tests passed, 0 failed** (100%).
+     - Production build `npm run build`: **compiled dist/ in 18.03s with 0 errors** (1,767 modules transformed).
+
+### Phase 6: Desktop Journey Map & Casework Rebrand (COMPLETED)
+- **Status**: Completed  
+- **Authority**: Desktop Journey Reference Screenshot (`theme/WhatsApp Image 2026-10-24 at 1.50.13 AM.jpeg`)
+- **Actions Executed**:
+  1. **Interactive SVG Desktop Journey Map (`JourneyMap.tsx`)**:
+     - Visual macro-regions: Restrained **Prepare**, **Choose**, and **Move** terrain bands with subtle green tint fills (`rgba(36, 91, 66, 0.08)` to `rgba(36, 91, 66, 0.16)`) and low-contrast decorative vector contour lines.
+     - Dotted/dashed bezier dependency paths (`stroke-dasharray="4 6"`) showing step progression and parallel branches without visual clutter.
+     - Citron checkmark button nodes (`#D7EE83`, dark text `#19261F`) for completed milestones.
+     - Concentric animated location ring with floating `"You are here"` badge over the current active step.
+     - Failure states preservation: blocked and reopened steps render distinct red/amber warning nodes with `"Review required"` alerts; never collapsed into "complete".
+     - Fully accessible keyboard navigation (`tabIndex={0}`, `role="button"`, Enter/Space activation, and explicit focus rings).
+     - Compact bottom status legend: Completed, In Progress, Review required, Skipped, Locked.
+  2. **Accessible Vertical Ordered List Tracks (`JourneyTracks.tsx`)**:
+     - Semantic `<ol>` grouped into Prepare, Choose, and Move macro-phases.
+     - Displays status badges, required evidence tags, contextual guidance notes, and direct casework action buttons (`/student/documents`, `/student/tasks`, `/student/messages`).
+     - Functions as the automatic mobile default on viewports `< md` (`< 768px`) to ensure small screens never suffer unreadable SVG scaling, while still allowing user toggle.
+  3. **Floating Step Detail Bento Panel (`JourneyStepDetailPanel.tsx`)**:
+     - 24px rounded dark bento card (`#16241b`, border `#203327`) displaying selected step title, stage, responsible actor, required evidence checklist from `requiredEvidence`, procedural benchmark flags (`FLAG-xxx`), and blocked/reopened alert banners with recorded justification.
+     - Direct Citron action button routing to the appropriate casework surface.
+  4. **Master Student Journey Workspace (`StudentJourneyPage.tsx`)**:
+     - Quiet page header: "Your journey" with real target country and intake subtitle.
+     - Location pin banner: "You are here: [Active Step Title]" with direct "Continue" action.
+     - Multi-application selector: Allows switching between university applications (e.g. TUM vs PoliMi) with isolated workflow step states, preventing timeline conflation.
+     - Top-right view switcher: Seamlessly toggles between `Map` and `Tracks` presentations over the exact same underlying `case_workflow_steps` records.
+     - Genuine empty state: Displays honest "No Active Case Journey" screen with prompt to contact staff when no student case is assigned.
+  5. **Casework Surfaces Rebrand to DESIGN_SYSTEM_V2**:
+     - `MyApplicationsPage.tsx`: Overhauled with 24px cards, Forest/Citron tokens, removed legacy coral `#FFEFEA`, added direct "Interactive Journey Map" header CTA and per-card map links.
+     - `ApplicationDetailPage.tsx`: Overhauled with 24px cards, removed `#accent-peach-bg`, linked to Journey Map.
+     - `StudentTasksPage.tsx`: Rebranded accountability banner and task dialog with DESIGN_SYSTEM_V2 surfaces.
+     - `StudentMessagesPage.tsx`: Rebranded header badge, adviser header, message bubbles, and paperclip icon.
+     - `StudentDocumentsPage.tsx`: Rebranded dropzone, verification cards, adviser card, and ephemeral ticket colors.
+     - `StudentJourneyNav.tsx`: Added `Journey Map` (`/student/journey`) tab with Map icon alongside Applications, Documents, Tasks, and Messages.
+     - `StudentBottomDock.tsx`: Routed `Journey` dock destination directly to `/student/journey`.
+     - `navigation.ts`: Added `Journey Map` item to `STUDENT_NAV_GROUPS`.
+  6. **Comprehensive Automated Verification & Testing**:
+     - Created `src/test/JourneyMapAndCaseworkRebrand.test.tsx` (15 unit/integration test cases covering SVG map rendering, Prepare/Choose/Move regions, "You are here" badge, status mapping integrity, keyboard navigation, tracks list, detail panel, multi-application isolation, view toggle, and empty state).
+     - `npx tsc --noEmit`: **0 errors**.
+     - `npx vitest run src/test/JourneyMapAndCaseworkRebrand.test.tsx`: **15/15 passed** (100%).
+     - Full test suite `npm test`: **22 test files passed, 329 tests passed, 0 failed** (100%).
+     - Production build `npm run build`: **compiled dist/ in 18.03s with 0 errors** (1,767 modules transformed).
+
+### Phase 6: Desktop Journey Map & Casework Rebrand (COMPLETED)
+- **Status**: Completed  
+- **Authority**: Desktop Journey Reference Screenshot (`theme/WhatsApp Image 2026-10-24 at 1.50.13 AM.jpeg`)
+- **Actions Executed**:
+  1. **Interactive SVG Desktop Journey Map (`JourneyMap.tsx`)**:
+     - Visual macro-regions: Restrained **Prepare**, **Choose**, and **Move** terrain bands with subtle green tint fills (`rgba(36, 91, 66, 0.08)` to `rgba(36, 91, 66, 0.16)`) and low-contrast decorative vector contour lines.
+     - Dotted/dashed bezier dependency paths (`stroke-dasharray="4 6"`) showing step progression and parallel branches without visual clutter.
+     - Citron checkmark button nodes (`#D7EE83`, dark text `#19261F`) for completed milestones.
+     - Concentric animated location ring with floating `"You are here"` badge over the current active step.
+     - Failure states preservation: blocked and reopened steps render distinct red/amber warning nodes with `"Review required"` alerts; never collapsed into "complete".
+     - Fully accessible keyboard navigation (`tabIndex={0}`, `role="button"`, Enter/Space activation, and explicit focus rings).
+     - Compact bottom status legend: Completed, In Progress, Review required, Skipped, Locked.
+  2. **Accessible Vertical Ordered List Tracks (`JourneyTracks.tsx`)**:
+     - Semantic `<ol>` grouped into Prepare, Choose, and Move macro-phases.
+     - Displays status badges, required evidence tags, contextual guidance notes, and direct casework action buttons (`/student/documents`, `/student/tasks`, `/student/messages`).
+     - Functions as the automatic mobile default on viewports `< md` (`< 768px`) to ensure small screens never suffer unreadable SVG scaling, while still allowing user toggle.
+  3. **Floating Step Detail Bento Panel (`JourneyStepDetailPanel.tsx`)**:
+     - 24px rounded dark bento card (`#16241b`, border `#203327`) displaying selected step title, stage, responsible actor, required evidence checklist from `requiredEvidence`, procedural benchmark flags (`FLAG-xxx`), and blocked/reopened alert banners with recorded justification.
+     - Direct Citron action button routing to the appropriate casework surface.
+  4. **Master Student Journey Workspace (`StudentJourneyPage.tsx`)**:
+     - Quiet page header: "Your journey" with real target country and intake subtitle.
+     - Location pin banner: "You are here: [Active Step Title]" with direct "Continue" action.
+     - Multi-application selector: Allows switching between university applications (e.g. TUM vs PoliMi) with isolated workflow step states, preventing timeline conflation.
+     - Top-right view switcher: Seamlessly toggles between `Map` and `Tracks` presentations over the exact same underlying `case_workflow_steps` records.
+     - Genuine empty state: Displays honest "No Active Case Journey" screen with prompt to contact staff when no student case is assigned.
+  5. **Casework Surfaces Rebrand to DESIGN_SYSTEM_V2**:
+     - `MyApplicationsPage.tsx`: Overhauled with 24px cards, Forest/Citron tokens, removed legacy coral `#FFEFEA`, added direct "Interactive Journey Map" header CTA and per-card map links.
+     - `ApplicationDetailPage.tsx`: Overhauled with 24px cards, removed `#accent-peach-bg`, linked to Journey Map.
+     - `StudentTasksPage.tsx`: Rebranded accountability banner and task dialog with DESIGN_SYSTEM_V2 surfaces.
+     - `StudentMessagesPage.tsx`: Rebranded header badge, adviser header, message bubbles, and paperclip icon.
+     - `StudentDocumentsPage.tsx`: Rebranded dropzone, verification cards, adviser card, and ephemeral ticket colors.
+     - `StudentJourneyNav.tsx`: Added `Journey Map` (`/student/journey`) tab with Map icon alongside Applications, Documents, Tasks, and Messages.
+     - `StudentBottomDock.tsx`: Routed `Journey` dock destination directly to `/student/journey`.
+     - `navigation.ts`: Added `Journey Map` item to `STUDENT_NAV_GROUPS`.
+  6. **Comprehensive Automated Verification & Testing**:
+     - Created `src/test/JourneyMapAndCaseworkRebrand.test.tsx` (15 unit/integration test cases covering SVG map rendering, Prepare/Choose/Move regions, "You are here" badge, status mapping integrity, keyboard navigation, tracks list, detail panel, multi-application isolation, view toggle, and empty state).
+     - `npx tsc --noEmit`: **0 errors**.
+     - `npx vitest run src/test/JourneyMapAndCaseworkRebrand.test.tsx`: **15/15 passed** (100%).
+     - Full test suite `npm test`: **22 test files passed, 329 tests passed, 0 failed** (100%).
+     - Production build `npm run build`: **compiled dist/ in 18.03s with 0 errors** (1,767 modules transformed).
+
+### Phase 6: Desktop Journey Map & Casework Rebrand (COMPLETED)
+- **Status**: Completed  
+- **Authority**: Desktop Journey Reference Screenshot (`theme/WhatsApp Image 2026-10-24 at 1.50.13 AM.jpeg`)
+- **Actions Executed**:
+  1. **Interactive SVG Desktop Journey Map (`JourneyMap.tsx`)**:
+     - Visual macro-regions: Restrained **Prepare**, **Choose**, and **Move** terrain bands with subtle green tint fills (`rgba(36, 91, 66, 0.08)` to `rgba(36, 91, 66, 0.16)`) and low-contrast decorative vector contour lines.
+     - Dotted/dashed bezier dependency paths (`stroke-dasharray="4 6"`) showing step progression and parallel branches without visual clutter.
+     - Citron checkmark button nodes (`#D7EE83`, dark text `#19261F`) for completed milestones.
+     - Concentric animated location ring with floating `"You are here"` badge over the current active step.
+     - Failure states preservation: blocked and reopened steps render distinct red/amber warning nodes with `"Review required"` alerts; never collapsed into "complete".
+     - Fully accessible keyboard navigation (`tabIndex={0}`, `role="button"`, Enter/Space activation, and explicit focus rings).
+     - Compact bottom status legend: Completed, In Progress, Review required, Skipped, Locked.
+  2. **Accessible Vertical Ordered List Tracks (`JourneyTracks.tsx`)**:
+     - Semantic `<ol>` grouped into Prepare, Choose, and Move macro-phases.
+     - Displays status badges, required evidence tags, contextual guidance notes, and direct casework action buttons (`/student/documents`, `/student/tasks`, `/student/messages`).
+     - Functions as the automatic mobile default on viewports `< md` (`< 768px`) to ensure small screens never suffer unreadable SVG scaling, while still allowing user toggle.
+  3. **Floating Step Detail Bento Panel (`JourneyStepDetailPanel.tsx`)**:
+     - 24px rounded dark bento card (`#16241b`, border `#203327`) displaying selected step title, stage, responsible actor, required evidence checklist from `requiredEvidence`, procedural benchmark flags (`FLAG-xxx`), and blocked/reopened alert banners with recorded justification.
+     - Direct Citron action button routing to the appropriate casework surface.
+  4. **Master Student Journey Workspace (`StudentJourneyPage.tsx`)**:
+     - Quiet page header: "Your journey" with real target country and intake subtitle.
+     - Location pin banner: "You are here: [Active Step Title]" with direct "Continue" action.
+     - Multi-application selector: Allows switching between university applications (e.g. TUM vs PoliMi) with isolated workflow step states, preventing timeline conflation.
+     - Top-right view switcher: Seamlessly toggles between `Map` and `Tracks` presentations over the exact same underlying `case_workflow_steps` records.
+     - Genuine empty state: Displays honest "No Active Case Journey" screen with prompt to contact staff when no student case is assigned.
+  5. **Casework Surfaces Rebrand to DESIGN_SYSTEM_V2**:
+     - `MyApplicationsPage.tsx`: Overhauled with 24px cards, Forest/Citron tokens, removed legacy coral `#FFEFEA`, added direct "Interactive Journey Map" header CTA and per-card map links.
+     - `ApplicationDetailPage.tsx`: Overhauled with 24px cards, removed `#accent-peach-bg`, linked to Journey Map.
+     - `StudentTasksPage.tsx`: Rebranded accountability banner and task dialog with DESIGN_SYSTEM_V2 surfaces.
+     - `StudentMessagesPage.tsx`: Rebranded header badge, adviser header, message bubbles, and paperclip icon.
+     - `StudentDocumentsPage.tsx`: Rebranded dropzone, verification cards, adviser card, and ephemeral ticket colors.
+     - `StudentJourneyNav.tsx`: Added `Journey Map` (`/student/journey`) tab with Map icon alongside Applications, Documents, Tasks, and Messages.
+     - `StudentBottomDock.tsx`: Routed `Journey` dock destination directly to `/student/journey`.
+     - `navigation.ts`: Added `Journey Map` item to `STUDENT_NAV_GROUPS`.
+  6. **Comprehensive Automated Verification & Testing**:
+     - Created `src/test/JourneyMapAndCaseworkRebrand.test.tsx` (15 unit/integration test cases covering SVG map rendering, Prepare/Choose/Move regions, "You are here" badge, status mapping integrity, keyboard navigation, tracks list, detail panel, multi-application isolation, view toggle, and empty state).
+     - `npx tsc --noEmit`: **0 errors**.
+     - `npx vitest run src/test/JourneyMapAndCaseworkRebrand.test.tsx`: **15/15 passed** (100%).
+     - Full test suite `npm test`: **22 test files passed, 329 tests passed, 0 failed** (100%).
+     - Production build `npm run build`: **compiled dist/ in 18.03s with 0 errors** (1,767 modules transformed).
+
+### Phase 7: Remaining Routes, Search Dialog & Profile Settings Rebrand (COMPLETED)
+- **Status**: Completed
+- **Authority**: Light Search Reference (	heme/WhatsApp Image 2026-10-24 at 1.49.33 AM.jpeg) & Light Settings Reference (	heme/WhatsApp Image 2026-10-24 at 1.49.50 AM.jpeg)
+- **Actions Executed**:
+  1. **Global Search Modal (SearchDialog.tsx)**:
+     - Accessible modal dialog with focus management, Esc close, Ctrl/Cmd+K keyboard shortcut.
+     - 2-column mobile category tiles (Everything, Destinations, Universities, Programmes, Scholarships).
+     - Recent search history isolated strictly per user in LocalStorage.
+  2. **Settings & Profile Workspace (ExplorerAccountPage.tsx)**:
+     - Initials avatar circle (#133020), name/email/role display.
+     - Grouped rows with clean dividers, theme toggle (Light, Dark, System), notifications preference, session termination.
+     - Interactive Personal Information modal.
+  3. **Remaining Support, Legal & Administrative Routes**:
+     - Contact, Terms, Privacy, 404, Staff, and Admin layouts aligned to DESIGN_SYSTEM_V2.
+  4. **Automated Testing**:
+     - Added src/test/RemainingRoutesAndSettingsRebrand.test.tsx (11 unit/integration test cases).
+     - Test suite passed: 23 test files, 340 tests passed (100%).
+
+### Phase 8: Post-Rebrand Full-System Verification & Architecture Audit (COMPLETED)
+- **Status**: Completed
+- **Authority**: Full System Rebrand Mandate & Multi-Viewport Verification Plan
+- **Actions Executed**:
+  1. **ESLint Cleanup & Build Integrity**:
+     - Cleaned 34 ESLint warnings and errors. 
+pm run lint exits code 0 with --max-warnings 0.
+     - 	sc --noEmit exits code 0.
+     - 
+pm run build compiles 1,768 modules into dist/ in 9.91s with code 0.
+  2. **Playwright E2E Verification (erify_post_rebrand_comprehensive.py & 	est_browser_responsive.py)**:
+     - 9/9 WCAG 2.2 color contrast pairs mathematically verified as AAA compliant.
+     - Reference screens 1-4 captured and verified with high fidelity against design specs.
+     - Multi-viewport matrix across 360px, 390px, 768px, 1024px, 1600px widths: **0px horizontal overflow across all tested routes**.
+     - 200% zoom scaling, 65-char long synthetic names, prefers-reduced-motion, and theme switching all verified.
+     - 5-item canonical public navbar, 50-item preview cap, and counsellor casework isolation verified.
+  3. **Asset & Theme Cleanliness**:
+     - Zero external CDN links; 100% local assets in public/.
+     - Zero legacy coral color tokens remaining in active code.
+     - Comprehensive implementation report delivered in docs/POST_REBRAND_VERIFICATION_REPORT.md.

@@ -110,7 +110,7 @@ export const DiscoveryLayout: React.FC<DiscoveryLayoutProps> = ({ currentRole, o
             <button
               type="button"
               onClick={() => setMobileMenuOpen(true)}
-              className="md:hidden"
+              className="xl:hidden"
               aria-label="Open discovery navigation"
               style={{
                 padding: '0.5rem',
@@ -134,7 +134,7 @@ export const DiscoveryLayout: React.FC<DiscoveryLayoutProps> = ({ currentRole, o
           {/* Desktop Navigation Links */}
           <nav
             style={{ display: 'none', alignItems: 'center', gap: '0.375rem' }}
-            className="md:flex"
+            className="hidden xl:flex"
             aria-label="Discovery Header Navigation"
           >
             <NavLink
@@ -372,6 +372,7 @@ export const DiscoveryLayout: React.FC<DiscoveryLayoutProps> = ({ currentRole, o
                     {initial}
                   </div>
                   <span
+                    className="hidden sm:inline"
                     style={{
                       fontSize: '0.8125rem',
                       fontWeight: 600,
@@ -391,9 +392,9 @@ export const DiscoveryLayout: React.FC<DiscoveryLayoutProps> = ({ currentRole, o
                   onClick={handleSignOut}
                   title="Sign out of account"
                   aria-label="Sign out"
+                  className="hidden sm:flex"
                   style={{
                     color: 'var(--color-foreground-muted)',
-                    display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     padding: '0.5rem',

@@ -189,6 +189,7 @@ export const Topbar: React.FC<TopbarProps> = ({
           <Search size={15} strokeWidth={2} aria-hidden={true} />
           <span className="hidden sm:inline">Search</span>
           <kbd
+            className="hidden sm:inline-block"
             style={{
               fontSize: '0.625rem',
               fontWeight: 700,
@@ -264,6 +265,7 @@ export const Topbar: React.FC<TopbarProps> = ({
               {initial}
             </div>
             <span
+              className="hidden sm:inline"
               style={{
                 fontSize: '0.75rem',
                 fontWeight: 600,

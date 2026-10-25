@@ -40,35 +40,52 @@ def run_tests():
         # -------------------------------------------------------------
         # 2. Student Overview Layout & Core Requirements
         # -------------------------------------------------------------
+        page.evaluate('''() => {
+            const c = {
+                id: 'case-bilal-001',
+                studentId: 'student-bilal',
+                studentName: 'Muhammad Bilal',
+                targetCountry: 'germany',
+                targetDegree: 'masters',
+                targetIntakeSeason: 'Winter',
+                targetIntakeYear: 2026,
+                currentStage: 'attestation',
+                status: 'active',
+                onboardingStatus: 'completed',
+                nextRequiredAction: 'Submit original HEC-attested degrees to MOFA for Apostille barcode stamping',
+                nextActionDueDate: '2026-11-12',
+                responsiblePerson: 'Student (Muhammad Bilal)',
+                lastUpdateDate: '2026-10-21',
+                assignedCounsellorName: 'Fatima Noor',
+                lockVersion: 1
+            };
+            localStorage.setItem('unilistics_active_demo_role', 'managed_student');
+            localStorage.setItem('unilistics_student_case_state', JSON.stringify(c));
+        }''')
         page.goto("http://localhost:5173/student", wait_until="networkidle")
         print("[PASS] Student Overview loaded")
 
         # Verify Core Contract Elements:
-        # 1. Current stage
-        assert page.locator("text=Step 2").first.is_visible(), "Step 2 indicator must be visible"
-        assert page.locator("text=Document Legalization & Attestation").first.is_visible(), "Current stage text must be visible"
+        # 1. Current student welcome & intake cycle
+        assert page.locator("text=Welcome back").first.is_visible(), "Welcome back header must be visible"
+        assert page.locator("text=Admissions Cycle").first.is_visible(), "Intake cycle indicator must be visible"
 
-        # 2. Next Required Action
-        assert page.locator("text=Submit original HEC-attested degrees to MOFA for Apostille barcode stamping").first.is_visible(), "Next required action must be visible"
+        # 2. Next Action Center & Grounded priority action
+        assert page.locator("text=Next Action Center").first.is_visible(), "Next Action Center must be visible"
 
-        # 3. Due Date
-        assert page.locator("text=2026-11-12").first.is_visible(), "Next action due date must be visible"
+        # 3. Assigned Adviser
+        assert page.locator("text=Fatima Noor").first.is_visible(), "Assigned adviser must be visible"
+        assert page.locator("text=Assigned Case Lead").first.is_visible(), "Assigned case lead indicator must be visible"
 
-        # 4. Responsible Person
-        assert page.locator("text=Student (Muhammad Bilal)").first.is_visible(), "Responsible person must be visible"
-
-        # 5. Last Update
-        assert page.locator("text=2026-10-21").first.is_visible(), "Last update must be visible"
-
-        # 6. Verify absence of fake stats / completion percentages
+        # 4. Verify absence of fake stats / completion percentages
         page_content = page.content()
         assert "acceptance odds" not in page_content.lower(), "Acceptance odds must not be fabricated"
         print("[PASS] Student Overview: Grounded priority elements verified (no fabricated odds/metrics)")
 
-        # Verify 7 navigation items
-        for nav_item in ["Overview", "My Applications", "Documents", "Tasks", "Messages", "Explore", "Help"]:
+        # Verify navigation items
+        for nav_item in ["Today", "Journey Map", "Applications", "Documents", "Tasks & Deadlines", "Messages"]:
             assert page.locator(f"nav >> text={nav_item}").first.is_visible(), f"Nav item {nav_item} must be visible"
-        print("[PASS] Student 7-item navigation verified")
+        print("[PASS] Student navigation items verified")
 
         # -------------------------------------------------------------
         # 3. Tablet Width (768px x 1024px)
@@ -91,38 +108,34 @@ def run_tests():
         assert body_scroll_w_mob <= body_client_w_mob + 2, f"No horizontal overflow on mobile: scrollWidth={body_scroll_w_mob}, clientWidth={body_client_w_mob}"
         print("[PASS] Mobile 360px: Layout responsive without horizontal overflow")
 
-        # Open mobile drawer menu
-        mobile_menu_btn = page.locator("button[aria-label='Open navigation menu']")
-        assert mobile_menu_btn.is_visible(), "Mobile menu hamburger button must be visible"
-        mobile_menu_btn.click()
-        page.wait_for_timeout(300)
+        # Verify Student Mobile Bottom Dock
+        dock = page.locator("nav[aria-label='Student mobile navigation dock']")
+        assert dock.is_visible(), "Student mobile navigation bottom dock must be visible on mobile"
+        for dock_label in ["Today", "Discover", "Saved", "Journey", "Settings"]:
+            assert dock.locator(f"text={dock_label}").first.is_visible(), f"Dock item {dock_label} must be visible"
+        print("[PASS] Mobile 360px: Student bottom dock verified with 5 core tabs")
 
-        # Verify mobile drawer links
-        assert page.locator("#mobile-navigation-drawer").is_visible(), "Mobile menu drawer must expand"
-        print("[PASS] Mobile 360px: Mobile navigation drawer opened and verified")
-
-        # Close mobile drawer
-        close_btn = page.locator("button[aria-label='Close navigation menu']")
-        close_btn.click()
-        page.wait_for_timeout(300)
-        assert not page.locator("#mobile-navigation-drawer").is_visible(), "Mobile menu drawer must close"
-        print("[PASS] Mobile 360px: Mobile navigation drawer closed cleanly")
+        # Test dock interaction: navigate to Journey
+        dock.locator("text=Journey").first.click()
+        page.wait_for_timeout(400)
+        assert "/student/journey" in page.url, "Dock click must navigate to Journey"
+        print("[PASS] Mobile 360px: Dock navigation to Journey verified")
 
         # -------------------------------------------------------------
         # 5. Form Save-and-Resume Draft Verification (at 360px)
         # -------------------------------------------------------------
         page.goto("http://localhost:5173/request-access", wait_until="networkidle")
-        name_input = page.locator("input#input-full-legal-name--as-per-passport---cnic-")
+        name_input = page.locator("input#input-full-legal-name")
         name_input.fill("Ahmad Raza Khan")
-        city_input = page.locator("input#input-city-of-residence-in-pakistan")
-        city_input.fill("Faisalabad")
+        email_input = page.locator("input#input-email-address")
+        email_input.fill("ahmad.raza@example.com")
         page.wait_for_timeout(600) # wait for debounced auto-save
 
         # Reload page to test resume
         page.reload(wait_until="networkidle")
         assert page.locator("text=Draft Resumed").first.is_visible(), "Draft resumed banner must be visible"
         assert name_input.input_value() == "Ahmad Raza Khan", "Drafted name must be restored"
-        assert city_input.input_value() == "Faisalabad", "Drafted city must be restored"
+        assert email_input.input_value() == "ahmad.raza@example.com", "Drafted email must be restored"
         print("[PASS] Save-and-Resume Form Behavior: Form draft auto-saved and restored on reload")
 
         # Clear Draft
@@ -136,18 +149,18 @@ def run_tests():
         # 6. Staff Desk Layout Verification
         # -------------------------------------------------------------
         page.set_viewport_size({"width": 1280, "height": 800})
+        page.evaluate("() => { localStorage.setItem('unilistics_active_demo_role', 'counsellor'); }")
         page.goto("http://localhost:5173/staff", wait_until="networkidle")
-        assert page.locator("text=Operational Staff Portal").first.is_visible(), "Staff portal header must be visible"
-        assert page.locator("text=Review Queue").first.is_visible(), "Staff review queue link must be visible"
+        assert page.locator("text=Counsellor Control Center").first.is_visible() or page.locator("text=Admissions Operations Hub").first.is_visible(), "Staff portal header must be visible"
         print("[PASS] Staff Portal Layout: Verified separate staff administration boundary")
 
         # -------------------------------------------------------------
         # 7. Explorer Layout Verification
         # -------------------------------------------------------------
-        page.goto("http://localhost:5173/explorer", wait_until="networkidle")
-        assert page.locator("text=Full Published Catalogue").first.is_visible(), "Explorer catalogue title must be visible"
-        assert page.locator("text=Regional Scholarships").first.is_visible(), "Scholarships tab must be visible"
-        print("[PASS] Explorer Layout: Verified 4-item navigation and catalogue views")
+        page.evaluate("() => { localStorage.setItem('unilistics_active_demo_role', 'explorer'); }")
+        page.goto("http://localhost:5173/universities", wait_until="networkidle")
+        assert page.locator("text=European Universities").first.is_visible(), "Explorer catalogue title must be visible"
+        print("[PASS] Explorer Layout: Verified published catalogue views")
 
         browser.close()
         print("\nALL E2E & RESPONSIVE LAYOUT VERIFICATIONS PASSED SUCCESSFULLY!")

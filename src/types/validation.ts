@@ -126,7 +126,7 @@ export const isValidPublicUrl = (url?: string | null): boolean => {
 // 2. Spreadsheet Formula Injection Defense
 export const escapeFormulaInjection = (value: unknown): unknown => {
   if (typeof value !== 'string') return value;
-  if (/^[\=\+\-\@\t\r]/.test(value)) {
+  if (/^[=+\-@\t\r]/.test(value)) {
     return `'${value}`;
   }
   return value;

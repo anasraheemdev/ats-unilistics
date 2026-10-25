@@ -28,7 +28,7 @@ function getStoredTheme(): ThemePreference {
     if (stored === 'light' || stored === 'dark' || stored === 'system') {
       return stored;
     }
-  } catch (e) {
+  } catch {
     // Storage access denied in private browsing
   }
   return 'system';
@@ -83,7 +83,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     try {
       localStorage.setItem(STORAGE_KEY, newTheme);
       localStorage.setItem('theme', newTheme);
-    } catch (e) {
+    } catch {
       // Storage access blocked
     }
   };

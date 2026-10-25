@@ -664,9 +664,8 @@ describe('Country Workflow Engine, Candidate Branches & Non-Destructive Case Mig
   // ===========================================================================
   describe('5. RLS & Staff Role Authorization Matrix for Workflows', () => {
     it('prohibits ordinary counsellors from updating template publication status via RLS', async () => {
-      let tplId: string;
       const res = await db.query<any>(`SELECT id FROM public.workflow_templates LIMIT 1;`);
-      tplId = res.rows[0].id;
+      const tplId: string = res.rows[0].id;
 
       await asPersona('authenticated', TEST_USERS.counsellor, async (tx) => {
         // Attempt direct update on workflow_templates publication_status

@@ -558,7 +558,7 @@ export const HomePage: React.FC = () => {
             {/* Application Milestone Mosaic */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
               {/* Main Milestone Stepper (8 Cols) */}
-              <div className="lg:col-span-8 rounded-2xl p-6 bg-[#F7F9F7] flex flex-col justify-between border border-[#ebe6de]">
+              <div className="lg:col-span-8 rounded-2xl p-6 bg-[#F7F9F7] flex flex-col justify-between border border-[#ebe6de] overflow-hidden">
                 <div>
                   <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
                     <div className="flex items-center gap-3">
@@ -580,8 +580,8 @@ export const HomePage: React.FC = () => {
                   </div>
 
                   {/* Stepper Nodes */}
-                  <div className="my-8">
-                    <div className="flex items-center justify-between relative">
+                  <div className="my-8 overflow-x-auto pb-2" style={{ maxWidth: '100%', WebkitOverflowScrolling: 'touch' }}>
+                    <div className="flex items-center justify-between relative min-w-[320px]">
                       <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-1 bg-[#ebe6de] z-0"></div>
                       <div className="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-[#245B42] w-[65%] z-0"></div>
 

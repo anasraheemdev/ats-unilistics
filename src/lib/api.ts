@@ -574,7 +574,7 @@ export const api = {
           if (!error && data) {
             return { success: true, message: `Invitation dispatched to ${payload.email}.`, userId: data.user_id };
           }
-        } catch {}
+        } catch { /* fallback */ }
       }
       return {
         success: true,
@@ -716,7 +716,7 @@ export const api = {
             targetCountry: payload.targetCountry || 'germany',
           })
         );
-      } catch {}
+      } catch { /* fallback */ }
 
       await this.switchRole('explorer');
       return {
@@ -762,7 +762,7 @@ export const api = {
           if (approvedGuidance) {
             return this.switchRole('managed_student');
           }
-        } catch {}
+        } catch { /* fallback */ }
         return this.switchRole('explorer');
       }
 
@@ -828,7 +828,7 @@ export const api = {
               isPreview: true,
             }));
           }
-        } catch {}
+        } catch { /* fallback */ }
       }
       return [];
     },
@@ -862,7 +862,7 @@ export const api = {
               isPreview: true,
             }));
           }
-        } catch {}
+        } catch { /* fallback */ }
       }
       return [];
     },
@@ -903,7 +903,7 @@ export const api = {
               is_preview_restricted: isApproved ? false : (data.is_preview_restricted ?? true),
             };
           }
-        } catch {}
+        } catch { /* fallback */ }
       }
 
       return {
@@ -941,7 +941,7 @@ export const api = {
               isPreview: true,
             };
           }
-        } catch {}
+        } catch { /* fallback */ }
       }
       return null;
     },
@@ -974,7 +974,7 @@ export const api = {
               isPreview: p.is_preview_allowed,
             }));
           }
-        } catch {}
+        } catch { /* fallback */ }
       }
       return [];
     },
@@ -1019,7 +1019,7 @@ export const api = {
               is_preview_restricted: data.is_preview_restricted ?? !isApproved,
             };
           }
-        } catch {}
+        } catch { /* fallback */ }
       }
 
       return {
@@ -1065,7 +1065,7 @@ export const api = {
               isPreview: data.is_preview_allowed,
             };
           }
-        } catch {}
+        } catch { /* fallback */ }
       }
       return null;
     },
@@ -1098,7 +1098,7 @@ export const api = {
               provenance: s.provenance,
             }));
           }
-        } catch {}
+        } catch { /* fallback */ }
       }
       return [];
     },
@@ -1152,7 +1152,7 @@ export const api = {
               is_gated: false,
             };
           }
-        } catch {}
+        } catch { /* fallback */ }
       }
 
       return {
@@ -1186,7 +1186,7 @@ export const api = {
               isPublished: data.publication_status === 'published',
             };
           }
-        } catch {}
+        } catch { /* fallback */ }
       }
       return null;
     },
@@ -1628,7 +1628,7 @@ export const api = {
             uniName = p.universities?.name || 'University';
             country = p.universities?.country_code || 'germany';
           }
-        } catch {}
+        } catch { /* fallback */ }
       }
       const newAppId = 'app-custom-' + Date.now();
 
@@ -1754,34 +1754,30 @@ export const api = {
       }
 
       if (supabase) {
-        try {
-          const { data, error } = await supabase.rpc('staff_update_application', {
-            p_application_id: payload.applicationId,
-            p_expected_lock_version: payload.expectedLockVersion,
-            p_dossier_review_status: payload.dossierReviewStatus || null,
-            p_dossier_review_notes: payload.dossierReviewNotes || null,
-            p_external_status: payload.externalStatus || null,
-            p_external_evidence_reference: payload.externalEvidenceReference || null,
-            p_submitted_at: payload.submittedAt || null,
-            p_offer_conditions: payload.offerConditions || null,
-            p_decision_outcome_type: payload.decisionOutcomeType || null,
-            p_decision_reason: payload.decisionReason || null,
-            p_deferral_target_intake: payload.deferralTargetIntake || null,
-            p_portal_application_number: payload.portalApplicationNumber || null,
-            p_portal_url: payload.portalUrl || null,
-            p_portal_account_email: payload.portalAccountEmail || null,
-            p_next_action: payload.nextAction || null,
-            p_next_action_due_date: payload.nextActionDueDate || null,
-            p_responsible_party: payload.responsibleParty || null,
-            p_is_correction: payload.isCorrection || false,
-            p_correction_reason: payload.correctionReason || null,
-            p_is_internal_only: payload.isInternalOnly || false,
-          });
-          if (error) throw new Error(error.message);
-          if (data) return { success: true, newLockVersion: data.new_lock_version, message: 'Update successfully applied' };
-        } catch (err: any) {
-          throw err;
-        }
+        const { data, error } = await supabase.rpc('staff_update_application', {
+          p_application_id: payload.applicationId,
+          p_expected_lock_version: payload.expectedLockVersion,
+          p_dossier_review_status: payload.dossierReviewStatus || null,
+          p_dossier_review_notes: payload.dossierReviewNotes || null,
+          p_external_status: payload.externalStatus || null,
+          p_external_evidence_reference: payload.externalEvidenceReference || null,
+          p_submitted_at: payload.submittedAt || null,
+          p_offer_conditions: payload.offerConditions || null,
+          p_decision_outcome_type: payload.decisionOutcomeType || null,
+          p_decision_reason: payload.decisionReason || null,
+          p_deferral_target_intake: payload.deferralTargetIntake || null,
+          p_portal_application_number: payload.portalApplicationNumber || null,
+          p_portal_url: payload.portalUrl || null,
+          p_portal_account_email: payload.portalAccountEmail || null,
+          p_next_action: payload.nextAction || null,
+          p_next_action_due_date: payload.nextActionDueDate || null,
+          p_responsible_party: payload.responsibleParty || null,
+          p_is_correction: payload.isCorrection || false,
+          p_correction_reason: payload.correctionReason || null,
+          p_is_internal_only: payload.isInternalOnly || false,
+        });
+        if (error) throw new Error(error.message);
+        if (data) return { success: true, newLockVersion: data.new_lock_version, message: 'Update successfully applied' };
       }
 
       // Local / Offline Optimistic Concurrency Check
@@ -1905,17 +1901,13 @@ export const api = {
         throw new Error('Case reassignment requires an audit justification of at least 5 characters');
       }
       if (supabase) {
-        try {
-          const { data, error } = await supabase.rpc('admin_reassign_case', {
-            p_case_id: caseId,
-            p_new_counsellor_id: newCounsellorId,
-            p_reassignment_reason: reason,
-          });
-          if (error) throw new Error(error.message);
-          if (data) return data;
-        } catch (err: any) {
-          throw err;
-        }
+        const { data, error } = await supabase.rpc('admin_reassign_case', {
+          p_case_id: caseId,
+          p_new_counsellor_id: newCounsellorId,
+          p_reassignment_reason: reason,
+        });
+        if (error) throw new Error(error.message);
+        if (data) return data;
       }
 
       // Reassignment fallback
@@ -2159,7 +2151,7 @@ export const api = {
           if (currentRole === 'explorer') {
             localStorage.setItem(ACTIVE_ROLE_KEY, 'managed_student');
           }
-        } catch {}
+        } catch { /* fallback */ }
       }
 
       // Save activation email in local sink
@@ -2650,7 +2642,7 @@ export const api = {
               provenance: u.provenance,
             }));
           }
-        } catch {}
+        } catch { /* fallback */ }
       }
       return [];
     },
@@ -2683,7 +2675,7 @@ export const api = {
               provenance: p.provenance,
             }));
           }
-        } catch {}
+        } catch { /* fallback */ }
       }
       return [];
     },
@@ -2710,7 +2702,7 @@ export const api = {
               isPublished: s.publication_status === 'published',
             }));
           }
-        } catch {}
+        } catch { /* fallback */ }
       }
       return [];
     },
@@ -3856,7 +3848,7 @@ export const api = {
       // Local fallback session
       const randomUuid = 'session-' + Math.random().toString(36).substring(2, 10);
       const randomKey = `${params.caseId}/${params.documentType}/${randomUuid}.bin`;
-      const safeName = params.file.name.replace(/[^a-zA-Z0-9_\-\. ]/g, '_');
+      const safeName = params.file.name.replace(/[^a-zA-Z0-9_\-. ]/g, '_');
       const docs = getStoredDocuments();
       const existing = docs.find((d) => d.caseId === params.caseId && d.documentType === params.documentType);
       const nextVer = existing ? (existing.currentVersionNumber || 1) + 1 : 1;
@@ -4420,7 +4412,7 @@ export const api = {
             rateData = parsed;
           }
         }
-      } catch {}
+      } catch { /* fallback */ }
 
       if (rateData.count >= 5) {
         throw new Error('Rate limit exceeded: You have submitted multiple inquiries recently. Please wait before submitting again.');
@@ -4429,7 +4421,7 @@ export const api = {
       rateData.count += 1;
       try {
         localStorage.setItem(`rl_${rateKey}`, JSON.stringify(rateData));
-      } catch {}
+      } catch { /* fallback */ }
 
       const inquiryId = `inq-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
       const inquiryRecord = {
@@ -4447,7 +4439,7 @@ export const api = {
         const storedInquiries = JSON.parse(localStorage.getItem('unilistics_public_inquiries') || '[]');
         storedInquiries.unshift(inquiryRecord);
         localStorage.setItem('unilistics_public_inquiries', JSON.stringify(storedInquiries));
-      } catch {}
+      } catch { /* fallback */ }
 
       return {
         success: true,
@@ -4824,7 +4816,7 @@ export const api = {
       try {
         const raw = localStorage.getItem(WEBHOOK_LEDGER_KEY);
         if (raw) ledger = JSON.parse(raw);
-      } catch {}
+      } catch { /* fallback */ }
 
       const ledgerKey = `${provider}:${providerEventId}`;
       if (ledger.includes(ledgerKey)) {
@@ -4834,7 +4826,7 @@ export const api = {
       ledger.push(ledgerKey);
       try {
         localStorage.setItem(WEBHOOK_LEDGER_KEY, JSON.stringify(ledger));
-      } catch {}
+      } catch { /* fallback */ }
 
       const outbox = getStoredDurableOutbox();
       let matchedId: string | undefined = undefined;
@@ -4887,7 +4879,7 @@ export const api = {
               calculatedAt: data.calculated_at || new Date().toISOString(),
             };
           }
-        } catch {}
+        } catch { /* fallback */ }
       }
 
       // Local authoritative calculation
@@ -4978,7 +4970,7 @@ export const api = {
               raw: item,
             }));
           }
-        } catch {}
+        } catch { /* fallback */ }
       }
 
       const now = new Date();
