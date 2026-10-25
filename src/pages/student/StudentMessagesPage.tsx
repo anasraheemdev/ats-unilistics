@@ -7,6 +7,7 @@ import { LoadingState } from '@/components/common/LoadingState';
 import { ErrorState } from '@/components/common/ErrorState';
 import { EmptyState } from '@/components/common/EmptyState';
 import { Send, ShieldCheck, Paperclip, FileText, Download, X, CheckCircle } from 'lucide-react';
+import { StudentJourneyNav } from '@/components/layout/StudentJourneyNav';
 import { CaseMessage, CaseDocument } from '@/types';
 
 export const StudentMessagesPage: React.FC = () => {
@@ -86,6 +87,7 @@ export const StudentMessagesPage: React.FC = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', maxWidth: '880px', margin: '0 auto' }}>
+      <StudentJourneyNav />
       {/* Header */}
       <div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '0.5rem' }}>

@@ -89,20 +89,29 @@ export const StudentOverviewPage: React.FC = () => {
   const pendingTasks = tasks.filter((t: CaseTask) => t.status === 'pending');
   const priorityTask = pendingTasks[0] || null;
 
-  // Latest note from counsellor
+  // Latest genuine note from assigned counsellor or admin
   const counsellorNotes = messages.filter((m) => m.senderRole === 'counsellor' || m.senderRole === 'admin');
   const latestCounsellorNote = counsellorNotes[counsellorNotes.length - 1] || null;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-      {/* 1. Top Welcome Banner (Matching screen(3).png) */}
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1.75rem',
+        fontFamily: 'var(--font-family-base, "DM Sans", sans-serif)',
+      }}
+    >
+      {/* 1. Top Welcome Banner Card */}
       <section
-        className="bento-card"
         style={{
-          padding: '2rem 1.75rem',
-          backgroundColor: '#ffffff',
+          padding: '1.75rem',
+          backgroundColor: 'var(--surface-card, #FFFFFF)',
+          borderRadius: '24px',
+          border: '1px solid var(--border-subtle, #E1E8DE)',
+          boxShadow: 'var(--shadow-subtle, 0 1px 3px rgba(0, 0, 0, 0.04))',
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
           gap: '1.5rem',
           alignItems: 'center',
         }}
@@ -115,16 +124,16 @@ export const StudentOverviewPage: React.FC = () => {
                 fontWeight: 700,
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
-                backgroundColor: 'var(--accent-peach-bg)',
-                color: 'var(--action-primary)',
-                padding: '0.2rem 0.6rem',
-                borderRadius: 'var(--radius-pill)',
-                border: '1px solid var(--accent-peach-border)',
+                backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+                color: 'var(--action-primary, #245B42)',
+                padding: '0.25rem 0.625rem',
+                borderRadius: '9999px',
+                border: '1px solid var(--border-subtle, #E1E8DE)',
               }}
             >
               {studentCase.targetIntakeSeason.toUpperCase()} {studentCase.targetIntakeYear} Admissions Cycle
             </span>
-            <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)' }}>
+            <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-foreground-muted, #58695E)' }}>
               Case Ref: #{studentCase.id.slice(0, 8).toUpperCase()}
             </span>
           </div>
@@ -132,113 +141,199 @@ export const StudentOverviewPage: React.FC = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
             <h1
               style={{
-                fontSize: 'clamp(1.75rem, 3.5vw, 2.25rem)',
-                fontWeight: 800,
-                color: 'var(--text-charcoal)',
+                fontSize: 'clamp(1.5rem, 3vw, 2rem)',
+                fontWeight: 700,
+                color: 'var(--color-foreground, #19261F)',
                 letterSpacing: '-0.025em',
-                lineHeight: 1.15,
+                lineHeight: 1.2,
+                margin: 0,
               }}
             >
               Welcome back, {studentCase.studentName}!
             </h1>
-            <span style={{ fontSize: '1.75rem' }} role="img" aria-label="Graduation Cap">🎓</span>
           </div>
 
-          <p style={{ fontSize: '0.9375rem', color: 'var(--text-muted)', lineHeight: 1.5, maxWidth: '580px' }}>
-            Your university applications and visa attestations are tracked in this verified case room. You have{' '}
-            <strong style={{ color: 'var(--action-primary)' }}>{pendingTasks.length} pending actions</strong> to complete.
+          <p style={{ fontSize: '0.9375rem', color: 'var(--color-foreground-muted, #58695E)', lineHeight: 1.5, maxWidth: '580px', margin: 0 }}>
+            Your university applications and visa documents are tracked in this verified workspace. You have{' '}
+            <strong style={{ color: 'var(--action-primary, #245B42)' }}>{pendingTasks.length} pending actions</strong> to complete.
           </p>
         </div>
 
-        {/* Assigned Advisor Info Card */}
+        {/* Assigned Advisor Info Card (Genuine Data or Unassigned State) */}
         <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
           <div
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '1rem',
-              backgroundColor: 'var(--surface-recessed)',
+              gap: '0.875rem',
+              backgroundColor: 'var(--surface-recessed, #EDF2E9)',
               padding: '1rem 1.25rem',
-              borderRadius: 'var(--radius-card-sm)',
-              border: '1px solid var(--border-subtle)',
+              borderRadius: '16px',
+              border: '1px solid var(--border-subtle, #E1E8DE)',
               width: '100%',
-              maxWidth: '360px',
+              maxWidth: '380px',
             }}
           >
             <div
               style={{
-                width: '46px',
-                height: '46px',
-                borderRadius: 'var(--radius-full)',
-                backgroundColor: 'var(--action-primary)',
-                color: '#ffffff',
+                width: '44px',
+                height: '44px',
+                borderRadius: '50%',
+                backgroundColor: studentCase.assignedCounsellorName ? 'var(--action-primary, #245B42)' : '#8DA394',
+                color: '#FFFFFF',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontWeight: 700,
-                fontSize: '1.125rem',
+                fontSize: '1rem',
                 flexShrink: 0,
               }}
+              aria-hidden="true"
             >
-              {studentCase.assignedCounsellorName ? studentCase.assignedCounsellorName.charAt(0) : 'A'}
+              {studentCase.assignedCounsellorName ? studentCase.assignedCounsellorName.charAt(0) : '?'}
             </div>
 
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: '0.9375rem', fontWeight: 700, color: 'var(--text-charcoal)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <div
+                style={{
+                  fontSize: '0.9375rem',
+                  fontWeight: 700,
+                  color: 'var(--color-foreground, #19261F)',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                }}
+              >
                 {studentCase.assignedCounsellorName || 'Adviser Pending Assignment'}
               </div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                {studentCase.assignedCounsellorName ? 'Senior Admissions Adviser' : 'Unallocated to Staff'}
+              <div style={{ fontSize: '0.75rem', color: 'var(--color-foreground-muted, #58695E)' }}>
+                {studentCase.assignedCounsellorName ? 'Admissions Adviser' : 'Unallocated to Staff'}
               </div>
-              <div style={{ fontSize: '0.6875rem', color: 'var(--color-success)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.25rem', marginTop: '0.15rem' }}>
-                <ShieldCheck size={12} />
-                <span>Assigned Case Lead</span>
+              <div
+                style={{
+                  fontSize: '0.6875rem',
+                  color: studentCase.assignedCounsellorName ? 'var(--color-success, #245B42)' : 'var(--color-foreground-muted, #58695E)',
+                  fontWeight: 600,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.25rem',
+                  marginTop: '0.15rem',
+                }}
+              >
+                {studentCase.assignedCounsellorName ? (
+                  <>
+                    <ShieldCheck size={13} aria-hidden={true} />
+                    <span>Assigned Case Lead</span>
+                  </>
+                ) : (
+                  <>
+                    <Clock size={13} aria-hidden={true} />
+                    <span>Admin Reviewing Allocation</span>
+                  </>
+                )}
               </div>
             </div>
 
-            <Link
-              to="/student/messages"
-              className="btn-pill btn-pill-secondary"
-              style={{
-                padding: '0.4rem 0.75rem',
-                fontSize: '0.75rem',
-                minHeight: '36px',
-                textDecoration: 'none',
-              }}
-              title="Message your assigned adviser"
-              aria-label="Message your assigned adviser"
-            >
-              <MessageSquare size={14} />
-            </Link>
+            {studentCase.assignedCounsellorName && (
+              <Link
+                to="/student/messages"
+                style={{
+                  padding: '0.5rem',
+                  borderRadius: '9999px',
+                  backgroundColor: 'var(--surface-card, #FFFFFF)',
+                  border: '1px solid var(--border-subtle, #E1E8DE)',
+                  color: 'var(--action-primary, #245B42)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  minHeight: '38px',
+                  minWidth: '38px',
+                  textDecoration: 'none',
+                }}
+                title="Message your assigned adviser"
+                aria-label="Message your assigned adviser"
+              >
+                <MessageSquare size={16} aria-hidden={true} />
+              </Link>
+            )}
           </div>
         </div>
       </section>
 
-      {/* Mobile Quick Action Buttons (Matching screen(6).png) */}
+      {/* Mobile Quick Action Strip (Tappable Navigation) */}
       <div
         className="md:hidden"
         style={{
-          display: 'flex',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
           gap: '0.5rem',
-          overflowX: 'auto',
-          paddingBottom: '0.25rem',
         }}
       >
-        <Link to="/student/documents" className="btn-pill btn-pill-primary" style={{ fontSize: '0.8125rem', flex: 1, textDecoration: 'none' }}>
-          <Upload size={14} />
-          <span>Upload File</span>
+        <Link
+          to="/student/documents"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.35rem',
+            padding: '0.625rem 0.5rem',
+            borderRadius: '16px',
+            backgroundColor: 'var(--action-primary, #245B42)',
+            color: '#FFFFFF',
+            fontSize: '0.75rem',
+            fontWeight: 600,
+            textDecoration: 'none',
+            minHeight: '44px',
+          }}
+        >
+          <Upload size={14} aria-hidden={true} />
+          <span>Upload</span>
         </Link>
-        <Link to="/student/messages" className="btn-pill btn-pill-secondary" style={{ fontSize: '0.8125rem', flex: 1, textDecoration: 'none' }}>
-          <MessageSquare size={14} />
-          <span>Message Adviser</span>
+        <Link
+          to="/student/messages"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.35rem',
+            padding: '0.625rem 0.5rem',
+            borderRadius: '16px',
+            backgroundColor: 'var(--surface-card, #FFFFFF)',
+            border: '1px solid var(--border-subtle, #E1E8DE)',
+            color: 'var(--color-foreground, #19261F)',
+            fontSize: '0.75rem',
+            fontWeight: 600,
+            textDecoration: 'none',
+            minHeight: '44px',
+          }}
+        >
+          <MessageSquare size={14} aria-hidden={true} />
+          <span>Messages</span>
         </Link>
-        <Link to="/student/applications" className="btn-pill btn-pill-secondary" style={{ fontSize: '0.8125rem', flex: 1, textDecoration: 'none' }}>
-          <Clock size={14} />
-          <span>Timeline</span>
+        <Link
+          to="/student/applications"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.35rem',
+            padding: '0.625rem 0.5rem',
+            borderRadius: '16px',
+            backgroundColor: 'var(--surface-card, #FFFFFF)',
+            border: '1px solid var(--border-subtle, #E1E8DE)',
+            color: 'var(--color-foreground, #19261F)',
+            fontSize: '0.75rem',
+            fontWeight: 600,
+            textDecoration: 'none',
+            minHeight: '44px',
+          }}
+        >
+          <Clock size={14} aria-hidden={true} />
+          <span>Casework</span>
         </Link>
       </div>
 
-      {/* 2. Main Bento Two-Column Layout */}
+      {/* 2. Main Two-Column Layout */}
       <div
         style={{
           display: 'grid',
@@ -247,22 +342,38 @@ export const StudentOverviewPage: React.FC = () => {
           alignItems: 'start',
         }}
       >
-        {/* LEFT COLUMN: Actions, Active Applications, Milestones */}
+        {/* LEFT COLUMN: Actions & Active Applications */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
-          {/* Card: Priority Requirement Pending */}
-          <div className="bento-card" style={{ padding: '1.75rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--action-primary)', letterSpacing: '0.04em' }}>
-                Admissions Action Center
+          {/* Card: Priority Requirement / Next Action */}
+          <section
+            style={{
+              padding: '1.75rem',
+              backgroundColor: 'var(--surface-card, #FFFFFF)',
+              borderRadius: '24px',
+              border: '1px solid var(--border-subtle, #E1E8DE)',
+              boxShadow: 'var(--shadow-subtle, 0 1px 3px rgba(0, 0, 0, 0.04))',
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+              <span
+                style={{
+                  fontSize: '0.75rem',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  color: 'var(--action-primary, #245B42)',
+                  letterSpacing: '0.04em',
+                }}
+              >
+                Next Action Center
               </span>
               <span
                 style={{
                   fontSize: '0.75rem',
                   fontWeight: 600,
-                  backgroundColor: 'var(--surface-recessed)',
-                  padding: '0.2rem 0.6rem',
-                  borderRadius: 'var(--radius-pill)',
-                  color: 'var(--text-muted)',
+                  backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+                  padding: '0.25rem 0.625rem',
+                  borderRadius: '9999px',
+                  color: 'var(--color-foreground-muted, #58695E)',
                 }}
               >
                 {completedTasksCount} of {totalTasksCount} tasks completed
@@ -272,10 +383,10 @@ export const StudentOverviewPage: React.FC = () => {
             {priorityTask ? (
               <div
                 style={{
-                  backgroundColor: 'var(--surface-recessed)',
-                  borderRadius: 'var(--radius-card-sm)',
+                  backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+                  borderRadius: '16px',
                   padding: '1.25rem',
-                  border: '1px solid var(--border-subtle)',
+                  border: '1px solid var(--border-subtle, #E1E8DE)',
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
@@ -284,21 +395,20 @@ export const StudentOverviewPage: React.FC = () => {
                       fontSize: '0.6875rem',
                       fontWeight: 700,
                       textTransform: 'uppercase',
-                      backgroundColor: 'var(--color-warning-bg)',
-                      color: 'var(--color-warning)',
+                      backgroundColor: 'rgba(36, 91, 66, 0.1)',
+                      color: 'var(--action-primary, #245B42)',
                       padding: '0.15rem 0.5rem',
-                      borderRadius: 'var(--radius-pill)',
-                      border: '1px solid var(--color-warning-border)',
+                      borderRadius: '9999px',
                       display: 'inline-flex',
                       alignItems: 'center',
                       gap: '0.25rem',
                     }}
                   >
-                    <Clock size={11} />
+                    <Clock size={12} aria-hidden={true} />
                     <span>Next Action Required</span>
                   </span>
                   {priorityTask.dueDate && (
-                    <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)' }}>
+                    <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-foreground-muted, #58695E)' }}>
                       Due: {priorityTask.dueDate}
                     </span>
                   )}
@@ -308,63 +418,103 @@ export const StudentOverviewPage: React.FC = () => {
                   style={{
                     fontSize: '1.125rem',
                     fontWeight: 700,
-                    color: 'var(--text-charcoal)',
+                    color: 'var(--color-foreground, #19261F)',
                     marginBottom: '0.5rem',
                     lineHeight: 1.3,
+                    margin: 0,
                   }}
                 >
                   {priorityTask.title}
                 </h3>
 
-                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '1.25rem', lineHeight: 1.5 }}>
-                  {priorityTask.description || 'This document or task is required by your target institution and consular regulations.'}
+                <p style={{ fontSize: '0.875rem', color: 'var(--color-foreground-muted, #58695E)', margin: '0.5rem 0 1.25rem', lineHeight: 1.5 }}>
+                  {priorityTask.description || 'This item is required by your target institution and consular regulations.'}
                 </p>
 
                 <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                   <Link
                     to="/student/documents"
-                    className="btn-pill btn-pill-primary"
-                    style={{ fontSize: '0.8125rem', padding: '0.5rem 1rem', textDecoration: 'none' }}
+                    style={{
+                      fontSize: '0.8125rem',
+                      padding: '0.5rem 1rem',
+                      borderRadius: '9999px',
+                      backgroundColor: 'var(--action-primary, #245B42)',
+                      color: '#FFFFFF',
+                      fontWeight: 600,
+                      textDecoration: 'none',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                      minHeight: '38px',
+                    }}
                   >
-                    <Upload size={14} />
+                    <Upload size={14} aria-hidden={true} />
                     <span>Upload Required File</span>
                   </Link>
                   <button
                     type="button"
                     onClick={() => handleToggleTask(priorityTask.id)}
-                    className="btn-pill btn-pill-secondary"
-                    style={{ fontSize: '0.8125rem', padding: '0.5rem 1rem' }}
+                    style={{
+                      fontSize: '0.8125rem',
+                      padding: '0.5rem 1rem',
+                      borderRadius: '9999px',
+                      backgroundColor: 'var(--surface-card, #FFFFFF)',
+                      border: '1px solid var(--border-subtle, #E1E8DE)',
+                      color: 'var(--color-foreground, #19261F)',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                      minHeight: '38px',
+                    }}
                   >
-                    <CheckSquare size={14} />
+                    <CheckSquare size={14} aria-hidden={true} />
                     <span>Mark Finished</span>
                   </button>
                 </div>
               </div>
             ) : (
-              <div style={{ textAlign: 'center', padding: '1rem 0' }}>
-                <CheckCircle2 size={32} style={{ color: 'var(--color-success)', margin: '0 auto 0.5rem' }} />
-                <div style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-charcoal)' }}>
+              <div style={{ textAlign: 'center', padding: '1.5rem 0' }}>
+                <CheckCircle2 size={36} style={{ color: 'var(--action-primary, #245B42)', margin: '0 auto 0.5rem' }} aria-hidden={true} />
+                <div style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--color-foreground, #19261F)' }}>
                   All procedural tasks up to date!
                 </div>
-                <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
-                  Your assigned adviser is tracking external university deadlines.
+                <div style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted, #58695E)', marginTop: '0.25rem' }}>
+                  Your assigned adviser is tracking external university deadlines and portal queues.
                 </div>
               </div>
             )}
-          </div>
+          </section>
 
-          {/* Card: Target Universities / Active Applications */}
-          <div className="bento-card" style={{ padding: '1.75rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+          {/* Card: Active University Applications */}
+          <section
+            style={{
+              padding: '1.75rem',
+              backgroundColor: 'var(--surface-card, #FFFFFF)',
+              borderRadius: '24px',
+              border: '1px solid var(--border-subtle, #E1E8DE)',
+              boxShadow: 'var(--shadow-subtle, 0 1px 3px rgba(0, 0, 0, 0.04))',
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '0.5rem' }}>
               <div>
-                <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-charcoal)', margin: 0 }}>
-                  Target Universities ({applications.length} Active)
+                <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-foreground, #19261F)', margin: 0 }}>
+                  Active Applications ({applications.length})
                 </h2>
-                <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
-                  Multi-application tracking with real-time stage progression
+                <span style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted, #58695E)' }}>
+                  Track admissions status across target European universities
                 </span>
               </div>
-              <Link to="/student/applications" style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--action-primary)', textDecoration: 'none' }}>
+              <Link
+                to="/student/applications"
+                style={{
+                  fontSize: '0.8125rem',
+                  fontWeight: 600,
+                  color: 'var(--action-primary, #245B42)',
+                  textDecoration: 'none',
+                }}
+              >
                 Manage All
               </Link>
             </div>
@@ -380,11 +530,11 @@ export const StudentOverviewPage: React.FC = () => {
                       alignItems: 'center',
                       justifyContent: 'space-between',
                       padding: '1rem 1.25rem',
-                      borderRadius: 'var(--radius-card-sm)',
-                      backgroundColor: 'var(--surface-recessed)',
-                      border: '1px solid var(--border-subtle)',
+                      borderRadius: '16px',
+                      backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+                      border: '1px solid var(--border-subtle, #E1E8DE)',
                       textDecoration: 'none',
-                      transition: 'all var(--transition-fast)',
+                      transition: 'all 150ms ease-out',
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', minWidth: 0 }}>
@@ -392,25 +542,43 @@ export const StudentOverviewPage: React.FC = () => {
                         style={{
                           width: '42px',
                           height: '42px',
-                          borderRadius: 'var(--radius-sm)',
-                          backgroundColor: '#ffffff',
-                          border: '1px solid var(--border-refined)',
+                          borderRadius: '12px',
+                          backgroundColor: '#FFFFFF',
+                          border: '1px solid var(--border-subtle, #E1E8DE)',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          fontWeight: 800,
+                          fontWeight: 700,
                           fontSize: '0.875rem',
-                          color: 'var(--action-primary)',
+                          color: 'var(--action-primary, #245B42)',
                           flexShrink: 0,
                         }}
+                        aria-hidden={true}
                       >
                         {(app.universitySnapshot?.name || 'UNI').slice(0, 3).toUpperCase()}
                       </div>
                       <div style={{ minWidth: 0 }}>
-                        <div style={{ fontSize: '0.9375rem', fontWeight: 700, color: 'var(--text-charcoal)', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                        <div
+                          style={{
+                            fontSize: '0.9375rem',
+                            fontWeight: 700,
+                            color: 'var(--color-foreground, #19261F)',
+                            textOverflow: 'ellipsis',
+                            overflow: 'hidden',
+                            whiteSpace: 'nowrap',
+                          }}
+                        >
                           {app.universitySnapshot?.name || 'University'}
                         </div>
-                        <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                        <div
+                          style={{
+                            fontSize: '0.8125rem',
+                            color: 'var(--color-foreground-muted, #58695E)',
+                            textOverflow: 'ellipsis',
+                            overflow: 'hidden',
+                            whiteSpace: 'nowrap',
+                          }}
+                        >
                           {app.programSnapshot?.title || 'Degree Program'}
                         </div>
                       </div>
@@ -418,33 +586,37 @@ export const StudentOverviewPage: React.FC = () => {
 
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
                       <span
-                        className="badge-semantic"
                         style={{
+                          fontSize: '0.75rem',
+                          fontWeight: 700,
+                          padding: '0.2rem 0.625rem',
+                          borderRadius: '9999px',
+                          textTransform: 'uppercase',
                           backgroundColor:
                             app.externalStatus === 'accepted_offer' || app.externalStatus === 'conditional_offer'
-                              ? 'var(--color-success-bg)'
+                              ? 'rgba(36, 91, 66, 0.12)'
                               : app.externalStatus === 'submitted' || app.externalStatus === 'awaiting_decision'
-                              ? 'var(--color-info-bg)'
-                              : 'var(--color-warning-bg)',
+                              ? 'rgba(74, 108, 182, 0.12)'
+                              : 'rgba(215, 238, 131, 0.4)',
                           color:
                             app.externalStatus === 'accepted_offer' || app.externalStatus === 'conditional_offer'
-                              ? 'var(--color-success)'
+                              ? 'var(--action-primary, #245B42)'
                               : app.externalStatus === 'submitted' || app.externalStatus === 'awaiting_decision'
-                              ? 'var(--color-info)'
-                              : 'var(--color-warning)',
+                              ? '#2B5797'
+                              : '#19261F',
                           border: '1px solid currentColor',
                         }}
                       >
-                        {app.externalStatus.replace(/_/g, ' ').toUpperCase()}
+                        {app.externalStatus.replace(/_/g, ' ')}
                       </span>
-                      <ChevronRight size={18} style={{ color: 'var(--text-muted)' }} />
+                      <ChevronRight size={18} style={{ color: 'var(--color-foreground-muted, #58695E)' }} aria-hidden={true} />
                     </div>
                   </Link>
                 ))}
               </div>
             ) : (
               <EmptyState
-                title="No active university applications yet"
+                title="No active applications yet"
                 description="Browse accredited European degree programs in the catalogue and select target institutions with your counsellor."
                 actionLabel="Explore European Catalogue"
                 onAction={() => window.location.assign('/student/explore')}
@@ -452,50 +624,58 @@ export const StudentOverviewPage: React.FC = () => {
                 imageAlt="Empty applications illustration"
               />
             )}
-          </div>
+          </section>
         </div>
 
-        {/* RIGHT COLUMN: Counsellor Quick Note, Recent Documents, Critical Deadlines */}
+        {/* RIGHT COLUMN: Counsellor Note, Document Vault, Upcoming Deadlines */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
-          {/* Card: Counsellor Quick Note (Matching screen(3).png) */}
-          <div className="bento-card" style={{ padding: '1.5rem' }}>
+          {/* Card: Counsellor Quick Note */}
+          <section
+            style={{
+              padding: '1.5rem',
+              backgroundColor: 'var(--surface-card, #FFFFFF)',
+              borderRadius: '24px',
+              border: '1px solid var(--border-subtle, #E1E8DE)',
+              boxShadow: 'var(--shadow-subtle, 0 1px 3px rgba(0, 0, 0, 0.04))',
+            }}
+          >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <MessageSquare size={16} style={{ color: 'var(--action-primary)' }} />
-                <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-charcoal)', margin: 0 }}>
+                <MessageSquare size={16} style={{ color: 'var(--action-primary, #245B42)' }} aria-hidden={true} />
+                <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--color-foreground, #19261F)', margin: 0 }}>
                   Adviser Quick Note
                 </h3>
               </div>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                {latestCounsellorNote ? 'Recent Advice' : 'Case Thread'}
+              <span style={{ fontSize: '0.75rem', color: 'var(--color-foreground-muted, #58695E)' }}>
+                {latestCounsellorNote ? 'Recent Guidance' : 'Case Thread'}
               </span>
             </div>
 
             {latestCounsellorNote ? (
               <div
                 style={{
-                  backgroundColor: 'var(--accent-peach-bg)',
-                  border: '1px solid var(--accent-peach-border)',
-                  borderRadius: 'var(--radius-card-sm)',
+                  backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+                  border: '1px solid var(--border-subtle, #E1E8DE)',
+                  borderRadius: '16px',
                   padding: '1rem 1.125rem',
                   marginBottom: '1rem',
                 }}
               >
-                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--action-primary)', marginBottom: '0.35rem' }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--action-primary, #245B42)', marginBottom: '0.35rem' }}>
                   From {latestCounsellorNote.senderName}:
                 </div>
-                <p style={{ fontSize: '0.875rem', color: 'var(--text-charcoal)', fontStyle: 'italic', lineHeight: 1.5, margin: 0 }}>
+                <p style={{ fontSize: '0.875rem', color: 'var(--color-foreground, #19261F)', fontStyle: 'italic', lineHeight: 1.5, margin: 0 }}>
                   "{latestCounsellorNote.messageBody || (latestCounsellorNote as any).content}"
                 </p>
               </div>
             ) : (
               <div
                 style={{
-                  backgroundColor: 'var(--surface-recessed)',
-                  borderRadius: 'var(--radius-card-sm)',
+                  backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+                  borderRadius: '16px',
                   padding: '1rem',
                   fontSize: '0.8125rem',
-                  color: 'var(--text-muted)',
+                  color: 'var(--color-foreground-muted, #58695E)',
                   marginBottom: '1rem',
                 }}
               >
@@ -505,26 +685,56 @@ export const StudentOverviewPage: React.FC = () => {
 
             <Link
               to="/student/messages"
-              className="btn-pill btn-pill-secondary"
-              style={{ width: '100%', fontSize: '0.8125rem', textDecoration: 'none' }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.5rem',
+                width: '100%',
+                padding: '0.5rem 1rem',
+                borderRadius: '9999px',
+                backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+                border: '1px solid var(--border-subtle, #E1E8DE)',
+                color: 'var(--action-primary, #245B42)',
+                fontSize: '0.8125rem',
+                fontWeight: 600,
+                textDecoration: 'none',
+                minHeight: '40px',
+              }}
             >
-              <Send size={14} />
+              <Send size={14} aria-hidden={true} />
               <span>Open Case Messaging Room</span>
             </Link>
-          </div>
+          </section>
 
-          {/* Card: Verification Vault / Recent Documents */}
-          <div className="bento-card" style={{ padding: '1.5rem' }}>
+          {/* Card: Document Vault / Recent Files */}
+          <section
+            style={{
+              padding: '1.5rem',
+              backgroundColor: 'var(--surface-card, #FFFFFF)',
+              borderRadius: '24px',
+              border: '1px solid var(--border-subtle, #E1E8DE)',
+              boxShadow: 'var(--shadow-subtle, 0 1px 3px rgba(0, 0, 0, 0.04))',
+            }}
+          >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
               <div>
-                <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-charcoal)', margin: 0 }}>
+                <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--color-foreground, #19261F)', margin: 0 }}>
                   Recent Documents
                 </h3>
-                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                <span style={{ fontSize: '0.75rem', color: 'var(--color-foreground-muted, #58695E)' }}>
                   Verified Document Vault ({documents.length} Files)
                 </span>
               </div>
-              <Link to="/student/documents" style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--action-primary)', textDecoration: 'none' }}>
+              <Link
+                to="/student/documents"
+                style={{
+                  fontSize: '0.8125rem',
+                  fontWeight: 600,
+                  color: 'var(--action-primary, #245B42)',
+                  textDecoration: 'none',
+                }}
+              >
                 View All
               </Link>
             </div>
@@ -539,32 +749,53 @@ export const StudentOverviewPage: React.FC = () => {
                       alignItems: 'center',
                       justifyContent: 'space-between',
                       padding: '0.75rem 0.875rem',
-                      borderRadius: 'var(--radius-sm)',
-                      backgroundColor: 'var(--surface-recessed)',
-                      border: '1px solid var(--border-subtle)',
+                      borderRadius: '12px',
+                      backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+                      border: '1px solid var(--border-subtle, #E1E8DE)',
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', minWidth: 0 }}>
-                      <FileText size={16} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+                      <FileText size={16} style={{ color: 'var(--color-foreground-muted, #58695E)', flexShrink: 0 }} aria-hidden={true} />
                       <div style={{ minWidth: 0 }}>
-                        <div style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-charcoal)', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                        <div
+                          style={{
+                            fontSize: '0.8125rem',
+                            fontWeight: 600,
+                            color: 'var(--color-foreground, #19261F)',
+                            textOverflow: 'ellipsis',
+                            overflow: 'hidden',
+                            whiteSpace: 'nowrap',
+                          }}
+                        >
                           {doc.documentType.replace('_', ' ').toUpperCase()}
                         </div>
-                        <div style={{ fontSize: '0.6875rem', color: 'var(--text-muted)' }}>
+                        <div style={{ fontSize: '0.6875rem', color: 'var(--color-foreground-muted, #58695E)' }}>
                           {(doc.fileSizeBytes / 1024 / 1024).toFixed(1)} MB • {doc.fileName}
                         </div>
                       </div>
                     </div>
 
                     <span
-                      className={`badge-semantic ${
-                        doc.quarantineStatus === 'approved' || doc.verificationStatus === 'verified'
-                          ? 'badge-emerald'
-                          : doc.quarantineStatus === 'needs_replacement' || doc.quarantineStatus === 'rejected' || doc.verificationStatus === 'rejected'
-                          ? 'badge-rose'
-                          : 'badge-blue'
-                      }`}
-                      style={{ fontSize: '0.6875rem', flexShrink: 0 }}
+                      style={{
+                        fontSize: '0.6875rem',
+                        fontWeight: 700,
+                        padding: '0.15rem 0.5rem',
+                        borderRadius: '9999px',
+                        textTransform: 'uppercase',
+                        backgroundColor:
+                          doc.quarantineStatus === 'approved' || doc.verificationStatus === 'verified'
+                            ? 'rgba(36, 91, 66, 0.12)'
+                            : doc.quarantineStatus === 'needs_replacement' || doc.verificationStatus === 'rejected'
+                            ? 'rgba(220, 38, 38, 0.1)'
+                            : 'rgba(74, 108, 182, 0.12)',
+                        color:
+                          doc.quarantineStatus === 'approved' || doc.verificationStatus === 'verified'
+                            ? 'var(--action-primary, #245B42)'
+                            : doc.quarantineStatus === 'needs_replacement' || doc.verificationStatus === 'rejected'
+                            ? '#DC2626'
+                            : '#2B5797',
+                        flexShrink: 0,
+                      }}
                     >
                       {(doc.quarantineStatus || doc.verificationStatus || 'pending').replace(/_/g, ' ')}
                     </span>
@@ -573,26 +804,49 @@ export const StudentOverviewPage: React.FC = () => {
               </div>
             ) : (
               <div style={{ textAlign: 'center', padding: '1rem 0' }}>
-                <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '0.75rem' }}>
+                <div style={{ fontSize: '0.875rem', color: 'var(--color-foreground-muted, #58695E)', marginBottom: '0.75rem' }}>
                   No documents uploaded yet.
                 </div>
-                <Link to="/student/documents" className="btn-pill btn-pill-primary" style={{ fontSize: '0.75rem', padding: '0.4rem 0.875rem', textDecoration: 'none' }}>
-                  Upload First Document
+                <Link
+                  to="/student/documents"
+                  style={{
+                    fontSize: '0.75rem',
+                    padding: '0.4rem 0.875rem',
+                    borderRadius: '9999px',
+                    backgroundColor: 'var(--action-primary, #245B42)',
+                    color: '#FFFFFF',
+                    fontWeight: 600,
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.35rem',
+                  }}
+                >
+                  <Upload size={12} aria-hidden={true} />
+                  <span>Upload First Document</span>
                 </Link>
               </div>
             )}
-          </div>
+          </section>
 
-          {/* Card: Critical Deadlines */}
-          <div className="bento-card" style={{ padding: '1.5rem' }}>
+          {/* Card: Procedural Milestones & Deadlines */}
+          <section
+            style={{
+              padding: '1.5rem',
+              backgroundColor: 'var(--surface-card, #FFFFFF)',
+              borderRadius: '24px',
+              border: '1px solid var(--border-subtle, #E1E8DE)',
+              boxShadow: 'var(--shadow-subtle, 0 1px 3px rgba(0, 0, 0, 0.04))',
+            }}
+          >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Calendar size={16} style={{ color: 'var(--action-primary)' }} />
-                <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-charcoal)', margin: 0 }}>
+                <Calendar size={16} style={{ color: 'var(--action-primary, #245B42)' }} aria-hidden={true} />
+                <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--color-foreground, #19261F)', margin: 0 }}>
                   Upcoming Deadlines
                 </h3>
               </div>
-              <span style={{ fontSize: '0.6875rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>
+              <span style={{ fontSize: '0.6875rem', color: 'var(--color-foreground-muted, #58695E)', textTransform: 'uppercase', fontWeight: 600 }}>
                 Central CET Sync
               </span>
             </div>
@@ -603,21 +857,27 @@ export const StudentOverviewPage: React.FC = () => {
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                  padding: '0.625rem 0.75rem',
-                  backgroundColor: 'var(--surface-recessed)',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1px solid var(--border-subtle)',
+                  padding: '0.75rem 0.875rem',
+                  backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+                  borderRadius: '12px',
+                  border: '1px solid var(--border-subtle, #E1E8DE)',
                 }}
               >
                 <div>
-                  <div style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-charcoal)' }}>
+                  <div style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--color-foreground, #19261F)' }}>
                     German APS Verification
                   </div>
-                  <div style={{ fontSize: '0.6875rem', color: 'var(--text-muted)' }}>
+                  <div style={{ fontSize: '0.6875rem', color: 'var(--color-foreground-muted, #58695E)' }}>
                     Mandatory for German Student Visa
                   </div>
                 </div>
-                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--action-primary)' }}>
+                <span
+                  style={{
+                    fontSize: '0.75rem',
+                    fontWeight: 700,
+                    color: 'var(--action-primary, #245B42)',
+                  }}
+                >
                   Active Queue
                 </span>
               </div>
@@ -627,28 +887,36 @@ export const StudentOverviewPage: React.FC = () => {
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                  padding: '0.625rem 0.75rem',
-                  backgroundColor: 'var(--surface-recessed)',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1px solid var(--border-subtle)',
+                  padding: '0.75rem 0.875rem',
+                  backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+                  borderRadius: '12px',
+                  border: '1px solid var(--border-subtle, #E1E8DE)',
                 }}
               >
                 <div>
-                  <div style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-charcoal)' }}>
+                  <div style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--color-foreground, #19261F)' }}>
                     Italian Pre-Enrollment (Universitaly)
                   </div>
-                  <div style={{ fontSize: '0.6875rem', color: 'var(--text-muted)' }}>
+                  <div style={{ fontSize: '0.6875rem', color: 'var(--color-foreground-muted, #58695E)' }}>
                     Intake Window Closing
                   </div>
                 </div>
-                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-warning)' }}>
+                <span
+                  style={{
+                    fontSize: '0.75rem',
+                    fontWeight: 700,
+                    color: '#8A5A00',
+                  }}
+                >
                   Due 30 Nov
                 </span>
               </div>
             </div>
-          </div>
+          </section>
         </div>
       </div>
     </div>
   );
 };
+
+export default StudentOverviewPage;

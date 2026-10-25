@@ -48,31 +48,31 @@ export const DISCOVERY_NAV_GROUPS: NavGroupConfig[] = [
 // 2. Managed Student Navigation
 export const STUDENT_NAV_GROUPS: NavGroupConfig[] = [
   {
-    id: 'my-journey',
-    label: 'My Journey',
+    id: 'main',
+    label: 'Main',
     items: [
-      { id: 'stu-overview', label: 'Overview', path: '/student', iconName: 'LayoutDashboard', end: true },
-      { id: 'stu-apps', label: 'My Applications', path: '/student/applications', iconName: 'GraduationCap' },
-      { id: 'stu-docs', label: 'Documents', path: '/student/documents', iconName: 'FileCheck2' },
-      { id: 'stu-tasks', label: 'Tasks & Deadlines', path: '/student/tasks', iconName: 'Clock', badgeKey: 'tasks' },
-      { id: 'stu-messages', label: 'Messages', path: '/student/messages', iconName: 'MessageSquare', badgeKey: 'messages' },
+      { id: 'stu-today', label: 'Today', path: '/student', iconName: 'House', end: true },
+      { id: 'stu-discover', label: 'Discover', path: '/student/explore', iconName: 'Compass' },
+      { id: 'stu-saved', label: 'Saved', path: '/student/saved', iconName: 'Bookmark' },
     ],
   },
   {
-    id: 'explore',
-    label: 'Explore',
+    id: 'journey',
+    label: 'Journey',
     items: [
-      { id: 'stu-explore-unis', label: 'Explore Universities', path: '/student/explore', iconName: 'Compass' },
+      { id: 'stu-apps', label: 'Applications', path: '/student/applications', iconName: 'GraduationCap' },
+      { id: 'stu-docs', label: 'Documents', path: '/student/documents', iconName: 'FileCheck2' },
+      { id: 'stu-tasks', label: 'Tasks & Deadlines', path: '/student/tasks', iconName: 'Clock', badgeKey: 'tasks' },
+      { id: 'stu-messages', label: 'Messages', path: '/student/messages', iconName: 'MessageSquare', badgeKey: 'messages' },
       { id: 'stu-scholarships', label: 'Scholarships', path: '/student/scholarships', iconName: 'Award' },
-      { id: 'stu-saved', label: 'Saved Items', path: '/student/saved', iconName: 'Bookmark' },
     ],
   },
   {
     id: 'account',
-    label: 'Account',
+    label: 'Support & Account',
     items: [
-      { id: 'stu-help', label: 'Help & Support', path: '/student/help', iconName: 'CircleHelp' },
-      { id: 'stu-account', label: 'Account Settings', path: '/student/account', iconName: 'Settings' },
+      { id: 'stu-help', label: 'Help Centre', path: '/student/help', iconName: 'CircleHelp' },
+      { id: 'stu-account', label: 'Settings', path: '/student/account', iconName: 'Settings' },
     ],
   },
 ];

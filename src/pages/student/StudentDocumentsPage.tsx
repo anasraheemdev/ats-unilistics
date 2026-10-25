@@ -19,6 +19,7 @@ import {
   Send,
   FileText,
 } from 'lucide-react';
+import { StudentJourneyNav } from '@/components/layout/StudentJourneyNav';
 import { CaseDocument, AuthorizedDownloadTicket, CaseMessage } from '@/types';
 
 const CHECKLIST_CATEGORIES = [
@@ -252,6 +253,7 @@ export const StudentDocumentsPage: React.FC = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+      <StudentJourneyNav />
       {/* Editorial Header */}
       <div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>

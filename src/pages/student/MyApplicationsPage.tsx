@@ -20,6 +20,7 @@ import {
   MessageSquare,
   Calendar,
 } from 'lucide-react';
+import { StudentJourneyNav } from '@/components/layout/StudentJourneyNav';
 
 export const MyApplicationsPage: React.FC = () => {
   const [expandedHistoryAppId, setExpandedHistoryAppId] = useState<string | null>(null);
@@ -64,6 +65,7 @@ export const MyApplicationsPage: React.FC = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+      <StudentJourneyNav />
       {/* Top Banner matching screen(6).png */}
       <div
         className="bento-card"

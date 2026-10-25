@@ -2,7 +2,7 @@
 
 **Document Version**: 2.0.0  
 **Last Updated**: October 25, 2026  
-**Active Phase**: Phase 4 — Public & Explorer Layouts, Homepage & Discovery Rebrand (COMPLETED)  
+**Active Phase**: Phase 5 — Approved Managed-Student Shell, Bottom Dock & Overview Rebrand (COMPLETED)  
 **Git Checkpoint**: Branch `master`  
 **Design Authority**: [docs/REBRAND_SCOPE.md](file:///c:/Users/anasr/OneDrive/Desktop/ats-unilistics/docs/REBRAND_SCOPE.md)  
 **Token & Design System Specification**: [docs/DESIGN_SYSTEM_V2.md](file:///c:/Users/anasr/OneDrive/Desktop/ats-unilistics/docs/DESIGN_SYSTEM_V2.md)  
@@ -16,8 +16,8 @@ Prior to initiating and following each phase of frontend changes, the applicatio
 | Verification Stage | Command Executed | Result / Output | Status |
 | :--- | :--- | :--- | :--- |
 | **TypeScript Typecheck** | `npm run typecheck` | Clean exit with code 0 (`tsc --noEmit`). | **PASS** |
-| **Automated Test Suite** | `npm test` (`vitest run`) | **20 test files passed (302 tests passed, 0 failed)** in 19.63s. | **PASS** |
-| **Production Build** | `npm run build` | Transformed 1,761 modules; compiled `dist/` in 4.14s with 0 errors. | **PASS** |
+| **Automated Test Suite** | `npm test` (`vitest run`) | **21 test files passed (314 tests passed, 0 failed)** in 31.95s. | **PASS** |
+| **Production Build** | `npm run build` | Transformed 1,763 modules; compiled `dist/` in 5.89s with 0 errors. | **PASS** |
 | **Live Database Verification** | `DatabaseCatalogueLiveVerification.test.ts` | Verified 512 universities, 4,816 programs, 50 preview allowlist entries, and 11 scholarships directly in Supabase Postgres. | **PASS** |
 
 ---
@@ -154,4 +154,36 @@ All brand assets from `theme/v1.0.zip` have been safely extracted into `theme/ex
      - `npm run typecheck`: **0 errors**.
      - `npm test`: **20 test files passed, 302 tests passed, 0 failed**.
      - `npm run build`: **compiled dist/ in 4.14s with 0 errors**.
+
+### Phase 5: Approved Managed-Student Shell, Bottom Dock & Overview Rebrand (COMPLETED)
+- **Status**: Completed  
+- **Actions Executed**:
+  1. **Desktop Slim Sidebar**:
+     - Standardized desktop sidebar width to `216px` (within 204–224px reference scale) and `68px` collapsed.
+     - Grouped destinations under **Main** (Today, Discover, Saved), **Journey** (Applications, Documents, Tasks & Deadlines, Messages, Scholarships), and **Support & Account** (Help Centre, Settings), ensuring zero feature loss.
+     - Selected item styled with vibrant Citron pill background (`#D7EE83`), dark ink text and icon (`#19261F`), 16px radius, and subtle elevation.
+     - Added optional supportive card ("Big plans. Small steps.") with academic cap icon and calm sage surface.
+     - Obvious account controls with user initials avatar, display name, role label, and accessible Sign out button.
+  2. **Mobile Bottom Navigation Dock (`StudentBottomDock.tsx`)**:
+     - Implemented 5-destination bottom dock: **Today** (`/student`), **Discover** (`/student/explore`), **Saved** (`/student/saved`), **Journey** (`/student/applications`), and **Settings** (`/student/account`).
+     - Added safe-area padding (`env(safe-area-inset-bottom)`) and minimum 48px touch targets.
+     - Strictly quarantined to `StudentLayout` (managed students); absent from public/explorer and staff layouts.
+     - Eliminated duplicate active navigation chrome at intermediate widths (hidden mobile hamburger for students while retained for staff operations).
+  3. **Casework Sub-Navigation (`StudentJourneyNav.tsx`)**:
+     - Sticky horizontal tab navigation for casework modules (**Applications**, **Documents**, **Tasks & Deadlines**, **Messages**) with live notification badges, ensuring seamless switching on both mobile and desktop.
+  4. **Compact Top Utility Bar (`Topbar.tsx`)**:
+     - Standardized to 64px height with fine 1px border.
+     - Added operational search button and keyboard shortcut (`Ctrl+K` / `⌘K`) routing directly to student explore.
+     - Added operational theme switcher button (`Sun`/`Moon`) toggling between light and dark modes via `useTheme()` with local persistence.
+     - Embedded live `NotificationDrawer` and user identity pill with quick sign out.
+  5. **Minimalist Student Overview (`StudentOverviewPage.tsx`)**:
+     - Built with 24px rounded bento cards (`rounded-[24px]`) and `DESIGN_SYSTEM_V2` palette.
+     - Grounded in genuine dynamic data: real priority next action with upload and mark-finished controls, actual tasks and deadlines, real target applications with status pills, and verified document vault files.
+     - Honest assigned adviser status: displays real counsellor lead or clean empty state ("Adviser Pending Assignment - Unallocated to Staff").
+     - Completely eliminated legacy peach styles, fake "Sultan" name, and fabricated "10 Available credits".
+  6. **Verification & Testing**:
+     - Created `src/test/StudentWorkspaceAndLayoutRebrand.test.tsx` (12 unit/integration tests).
+     - `npm run typecheck`: **0 errors**.
+     - `npm test`: **21 test files passed, 314 tests passed, 0 failed**.
+     - `npm run build`: **compiled dist/ in 5.89s with 0 errors** (1,763 modules transformed).
 

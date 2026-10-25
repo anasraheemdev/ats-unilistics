@@ -276,33 +276,38 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         minHeight: 'var(--touch-target-min, 44px)',
                         borderRadius: 'var(--radius-control, 16px)',
                         fontSize: '0.875rem',
-                        fontWeight: isActive ? 600 : 500,
+                        fontWeight: isActive ? 700 : 500,
                         textDecoration: 'none',
-                        color: isActive ? 'var(--action-primary)' : 'var(--color-foreground)',
-                        backgroundColor: isActive ? 'var(--surface-selected)' : 'transparent',
+                        color: isActive ? '#19261F' : 'var(--color-foreground)',
+                        backgroundColor: isActive ? 'var(--brand-citron, #D7EE83)' : 'transparent',
                         border: '1px solid',
-                        borderColor: isActive ? 'var(--border-subtle)' : 'transparent',
+                        borderColor: isActive ? 'rgba(0, 0, 0, 0.08)' : 'transparent',
+                        boxShadow: isActive ? '0 1px 3px rgba(0, 0, 0, 0.06)' : 'none',
                         transition: 'all var(--transition-fast)',
                       })}
                     >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
-                        <Icon size={20} strokeWidth={2} aria-hidden={true} />
-                        {!isCollapsed && <span>{item.label}</span>}
-                      </div>
+                      {({ isActive }) => (
+                        <>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
+                            <Icon size={20} strokeWidth={isActive ? 2.25 : 1.75} aria-hidden={true} />
+                            {!isCollapsed && <span>{item.label}</span>}
+                          </div>
 
-                      {!isCollapsed && badgeCount !== undefined && badgeCount > 0 && (
-                        <span
-                          style={{
-                            fontSize: '0.6875rem',
-                            fontWeight: 700,
-                            padding: '0.125rem 0.5rem',
-                            borderRadius: 'var(--radius-pill)',
-                            backgroundColor: 'var(--action-primary)',
-                            color: 'var(--color-on-primary)',
-                          }}
-                        >
-                          {badgeCount}
-                        </span>
+                          {!isCollapsed && badgeCount !== undefined && badgeCount > 0 && (
+                            <span
+                              style={{
+                                fontSize: '0.6875rem',
+                                fontWeight: 700,
+                                padding: '0.125rem 0.5rem',
+                                borderRadius: 'var(--radius-pill)',
+                                backgroundColor: isActive ? '#19261F' : 'var(--action-primary)',
+                                color: isActive ? '#D7EE83' : 'var(--color-on-primary)',
+                              }}
+                            >
+                              {badgeCount}
+                            </span>
+                          )}
+                        </>
                       )}
                     </NavLink>
                   );
@@ -311,6 +316,37 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
           ))}
         </nav>
+
+        {/* Optional Supportive Panel (Desktop Reference: "Big plans. Small steps.") */}
+        {!isCollapsed && currentRole === 'managed_student' && (
+          <div
+            style={{
+              padding: '0 0.75rem 0.875rem',
+            }}
+          >
+            <div
+              style={{
+                padding: '0.875rem 1rem',
+                borderRadius: 'var(--radius-control, 16px)',
+                backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+                border: '1px solid var(--border-subtle, #E1E8DE)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.35rem',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--action-primary, #245B42)' }}>
+                <GraduationCap size={16} strokeWidth={2.25} aria-hidden={true} />
+                <span style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '-0.01em' }}>
+                  Big plans. Small steps.
+                </span>
+              </div>
+              <p style={{ fontSize: '0.6875rem', color: 'var(--color-foreground-muted, #58695E)', margin: 0, lineHeight: 1.4 }}>
+                Keep your documents and deadlines verified for European admissions.
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Bottom User Account & Sign Out */}
         <div
@@ -425,8 +461,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <aside
         className="hidden md:block"
         style={{
-          width: collapsed ? '72px' : '260px',
-          minWidth: collapsed ? '72px' : '260px',
+          width: collapsed ? '68px' : '216px',
+          minWidth: collapsed ? '68px' : '216px',
           height: '100vh',
           position: 'sticky',
           top: 0,

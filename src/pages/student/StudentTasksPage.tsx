@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
 import { Select } from '@/components/ui/Select';
 import { Info, PlusCircle, X } from 'lucide-react';
+import { StudentJourneyNav } from '@/components/layout/StudentJourneyNav';
 
 export const StudentTasksPage: React.FC = () => {
   const [isAddingTask, setIsAddingTask] = useState(false);
@@ -60,6 +61,7 @@ export const StudentTasksPage: React.FC = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+      <StudentJourneyNav />
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
           <h1 style={{ fontSize: '1.5rem', fontWeight: 800, margin: 0 }}>Case Action Tasks & Country Checklists</h1>

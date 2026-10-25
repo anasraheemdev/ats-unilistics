@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
+import { StudentBottomDock } from './StudentBottomDock';
 import { SkipLink } from '@/components/ui/SkipLink';
 import { ErrorBoundary } from '@/components/common/ErrorBoundary';
 import { STUDENT_NAV_GROUPS } from '@/config/navigation';
@@ -47,10 +48,10 @@ export const StudentLayout: React.FC<StudentLayoutProps> = ({ currentRole, onRol
   };
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--surface-canvas)' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--surface-canvas, #F6F8F5)' }}>
       <SkipLink targetId="main-content" />
 
-      {/* Persistent Desktop Sidebar & Mobile Drawer */}
+      {/* Persistent Desktop Sidebar */}
       <Sidebar
         groups={STUDENT_NAV_GROUPS}
         workspaceTitle="Student Workspace"
@@ -71,6 +72,7 @@ export const StudentLayout: React.FC<StudentLayoutProps> = ({ currentRole, onRol
           userName={userName}
           userEmail={userEmail}
           onOpenMobileNav={() => setMobileOpen(true)}
+          onRoleChange={onRoleChange}
         />
 
         <main
@@ -81,6 +83,7 @@ export const StudentLayout: React.FC<StudentLayoutProps> = ({ currentRole, onRol
             padding: '1.5rem',
             outline: 'none',
           }}
+          className="pb-24 md:pb-6"
         >
           <div style={{ maxWidth: '1280px', margin: '0 auto', width: '100%' }}>
             <ErrorBoundary>
@@ -89,6 +92,11 @@ export const StudentLayout: React.FC<StudentLayoutProps> = ({ currentRole, onRol
           </div>
         </main>
       </div>
+
+      {/* Mobile Bottom Dock exclusively for Managed Students */}
+      <StudentBottomDock />
     </div>
   );
 };
+
+export default StudentLayout;
