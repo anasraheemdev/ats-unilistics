@@ -1,30 +1,48 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTheme } from '@/lib/theme';
 
 interface BrandWordmarkProps {
   className?: string;
   size?: 'sm' | 'md' | 'lg';
   showTagline?: boolean;
+  variant?: 'auto' | 'light' | 'dark' | 'monochrome';
 }
 
 /**
  * Authentic Unilistics Brand Wordmark.
- * Integrates the official verified Unilistics logo mark alongside high-contrast typography.
+ * Uses official brand kit SVG marks with intrinsic proportions,
+ * lowercase "unilistics" wordmark in DM Sans Bold, ~10px gap,
+ * and automatic light/dark icon switching.
  */
 export const BrandWordmark: React.FC<BrandWordmarkProps> = ({
   size = 'md',
   showTagline = true,
+  variant = 'auto',
   className,
 }) => {
   const [imgError, setImgError] = useState(false);
+  const { resolvedTheme } = useTheme();
 
+  // Dimensions: Standard 36px; compact 24px; lg 44px
+  // SVG natural aspect ratio is 512 / 459 (~1.1155)
   const dimensions = {
-    sm: { img: 24, font: '1.125rem' },
-    md: { img: 30, font: '1.375rem' },
-    lg: { img: 36, font: '1.625rem' },
+    sm: { width: 24, height: 21.5, fontSize: '1.125rem' }, // compact 24px
+    md: { width: 36, height: 32.3, fontSize: '1.25rem' },  // standard 36px (~20px text)
+    lg: { width: 44, height: 39.5, fontSize: '1.5rem' },
   };
 
   const currentDim = dimensions[size];
+
+  // Resolve SVG mark based on theme
+  let logoSrc = '/images/brand/original-icon.svg';
+  if (variant === 'dark' || (variant === 'auto' && resolvedTheme === 'dark')) {
+    logoSrc = '/images/brand/reversed-icon.svg';
+  } else if (variant === 'monochrome') {
+    logoSrc = resolvedTheme === 'dark'
+      ? '/images/brand/monochrome-light.svg'
+      : '/images/brand/monochrome-dark.svg';
+  }
 
   return (
     <Link
@@ -33,41 +51,42 @@ export const BrandWordmark: React.FC<BrandWordmarkProps> = ({
       style={{
         display: 'inline-flex',
         alignItems: 'center',
-        gap: '0.625rem',
+        gap: '0.625rem', // ~10px gap
         textDecoration: 'none',
         color: 'var(--text-charcoal)',
       }}
-      aria-label="Unilistics Home"
+      aria-label="unilistics home"
     >
       {!imgError && (
         <img
-          src="/images/unilistics/unilistics-logo.png"
-          alt="Unilistics"
-          width={currentDim.img}
-          height={currentDim.img}
+          src={logoSrc}
+          alt="unilistics mark"
+          width={currentDim.width}
+          height={currentDim.height}
           onError={() => setImgError(true)}
           style={{
             objectFit: 'contain',
-            height: `${currentDim.img}px`,
-            width: `${currentDim.img}px`,
+            width: `${currentDim.width}px`,
+            height: `${currentDim.height}px`,
             flexShrink: 0,
+            display: 'block',
           }}
         />
       )}
 
       <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <span
             style={{
               fontFamily: 'var(--font-family-base)',
-              fontWeight: 800,
-              fontSize: currentDim.font,
+              fontWeight: 700, // DM Sans Bold
+              fontSize: currentDim.fontSize,
               letterSpacing: '-0.025em',
               color: 'var(--text-charcoal)',
               lineHeight: 1.1,
             }}
           >
-            UNILISTICS
+            unilistics
           </span>
           <span
             style={{
@@ -75,11 +94,11 @@ export const BrandWordmark: React.FC<BrandWordmarkProps> = ({
               fontWeight: 700,
               textTransform: 'uppercase',
               letterSpacing: '0.06em',
-              backgroundColor: 'var(--accent-peach-bg)',
+              backgroundColor: 'var(--surface-selected)',
               color: 'var(--action-primary)',
               padding: '0.125rem 0.375rem',
               borderRadius: 'var(--radius-pill)',
-              border: '1px solid var(--accent-peach-border)',
+              border: '1px solid var(--border-subtle)',
             }}
             title="Official verified application tracking system platform"
           >
@@ -104,3 +123,5 @@ export const BrandWordmark: React.FC<BrandWordmarkProps> = ({
     </Link>
   );
 };
+
+export default BrandWordmark;

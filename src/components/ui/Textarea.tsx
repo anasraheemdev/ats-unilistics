@@ -23,6 +23,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           style={{
             fontSize: '0.875rem',
             fontWeight: 600,
+            fontFamily: 'var(--font-family-base)',
             color: 'var(--color-foreground)',
             display: 'flex',
             alignItems: 'center',
@@ -45,14 +46,16 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           aria-invalid={Boolean(error)}
           aria-describedby={describedBy}
           style={{
-            padding: '0.625rem 0.75rem',
-            borderRadius: 'var(--radius-md)',
+            padding: '0.75rem 0.875rem',
+            borderRadius: 'var(--radius-control)', // 16px control radius from guidelines
             border: `1px solid ${error ? 'var(--color-destructive)' : 'var(--color-border)'}`,
             backgroundColor: 'var(--color-surface)',
             color: 'var(--color-foreground)',
+            fontFamily: 'var(--font-family-base)',
             fontSize: '1rem',
             lineHeight: 1.5,
             resize: 'vertical',
+            transition: 'border-color var(--transition-fast)',
             ...style,
           }}
           {...props}
@@ -79,3 +82,5 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 );
 
 Textarea.displayName = 'Textarea';
+
+export default Textarea;

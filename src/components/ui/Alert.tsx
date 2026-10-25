@@ -49,11 +49,12 @@ export const Alert: React.FC<AlertProps> = ({
         display: 'flex',
         alignItems: 'flex-start',
         gap: '0.75rem',
-        padding: '1rem',
-        borderRadius: 'var(--radius-md)',
+        padding: '1rem 1.25rem',
+        borderRadius: 'var(--radius-control)', // 16px control radius
         backgroundColor: current.bg,
         border: `1px solid ${current.border}`,
         marginBottom: '1rem',
+        fontFamily: 'var(--font-family-base)',
       }}
     >
       <IconComponent
@@ -61,7 +62,7 @@ export const Alert: React.FC<AlertProps> = ({
         style={{ color: current.color, flexShrink: 0, marginTop: '2px' }}
         aria-hidden="true"
       />
-      <div style={{ flex: 1, fontSize: '0.875rem', color: 'var(--color-foreground)' }}>
+      <div style={{ flex: 1, fontSize: '0.875rem', color: 'var(--color-foreground)', lineHeight: 1.5 }}>
         {title && (
           <div style={{ fontWeight: 700, color: current.color, marginBottom: '0.25rem' }}>
             {title}
@@ -72,3 +73,5 @@ export const Alert: React.FC<AlertProps> = ({
     </div>
   );
 };
+
+export default Alert;

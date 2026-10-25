@@ -7,6 +7,7 @@ import { ErrorBoundary } from '@/components/common/ErrorBoundary';
 import { UserRole } from '@/types';
 import { api } from '@/lib/api';
 import { ExpiredSessionModal } from '@/components/common/ExpiredSessionModal';
+import { ThemeProvider } from '@/lib/theme';
 
 export const App: React.FC = () => {
   const [currentRole, setCurrentRole] = useState<UserRole>('visitor');
@@ -34,31 +35,39 @@ export const App: React.FC = () => {
           alignItems: 'center',
           justifyContent: 'center',
           minHeight: '100vh',
-          backgroundColor: 'var(--surface-canvas, #fdfbf7)',
-          color: 'var(--text-charcoal, #1a1a1a)',
+          backgroundColor: 'var(--surface-canvas, #F6F8F5)',
+          color: 'var(--text-charcoal, #19261F)',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '1.25rem' }}>
           <img
-            src="/images/unilistics/unilistics-logo.png"
+            src="/images/brand/original-icon.svg"
             alt="Unilistics"
             width={36}
-            height={36}
+            height={32}
             style={{ objectFit: 'contain' }}
             onError={(e) => {
               (e.target as HTMLElement).style.display = 'none';
             }}
           />
-          <span style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-charcoal, #1a1a1a)' }}>
-            Unilistics
+          <span
+            style={{
+              fontSize: '1.25rem',
+              fontWeight: 700,
+              fontFamily: 'var(--font-family-base)',
+              letterSpacing: '-0.02em',
+              color: 'var(--text-charcoal, #19261F)',
+            }}
+          >
+            unilistics
           </span>
         </div>
         <div
           style={{
             width: '24px',
             height: '24px',
-            border: '2.5px solid var(--border-subtle, #ebe6de)',
-            borderTopColor: 'var(--action-primary, #b72301)',
+            border: '2.5px solid var(--border-subtle, #DDE5DC)',
+            borderTopColor: 'var(--action-primary, #245B42)',
             borderRadius: '50%',
             animation: 'unilistics-spin 0.8s linear infinite',
           }}
@@ -70,12 +79,14 @@ export const App: React.FC = () => {
 
   return (
     <ErrorBoundary fallbackTitle="Unilistics System Exception">
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <AppRoutes currentRole={currentRole} onRoleChange={setCurrentRole} />
-          <ExpiredSessionModal onReauthenticated={setCurrentRole} />
-        </BrowserRouter>
-      </QueryClientProvider>
+      <ThemeProvider>
+        <QueryClientProvider client={queryClient}>
+          <BrowserRouter>
+            <AppRoutes currentRole={currentRole} onRoleChange={setCurrentRole} />
+            <ExpiredSessionModal onReauthenticated={setCurrentRole} />
+          </BrowserRouter>
+        </QueryClientProvider>
+      </ThemeProvider>
     </ErrorBoundary>
   );
 };

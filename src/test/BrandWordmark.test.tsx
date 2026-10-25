@@ -2,17 +2,20 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
 import { BrandWordmark } from '@/components/ui/BrandWordmark';
+import { ThemeProvider } from '@/lib/theme';
 
 describe('BrandWordmark Component', () => {
   it('renders clearly provisional text wordmark with preview tag', () => {
     render(
       <BrowserRouter>
-        <BrandWordmark />
+        <ThemeProvider>
+          <BrandWordmark />
+        </ThemeProvider>
       </BrowserRouter>
     );
 
-    // Expect the typography wordmark
-    expect(screen.getByText('UNILISTICS')).toBeInTheDocument();
+    // Expect the lowercase typography wordmark per brand guidelines
+    expect(screen.getByText('unilistics')).toBeInTheDocument();
 
     // Expect the provisional preview tag
     expect(screen.getByText('PREVIEW')).toBeInTheDocument();

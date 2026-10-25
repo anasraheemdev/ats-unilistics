@@ -1,7 +1,7 @@
 import React from 'react';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'accent' | 'outline' | 'destructive' | 'ghost';
+  variant?: 'primary' | 'secondary' | 'accent' | 'highlight' | 'outline' | 'destructive' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
   leftIcon?: React.ReactNode;
@@ -24,7 +24,6 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    // Style configurations based on tokens
     const baseStyle: React.CSSProperties = {
       display: 'inline-flex',
       alignItems: 'center',
@@ -32,21 +31,22 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       gap: '0.5rem',
       fontWeight: 600,
       fontFamily: 'var(--font-family-base)',
-      borderRadius: 'var(--radius-md)',
-      transition: 'background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast)',
+      borderRadius: 'var(--radius-control)', // 16px control radius from guidelines
+      transition: 'background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast)',
       textDecoration: 'none',
       whiteSpace: 'nowrap',
-      minHeight: 'var(--touch-target-min)', // 44px accessible touch target
-      minWidth: 'var(--touch-target-min)',
+      minHeight: 'var(--touch-target-default, 48px)', // 48px practical touch target, >= 44px min
+      minWidth: 'var(--touch-target-min, 44px)',
       cursor: disabled || isLoading ? 'not-allowed' : 'pointer',
       opacity: disabled || isLoading ? 0.65 : 1,
+      boxShadow: variant === 'ghost' ? 'none' : 'var(--shadow-sm)',
       ...style,
     };
 
     const sizeStyles: Record<string, React.CSSProperties> = {
-      sm: { padding: '0.375rem 0.75rem', fontSize: '0.875rem' },
-      md: { padding: '0.5rem 1rem', fontSize: '0.9375rem' },
-      lg: { padding: '0.75rem 1.5rem', fontSize: '1rem' },
+      sm: { padding: '0.375rem 0.875rem', fontSize: '0.875rem', minHeight: '44px' },
+      md: { padding: '0.625rem 1.25rem', fontSize: '0.9375rem', minHeight: '48px' },
+      lg: { padding: '0.75rem 1.75rem', fontSize: '1rem', minHeight: '52px' },
     };
 
     const variantStyles: Record<string, React.CSSProperties> = {
@@ -61,13 +61,20 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         border: '1px solid var(--color-secondary)',
       },
       accent: {
-        backgroundColor: 'var(--color-accent)',
-        color: 'var(--color-on-accent)',
-        border: '1px solid var(--color-accent)',
+        backgroundColor: 'var(--brand-citron)',
+        color: 'var(--color-on-highlight)',
+        border: '1px solid var(--brand-citron)',
+        fontWeight: 700,
+      },
+      highlight: {
+        backgroundColor: 'var(--brand-citron)',
+        color: 'var(--color-on-highlight)',
+        border: '1px solid var(--brand-citron)',
+        fontWeight: 700,
       },
       outline: {
         backgroundColor: 'transparent',
-        color: 'var(--color-primary)',
+        color: 'var(--action-primary)',
         border: '1px solid var(--color-border)',
       },
       destructive: {

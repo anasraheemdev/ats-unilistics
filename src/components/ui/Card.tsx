@@ -2,7 +2,7 @@ import React from 'react';
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  variant?: 'default' | 'highlight' | 'warning' | 'info';
+  variant?: 'default' | 'panel' | 'highlight' | 'warning' | 'info';
   padding?: 'none' | 'sm' | 'md' | 'lg';
 }
 
@@ -15,9 +15,9 @@ export const Card: React.FC<CardProps> = ({
 }) => {
   const paddingMap = {
     none: '0',
-    sm: '0.75rem',
-    md: '1.25rem',
-    lg: '1.75rem',
+    sm: '1rem',      // 16px
+    md: '1.5rem',    // 24px panel padding from guidelines
+    lg: '2rem',      // 32px section spacing from guidelines
   };
 
   const variantMap: Record<string, React.CSSProperties> = {
@@ -25,9 +25,13 @@ export const Card: React.FC<CardProps> = ({
       backgroundColor: 'var(--color-surface)',
       border: '1px solid var(--color-border)',
     },
+    panel: {
+      backgroundColor: 'var(--surface-panel)',
+      border: '1px solid var(--color-border)',
+    },
     highlight: {
       backgroundColor: 'var(--color-surface)',
-      border: '2px solid var(--color-primary)',
+      border: '2px solid var(--action-primary)',
     },
     warning: {
       backgroundColor: 'var(--color-warning-bg)',
@@ -42,9 +46,10 @@ export const Card: React.FC<CardProps> = ({
   return (
     <div
       style={{
-        borderRadius: 'var(--radius-lg)',
-        boxShadow: 'var(--shadow-sm)',
+        borderRadius: 'var(--radius-card)', // 24px card radius
+        boxShadow: 'var(--shadow-card)',    // Quiet shadow
         padding: paddingMap[padding],
+        transition: 'border-color var(--transition-fast), background-color var(--transition-fast)',
         ...variantMap[variant],
         ...style,
       }}
@@ -54,3 +59,5 @@ export const Card: React.FC<CardProps> = ({
     </div>
   );
 };
+
+export default Card;

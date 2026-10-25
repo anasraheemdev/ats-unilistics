@@ -91,12 +91,15 @@ export const Modal: React.FC<ModalProps> = ({
       style={{
         position: 'fixed',
         inset: 0,
-        backgroundColor: 'rgba(15, 23, 42, 0.65)',
+        backgroundColor: 'rgba(13, 21, 17, 0.72)', // Green-black backdrop
+        backdropFilter: 'blur(4px)',
+        WebkitBackdropFilter: 'blur(4px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         padding: '1rem',
-        zIndex: 50,
+        zIndex: 1000,
+        transition: 'opacity var(--transition-fade)',
       }}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
@@ -110,16 +113,18 @@ export const Modal: React.FC<ModalProps> = ({
         ref={modalRef}
         tabIndex={-1}
         style={{
-          backgroundColor: 'var(--color-surface)',
-          borderRadius: 'var(--radius-lg)',
-          boxShadow: 'var(--shadow-lg)',
+          backgroundColor: 'var(--surface-card)',
+          borderRadius: 'var(--radius-card)', // 24px card radius from guidelines
+          boxShadow: 'var(--shadow-floating)',
           width: '100%',
-          maxWidth: '560px',
+          maxWidth: '580px',
           maxHeight: '90vh',
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
-          border: '1px solid var(--color-border)',
+          border: '1px solid var(--border-subtle)',
+          fontFamily: 'var(--font-family-base)',
+          color: 'var(--color-foreground)',
         }}
       >
         {/* Header */}
@@ -128,11 +133,11 @@ export const Modal: React.FC<ModalProps> = ({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding: '1.25rem 1.5rem',
-            borderBottom: '1px solid var(--color-border)',
+            padding: '1.25rem 1.5rem', // 24px horizontal padding
+            borderBottom: '1px solid var(--border-subtle)',
           }}
         >
-          <h2 id={titleId} style={{ fontSize: '1.25rem', fontWeight: 700 }}>
+          <h2 id={titleId} style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-charcoal)' }}>
             {title}
           </h2>
           <Button
@@ -140,18 +145,19 @@ export const Modal: React.FC<ModalProps> = ({
             size="sm"
             onClick={onClose}
             aria-label="Close dialog"
-            style={{ minHeight: '36px', minWidth: '36px', padding: '0.25rem' }}
+            style={{ minHeight: '44px', minWidth: '44px', padding: '0.5rem', borderRadius: 'var(--radius-control)' }}
           >
-            <X size={18} aria-hidden="true" />
+            <X size={20} aria-hidden="true" />
           </Button>
         </div>
 
         {/* Body */}
         <div
           style={{
-            padding: '1.5rem',
+            padding: '1.5rem', // 24px panel padding
             overflowY: 'auto',
             flex: 1,
+            lineHeight: 1.6,
           }}
         >
           {children}
@@ -162,8 +168,8 @@ export const Modal: React.FC<ModalProps> = ({
           <div
             style={{
               padding: '1rem 1.5rem',
-              borderTop: '1px solid var(--color-border)',
-              backgroundColor: 'var(--color-surface-hover)',
+              borderTop: '1px solid var(--border-subtle)',
+              backgroundColor: 'var(--surface-panel)',
               display: 'flex',
               justifyContent: 'flex-end',
               gap: '0.75rem',
@@ -176,3 +182,5 @@ export const Modal: React.FC<ModalProps> = ({
     </div>
   );
 };
+
+export default Modal;

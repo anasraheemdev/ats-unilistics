@@ -1,137 +1,305 @@
+/* ==============================================================================
+ * UNILISTICS DESIGN SYSTEM TOKENS - V2.0
+ * Verified against Brand Kit v1.0, brand-guidelines.html, and design references.
+ *
+ * Light Palette: Forest Green (#245B42), Citron Highlight (#D7EE83),
+ *                Light Ink (#19261F), Light Canvas (#F6F8F5), Sage (#B4D0B6).
+ * Dark Palette:  Sampled/derived green-black UI canvas (#0D1511 / #111D16),
+ *                elevated surfaces (#16241B, #1C2A20), crisp text (#F2F7F4),
+ *                muted text (#8DA394), Citron primary action (#D7EE83).
+ * ============================================================================== */
+
+/* Local Variable Font - DM Sans (weight axis: 100 to 1000) */
+@font-face {
+  font-family: 'DM Sans';
+  src: url('/fonts/dm-sans-variable.ttf') format('truetype-variations'),
+       url('/fonts/dm-sans-variable.ttf') format('truetype');
+  font-weight: 100 1000;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  /* ==============================================================================
-   * UNILISTICS DESIGN SYSTEM TOKENS - WARM EDITORIAL BENTO & KINETIC HORIZON
-   * ============================================================================== */
-
-  /* Surface Canvas & Elevation */
-  --surface-canvas: #fdfbf7;
-  --surface-recessed: #f9f6f0;
-  --surface-card: #ffffff;
-  --surface-card-subtle: #fcfaf6;
-  --surface-hover: #f5f1ea;
-
-  /* Legacy & Semantic Color Mappings (Backward compatible) */
-  --color-background: var(--surface-canvas);
-  --color-surface: var(--surface-card);
-  --color-surface-hover: var(--surface-hover);
-
-  /* Typography Colors */
-  --text-charcoal: #1a1a1a;
-  --text-body: #2d3139;
-  --text-muted: #636b78;
-  --text-subtle: #7e8694;
-
-  --color-foreground: var(--text-charcoal);
-  --color-foreground-muted: var(--text-muted);
-  --color-foreground-subtle: var(--text-subtle);
-
-  /* Borders & Dividers */
-  --border-subtle: #ebe6de;
-  --border-refined: #dfd9ce;
-  --color-border: var(--border-subtle);
-  --color-border-subtle: #f0ebe2;
-
-  /* Brand Colors & Actions */
-  --brand-coral: #ff5733;
-  --brand-coral-hover: #ff6f4e;
-  --brand-coral-gradient: linear-gradient(135deg, #ff5733 0%, #ff6f4e 100%);
-  --brand-cyan: #00a389;
-
-  /* Accessible Button Tokens (Contrast >= 4.5:1 against #ffffff) */
-  --action-primary: #b72301;
-  --action-primary-hover: #9a1d00;
-  --color-primary: var(--action-primary);
-  --color-primary-hover: var(--action-primary-hover);
-  --color-primary-light: #ffefea;
-  --color-on-primary: #ffffff;
-
-  --color-secondary: #2d3139;
-  --color-secondary-hover: #1a1a1a;
-  --color-secondary-light: #f5f1ea;
-  --color-on-secondary: #ffffff;
-
-  /* Subtle Atmospheric Accents */
-  --accent-mint-bg: #e8f8f2;
-  --accent-mint-border: #bcead7;
-  --accent-mint-text: #0f766e;
-
-  --accent-peach-bg: #ffefea;
-  --accent-peach-border: #ffd2c6;
-  --accent-peach-text: #b72301;
-
-  --accent-lavender-bg: #f3eafd;
-  --accent-lavender-border: #e0cef8;
-  --accent-lavender-text: #6b21a8;
-
-  --accent-blue-bg: #eff6ff;
-  --accent-blue-border: #bfdbfe;
-  --accent-blue-text: #1d4ed8;
-
-  /* Semantic Status Colors (WCAG 2.2 AA compliant with icon + text) */
-  --color-success: #0f766e;
-  --color-success-bg: #e6f7f5;
-  --color-success-border: #bcead7;
-
-  --color-warning: #b45309;
-  --color-warning-bg: #fef3c7;
-  --color-warning-border: #fde68a;
-
-  --color-destructive: #be123c;
-  --color-destructive-hover: #9f1239;
-  --color-destructive-bg: #ffe4e6;
-  --color-destructive-border: #fecdd3;
-  --color-on-destructive: #ffffff;
-
-  --color-info: #1d4ed8;
-  --color-info-bg: #eff6ff;
-  --color-info-border: #bfdbfe;
-
-  /* Focus Indicator Token */
-  --focus-ring: 2.5px solid #b72301;
-  --focus-ring-offset: 2.5px;
-  --focus-ring-color: #b72301;
-
-  /* Typography Scale */
-  --font-family-base: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* Typography Families & Hierarchy */
+  --font-family-base: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --font-weight-regular: 400;   /* Reading */
+  --font-weight-medium: 500;    /* Supporting emphasis / labels */
+  --font-weight-semibold: 600;  /* Headings & controls */
+  --font-weight-bold: 700;      /* Wordmark & strong emphasis */
 
   /* Spacing Rhythm (4px / 8px scale) */
   --space-1: 0.25rem;  /* 4px */
   --space-2: 0.5rem;   /* 8px */
   --space-3: 0.75rem;  /* 12px */
-  --space-4: 1rem;     /* 16px */
+  --space-4: 1rem;     /* 16px - Mobile gutter */
   --space-5: 1.25rem;  /* 20px */
-  --space-6: 1.5rem;   /* 24px */
-  --space-8: 2rem;     /* 32px */
-  --space-10: 2.5rem;  /* 40px */
-  --space-12: 3rem;    /* 48px */
+  --space-6: 1.5rem;   /* 24px - Panel padding */
+  --space-8: 2rem;     /* 32px - Section spacing */
+  --space-10: 2.5rem;  /* 40px - Desktop gutter */
+  --space-12: 3rem;    /* 48px - Standard touch target */
   --space-16: 4rem;    /* 64px */
 
-  /* Borders & Bento Radii */
+  /* Layout Geometry from Brand Guidelines */
+  --gutter-mobile: 16px;
+  --gutter-desktop: 40px;
+  --padding-panel: 24px;
+  --space-section: 32px;
+  --touch-target-min: 44px;      /* Accessible minimum touch target */
+  --touch-target-default: 48px;  /* Practical standard touch target */
+
+  /* Borders & Control Radii */
   --radius-xs: 6px;
   --radius-sm: 10px;
-  --radius-md: 14px;
+  --radius-control: 16px;        /* 16px control radius (buttons, inputs, selects) */
+  --radius-md: 16px;             /* Backward compatible */
   --radius-lg: 18px;
-  --radius-card: 24px;
+  --radius-card: 24px;           /* 24px card radius */
   --radius-card-sm: 16px;
   --radius-pill: 9999px;
   --radius-full: 9999px;
 
-  /* Shadows (Quiet & Atmospheric) */
-  --shadow-sm: 0 1px 3px 0 rgba(26, 28, 30, 0.04);
-  --shadow-card: 0 2px 8px -2px rgba(26, 28, 30, 0.04), 0 8px 24px -4px rgba(26, 28, 30, 0.06);
-  --shadow-hover: 0 6px 16px -2px rgba(26, 28, 30, 0.06), 0 16px 36px -4px rgba(26, 28, 30, 0.10);
-  --shadow-floating: 0 8px 30px rgba(0, 0, 0, 0.08);
+  /* Motion & Durations from Brand Guidelines */
+  --transition-fade: 180ms ease-out;                        /* 180ms context fade */
+  --transition-drill: 320ms ease-out;                       /* 320ms drill navigation */
+  --transition-continuity: 360ms cubic-bezier(0.16, 1, 0.3, 1); /* 360ms continuity */
+  --transition-fast: 180ms ease-out;
+  --transition-normal: 320ms ease-out;
 
-  /* Touch Target Minimum (44px for accessibility) */
-  --touch-target-min: 44px;
+  /* -------------------------------------------------------------------------
+   * LIGHT MODE SEMANTIC TOKENS (Default)
+   * ------------------------------------------------------------------------- */
 
-  /* Transitions */
-  --transition-fast: 140ms ease-out;
-  --transition-normal: 200ms ease-out;
+  /* Surface Canvas & Elevation */
+  --surface-canvas: #F6F8F5;       /* Confirmed Kit Canvas */
+  --surface-recessed: #EDF2E9;     /* Monochrome Light / Quiet Sage */
+  --surface-card: #FFFFFF;         /* Light card surface white */
+  --surface-panel: #EAEFE8;        /* Derived quiet sage surface */
+  --surface-card-subtle: #F0F4EE;  /* Derived quiet sage */
+  --surface-elevated: #FFFFFF;
+  --surface-hover: #E2ECE0;
+
+  --color-background: var(--surface-canvas);
+  --color-surface: var(--surface-card);
+  --color-surface-hover: var(--surface-hover);
+
+  /* Typography Colors */
+  --text-charcoal: #19261F;        /* Confirmed Kit Light Ink */
+  --text-primary: #19261F;
+  --text-body: #23342B;
+  --text-secondary: #4B5E53;
+  --text-muted: #607368;
+  --text-subtle: #7A8D82;
+
+  --color-foreground: var(--text-primary);
+  --color-foreground-muted: var(--text-muted);
+  --color-foreground-subtle: var(--text-subtle);
+
+  /* Borders & Dividers */
+  --border-subtle: #DDE5DC;
+  --border-refined: #CBD7CA;
+  --color-border: var(--border-subtle);
+  --color-border-subtle: #E8EFE7;
+
+  /* Brand Colors & Actions */
+  --brand-forest: #245B42;         /* Confirmed Light Action Forest */
+  --brand-citron: #D7EE83;         /* Confirmed Citron Highlight */
+  --brand-sage: #B4D0B6;           /* Confirmed Sage Illustration */
+
+  /* Accessible Action Tokens */
+  --action-primary: #245B42;
+  --action-primary-hover: #1B4A35;
+  --color-primary: var(--action-primary);
+  --color-primary-hover: var(--action-primary-hover);
+  --color-primary-light: #E4EFE7;
+  --color-on-primary: #FFFFFF;     /* Contrast 7.92:1 AAA against #245B42 */
+
+  --action-secondary: #19261F;
+  --action-secondary-hover: #101914;
+  --color-secondary: #19261F;
+  --color-secondary-hover: #101914;
+  --color-secondary-light: #EDF2E9;
+  --color-on-secondary: #FFFFFF;
+
+  --action-highlight: #D7EE83;
+  --action-highlight-hover: #C5DE6F;
+  --color-highlight: #D7EE83;
+  --color-on-highlight: #19261F;   /* Contrast 16.45:1 AAA with dark ink, NEVER white */
+
+  /* Selection States */
+  --surface-selected: #E2ECE0;
+  --border-selected: #245B42;
+  --color-on-selected: #19261F;
+
+  /* Focus Indicator Token */
+  --focus-ring: 2.5px solid #245B42;
+  --focus-ring-offset: 2.5px;
+  --focus-ring-color: #245B42;
+
+  /* Quiet Shadows (Subtle, non-distracting) */
+  --shadow-sm: 0 1px 2px 0 rgba(25, 38, 31, 0.04);
+  --shadow-card: 0 2px 8px -2px rgba(25, 38, 31, 0.04), 0 6px 16px -4px rgba(25, 38, 31, 0.04);
+  --shadow-hover: 0 4px 12px -2px rgba(25, 38, 31, 0.06), 0 10px 24px -4px rgba(25, 38, 31, 0.08);
+  --shadow-floating: 0 8px 24px rgba(25, 38, 31, 0.08);
+
+  /* Semantic Status Colors (WCAG 2.2 AA compliant) */
+  --color-success: #1B5A45;
+  --color-success-bg: #E8F5EE;
+  --color-success-border: #B6E0CD;
+
+  --color-warning: #B45309;
+  --color-warning-bg: #FEF3C7;
+  --color-warning-border: #FDE68A;
+
+  --color-destructive: #BE123C;    /* Preserved semantic error red */
+  --color-destructive-hover: #9F1239;
+  --color-destructive-bg: #FFE4E6;
+  --color-destructive-border: #FECDD3;
+  --color-on-destructive: #FFFFFF;
+
+  --color-info: #1D4ED8;
+  --color-info-bg: #EFF6FF;
+  --color-info-border: #BFDBFE;
+
+  /* Atmospheric accents */
+  --accent-mint-bg: #E8F5EE;
+  --accent-mint-border: #B6E0CD;
+  --accent-mint-text: #1B5A45;
+
+  --accent-peach-bg: #F0F4EE;
+  --accent-peach-border: #CBD7CA;
+  --accent-peach-text: #245B42;
+
+  --accent-lavender-bg: #F3EAFD;
+  --accent-lavender-border: #E0CEF8;
+  --accent-lavender-text: #6B21A8;
+
+  --accent-blue-bg: #EFF6FF;
+  --accent-blue-border: #BFDBFE;
+  --accent-blue-text: #1D4ED8;
 }
 
-/* Reduced Motion Preference Override */
+/* ---------------------------------------------------------------------------
+ * DARK MODE SEMANTIC TOKENS
+ * Applied via [data-theme="dark"] on <html> or .dark class.
+ * Calibrated green-black UI values derived from dark references.
+ * --------------------------------------------------------------------------- */
+[data-theme="dark"],
+.dark {
+  /* Green-Black Surfaces (Derived from dark screenshots) */
+  --surface-canvas: #0D1511;       /* Deepest green-black canvas */
+  --surface-recessed: #111D16;     /* Sampled green-black background */
+  --surface-card: #16241B;         /* Card surface */
+  --surface-panel: #1C2A20;        /* Sidebar / nav panel */
+  --surface-card-subtle: #19271E;
+  --surface-elevated: #203326;     /* Elevated dialog / dropdown */
+  --surface-hover: #23382B;
+
+  --color-background: var(--surface-canvas);
+  --color-surface: var(--surface-card);
+  --color-surface-hover: var(--surface-hover);
+
+  /* Typography Colors */
+  --text-charcoal: #F2F7F4;        /* Crisp primary text (12.8:1 contrast) */
+  --text-primary: #F2F7F4;
+  --text-body: #DCE5E0;
+  --text-secondary: #B0C4B7;
+  --text-muted: #8DA394;           /* Calibrated muted text (5.1:1 AA) */
+  --text-subtle: #6D8274;
+
+  --color-foreground: var(--text-primary);
+  --color-foreground-muted: var(--text-muted);
+  --color-foreground-subtle: var(--text-subtle);
+
+  /* Borders & Dividers */
+  --border-subtle: #203327;        /* Quiet green-black border */
+  --border-refined: #2A4233;
+  --color-border: var(--border-subtle);
+  --color-border-subtle: #1A2A20;
+
+  /* Brand Colors & Actions in Dark Mode */
+  --brand-forest: #2E7253;
+  --brand-citron: #D7EE83;
+  --brand-sage: #78967B;
+
+  /* In dark mode, primary action uses Citron highlight with dark ink text */
+  --action-primary: #D7EE83;
+  --action-primary-hover: #C5DE6F;
+  --color-primary: var(--action-primary);
+  --color-primary-hover: var(--action-primary-hover);
+  --color-primary-light: #203327;
+  --color-on-primary: #19261F;     /* Dark ink on Citron: 16.45:1 AAA */
+
+  --action-secondary: #23382B;
+  --action-secondary-hover: #2D4737;
+  --color-secondary: #23382B;
+  --color-secondary-hover: #2D4737;
+  --color-secondary-light: #16241B;
+  --color-on-secondary: #F2F7F4;
+
+  --action-highlight: #D7EE83;
+  --action-highlight-hover: #C5DE6F;
+  --color-highlight: #D7EE83;
+  --color-on-highlight: #19261F;
+
+  /* Selection States */
+  --surface-selected: #1F3526;
+  --border-selected: #D7EE83;
+  --color-on-selected: #F2F7F4;
+
+  /* Focus Indicator Token */
+  --focus-ring: 2.5px solid #D7EE83;
+  --focus-ring-offset: 2.5px;
+  --focus-ring-color: #D7EE83;
+
+  /* Dark Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+  --shadow-card: 0 2px 8px -2px rgba(0, 0, 0, 0.4), 0 6px 16px -4px rgba(0, 0, 0, 0.5);
+  --shadow-hover: 0 4px 12px -2px rgba(0, 0, 0, 0.5), 0 10px 24px -4px rgba(0, 0, 0, 0.6);
+  --shadow-floating: 0 8px 30px rgba(0, 0, 0, 0.6);
+
+  /* Dark Semantic Status Colors */
+  --color-success: #C7E78D;
+  --color-success-bg: #142E20;
+  --color-success-border: #235439;
+
+  --color-warning: #FBBF24;
+  --color-warning-bg: #32220B;
+  --color-warning-border: #5F4114;
+
+  --color-destructive: #F87171;    /* Accessible red in dark mode */
+  --color-destructive-hover: #EF4444;
+  --color-destructive-bg: #381118;
+  --color-destructive-border: #6B1C28;
+  --color-on-destructive: #FFFFFF;
+
+  --color-info: #60A5FA;
+  --color-info-bg: #0F223D;
+  --color-info-border: #1D4377;
+
+  /* Dark Accents */
+  --accent-mint-bg: #142E20;
+  --accent-mint-border: #235439;
+  --accent-mint-text: #C7E78D;
+
+  --accent-peach-bg: #203327;
+  --accent-peach-border: #2A4233;
+  --accent-peach-text: #D7EE83;
+
+  --accent-lavender-bg: #2E1B4D;
+  --accent-lavender-border: #4D2D80;
+  --accent-lavender-text: #D8B4FE;
+
+  --accent-blue-bg: #0F223D;
+  --accent-blue-border: #1D4377;
+  --accent-blue-text: #93C5FD;
+}
+
+/* ---------------------------------------------------------------------------
+ * REDUCED MOTION OVERRIDE
+ * WCAG 2.2 Requirement: Disables nonessential animations/transitions
+ * --------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

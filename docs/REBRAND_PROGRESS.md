@@ -1,58 +1,65 @@
 # Unilistics ATS Presentation Rebrand Progress Tracker
 
-**Document Version**: 1.0.0  
+**Document Version**: 2.0.0  
 **Last Updated**: October 25, 2026  
-**Active Phase**: Phase 1 — Discovery, Baseline, Asset Audit & Scope Establishment  
+**Active Phase**: Phase 2 — Design Tokens, Typography, Brand Assets & Shared Controls (COMPLETED)  
 **Git Checkpoint**: Branch `checkpoint-pre-rebrand` (Commit: `checkpoint: pre-rebrand working baseline (277 tests passing)`)  
 **Design Authority**: [docs/REBRAND_SCOPE.md](file:///c:/Users/anasr/OneDrive/Desktop/ats-unilistics/docs/REBRAND_SCOPE.md)  
+**Token & Design System Specification**: [docs/DESIGN_SYSTEM_V2.md](file:///c:/Users/anasr/OneDrive/Desktop/ats-unilistics/docs/DESIGN_SYSTEM_V2.md)  
 
 ---
 
 ## 1. Baseline Verification & Health Check
 
-Prior to initiating any frontend changes, the existing application baseline was validated through comprehensive automated testing and production compilation:
+Prior to initiating and following each phase of frontend changes, the application baseline was validated through comprehensive automated testing and production compilation:
 
 | Verification Stage | Command Executed | Result / Output | Status |
 | :--- | :--- | :--- | :---: |
 | **TypeScript Typecheck** | `npm run typecheck` | Clean exit with code 0 (`tsc --noEmit`). | **PASS** |
-| **Automated Test Suite** | `npm test` (`vitest run`) | **18 test files passed (277 tests passed, 0 failed)** in 35.70s. | **PASS** |
-| **Production Build** | `npm run build` | Transformed 1,758 modules; compiled `dist/` in 13.80s with 0 errors. | **PASS** |
+| **Automated Test Suite** | `npm test` (`vitest run`) | **18 test files passed (277 tests passed, 0 failed)** in 24.78s. | **PASS** |
+| **Production Build** | `npm run build` | Transformed 1,759 modules; compiled `dist/` in 5.24s with 0 errors. | **PASS** |
 | **Live Database Verification** | `DatabaseCatalogueLiveVerification.test.ts` | Verified 512 universities, 4,816 programs, 50 preview allowlist entries, and 11 scholarships directly in Supabase Postgres. | **PASS** |
 
 ---
 
 ## 2. Brand Asset & Design Token Audit
 
-All brand assets from `theme/v1.0.zip` have been safely extracted into `theme/extracted_v1/` and cataloged without executing arbitrary content:
+All brand assets from `theme/v1.0.zip` have been safely extracted into `theme/extracted_v1/`, copied to project directories, and integrated:
 
-| Asset | Source Path | Target Application Destination | Usage in Rebrand |
-| :--- | :--- | :--- | :--- |
-| **DM Sans Font** | `theme/extracted_v1/dm-sans-variable.ttf` | `src/assets/fonts/dm-sans-variable.ttf` | Primary product typeface across all surfaces. |
-| **Original Icon SVG** | `theme/extracted_v1/original-icon.svg` | `public/images/brand/original-icon.svg` | Light theme logo mark and navigation icon. |
-| **Reversed Icon SVG** | `theme/extracted_v1/reversed-icon.svg` | `public/images/brand/reversed-icon.svg` | Dark theme logo mark and Citron highlight brand icon. |
-| **Monochrome Light** | `theme/extracted_v1/monochrome-light.svg`| `public/images/brand/monochrome-light.svg` | High-contrast monochrome applications. |
-| **Monochrome Dark** | `theme/extracted_v1/monochrome-dark.svg` | `public/images/brand/monochrome-dark.svg` | Dark monochrome applications. |
-| **Brand Guidelines** | `theme/extracted_v1/brand-guidelines.html`| `docs/reference/brand-guidelines.html` | Authoritative reference copy, contrast ratios, and layout rules. |
+| Asset | Source Path | Target Application Destination | Usage in Rebrand | Status |
+| :--- | :--- | :--- | :--- | :---: |
+| **DM Sans Font** | `theme/extracted_v1/dm-sans-variable.ttf` | `src/assets/fonts/` & `public/fonts/` | Primary product typeface across all surfaces via `@font-face` (wght: 100-1000). | **ACTIVE** |
+| **SIL OFL License** | Generated from upstream official repository | `src/assets/fonts/OFL.txt` & `public/fonts/OFL.txt` | Complete official SIL OFL 1.1 license text & provenance records. | **ACTIVE** |
+| **Original Icon SVG** | `theme/extracted_v1/original-icon.svg` | `public/images/brand/original-icon.svg` | Light theme logo mark and navigation icon. | **ACTIVE** |
+| **Reversed Icon SVG** | `theme/extracted_v1/reversed-icon.svg` | `public/images/brand/reversed-icon.svg` | Dark theme logo mark and Citron highlight brand icon. | **ACTIVE** |
+| **Monochrome Light** | `theme/extracted_v1/monochrome-light.svg`| `public/images/brand/monochrome-light.svg` | High-contrast monochrome light applications. | **ACTIVE** |
+| **Monochrome Dark** | `theme/extracted_v1/monochrome-dark.svg` | `public/images/brand/monochrome-dark.svg` | High-contrast monochrome dark applications. | **ACTIVE** |
+| **Horizontal PNGs** | `theme/extracted_v1/horizontal-*.png` | `public/images/brand/` | Raster horizontal lockup references. | **ACTIVE** |
+| **Design System v2** | `docs/DESIGN_SYSTEM_V2.md` | `docs/DESIGN_SYSTEM_V2.md` | Authoritative specification of confirmed vs derived tokens & contrast pairs. | **ACTIVE** |
 
 ---
 
 ## 3. Route & Component Rebrand Checklist
 
 ### 3.1 Design System & Base Styling
-- [ ] Install local font `@font-face` for `DM Sans Variable` and update `index.html`.
-- [ ] Replace warm coral tokens in `src/styles/tokens.css` with Forest (`#245b42`), Citron (`#d7ee83`), Sage (`#b4d0b6`), Light canvas (`#f6f8f5`), Light ink (`#19261f`), and Dark mode tokens (`#0d1511`, `#16241b`, `#203327`).
-- [ ] Update `src/styles/global.css` for typography defaults, card radii (`1.5rem`), button controls (`1rem`), and accessible focus rings.
-- [ ] Rebrand `src/components/ui/BrandWordmark.tsx` to support both light (`original-icon.svg`) and dark (`reversed-icon.svg`) with lowercase `unilistics` wordmark.
+- [x] Install local font `@font-face` for `DM Sans Variable` and update `index.html`.
+- [x] Replace warm coral tokens in `src/styles/tokens.css` with Forest (`#245b42`), Citron (`#d7ee83`), Sage (`#b4d0b6`), Light canvas (`#f6f8f5`), Light ink (`#19261f`), and Dark mode tokens (`#0d1511`, `#16241b`, `#203327`).
+- [x] Update `src/styles/global.css` for typography defaults, card radii (`24px`), control radius (`16px`), and accessible focus rings.
+- [x] Remove obsolete Plus Jakarta Sans and coral Tailwind CDN config script from `index.html`.
+- [x] Implement pre-paint appearance initializer script in `index.html` (synchronously applies `data-theme` before first paint).
+- [x] Implement `ThemeProvider` and `useTheme()` hook in `src/lib/theme.tsx` supporting light, dark, and system modes.
+- [x] Rebrand `src/components/ui/BrandWordmark.tsx` to support both light (`original-icon.svg`) and dark (`reversed-icon.svg`) with lowercase `unilistics` in DM Sans Bold (700) ~20px with ~10px gap.
 
 ### 3.2 Shared UI Components
-- [ ] `src/components/ui/Button.tsx` (Pill radius `9999px`, Forest primary on light, Citron primary on dark).
-- [ ] `src/components/ui/Card.tsx` (Radius `1.5rem`, subtle `1px` border, soft background options).
-- [ ] `src/components/ui/Badge.tsx` & `StatusBadge.tsx` (Sage, Citron, and Forest semantic variants).
-- [ ] `src/components/ui/Input.tsx`, `Select.tsx`, `Textarea.tsx` (Radius `1rem`, accessible borders).
-- [ ] `src/components/ui/Modal.tsx` (Rounded sheet dialogs with top radius `1.5rem`).
-- [ ] `src/components/common/LoadingState.tsx` & `ErrorState.tsx` (Composed, quiet surfaces).
+- [x] `src/components/ui/Button.tsx` (16px control radius, 48px touch target, Forest primary on light, Citron primary on dark, Citron highlight variant).
+- [x] `src/components/ui/Card.tsx` (Radius `24px`, panel padding `24px`, section spacing `32px`, subtle border, quiet shadows).
+- [x] `src/components/ui/Badge.tsx` & `StatusBadge.tsx` (Sage, Citron, and Forest semantic variants, pill geometry).
+- [x] `src/components/ui/Input.tsx`, `Select.tsx`, `Textarea.tsx` (16px control radius, 48px touch target, accessible borders).
+- [x] `src/components/ui/Modal.tsx` (24px radius, green-black backdrop `rgba(13, 21, 17, 0.72)`, 24px panel padding).
+- [x] `src/components/ui/Alert.tsx` (16px radius, tokenized status colors).
+- [x] `src/components/ui/SkipLink.tsx` (Pill geometry, high-contrast forest focus styling).
 
-### 3.3 Navigation & Layout Containers
+### 3.3 Navigation & Layout Containers (Next Step)
 - [ ] `src/components/layout/PublicNavbar.tsx` (Signed-out nav: Home, Explore Universities, Contact, Sign in, Sign up).
 - [ ] `src/components/layout/PublicLayout.tsx` & `PublicFooter.tsx`.
 - [ ] `src/components/layout/ExplorerLayout.tsx` (Top nav only, full catalogue access for verified explorers).
@@ -99,11 +106,15 @@ All brand assets from `theme/v1.0.zip` have been safely extracted into `theme/ex
   5. Created `docs/REBRAND_SCOPE.md` and marked superseded legacy design documents.
   6. Created `docs/REBRAND_PROGRESS.md` with full route and component checklist.
 
-### Phase 2: Design Tokens, Typography & Brand Assets (NEXT PHASE)
-- **Status**: Scheduled  
-- **Planned Actions**:
-  1. Copy font and SVG assets into project public/src directories.
-  2. Update `src/styles/tokens.css` with the complete Forest/Citron/Sage/Dark token system.
-  3. Update `src/styles/global.css` and `index.html` for font family and baseline element styles.
-  4. Update `BrandWordmark.tsx` and run regression test `BrandWordmark.test.tsx`.
-  5. Verify `npm run typecheck` and `npm test`.
+### Phase 2: Design Tokens, Typography, Brand Assets & Shared Controls (COMPLETED)
+- **Status**: Completed  
+- **Actions Executed**:
+  1. Copied DM Sans variable font into `src/assets/fonts/` and `public/fonts/`. Verified variable font weight axis (`100 1000`) and preserved official SIL OFL 1.1 license and provenance text.
+  2. Copied official SVG logo marks (`original-icon.svg`, `reversed-icon.svg`, `monochrome-light.svg`, `monochrome-dark.svg`, and PNGs) to `public/images/brand/`.
+  3. Retired legacy warm coral theme from `src/styles/tokens.css` and `src/styles/global.css`. Implemented unified V2 semantic token system for Light and Dark modes.
+  4. Purged obsolete Plus Jakarta Sans and coral Tailwind CDN script from `index.html`. Added synchronous pre-paint theme script.
+  5. Implemented `ThemeProvider` and `useTheme()` in `src/lib/theme.tsx` supporting light, dark, and system modes.
+  6. Rebranded `BrandWordmark.tsx` to use authentic SVG assets, lowercase "unilistics", and dark mode switching.
+  7. Rebranded shared UI components: `Button.tsx`, `Card.tsx`, `Badge.tsx`, `StatusBadge.tsx`, `Input.tsx`, `Select.tsx`, `Textarea.tsx`, `Modal.tsx`, `Alert.tsx`.
+  8. Created `docs/DESIGN_SYSTEM_V2.md` documenting confirmed vs. derived values, contrast ratios, and replacement mapping.
+  9. Verified with `npm run typecheck` (0 errors), `npm test` (18/18 test files passed, 277/277 tests passed), and `npm run build` (compiled `dist/` in 5.24s).

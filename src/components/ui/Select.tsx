@@ -29,6 +29,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           style={{
             fontSize: '0.875rem',
             fontWeight: 600,
+            fontFamily: 'var(--font-family-base)',
             color: 'var(--color-foreground)',
             display: 'flex',
             alignItems: 'center',
@@ -50,14 +51,16 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           aria-invalid={Boolean(error)}
           aria-describedby={describedBy}
           style={{
-            minHeight: 'var(--touch-target-min)',
-            padding: '0.5rem 0.75rem',
-            borderRadius: 'var(--radius-md)',
+            minHeight: 'var(--touch-target-default, 48px)', // 48px touch target from guidelines
+            padding: '0.625rem 0.875rem',
+            borderRadius: 'var(--radius-control)',          // 16px control radius from guidelines
             border: `1px solid ${error ? 'var(--color-destructive)' : 'var(--color-border)'}`,
             backgroundColor: 'var(--color-surface)',
             color: 'var(--color-foreground)',
+            fontFamily: 'var(--font-family-base)',
             fontSize: '1rem',
             cursor: 'pointer',
+            transition: 'border-color var(--transition-fast)',
             ...style,
           }}
           {...props}
@@ -90,3 +93,5 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
 );
 
 Select.displayName = 'Select';
+
+export default Select;

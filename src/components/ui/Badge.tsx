@@ -1,7 +1,7 @@
 import React from 'react';
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: 'default' | 'primary' | 'success' | 'warning' | 'destructive' | 'info';
+  variant?: 'default' | 'primary' | 'highlight' | 'success' | 'warning' | 'destructive' | 'info';
   size?: 'sm' | 'md';
 }
 
@@ -20,8 +20,14 @@ export const Badge: React.FC<BadgeProps> = ({
     },
     primary: {
       backgroundColor: 'var(--color-primary-light)',
-      color: 'var(--color-primary)',
-      border: '1px solid var(--color-border)',
+      color: 'var(--action-primary)',
+      border: '1px solid var(--border-subtle)',
+    },
+    highlight: {
+      backgroundColor: 'var(--brand-citron)',
+      color: 'var(--color-on-highlight)',
+      border: '1px solid var(--border-subtle)',
+      fontWeight: 700,
     },
     success: {
       backgroundColor: 'var(--color-success-bg)',
@@ -46,8 +52,8 @@ export const Badge: React.FC<BadgeProps> = ({
   };
 
   const sizeStyles: Record<string, React.CSSProperties> = {
-    sm: { padding: '0.125rem 0.375rem', fontSize: '0.75rem' },
-    md: { padding: '0.25rem 0.625rem', fontSize: '0.8125rem' },
+    sm: { padding: '0.125rem 0.5rem', fontSize: '0.75rem' },
+    md: { padding: '0.25rem 0.75rem', fontSize: '0.8125rem' },
   };
 
   return (
@@ -55,9 +61,10 @@ export const Badge: React.FC<BadgeProps> = ({
       style={{
         display: 'inline-flex',
         alignItems: 'center',
-        gap: '0.25rem',
+        gap: '0.375rem',
         fontWeight: 600,
-        borderRadius: 'var(--radius-full)',
+        fontFamily: 'var(--font-family-base)',
+        borderRadius: 'var(--radius-pill)',
         lineHeight: 1.2,
         ...sizeStyles[size],
         ...variantStyles[variant],
@@ -69,3 +76,5 @@ export const Badge: React.FC<BadgeProps> = ({
     </span>
   );
 };
+
+export default Badge;
