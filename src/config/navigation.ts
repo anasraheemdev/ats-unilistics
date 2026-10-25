@@ -60,6 +60,7 @@ export const STUDENT_NAV_GROUPS: NavGroupConfig[] = [
     id: 'journey',
     label: 'Journey',
     items: [
+      { id: 'stu-journey', label: 'Journey Map', path: '/student/journey', iconName: 'Map' },
       { id: 'stu-apps', label: 'Applications', path: '/student/applications', iconName: 'GraduationCap' },
       { id: 'stu-docs', label: 'Documents', path: '/student/documents', iconName: 'FileCheck2' },
       { id: 'stu-tasks', label: 'Tasks & Deadlines', path: '/student/tasks', iconName: 'Clock', badgeKey: 'tasks' },

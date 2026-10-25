@@ -263,10 +263,11 @@ export const StudentDocumentsPage: React.FC = () => {
               fontWeight: 700,
               padding: '3px 10px',
               borderRadius: '9999px',
-              backgroundColor: '#FFEFEA',
-              color: '#B72301',
+              backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+              color: 'var(--action-primary, #245B42)',
               textTransform: 'uppercase',
               letterSpacing: '0.04em',
+              border: '1px solid var(--border-subtle, #E1E8DE)',
             }}
           >
             Verified Document Storage
@@ -346,8 +347,8 @@ export const StudentDocumentsPage: React.FC = () => {
                 width: '56px',
                 height: '56px',
                 borderRadius: '50%',
-                backgroundColor: '#FFEFEA',
-                color: '#B72301',
+                backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+                color: 'var(--action-primary, #245B42)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -358,7 +359,7 @@ export const StudentDocumentsPage: React.FC = () => {
             </div>
 
             <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: 'var(--color-foreground)', marginBottom: '0.375rem' }}>
-              Drag & drop official documents here, or <span style={{ color: '#B72301', textDecoration: 'underline' }}>browse files</span>
+              Drag & drop official documents here, or <span style={{ color: 'var(--action-primary, #245B42)', textDecoration: 'underline' }}>browse files</span>
             </h3>
 
             <p style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted)', maxWidth: '480px', margin: '0 auto 1.25rem' }}>
@@ -523,8 +524,8 @@ export const StudentDocumentsPage: React.FC = () => {
                             width: '44px',
                             height: '44px',
                             borderRadius: '12px',
-                            backgroundColor: isApproved ? '#E8F8F2' : isNeedsReplacement ? '#FFEFEA' : '#F9F6F0',
-                            color: isApproved ? '#065F46' : isNeedsReplacement ? '#B72301' : 'var(--color-primary)',
+                            backgroundColor: isApproved ? 'rgba(215, 238, 131, 0.2)' : isNeedsReplacement ? 'rgba(239, 68, 68, 0.15)' : 'var(--surface-recessed, #EDF2E9)',
+                            color: isApproved ? 'var(--action-primary, #245B42)' : isNeedsReplacement ? '#DC2626' : 'var(--action-primary, #245B42)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -563,8 +564,8 @@ export const StudentDocumentsPage: React.FC = () => {
                       <div
                         style={{
                           padding: '0.75rem 1rem',
-                          backgroundColor: '#FFF5F2',
-                          border: '1px solid #FFD9CF',
+                          backgroundColor: 'rgba(239, 68, 68, 0.08)',
+                          border: '1px solid rgba(239, 68, 68, 0.2)',
                           borderRadius: '12px',
                           display: 'flex',
                           alignItems: 'center',
@@ -573,7 +574,7 @@ export const StudentDocumentsPage: React.FC = () => {
                           flexWrap: 'wrap',
                         }}
                       >
-                        <div style={{ fontSize: '0.8125rem', color: '#B72301' }}>
+                        <div style={{ fontSize: '0.8125rem', color: '#DC2626' }}>
                           <strong>Note from Counsellor:</strong>{' '}
                           {doc.replacementInstructions || doc.verificationNotes || 'Document requires re-upload with clear 4-corner scan.'}
                         </div>
@@ -599,15 +600,17 @@ export const StudentDocumentsPage: React.FC = () => {
               className="bento-card"
               style={{
                 padding: '1.25rem 1.5rem',
-                backgroundColor: '#FFFFFF',
+                backgroundColor: 'var(--surface-card, #FFFFFF)',
+                borderRadius: '16px',
+                border: '1px solid var(--border-subtle, #E1E8DE)',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '0.75rem',
               }}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.875rem' }}>
-                <span style={{ fontWeight: 700, color: 'var(--color-foreground)' }}>Dossier Verification Status</span>
-                <span style={{ fontWeight: 800, color: '#B72301' }}>{percentApproved}% Verified</span>
+                <span style={{ fontWeight: 700, color: 'var(--color-foreground, #19261F)' }}>Dossier Verification Status</span>
+                <span style={{ fontWeight: 800, color: 'var(--action-primary, #245B42)' }}>{percentApproved}% Verified</span>
               </div>
 
               {/* Multi-segment progress bar */}
@@ -679,14 +682,14 @@ export const StudentDocumentsPage: React.FC = () => {
           }}
         >
           {/* Advisor Card Header */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem', paddingBottom: '1rem', borderBottom: '1px solid #EBE6DE' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem', paddingBottom: '1rem', borderBottom: '1px solid var(--border-subtle, #E1E8DE)' }}>
             <div
               style={{
                 width: '48px',
                 height: '48px',
                 borderRadius: '50%',
-                backgroundColor: '#FFEFEA',
-                color: '#B72301',
+                backgroundColor: 'var(--action-primary, #245B42)',
+                color: '#FFFFFF',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -702,12 +705,12 @@ export const StudentDocumentsPage: React.FC = () => {
 
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
-                <h3 style={{ fontSize: '0.9375rem', fontWeight: 800, margin: 0, color: 'var(--color-foreground)' }}>
+                <h3 style={{ fontSize: '0.9375rem', fontWeight: 800, margin: 0, color: 'var(--color-foreground, #19261F)' }}>
                   {counsellorName}
                 </h3>
-                <CheckCircle size={14} style={{ color: '#065F46' }} />
+                <CheckCircle size={14} style={{ color: 'var(--action-primary, #245B42)' }} />
               </div>
-              <p style={{ fontSize: '0.75rem', color: 'var(--color-foreground-muted)', margin: '2px 0 0 0' }}>
+              <p style={{ fontSize: '0.75rem', color: 'var(--color-foreground-muted, #58695E)', margin: '2px 0 0 0' }}>
                 Assigned Educational Counsellor
               </p>
             </div>
@@ -723,8 +726,8 @@ export const StudentDocumentsPage: React.FC = () => {
                   fontWeight: 600,
                   padding: '3px 8px',
                   borderRadius: '9999px',
-                  backgroundColor: '#F9F6F0',
-                  color: 'var(--color-foreground-muted)',
+                  backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+                  color: 'var(--color-foreground-muted, #58695E)',
                 }}
               >
                 {topic}
@@ -750,8 +753,8 @@ export const StudentDocumentsPage: React.FC = () => {
                   alt=""
                   style={{ width: '80px', height: '80px', objectFit: 'contain', margin: '0 auto 0.75rem', opacity: 0.85 }}
                 />
-                <h4 style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--color-foreground)' }}>Advisory Channel Open</h4>
-                <p style={{ fontSize: '0.75rem', color: 'var(--color-foreground-muted)', margin: '0.25rem 0 0 0' }}>
+                <h4 style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--color-foreground, #19261F)' }}>Advisory Channel Open</h4>
+                <p style={{ fontSize: '0.75rem', color: 'var(--color-foreground-muted, #58695E)', margin: '0.25rem 0 0 0' }}>
                   Have a question about document certification or your next deadline? Send a note directly to your counsellor.
                 </p>
               </div>
@@ -775,8 +778,8 @@ export const StudentDocumentsPage: React.FC = () => {
                         maxWidth: '85%',
                         padding: '0.75rem 1rem',
                         borderRadius: isStudent ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
-                        backgroundColor: isStudent ? '#B72301' : '#F9F6F0',
-                        color: isStudent ? '#FFFFFF' : 'var(--color-foreground)',
+                        backgroundColor: isStudent ? 'var(--action-primary, #245B42)' : 'var(--surface-recessed, #EDF2E9)',
+                        color: isStudent ? '#FFFFFF' : 'var(--color-foreground, #19261F)',
                         fontSize: '0.8125rem',
                         lineHeight: 1.45,
                         boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
@@ -832,7 +835,7 @@ export const StudentDocumentsPage: React.FC = () => {
                   height: '36px',
                   borderRadius: '50%',
                   border: 'none',
-                  backgroundColor: chatMessage.trim() ? '#B72301' : '#E5E0D8',
+                  backgroundColor: chatMessage.trim() ? 'var(--action-primary, #245B42)' : '#E5E0D8',
                   color: '#FFFFFF',
                   display: 'flex',
                   alignItems: 'center',
@@ -969,7 +972,7 @@ export const StudentDocumentsPage: React.FC = () => {
               transition: 'all 0.2s ease',
             }}
           >
-            <UploadCloud size={36} style={{ color: '#B72301', margin: '0 auto 0.5rem' }} />
+            <UploadCloud size={36} style={{ color: 'var(--action-primary, #245B42)', margin: '0 auto 0.5rem' }} />
             <span style={{ display: 'block', fontSize: '0.9375rem', fontWeight: 600 }}>
               {selectedFile ? selectedFile.name : 'Click to select PDF or image file'}
             </span>
@@ -1028,7 +1031,7 @@ export const StudentDocumentsPage: React.FC = () => {
                   style={{
                     width: `${uploadProgress}%`,
                     height: '100%',
-                    backgroundColor: '#B72301',
+                    backgroundColor: 'var(--action-primary, #245B42)',
                     transition: 'width 0.3s ease',
                   }}
                 />
@@ -1108,10 +1111,10 @@ export const StudentDocumentsPage: React.FC = () => {
               <div
                 style={{
                   padding: '0.75rem 1rem',
-                  backgroundColor: '#FFF5F2',
-                  border: '1px solid #FFD9CF',
+                  backgroundColor: 'rgba(239, 68, 68, 0.08)',
+                  border: '1px solid rgba(239, 68, 68, 0.2)',
                   borderRadius: 'var(--radius-md)',
-                  color: '#B72301',
+                  color: '#DC2626',
                 }}
               >
                 <strong>Replacement Action Required by Counsellor:</strong>
@@ -1143,7 +1146,7 @@ export const StudentDocumentsPage: React.FC = () => {
                   border: '1px solid var(--color-border)',
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.375rem', color: '#B72301' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.375rem', color: 'var(--action-primary, #245B42)' }}>
                   <Clock size={16} />
                   <span style={{ fontWeight: 700 }}>Authorized Ephemeral Download Ticket</span>
                 </div>

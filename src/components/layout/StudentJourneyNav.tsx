@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { GraduationCap, FileText, Clock, MessageSquare } from 'lucide-react';
+import { Map, GraduationCap, FileText, Clock, MessageSquare } from 'lucide-react';
 
 interface JourneyNavProps {
   taskBadge?: number;
@@ -9,6 +9,7 @@ interface JourneyNavProps {
 
 export const StudentJourneyNav: React.FC<JourneyNavProps> = ({ taskBadge, messageBadge }) => {
   const tabs = [
+    { label: 'Journey Map', path: '/student/journey', icon: Map },
     { label: 'Applications', path: '/student/applications', icon: GraduationCap },
     { label: 'Documents', path: '/student/documents', icon: FileText },
     { label: 'Tasks & Deadlines', path: '/student/tasks', icon: Clock, badge: taskBadge },

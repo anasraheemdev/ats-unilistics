@@ -97,23 +97,24 @@ export const StudentMessagesPage: React.FC = () => {
               fontWeight: 700,
               padding: '3px 10px',
               borderRadius: '9999px',
-              backgroundColor: '#FFEFEA',
-              color: '#B72301',
+              backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+              color: 'var(--action-primary, #245B42)',
               textTransform: 'uppercase',
               letterSpacing: '0.04em',
+              border: '1px solid var(--border-subtle, #E1E8DE)',
             }}
           >
             Direct Advisory Channel
           </span>
-          <span style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted)' }}>
+          <span style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted, #58695E)' }}>
             • Case Ref: <code style={{ fontWeight: 600 }}>{studentCase?.id ? `#${studentCase.id.slice(0, 10).toUpperCase()}` : '#UNI-ACTIVE'}</code>
           </span>
         </div>
 
-        <h1 style={{ fontSize: '2rem', fontWeight: 800, letterSpacing: '-0.025em', color: 'var(--color-foreground)', margin: 0 }}>
+        <h1 style={{ fontSize: '2rem', fontWeight: 800, letterSpacing: '-0.025em', color: 'var(--color-foreground, #19261F)', margin: 0 }}>
           Advisory Communications & Dossier Notes
         </h1>
-        <p style={{ color: 'var(--color-foreground-muted)', fontSize: '0.9375rem', marginTop: '0.25rem', marginBottom: 0 }}>
+        <p style={{ color: 'var(--color-foreground-muted, #58695E)', fontSize: '0.9375rem', marginTop: '0.25rem', marginBottom: 0 }}>
           Auditable direct correspondence with your assigned educational counsellor. All guidance is permanently recorded.
         </p>
       </div>
@@ -126,7 +127,10 @@ export const StudentMessagesPage: React.FC = () => {
         className="bento-card"
         style={{
           padding: '2rem',
-          backgroundColor: '#FFFFFF',
+          backgroundColor: 'var(--surface-card, #FFFFFF)',
+          borderRadius: '24px',
+          border: '1px solid var(--border-subtle, #E1E8DE)',
+          boxShadow: 'var(--shadow-subtle, 0 1px 3px rgba(0, 0, 0, 0.04))',
           display: 'flex',
           flexDirection: 'column',
           gap: '1.5rem',
@@ -140,7 +144,7 @@ export const StudentMessagesPage: React.FC = () => {
             alignItems: 'center',
             justifyContent: 'space-between',
             paddingBottom: '1.25rem',
-            borderBottom: '1px solid #EBE6DE',
+            borderBottom: '1px solid var(--border-subtle, #E1E8DE)',
             flexWrap: 'wrap',
             gap: '1rem',
           }}
@@ -151,8 +155,8 @@ export const StudentMessagesPage: React.FC = () => {
                 width: '52px',
                 height: '52px',
                 borderRadius: '50%',
-                backgroundColor: '#FFEFEA',
-                color: '#B72301',
+                backgroundColor: 'var(--action-primary, #245B42)',
+                color: '#FFFFFF',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -256,8 +260,8 @@ export const StudentMessagesPage: React.FC = () => {
                       style={{
                         padding: '0.875rem 1.25rem',
                         borderRadius: isStudent ? '20px 20px 4px 20px' : '20px 20px 20px 4px',
-                        backgroundColor: isStudent ? '#B72301' : '#F9F6F0',
-                        color: isStudent ? '#FFFFFF' : 'var(--color-foreground)',
+                        backgroundColor: isStudent ? 'var(--action-primary, #245B42)' : 'var(--surface-recessed, #EDF2E9)',
+                        color: isStudent ? '#FFFFFF' : 'var(--color-foreground, #19261F)',
                         fontSize: '0.875rem',
                         lineHeight: 1.5,
                         boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
@@ -340,7 +344,7 @@ export const StudentMessagesPage: React.FC = () => {
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Paperclip size={14} style={{ color: '#B72301' }} />
+                <Paperclip size={14} style={{ color: 'var(--action-primary, #245B42)' }} />
                 <span>
                   Attached from Vault: <strong>{selectedDoc.title}</strong>
                 </span>

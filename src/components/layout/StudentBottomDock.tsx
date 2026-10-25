@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { House, Compass, Bookmark, GraduationCap, Settings, LucideProps } from 'lucide-react';
+import { House, Compass, Bookmark, Map, Settings, LucideProps } from 'lucide-react';
 
 interface DockItem {
   id: string;
@@ -15,14 +15,14 @@ const DOCK_ITEMS: DockItem[] = [
   { id: 'dock-today', label: 'Today', path: '/student', end: true },
   { id: 'dock-discover', label: 'Discover', path: '/student/explore' },
   { id: 'dock-saved', label: 'Saved', path: '/student/saved' },
-  { id: 'dock-journey', label: 'Journey', path: '/student/applications', isJourney: true },
+  { id: 'dock-journey', label: 'Journey', path: '/student/journey', isJourney: true },
   { id: 'dock-settings', label: 'Settings', path: '/student/account' },
 ].map((item) => {
   const iconMap: Record<string, React.ComponentType<LucideProps>> = {
     'dock-today': House,
     'dock-discover': Compass,
     'dock-saved': Bookmark,
-    'dock-journey': GraduationCap,
+    'dock-journey': Map,
     'dock-settings': Settings,
   };
   return { ...item, icon: iconMap[item.id] };
@@ -34,6 +34,7 @@ export const StudentBottomDock: React.FC = () => {
   // Helper to determine if the Journey tab should be considered active across casework subroutes
   const isCaseworkActive = (pathname: string) => {
     return (
+      pathname.startsWith('/student/journey') ||
       pathname.startsWith('/student/applications') ||
       pathname.startsWith('/student/documents') ||
       pathname.startsWith('/student/tasks') ||

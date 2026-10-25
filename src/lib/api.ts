@@ -1495,6 +1495,10 @@ export const api = {
         isInternalNote: false,
       });
     },
+
+    async getCaseWorkflowSteps(caseId: string, applicationId?: string): Promise<CaseWorkflowStep[]> {
+      return api.workflows.getCaseWorkflowSteps(caseId, applicationId);
+    },
   },
 
   staff: {

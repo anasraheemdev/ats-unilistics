@@ -80,21 +80,28 @@ export const StudentTasksPage: React.FC = () => {
         </Button>
       </div>
 
-      <Card padding="md" style={{ backgroundColor: 'var(--color-info-bg)', border: '1px solid var(--color-info-border)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-info)', fontWeight: 600, fontSize: '0.875rem' }}>
+      <div
+        style={{
+          padding: '1.25rem',
+          backgroundColor: 'var(--surface-card, #FFFFFF)',
+          borderRadius: '16px',
+          border: '1px solid var(--border-subtle, #E1E8DE)',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--action-primary, #245B42)', fontWeight: 600, fontSize: '0.875rem' }}>
           <Info size={16} aria-hidden="true" />
           <span>Task Accountability Protocol</span>
         </div>
-        <p style={{ fontSize: '0.8125rem', color: 'var(--color-foreground)', marginTop: '0.25rem' }}>
+        <p style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted, #58695E)', marginTop: '0.35rem', marginBottom: 0, lineHeight: 1.5 }}>
           Tasks marked with a student badge require your direct physical or digital action (e.g., dispatching courier packets,
           depositing blocked funds). Tasks marked with a counsellor badge are executed by staff on external portals.
           Case-specific checklists remain editable and tailored to your target country requirements.
         </p>
-      </Card>
+      </div>
 
       {/* Add Task Modal */}
       {isAddingTask && (
-        <Card padding="lg" style={{ border: '2px solid var(--color-primary)' }}>
+        <Card padding="lg" style={{ border: '1px solid var(--action-primary, #245B42)', borderRadius: '24px', backgroundColor: 'var(--surface-card, #FFFFFF)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
             <h3 style={{ fontSize: '1.125rem', fontWeight: 700, margin: 0 }}>Add Case-Specific Checklist Task</h3>
             <button

@@ -2,7 +2,7 @@
 
 **Document Version**: 2.0.0  
 **Last Updated**: October 25, 2026  
-**Active Phase**: Phase 5 — Approved Managed-Student Shell, Bottom Dock & Overview Rebrand (COMPLETED)  
+**Active Phase**: Phase 6 — Desktop Journey Map & Casework Rebrand (COMPLETED)  
 **Git Checkpoint**: Branch `master`  
 **Design Authority**: [docs/REBRAND_SCOPE.md](file:///c:/Users/anasr/OneDrive/Desktop/ats-unilistics/docs/REBRAND_SCOPE.md)  
 **Token & Design System Specification**: [docs/DESIGN_SYSTEM_V2.md](file:///c:/Users/anasr/OneDrive/Desktop/ats-unilistics/docs/DESIGN_SYSTEM_V2.md)  
@@ -16,8 +16,8 @@ Prior to initiating and following each phase of frontend changes, the applicatio
 | Verification Stage | Command Executed | Result / Output | Status |
 | :--- | :--- | :--- | :--- |
 | **TypeScript Typecheck** | `npm run typecheck` | Clean exit with code 0 (`tsc --noEmit`). | **PASS** |
-| **Automated Test Suite** | `npm test` (`vitest run`) | **21 test files passed (314 tests passed, 0 failed)** in 31.95s. | **PASS** |
-| **Production Build** | `npm run build` | Transformed 1,763 modules; compiled `dist/` in 5.89s with 0 errors. | **PASS** |
+| **Automated Test Suite** | `npm test` (`vitest run`) | **22 test files passed (329 tests passed, 0 failed)** in 69.59s. | **PASS** |
+| **Production Build** | `npm run build` | Transformed 1,767 modules; compiled `dist/` in 18.03s with 0 errors. | **PASS** |
 | **Live Database Verification** | `DatabaseCatalogueLiveVerification.test.ts` | Verified 512 universities, 4,816 programs, 50 preview allowlist entries, and 11 scholarships directly in Supabase Postgres. | **PASS** |
 
 ---
@@ -187,3 +187,44 @@ All brand assets from `theme/v1.0.zip` have been safely extracted into `theme/ex
      - `npm test`: **21 test files passed, 314 tests passed, 0 failed**.
      - `npm run build`: **compiled dist/ in 5.89s with 0 errors** (1,763 modules transformed).
 
+
+### Phase 6: Desktop Journey Map & Casework Rebrand (COMPLETED)
+- **Status**: Completed  
+- **Authority**: Desktop Journey Reference Screenshot (`theme/WhatsApp Image 2026-10-24 at 1.50.13 AM.jpeg`)
+- **Actions Executed**:
+  1. **Interactive SVG Desktop Journey Map (`JourneyMap.tsx`)**:
+     - Visual macro-regions: Restrained **Prepare**, **Choose**, and **Move** terrain bands with subtle green tint fills (`rgba(36, 91, 66, 0.08)` to `rgba(36, 91, 66, 0.16)`) and low-contrast decorative vector contour lines.
+     - Dotted/dashed bezier dependency paths (`stroke-dasharray="4 6"`) showing step progression and parallel branches without visual clutter.
+     - Citron checkmark button nodes (`#D7EE83`, dark text `#19261F`) for completed milestones.
+     - Concentric animated location ring with floating `"You are here"` badge over the current active step.
+     - Failure states preservation: blocked and reopened steps render distinct red/amber warning nodes with `"Review required"` alerts; never collapsed into "complete".
+     - Fully accessible keyboard navigation (`tabIndex={0}`, `role="button"`, Enter/Space activation, and explicit focus rings).
+     - Compact bottom status legend: Completed, In Progress, Review required, Skipped, Locked.
+  2. **Accessible Vertical Ordered List Tracks (`JourneyTracks.tsx`)**:
+     - Semantic `<ol>` grouped into Prepare, Choose, and Move macro-phases.
+     - Displays status badges, required evidence tags, contextual guidance notes, and direct casework action buttons (`/student/documents`, `/student/tasks`, `/student/messages`).
+     - Functions as the automatic mobile default on viewports `< md` (`< 768px`) to ensure small screens never suffer unreadable SVG scaling, while still allowing user toggle.
+  3. **Floating Step Detail Bento Panel (`JourneyStepDetailPanel.tsx`)**:
+     - 24px rounded dark bento card (`#16241b`, border `#203327`) displaying selected step title, stage, responsible actor, required evidence checklist from `requiredEvidence`, procedural benchmark flags (`FLAG-xxx`), and blocked/reopened alert banners with recorded justification.
+     - Direct Citron action button routing to the appropriate casework surface.
+  4. **Master Student Journey Workspace (`StudentJourneyPage.tsx`)**:
+     - Quiet page header: "Your journey" with real target country and intake subtitle.
+     - Location pin banner: "You are here: [Active Step Title]" with direct "Continue" action.
+     - Multi-application selector: Allows switching between university applications (e.g. TUM vs PoliMi) with isolated workflow step states, preventing timeline conflation.
+     - Top-right view switcher: Seamlessly toggles between `Map` and `Tracks` presentations over the exact same underlying `case_workflow_steps` records.
+     - Genuine empty state: Displays honest "No Active Case Journey" screen with prompt to contact staff when no student case is assigned.
+  5. **Casework Surfaces Rebrand to DESIGN_SYSTEM_V2**:
+     - `MyApplicationsPage.tsx`: Overhauled with 24px cards, Forest/Citron tokens, removed legacy coral `#FFEFEA`, added direct "Interactive Journey Map" header CTA and per-card map links.
+     - `ApplicationDetailPage.tsx`: Overhauled with 24px cards, removed `#accent-peach-bg`, linked to Journey Map.
+     - `StudentTasksPage.tsx`: Rebranded accountability banner and task dialog with DESIGN_SYSTEM_V2 surfaces.
+     - `StudentMessagesPage.tsx`: Rebranded header badge, adviser header, message bubbles, and paperclip icon.
+     - `StudentDocumentsPage.tsx`: Rebranded dropzone, verification cards, adviser card, and ephemeral ticket colors.
+     - `StudentJourneyNav.tsx`: Added `Journey Map` (`/student/journey`) tab with Map icon alongside Applications, Documents, Tasks, and Messages.
+     - `StudentBottomDock.tsx`: Routed `Journey` dock destination directly to `/student/journey`.
+     - `navigation.ts`: Added `Journey Map` item to `STUDENT_NAV_GROUPS`.
+  6. **Comprehensive Automated Verification & Testing**:
+     - Created `src/test/JourneyMapAndCaseworkRebrand.test.tsx` (15 unit/integration test cases covering SVG map rendering, Prepare/Choose/Move regions, "You are here" badge, status mapping integrity, keyboard navigation, tracks list, detail panel, multi-application isolation, view toggle, and empty state).
+     - `npx tsc --noEmit`: **0 errors**.
+     - `npx vitest run src/test/JourneyMapAndCaseworkRebrand.test.tsx`: **15/15 passed** (100%).
+     - Full test suite `npm test`: **22 test files passed, 329 tests passed, 0 failed** (100%).
+     - Production build `npm run build`: **compiled dist/ in 18.03s with 0 errors** (1,767 modules transformed).

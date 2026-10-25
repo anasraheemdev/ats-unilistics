@@ -13,6 +13,8 @@ import {
   FileCheck2,
   MessageSquare,
   Upload,
+  Map as MapIcon,
+  ArrowRight,
 } from 'lucide-react';
 import { CaseDocument, CaseTask } from '@/types';
 
@@ -64,7 +66,7 @@ export const ApplicationDetailPage: React.FC = () => {
           onRetry={() => refetchApp()}
         />
         <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-          <Link to="/student/applications" style={{ color: 'var(--action-primary)', fontWeight: 600, textDecoration: 'none' }}>
+          <Link to="/student/applications" style={{ color: 'var(--action-primary, #245B42)', fontWeight: 600, textDecoration: 'none' }}>
             ← Back to My Applications
           </Link>
         </div>
@@ -164,7 +166,14 @@ export const ApplicationDetailPage: React.FC = () => {
   ];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '2rem',
+        fontFamily: 'var(--font-family-base, "DM Sans", sans-serif)',
+      }}
+    >
       {/* 1. Breadcrumbs */}
       <div>
         <Link
@@ -175,7 +184,7 @@ export const ApplicationDetailPage: React.FC = () => {
             gap: '0.35rem',
             fontSize: '0.8125rem',
             fontWeight: 600,
-            color: 'var(--action-primary)',
+            color: 'var(--action-primary, #245B42)',
             textDecoration: 'none',
           }}
         >
@@ -189,7 +198,10 @@ export const ApplicationDetailPage: React.FC = () => {
         className="bento-card"
         style={{
           padding: '2rem',
-          backgroundColor: '#ffffff',
+          backgroundColor: 'var(--surface-card, #FFFFFF)',
+          borderRadius: '24px',
+          border: '1px solid var(--border-subtle, #E1E8DE)',
+          boxShadow: 'var(--shadow-subtle, 0 1px 3px rgba(0, 0, 0, 0.04))',
           display: 'flex',
           flexDirection: 'column',
           gap: '1.5rem',
@@ -204,57 +216,104 @@ export const ApplicationDetailPage: React.FC = () => {
                   fontWeight: 700,
                   textTransform: 'uppercase',
                   padding: '0.2rem 0.6rem',
-                  borderRadius: 'var(--radius-pill)',
-                  backgroundColor: 'var(--accent-peach-bg)',
-                  color: 'var(--action-primary)',
-                  border: '1px solid var(--accent-peach-border)',
+                  borderRadius: 'var(--radius-pill, 9999px)',
+                  backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+                  color: 'var(--action-primary, #245B42)',
+                  border: '1px solid var(--border-subtle, #E1E8DE)',
                 }}
               >
                 {country.toUpperCase()} • {application.intakeSnapshot?.season?.toUpperCase()} {application.intakeSnapshot?.academic_year}
               </span>
               <span
-                className="badge-semantic"
                 style={{
+                  fontSize: '0.75rem',
+                  fontWeight: 700,
+                  padding: '0.2rem 0.6rem',
+                  borderRadius: 'var(--radius-pill, 9999px)',
                   backgroundColor:
                     ['accepted_offer', 'unconditional_offer', 'visa_approved'].includes(application.externalStatus)
-                      ? 'var(--color-success-bg)'
+                      ? 'rgba(215, 238, 131, 0.2)'
                       : ['submitted', 'awaiting_decision'].includes(application.externalStatus)
-                      ? 'var(--color-info-bg)'
-                      : 'var(--color-warning-bg)',
+                      ? 'rgba(56, 189, 248, 0.15)'
+                      : 'rgba(251, 191, 36, 0.15)',
                   color:
                     ['accepted_offer', 'unconditional_offer', 'visa_approved'].includes(application.externalStatus)
-                      ? 'var(--color-success)'
+                      ? 'var(--action-primary, #245B42)'
                       : ['submitted', 'awaiting_decision'].includes(application.externalStatus)
-                      ? 'var(--color-info)'
-                      : 'var(--color-warning)',
-                  border: '1px solid currentColor',
+                      ? '#0284C7'
+                      : '#B45309',
                 }}
               >
                 {application.externalStatus.replace(/_/g, ' ').toUpperCase()}
               </span>
             </div>
 
-            <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-charcoal)', margin: 0, letterSpacing: '-0.02em' }}>
+            <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--color-foreground, #19261F)', margin: 0, letterSpacing: '-0.02em' }}>
               {uniName}
             </h1>
-            <p style={{ fontSize: '1rem', color: 'var(--text-muted)', margin: '0.25rem 0 0' }}>
+            <p style={{ fontSize: '1rem', color: 'var(--color-foreground-muted, #58695E)', margin: '0.25rem 0 0' }}>
               {progTitle} • {application.programSnapshot?.degree_level?.toUpperCase()} ({application.programSnapshot?.instruction_language?.toUpperCase()})
             </p>
           </div>
 
           <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+            <Link to="/student/journey" style={{ textDecoration: 'none' }}>
+              <button
+                type="button"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  padding: '0.55rem 1.1rem',
+                  borderRadius: 'var(--radius-pill, 9999px)',
+                  fontSize: '0.8125rem',
+                  fontWeight: 700,
+                  backgroundColor: 'var(--brand-citron, #D7EE83)',
+                  color: '#19261F',
+                  border: 'none',
+                  cursor: 'pointer',
+                }}
+              >
+                <MapIcon size={15} />
+                <span>Open in Journey Map</span>
+                <ArrowRight size={13} />
+              </button>
+            </Link>
+
             <Link
               to="/student/messages"
-              className="btn-pill btn-pill-secondary"
-              style={{ fontSize: '0.8125rem', padding: '0.5rem 1rem', textDecoration: 'none' }}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                fontSize: '0.8125rem',
+                padding: '0.55rem 1rem',
+                textDecoration: 'none',
+                backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+                color: 'var(--color-foreground, #19261F)',
+                borderRadius: 'var(--radius-pill, 9999px)',
+                fontWeight: 600,
+                border: '1px solid var(--border-subtle, #E1E8DE)',
+              }}
             >
               <MessageSquare size={15} />
               <span>Message Counsellor</span>
             </Link>
+
             <Link
               to="/student/documents"
-              className="btn-pill btn-pill-primary"
-              style={{ fontSize: '0.8125rem', padding: '0.5rem 1rem', textDecoration: 'none' }}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                fontSize: '0.8125rem',
+                padding: '0.55rem 1rem',
+                textDecoration: 'none',
+                backgroundColor: 'var(--action-primary, #245B42)',
+                color: '#FFFFFF',
+                borderRadius: 'var(--radius-pill, 9999px)',
+                fontWeight: 600,
+              }}
             >
               <Upload size={15} />
               <span>Upload Document</span>
@@ -269,39 +328,43 @@ export const ApplicationDetailPage: React.FC = () => {
             gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
             gap: '1rem',
             padding: '1rem 1.25rem',
-            backgroundColor: 'var(--surface-recessed)',
-            borderRadius: 'var(--radius-card-sm)',
-            border: '1px solid var(--border-subtle)',
+            backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+            borderRadius: '16px',
+            border: '1px solid var(--border-subtle, #E1E8DE)',
             fontSize: '0.8125rem',
           }}
         >
           <div>
-            <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.75rem' }}>Portal Application No:</span>
-            <strong style={{ fontFamily: 'var(--font-mono, monospace)' }}>
+            <span style={{ color: 'var(--color-foreground-muted, #58695E)', display: 'block', fontSize: '0.75rem' }}>Portal Application No:</span>
+            <strong style={{ fontFamily: 'monospace', color: 'var(--color-foreground, #19261F)' }}>
               {application.portalApplicationNumber || 'Not submitted yet'}
             </strong>
           </div>
           <div>
-            <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.75rem' }}>Submission Deadline:</span>
-            <strong>{application.submissionDeadline || application.intakeSnapshot?.deadline_date || 'Not specified'}</strong>
+            <span style={{ color: 'var(--color-foreground-muted, #58695E)', display: 'block', fontSize: '0.75rem' }}>Submission Deadline:</span>
+            <strong style={{ color: 'var(--color-foreground, #19261F)' }}>
+              {application.submissionDeadline || application.intakeSnapshot?.deadline_date || 'Not specified'}
+            </strong>
           </div>
           <div>
-            <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.75rem' }}>Dossier Review:</span>
-            <strong style={{ textTransform: 'capitalize' }}>
+            <span style={{ color: 'var(--color-foreground-muted, #58695E)', display: 'block', fontSize: '0.75rem' }}>Dossier Review:</span>
+            <strong style={{ textTransform: 'capitalize', color: 'var(--color-foreground, #19261F)' }}>
               {application.dossierReviewStatus.replace(/_/g, ' ')}
             </strong>
           </div>
           <div>
-            <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.75rem' }}>External Evidence:</span>
-            <span>{application.externalEvidenceReference || 'Official dossier review record'}</span>
+            <span style={{ color: 'var(--color-foreground-muted, #58695E)', display: 'block', fontSize: '0.75rem' }}>External Evidence:</span>
+            <span style={{ color: 'var(--color-foreground, #19261F)' }}>
+              {application.externalEvidenceReference || 'Official dossier review record'}
+            </span>
           </div>
         </div>
       </div>
 
       {/* 3. Navigation Tabs */}
-      <div style={{ display: 'flex', gap: '0.5rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.5rem' }}>
+      <div style={{ display: 'flex', gap: '0.5rem', borderBottom: '1px solid var(--border-subtle, #E1E8DE)', paddingBottom: '0.5rem', overflowX: 'auto' }}>
         {[
-          { id: 'timeline', label: 'Vertical Milestone Timeline', icon: Clock },
+          { id: 'timeline', label: 'Milestone Timeline', icon: Clock },
           { id: 'tasks', label: `Related Tasks (${tasks.length})`, icon: CheckCircle2 },
           { id: 'documents', label: `Dossier Files (${documents.length})`, icon: FileCheck2 },
           { id: 'history', label: `Status Audit (${history.length})`, icon: ShieldCheck },
@@ -318,14 +381,15 @@ export const ApplicationDetailPage: React.FC = () => {
                 alignItems: 'center',
                 gap: '0.5rem',
                 padding: '0.5rem 1rem',
-                borderRadius: 'var(--radius-pill)',
+                borderRadius: 'var(--radius-pill, 9999px)',
                 fontSize: '0.8125rem',
                 fontWeight: 600,
-                backgroundColor: isActive ? 'var(--action-primary)' : 'transparent',
-                color: isActive ? '#ffffff' : 'var(--text-muted)',
+                backgroundColor: isActive ? 'var(--action-primary, #245B42)' : 'transparent',
+                color: isActive ? '#ffffff' : 'var(--color-foreground-muted, #58695E)',
                 border: 'none',
                 cursor: 'pointer',
-                transition: 'all var(--transition-fast)',
+                transition: 'all 150ms ease-out',
+                whiteSpace: 'nowrap',
               }}
             >
               <Icon size={14} />
@@ -337,14 +401,29 @@ export const ApplicationDetailPage: React.FC = () => {
 
       {/* 4. Tab Content: Vertical Timeline */}
       {activeTab === 'timeline' && (
-        <div className="bento-card" style={{ padding: '2rem', backgroundColor: '#ffffff' }}>
-          <div style={{ marginBottom: '1.5rem' }}>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-charcoal)', margin: 0 }}>
-              Multi-Stage Procedural Timeline
-            </h2>
-            <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', margin: '0.25rem 0 0' }}>
-              Progressing independently according to {country.toUpperCase()} statutory admission procedures. Later stages require staff unlocking.
-            </p>
+        <div
+          className="bento-card"
+          style={{
+            padding: '2rem',
+            backgroundColor: 'var(--surface-card, #FFFFFF)',
+            borderRadius: '24px',
+            border: '1px solid var(--border-subtle, #E1E8DE)',
+          }}
+        >
+          <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
+            <div>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-foreground, #19261F)', margin: 0 }}>
+                Multi-Stage Procedural Timeline
+              </h2>
+              <p style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted, #58695E)', margin: '0.25rem 0 0' }}>
+                Progressing independently according to {country.toUpperCase()} statutory admission procedures. Later stages require staff unlocking.
+              </p>
+            </div>
+            <Link to="/student/journey" style={{ textDecoration: 'none' }}>
+              <span style={{ fontSize: '0.8125rem', fontWeight: 700, color: 'var(--action-primary, #245B42)', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+                <MapIcon size={14} /> View on Map
+              </span>
+            </Link>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -371,12 +450,12 @@ export const ApplicationDetailPage: React.FC = () => {
                         height: '36px',
                         borderRadius: '50%',
                         backgroundColor: isCompleted
-                          ? 'var(--color-success)'
+                          ? 'var(--brand-citron, #D7EE83)'
                           : isCurrent
-                          ? 'var(--action-primary)'
-                          : 'var(--surface-recessed)',
-                        color: isCompleted || isCurrent ? '#ffffff' : 'var(--text-muted)',
-                        border: isLocked ? '2px dashed var(--border-refined)' : 'none',
+                          ? 'var(--action-primary, #245B42)'
+                          : 'var(--surface-recessed, #EDF2E9)',
+                        color: isCompleted ? '#19261F' : isCurrent ? '#ffffff' : 'var(--color-foreground-muted, #58695E)',
+                        border: isLocked ? '2px dashed var(--border-subtle, #E1E8DE)' : 'none',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -392,7 +471,7 @@ export const ApplicationDetailPage: React.FC = () => {
                         style={{
                           width: '2px',
                           flex: 1,
-                          backgroundColor: isCompleted ? 'var(--color-success)' : 'var(--border-subtle)',
+                          backgroundColor: isCompleted ? 'var(--action-primary, #245B42)' : 'var(--border-subtle, #E1E8DE)',
                           minHeight: '40px',
                           margin: '0.5rem 0',
                         }}
@@ -405,13 +484,13 @@ export const ApplicationDetailPage: React.FC = () => {
                     style={{
                       flex: 1,
                       padding: '1rem 1.25rem',
-                      borderRadius: 'var(--radius-card-sm)',
-                      backgroundColor: isCurrent ? 'var(--surface-canvas)' : 'var(--surface-recessed)',
-                      border: isCurrent ? '1px solid var(--action-primary)' : '1px solid var(--border-subtle)',
+                      borderRadius: '16px',
+                      backgroundColor: isCurrent ? 'rgba(215, 238, 131, 0.08)' : 'var(--surface-recessed, #EDF2E9)',
+                      border: isCurrent ? '1px solid var(--action-primary, #245B42)' : '1px solid var(--border-subtle, #E1E8DE)',
                     }}
                   >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
-                      <span style={{ fontSize: '0.9375rem', fontWeight: 700, color: 'var(--text-charcoal)' }}>
+                      <span style={{ fontSize: '0.9375rem', fontWeight: 700, color: 'var(--color-foreground, #19261F)' }}>
                         Stage {stage.index}: {stage.title}
                       </span>
                       <span
@@ -419,16 +498,16 @@ export const ApplicationDetailPage: React.FC = () => {
                           fontSize: '0.6875rem',
                           fontWeight: 700,
                           padding: '0.15rem 0.5rem',
-                          borderRadius: 'var(--radius-pill)',
-                          backgroundColor: isCompleted ? 'var(--color-success-bg)' : isCurrent ? 'var(--accent-peach-bg)' : '#F3F4F6',
-                          color: isCompleted ? 'var(--color-success)' : isCurrent ? 'var(--action-primary)' : '#6B7280',
+                          borderRadius: 'var(--radius-pill, 9999px)',
+                          backgroundColor: isCompleted ? 'var(--brand-citron, #D7EE83)' : isCurrent ? 'var(--action-primary, #245B42)' : 'var(--surface-card, #FFFFFF)',
+                          color: isCompleted ? '#19261F' : isCurrent ? '#FFFFFF' : 'var(--color-foreground-muted, #58695E)',
                         }}
                       >
                         {isCompleted ? 'COMPLETED' : isCurrent ? 'IN PROGRESS' : 'LOCKED'}
                       </span>
                     </div>
 
-                    <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', margin: 0, lineHeight: 1.5 }}>
+                    <p style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted, #58695E)', margin: 0, lineHeight: 1.5 }}>
                       {stage.description}
                     </p>
 
@@ -440,10 +519,10 @@ export const ApplicationDetailPage: React.FC = () => {
                           alignItems: 'center',
                           gap: '0.35rem',
                           fontSize: '0.75rem',
-                          color: '#B78103',
-                          backgroundColor: '#FFF9E6',
+                          color: '#B45309',
+                          backgroundColor: 'rgba(251, 191, 36, 0.15)',
                           padding: '0.35rem 0.6rem',
-                          borderRadius: 'var(--radius-sm)',
+                          borderRadius: '8px',
                         }}
                       >
                         <Lock size={12} />
@@ -460,12 +539,12 @@ export const ApplicationDetailPage: React.FC = () => {
 
       {/* 5. Tab Content: Tasks */}
       {activeTab === 'tasks' && (
-        <div className="bento-card" style={{ padding: '1.5rem', backgroundColor: '#ffffff' }}>
-          <h2 style={{ fontSize: '1.125rem', fontWeight: 700, marginBottom: '1rem' }}>
+        <div className="bento-card" style={{ padding: '1.5rem', backgroundColor: 'var(--surface-card, #FFFFFF)', borderRadius: '24px', border: '1px solid var(--border-subtle, #E1E8DE)' }}>
+          <h2 style={{ fontSize: '1.125rem', fontWeight: 700, marginBottom: '1rem', color: 'var(--color-foreground, #19261F)' }}>
             Action Items & Attestation Deadlines
           </h2>
           {tasks.length === 0 ? (
-            <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>
+            <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--color-foreground-muted, #58695E)' }}>
               No tasks assigned yet. Your counsellor will schedule attestation milestones.
             </div>
           ) : (
@@ -475,27 +554,30 @@ export const ApplicationDetailPage: React.FC = () => {
                   key={t.id}
                   style={{
                     padding: '0.875rem 1rem',
-                    borderRadius: 'var(--radius-card-sm)',
-                    backgroundColor: 'var(--surface-recessed)',
-                    border: '1px solid var(--border-subtle)',
+                    borderRadius: '16px',
+                    backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+                    border: '1px solid var(--border-subtle, #E1E8DE)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
                   }}
                 >
                   <div>
-                    <strong style={{ fontSize: '0.875rem', display: 'block', color: 'var(--text-charcoal)' }}>
+                    <strong style={{ fontSize: '0.875rem', display: 'block', color: 'var(--color-foreground, #19261F)' }}>
                       {t.title}
                     </strong>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--color-foreground-muted, #58695E)' }}>
                       Due: {t.dueDate || 'Not set'} • Assigned to: {t.assignedToRole}
                     </span>
                   </div>
                   <span
-                    className="badge-semantic"
                     style={{
-                      backgroundColor: t.status === 'completed' ? 'var(--color-success-bg)' : 'var(--color-warning-bg)',
-                      color: t.status === 'completed' ? 'var(--color-success)' : 'var(--color-warning)',
+                      fontSize: '0.75rem',
+                      fontWeight: 700,
+                      padding: '2px 8px',
+                      borderRadius: '9999px',
+                      backgroundColor: t.status === 'completed' ? 'var(--brand-citron, #D7EE83)' : 'var(--surface-card, #FFFFFF)',
+                      color: t.status === 'completed' ? '#19261F' : 'var(--color-foreground, #19261F)',
                     }}
                   >
                     {t.status.toUpperCase()}
@@ -509,18 +591,32 @@ export const ApplicationDetailPage: React.FC = () => {
 
       {/* 6. Tab Content: Documents */}
       {activeTab === 'documents' && (
-        <div className="bento-card" style={{ padding: '1.5rem', backgroundColor: '#ffffff' }}>
+        <div className="bento-card" style={{ padding: '1.5rem', backgroundColor: 'var(--surface-card, #FFFFFF)', borderRadius: '24px', border: '1px solid var(--border-subtle, #E1E8DE)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-            <h2 style={{ fontSize: '1.125rem', fontWeight: 700, margin: 0 }}>
+            <h2 style={{ fontSize: '1.125rem', fontWeight: 700, margin: 0, color: 'var(--color-foreground, #19261F)' }}>
               Dossier Files & Verification Status
             </h2>
-            <Link to="/student/documents" className="btn-pill btn-pill-primary" style={{ fontSize: '0.75rem', padding: '0.35rem 0.75rem', textDecoration: 'none' }}>
+            <Link
+              to="/student/documents"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                fontSize: '0.75rem',
+                fontWeight: 600,
+                padding: '0.35rem 0.75rem',
+                backgroundColor: 'var(--action-primary, #245B42)',
+                color: '#FFFFFF',
+                borderRadius: 'var(--radius-pill, 9999px)',
+                textDecoration: 'none',
+              }}
+            >
               <Upload size={12} />
               <span>Upload Document</span>
             </Link>
           </div>
           {documents.length === 0 ? (
-            <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>
+            <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--color-foreground-muted, #58695E)' }}>
               No documents uploaded yet. Submit your transcripts and passport scan.
             </div>
           ) : (
@@ -530,37 +626,40 @@ export const ApplicationDetailPage: React.FC = () => {
                   key={doc.id}
                   style={{
                     padding: '0.875rem 1rem',
-                    borderRadius: 'var(--radius-card-sm)',
-                    backgroundColor: 'var(--surface-recessed)',
-                    border: '1px solid var(--border-subtle)',
+                    borderRadius: '16px',
+                    backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+                    border: '1px solid var(--border-subtle, #E1E8DE)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
                   }}
                 >
                   <div>
-                    <strong style={{ fontSize: '0.875rem', display: 'block', color: 'var(--text-charcoal)' }}>
+                    <strong style={{ fontSize: '0.875rem', display: 'block', color: 'var(--color-foreground, #19261F)' }}>
                       {doc.documentType.replace(/_/g, ' ').toUpperCase()}
                     </strong>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--color-foreground-muted, #58695E)' }}>
                       File: {doc.fileName} • Uploaded: {doc.uploadedAt ? doc.uploadedAt.split('T')[0] : 'Recently'}
                     </span>
                   </div>
                   <span
-                    className="badge-semantic"
                     style={{
+                      fontSize: '0.75rem',
+                      fontWeight: 700,
+                      padding: '2px 8px',
+                      borderRadius: '9999px',
                       backgroundColor:
                         doc.verificationStatus === 'verified'
-                          ? 'var(--color-success-bg)'
+                          ? 'var(--brand-citron, #D7EE83)'
                           : doc.verificationStatus === 'rejected'
-                          ? 'var(--color-danger-bg)'
-                          : 'var(--color-warning-bg)',
+                          ? 'rgba(239, 68, 68, 0.15)'
+                          : 'rgba(251, 191, 36, 0.15)',
                       color:
                         doc.verificationStatus === 'verified'
-                          ? 'var(--color-success)'
+                          ? '#19261F'
                           : doc.verificationStatus === 'rejected'
-                          ? 'var(--color-danger)'
-                          : 'var(--color-warning)',
+                          ? '#DC2626'
+                          : '#B45309',
                     }}
                   >
                     {doc.verificationStatus.toUpperCase()}
@@ -574,12 +673,12 @@ export const ApplicationDetailPage: React.FC = () => {
 
       {/* 7. Tab Content: History */}
       {activeTab === 'history' && (
-        <div className="bento-card" style={{ padding: '1.5rem', backgroundColor: '#ffffff' }}>
-          <h2 style={{ fontSize: '1.125rem', fontWeight: 700, marginBottom: '1rem' }}>
+        <div className="bento-card" style={{ padding: '1.5rem', backgroundColor: 'var(--surface-card, #FFFFFF)', borderRadius: '24px', border: '1px solid var(--border-subtle, #E1E8DE)' }}>
+          <h2 style={{ fontSize: '1.125rem', fontWeight: 700, marginBottom: '1rem', color: 'var(--color-foreground, #19261F)' }}>
             Official Audit Trail & Milestones
           </h2>
           {history.length === 0 ? (
-            <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>
+            <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--color-foreground-muted, #58695E)' }}>
               No status transitions recorded yet. Changes will be audited here by counsellors.
             </div>
           ) : (
@@ -589,17 +688,17 @@ export const ApplicationDetailPage: React.FC = () => {
                   key={i}
                   style={{
                     padding: '0.875rem 1rem',
-                    borderRadius: 'var(--radius-card-sm)',
-                    backgroundColor: 'var(--surface-recessed)',
-                    border: '1px solid var(--border-subtle)',
+                    borderRadius: '16px',
+                    backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+                    border: '1px solid var(--border-subtle, #E1E8DE)',
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <strong style={{ fontSize: '0.875rem' }}>{(h.toStatus || h.eventType).replace(/_/g, ' ').toUpperCase()}</strong>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{h.createdAt?.split('T')[0]}</span>
+                    <strong style={{ fontSize: '0.875rem', color: 'var(--color-foreground, #19261F)' }}>{(h.toStatus || h.eventType).replace(/_/g, ' ').toUpperCase()}</strong>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--color-foreground-muted, #58695E)' }}>{h.createdAt?.split('T')[0]}</span>
                   </div>
                   {h.reason && (
-                    <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginTop: '0.35rem', marginBottom: 0 }}>
+                    <p style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted, #58695E)', marginTop: '0.35rem', marginBottom: 0 }}>
                       {h.reason}
                     </p>
                   )}
@@ -612,3 +711,5 @@ export const ApplicationDetailPage: React.FC = () => {
     </div>
   );
 };
+
+export default ApplicationDetailPage;

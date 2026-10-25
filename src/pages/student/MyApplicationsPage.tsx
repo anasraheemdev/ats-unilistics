@@ -19,6 +19,8 @@ import {
   Upload,
   MessageSquare,
   Calendar,
+  Map as MapIcon,
+  ArrowRight,
 } from 'lucide-react';
 import { StudentJourneyNav } from '@/components/layout/StudentJourneyNav';
 
@@ -64,14 +66,25 @@ export const MyApplicationsPage: React.FC = () => {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '2rem',
+        fontFamily: 'var(--font-family-base, "DM Sans", sans-serif)',
+      }}
+    >
       <StudentJourneyNav />
-      {/* Top Banner matching screen(6).png */}
+
+      {/* Top Banner with DESIGN_SYSTEM_V2 styling */}
       <div
         className="bento-card"
         style={{
           padding: '2rem',
-          backgroundColor: '#FFFFFF',
+          backgroundColor: 'var(--surface-card, #FFFFFF)',
+          borderRadius: '24px',
+          border: '1px solid var(--border-subtle, #E1E8DE)',
+          boxShadow: 'var(--shadow-subtle, 0 1px 3px rgba(0, 0, 0, 0.04))',
           display: 'flex',
           flexDirection: 'column',
           gap: '1.25rem',
@@ -85,49 +98,92 @@ export const MyApplicationsPage: React.FC = () => {
                 fontWeight: 700,
                 padding: '3px 10px',
                 borderRadius: '9999px',
-                backgroundColor: '#FFEFEA',
-                color: '#B72301',
+                backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+                color: 'var(--action-primary, #245B42)',
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '0.375rem',
+                border: '1px solid var(--border-subtle, #E1E8DE)',
               }}
             >
-              <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#B72301' }} />
-              Active Intake Cycle
+              <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--action-primary, #245B42)' }} />
+              Active Admissions Cycle
             </span>
-            <span style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted)' }}>
+            <span style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted, #58695E)' }}>
               Updated recently
             </span>
           </div>
 
-          <span style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted)' }}>
-            Adviser: <strong style={{ color: 'var(--color-foreground)' }}>{counsellorName}</strong>
+          <span style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted, #58695E)' }}>
+            Adviser: <strong style={{ color: 'var(--color-foreground, #19261F)' }}>{counsellorName}</strong>
           </span>
         </div>
 
         <div>
-          <h1 style={{ fontSize: '2.25rem', fontWeight: 800, letterSpacing: '-0.025em', color: 'var(--color-foreground)', margin: 0 }}>
+          <h1
+            style={{
+              fontSize: 'clamp(1.75rem, 3.5vw, 2.25rem)',
+              fontWeight: 800,
+              letterSpacing: '-0.025em',
+              color: 'var(--color-foreground, #19261F)',
+              margin: 0,
+            }}
+          >
             Good day, {studentFirstName}
           </h1>
-          <p style={{ color: 'var(--color-foreground-muted)', fontSize: '1rem', marginTop: '0.375rem', marginBottom: 0 }}>
+          <p style={{ color: 'var(--color-foreground-muted, #58695E)', fontSize: '1rem', marginTop: '0.375rem', marginBottom: 0 }}>
             {applications.length > 0
               ? `Tracking ${applications.length} active university ${applications.length === 1 ? 'admission' : 'admissions'} and visa milestone journeys.`
               : 'Your study preferences are recorded. Your assigned counsellor will assemble target applications here.'}
           </p>
         </div>
 
-        {/* Quick Action Pills matching screen(6).png */}
+        {/* Action Controls including direct Journey Map link */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
-          <Link to="/student/documents" style={{ textDecoration: 'none' }}>
+          <Link to="/student/journey" style={{ textDecoration: 'none' }}>
             <button
               type="button"
-              className="btn-pill-primary"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '0.5rem',
-                padding: '8px 18px',
+                padding: '0.55rem 1.25rem',
+                borderRadius: 'var(--radius-pill, 9999px)',
                 fontSize: '0.875rem',
+                fontWeight: 700,
+                backgroundColor: 'var(--brand-citron, #D7EE83)',
+                color: '#19261F',
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'background-color 150ms ease-out',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = 'var(--accent-citron-hover, #C8E26C)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'var(--brand-citron, #D7EE83)';
+              }}
+            >
+              <MapIcon size={16} />
+              <span>Interactive Journey Map</span>
+              <ArrowRight size={14} />
+            </button>
+          </Link>
+
+          <Link to="/student/documents" style={{ textDecoration: 'none' }}>
+            <button
+              type="button"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                padding: '0.55rem 1.25rem',
+                borderRadius: 'var(--radius-pill, 9999px)',
+                fontSize: '0.875rem',
+                fontWeight: 600,
+                backgroundColor: 'var(--action-primary, #245B42)',
+                color: '#FFFFFF',
+                border: 'none',
                 cursor: 'pointer',
               }}
             >
@@ -138,17 +194,18 @@ export const MyApplicationsPage: React.FC = () => {
           <Link to="/student/messages" style={{ textDecoration: 'none' }}>
             <button
               type="button"
-              className="btn-pill"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '0.5rem',
-                padding: '8px 18px',
+                padding: '0.55rem 1.25rem',
+                borderRadius: 'var(--radius-pill, 9999px)',
                 fontSize: '0.875rem',
-                backgroundColor: '#F9F6F0',
-                color: 'var(--color-foreground)',
+                fontWeight: 600,
+                backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+                color: 'var(--color-foreground, #19261F)',
+                border: '1px solid var(--border-subtle, #E1E8DE)',
                 cursor: 'pointer',
-                border: '1px solid #EBE6DE',
               }}
             >
               <MessageSquare size={16} /> Contact {counsellorName.split(' ')[0]}
@@ -158,17 +215,18 @@ export const MyApplicationsPage: React.FC = () => {
           <Link to="/student/tasks" style={{ textDecoration: 'none' }}>
             <button
               type="button"
-              className="btn-pill"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '0.5rem',
-                padding: '8px 18px',
+                padding: '0.55rem 1.25rem',
+                borderRadius: 'var(--radius-pill, 9999px)',
                 fontSize: '0.875rem',
-                backgroundColor: '#F9F6F0',
-                color: 'var(--color-foreground)',
+                fontWeight: 600,
+                backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+                color: 'var(--color-foreground, #19261F)',
+                border: '1px solid var(--border-subtle, #E1E8DE)',
                 cursor: 'pointer',
-                border: '1px solid #EBE6DE',
               }}
             >
               <Calendar size={16} /> Action Deadlines
@@ -200,12 +258,14 @@ export const MyApplicationsPage: React.FC = () => {
         </div>
       )}
 
-      {/* Advisory Question Callout matching screen(6).png */}
+      {/* Advisory Question Callout */}
       <div
         className="bento-card"
         style={{
           padding: '1.5rem 2rem',
-          backgroundColor: '#FFFFFF',
+          backgroundColor: 'var(--surface-card, #FFFFFF)',
+          borderRadius: '24px',
+          border: '1px solid var(--border-subtle, #E1E8DE)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -219,8 +279,8 @@ export const MyApplicationsPage: React.FC = () => {
               width: '48px',
               height: '48px',
               borderRadius: '50%',
-              backgroundColor: '#FFEFEA',
-              color: '#B72301',
+              backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+              color: 'var(--action-primary, #245B42)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -230,10 +290,10 @@ export const MyApplicationsPage: React.FC = () => {
             <MessageSquare size={22} />
           </div>
           <div>
-            <h4 style={{ fontSize: '1rem', fontWeight: 700, margin: 0, color: 'var(--color-foreground)' }}>
+            <h4 style={{ fontSize: '1rem', fontWeight: 700, margin: 0, color: 'var(--color-foreground, #19261F)' }}>
               Have questions on conditional terms or visa requirements?
             </h4>
-            <p style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted)', margin: '0.25rem 0 0 0' }}>
+            <p style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted, #58695E)', margin: '0.25rem 0 0 0' }}>
               Coordinate directly with your advisory team to review offer letters and visa appointment slots.
             </p>
           </div>
@@ -276,7 +336,11 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
     activeStep = 2;
   } else if (application.externalStatus === 'submitted' || application.externalStatus === 'awaiting_decision') {
     activeStep = 3;
-  } else if (application.externalStatus === 'conditional_offer' || application.externalStatus === 'unconditional_offer' || application.externalStatus === 'accepted_offer') {
+  } else if (
+    application.externalStatus === 'conditional_offer' ||
+    application.externalStatus === 'unconditional_offer' ||
+    application.externalStatus === 'accepted_offer'
+  ) {
     activeStep = 4;
   } else if (application.externalStatus === 'visa_processing' || application.externalStatus === 'visa_approved') {
     activeStep = 5;
@@ -287,13 +351,16 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
       className="bento-card"
       style={{
         padding: '2rem',
-        backgroundColor: '#FFFFFF',
+        backgroundColor: 'var(--surface-card, #FFFFFF)',
+        borderRadius: '24px',
+        border: '1px solid var(--border-subtle, #E1E8DE)',
+        boxShadow: 'var(--shadow-subtle, 0 1px 3px rgba(0, 0, 0, 0.04))',
         display: 'flex',
         flexDirection: 'column',
         gap: '1.5rem',
       }}
     >
-      {/* Header matching screen(6).png */}
+      {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <div
@@ -301,14 +368,14 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
               width: '52px',
               height: '52px',
               borderRadius: '50%',
-              backgroundColor: '#F9F6F0',
-              border: '1px solid #EBE6DE',
+              backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+              border: '1px solid var(--border-subtle, #E1E8DE)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               fontWeight: 800,
               fontSize: '1.125rem',
-              color: '#1A1A1A',
+              color: 'var(--action-primary, #245B42)',
               flexShrink: 0,
             }}
           >
@@ -323,8 +390,8 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
                   fontWeight: 700,
                   padding: '2px 8px',
                   borderRadius: '9999px',
-                  backgroundColor: '#E0F2FE',
-                  color: '#0369A1',
+                  backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+                  color: 'var(--action-primary, #245B42)',
                 }}
               >
                 Stage {activeStep}: {activeStep === 3 ? 'University Submission' : activeStep === 2 ? 'Document Prep' : activeStep === 4 ? 'Offer & Decision' : 'Visa Filing'}
@@ -335,31 +402,48 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
                   fontWeight: 600,
                   padding: '2px 8px',
                   borderRadius: '9999px',
-                  backgroundColor: '#F9F6F0',
-                  color: 'var(--color-foreground-muted)',
+                  backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+                  color: 'var(--color-foreground-muted, #58695E)',
                 }}
               >
                 {application.universitySnapshot.country?.toUpperCase()}
               </span>
             </div>
 
-            <h2 style={{ fontSize: '1.375rem', fontWeight: 800, color: 'var(--color-foreground)', margin: 0 }}>
+            <h2 style={{ fontSize: '1.375rem', fontWeight: 800, color: 'var(--color-foreground, #19261F)', margin: 0 }}>
               {application.universitySnapshot.name}
             </h2>
-            <p style={{ fontSize: '0.9375rem', color: 'var(--color-foreground-muted)', margin: '2px 0 0 0' }}>
+            <p style={{ fontSize: '0.9375rem', color: 'var(--color-foreground-muted, #58695E)', margin: '2px 0 0 0' }}>
               {application.programSnapshot.title} • {application.programSnapshot.degree_level?.toUpperCase()}
             </p>
           </div>
         </div>
 
-        {/* Portal Reference badge */}
-        <div style={{ textAlign: 'right' }}>
-          <span style={{ display: 'block', fontSize: '0.75rem', color: 'var(--color-foreground-muted)' }}>
-            Official Dossier Ref
-          </span>
-          <span style={{ fontSize: '0.9375rem', fontWeight: 700, fontFamily: 'var(--font-family-mono)', color: 'var(--color-foreground)' }}>
-            {application.portalApplicationNumber || 'EDIN-PG-99214'}
-          </span>
+        {/* Portal Reference and Map action */}
+        <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.5rem' }}>
+          <div>
+            <span style={{ display: 'block', fontSize: '0.75rem', color: 'var(--color-foreground-muted, #58695E)' }}>
+              Official Dossier Ref
+            </span>
+            <span style={{ fontSize: '0.9375rem', fontWeight: 700, fontFamily: 'monospace', color: 'var(--color-foreground, #19261F)' }}>
+              {application.portalApplicationNumber || 'EDIN-PG-99214'}
+            </span>
+          </div>
+
+          <Link to={`/student/applications/${application.id}`} style={{ textDecoration: 'none' }}>
+            <span
+              style={{
+                fontSize: '0.75rem',
+                fontWeight: 700,
+                color: 'var(--action-primary, #245B42)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.25rem',
+              }}
+            >
+              Full Details <ArrowRight size={12} />
+            </span>
+          </Link>
         </div>
       </div>
 
@@ -367,9 +451,9 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
       <div
         style={{
           padding: '1rem 1.25rem',
-          backgroundColor: '#FDFBF7',
+          backgroundColor: 'var(--surface-recessed, #EDF2E9)',
           borderRadius: '16px',
-          border: '1px solid #F0ECE4',
+          border: '1px solid var(--border-subtle, #E1E8DE)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -378,22 +462,22 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
-          <CheckCircle size={18} style={{ color: '#065F46' }} />
-          <span style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--color-foreground)' }}>
+          <CheckCircle size={18} style={{ color: 'var(--action-primary, #245B42)' }} />
+          <span style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--color-foreground, #19261F)' }}>
             Application Progress
           </span>
         </div>
-        <span style={{ fontSize: '0.875rem', fontWeight: 800, color: 'var(--color-foreground)' }}>
+        <span style={{ fontSize: '0.875rem', fontWeight: 800, color: 'var(--action-primary, #245B42)' }}>
           {activeStep} of 5 milestones completed
         </span>
       </div>
 
-      {/* Next Action Required Box matching screen(6).png */}
+      {/* Next Action Required Box */}
       <div
         style={{
           padding: '1.25rem 1.5rem',
-          backgroundColor: '#FFFBEB',
-          border: '1px solid #FDE68A',
+          backgroundColor: 'rgba(215, 238, 131, 0.12)',
+          border: '1px solid rgba(215, 238, 131, 0.35)',
           borderRadius: '16px',
           display: 'flex',
           flexDirection: 'column',
@@ -401,7 +485,7 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
-          <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#92400E' }}>
+          <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--action-primary, #245B42)' }}>
             Next Action Required
           </span>
           <span
@@ -410,8 +494,8 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
               fontWeight: 700,
               padding: '3px 10px',
               borderRadius: '9999px',
-              backgroundColor: '#FEF3C7',
-              color: '#92400E',
+              backgroundColor: 'rgba(215, 238, 131, 0.25)',
+              color: 'var(--action-primary, #245B42)',
               display: 'inline-flex',
               alignItems: 'center',
               gap: '0.35rem',
@@ -421,31 +505,33 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
           </span>
         </div>
 
-        <h4 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--color-foreground)', margin: 0 }}>
+        <h4 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--color-foreground, #19261F)', margin: 0 }}>
           {application.nextAction || 'Upload Certified Transcripts & Verify Attestation'}
         </h4>
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
-          <span style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted)' }}>
+          <span style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted, #58695E)' }}>
             Assigned by {counsellorName}
           </span>
           <Link to="/student/documents" style={{ textDecoration: 'none' }}>
-            <span style={{ fontSize: '0.875rem', fontWeight: 800, color: '#B72301', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+            <span style={{ fontSize: '0.875rem', fontWeight: 800, color: 'var(--action-primary, #245B42)', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
               Complete Action →
             </span>
           </Link>
         </div>
       </div>
 
-      {/* Milestones & Journey (Vertical timeline matching screen(6).png) */}
+      {/* Milestones & Journey */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h3 style={{ fontSize: '1.0625rem', fontWeight: 800, color: 'var(--color-foreground)', margin: 0 }}>
+          <h3 style={{ fontSize: '1.0625rem', fontWeight: 800, color: 'var(--color-foreground, #19261F)', margin: 0 }}>
             Milestones & Journey
           </h3>
-          <span style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#0369A1' }}>
-            Step {activeStep} active
-          </span>
+          <Link to="/student/journey" style={{ textDecoration: 'none' }}>
+            <span style={{ fontSize: '0.8125rem', fontWeight: 700, color: 'var(--action-primary, #245B42)', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+              <MapIcon size={14} /> Open in Map View
+            </span>
+          </Link>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem', position: 'relative' }}>
@@ -456,8 +542,8 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
               gap: '1rem',
               padding: '1rem',
               borderRadius: '16px',
-              backgroundColor: activeStep >= 1 ? '#FFFFFF' : '#F9F6F0',
-              border: '1px solid #EBE6DE',
+              backgroundColor: activeStep >= 1 ? 'var(--surface-card, #FFFFFF)' : 'var(--surface-recessed, #EDF2E9)',
+              border: '1px solid var(--border-subtle, #E1E8DE)',
             }}
           >
             <div
@@ -465,8 +551,8 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
                 width: '28px',
                 height: '28px',
                 borderRadius: '50%',
-                backgroundColor: activeStep > 1 ? '#E8F8F2' : '#FFEFEA',
-                color: activeStep > 1 ? '#065F46' : '#B72301',
+                backgroundColor: activeStep > 1 ? 'var(--brand-citron, #D7EE83)' : 'var(--action-primary, #245B42)',
+                color: activeStep > 1 ? '#19261F' : '#FFFFFF',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -478,14 +564,14 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
             </div>
             <div style={{ flex: 1 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <strong style={{ fontSize: '0.9375rem', color: 'var(--color-foreground)' }}>
+                <strong style={{ fontSize: '0.9375rem', color: 'var(--color-foreground, #19261F)' }}>
                   Profile & Shortlist Selection
                 </strong>
-                <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#065F46' }}>
+                <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--action-primary, #245B42)' }}>
                   Approved
                 </span>
               </div>
-              <p style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted)', margin: '4px 0 0 0' }}>
+              <p style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted, #58695E)', margin: '4px 0 0 0' }}>
                 Academic profile verified and initial 4-university tier list locked.
               </p>
             </div>
@@ -498,8 +584,8 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
               gap: '1rem',
               padding: '1rem',
               borderRadius: '16px',
-              backgroundColor: activeStep >= 2 ? '#FFFFFF' : '#F9F6F0',
-              border: '1px solid #EBE6DE',
+              backgroundColor: activeStep >= 2 ? 'var(--surface-card, #FFFFFF)' : 'var(--surface-recessed, #EDF2E9)',
+              border: '1px solid var(--border-subtle, #E1E8DE)',
             }}
           >
             <div
@@ -507,8 +593,8 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
                 width: '28px',
                 height: '28px',
                 borderRadius: '50%',
-                backgroundColor: activeStep > 2 ? '#E8F8F2' : activeStep === 2 ? '#FFEFEA' : '#F3F4F6',
-                color: activeStep > 2 ? '#065F46' : activeStep === 2 ? '#B72301' : '#9CA3AF',
+                backgroundColor: activeStep > 2 ? 'var(--brand-citron, #D7EE83)' : activeStep === 2 ? 'var(--action-primary, #245B42)' : 'var(--surface-recessed, #EDF2E9)',
+                color: activeStep > 2 ? '#19261F' : activeStep === 2 ? '#FFFFFF' : '#8DA394',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -520,14 +606,14 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
             </div>
             <div style={{ flex: 1 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <strong style={{ fontSize: '0.9375rem', color: 'var(--color-foreground)' }}>
+                <strong style={{ fontSize: '0.9375rem', color: 'var(--color-foreground, #19261F)' }}>
                   Document Preparation & Attestation
                 </strong>
-                <span style={{ fontSize: '0.75rem', fontWeight: 600, color: activeStep > 2 ? '#065F46' : '#92400E' }}>
+                <span style={{ fontSize: '0.75rem', fontWeight: 600, color: activeStep > 2 ? 'var(--action-primary, #245B42)' : '#B45309' }}>
                   {activeStep > 2 ? 'Verified' : 'In Progress'}
                 </span>
               </div>
-              <p style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted)', margin: '4px 0 0 0' }}>
+              <p style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted, #58695E)', margin: '4px 0 0 0' }}>
                 Transcripts, Statement of Purpose, and language verification bundle validated.
               </p>
             </div>
@@ -540,8 +626,8 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
               gap: '1rem',
               padding: '1rem',
               borderRadius: '16px',
-              backgroundColor: activeStep === 3 ? '#FFF5F2' : activeStep > 3 ? '#FFFFFF' : '#F9F6F0',
-              border: activeStep === 3 ? '1px solid #FFD9CF' : '1px solid #EBE6DE',
+              backgroundColor: activeStep === 3 ? 'var(--surface-recessed, #EDF2E9)' : activeStep > 3 ? 'var(--surface-card, #FFFFFF)' : 'var(--surface-recessed, #EDF2E9)',
+              border: activeStep === 3 ? '1px solid var(--action-primary, #245B42)' : '1px solid var(--border-subtle, #E1E8DE)',
             }}
           >
             <div
@@ -549,8 +635,8 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
                 width: '28px',
                 height: '28px',
                 borderRadius: '50%',
-                backgroundColor: activeStep === 3 ? '#B72301' : activeStep > 3 ? '#E8F8F2' : '#F3F4F6',
-                color: activeStep === 3 ? '#FFFFFF' : activeStep > 3 ? '#065F46' : '#9CA3AF',
+                backgroundColor: activeStep === 3 ? 'var(--action-primary, #245B42)' : activeStep > 3 ? 'var(--brand-citron, #D7EE83)' : 'var(--surface-recessed, #EDF2E9)',
+                color: activeStep === 3 ? '#FFFFFF' : activeStep > 3 ? '#19261F' : '#8DA394',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -562,7 +648,7 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
             </div>
             <div style={{ flex: 1 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <strong style={{ fontSize: '0.9375rem', color: 'var(--color-foreground)' }}>
+                <strong style={{ fontSize: '0.9375rem', color: 'var(--color-foreground, #19261F)' }}>
                   University Portal Submission
                 </strong>
                 <span
@@ -571,14 +657,14 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
                     fontWeight: 700,
                     padding: '2px 8px',
                     borderRadius: '9999px',
-                    backgroundColor: activeStep === 3 ? '#B72301' : '#F9F6F0',
-                    color: activeStep === 3 ? '#FFFFFF' : 'var(--color-foreground-muted)',
+                    backgroundColor: activeStep === 3 ? 'var(--action-primary, #245B42)' : 'var(--surface-recessed, #EDF2E9)',
+                    color: activeStep === 3 ? '#FFFFFF' : 'var(--color-foreground-muted, #58695E)',
                   }}
                 >
                   {activeStep === 3 ? 'Active Stage' : activeStep > 3 ? 'Submitted' : 'Pending'}
                 </span>
               </div>
-              <p style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted)', margin: '4px 0 0 0' }}>
+              <p style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted, #58695E)', margin: '4px 0 0 0' }}>
                 Submitted on official institutional portal. Portal Ref: {application.portalApplicationNumber || 'EDIN-PG-99214'}
               </p>
             </div>
@@ -591,8 +677,8 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
               gap: '1rem',
               padding: '1rem',
               borderRadius: '16px',
-              backgroundColor: activeStep === 4 ? '#FFF5F2' : activeStep > 4 ? '#FFFFFF' : '#F9F6F0',
-              border: '1px solid #EBE6DE',
+              backgroundColor: activeStep === 4 ? 'var(--surface-recessed, #EDF2E9)' : activeStep > 4 ? 'var(--surface-card, #FFFFFF)' : 'var(--surface-recessed, #EDF2E9)',
+              border: '1px solid var(--border-subtle, #E1E8DE)',
             }}
           >
             <div
@@ -600,8 +686,8 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
                 width: '28px',
                 height: '28px',
                 borderRadius: '50%',
-                backgroundColor: activeStep > 4 ? '#E8F8F2' : '#F3F4F6',
-                color: activeStep > 4 ? '#065F46' : '#9CA3AF',
+                backgroundColor: activeStep > 4 ? 'var(--brand-citron, #D7EE83)' : '#E2E8F0',
+                color: activeStep > 4 ? '#19261F' : '#64748B',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -613,14 +699,14 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
             </div>
             <div style={{ flex: 1 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <strong style={{ fontSize: '0.9375rem', color: 'var(--color-foreground)' }}>
+                <strong style={{ fontSize: '0.9375rem', color: 'var(--color-foreground, #19261F)' }}>
                   Awaiting University Decision / Conditional Offer
                 </strong>
-                <span style={{ fontSize: '0.75rem', color: 'var(--color-foreground-muted)' }}>
+                <span style={{ fontSize: '0.75rem', color: 'var(--color-foreground-muted, #58695E)' }}>
                   {activeStep >= 4 ? 'Decision Arrived' : 'Expected: 4–6 weeks'}
                 </span>
               </div>
-              <p style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted)', margin: '4px 0 0 0' }}>
+              <p style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted, #58695E)', margin: '4px 0 0 0' }}>
                 {application.offerConditions || 'Faculty admission committee evaluation window underway.'}
               </p>
             </div>
@@ -633,8 +719,8 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
               gap: '1rem',
               padding: '1rem',
               borderRadius: '16px',
-              backgroundColor: '#F9F6F0',
-              border: '1px solid #EBE6DE',
+              backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+              border: '1px solid var(--border-subtle, #E1E8DE)',
             }}
           >
             <div
@@ -642,8 +728,8 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
                 width: '28px',
                 height: '28px',
                 borderRadius: '50%',
-                backgroundColor: '#F3F4F6',
-                color: '#9CA3AF',
+                backgroundColor: '#E2E8F0',
+                color: '#64748B',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -655,14 +741,14 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
             </div>
             <div style={{ flex: 1 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <strong style={{ fontSize: '0.9375rem', color: 'var(--color-foreground)' }}>
+                <strong style={{ fontSize: '0.9375rem', color: 'var(--color-foreground, #19261F)' }}>
                   Visa Documentation & Embassy Lodging
                 </strong>
-                <span style={{ fontSize: '0.75rem', color: 'var(--color-foreground-muted)' }}>
+                <span style={{ fontSize: '0.75rem', color: 'var(--color-foreground-muted, #58695E)' }}>
                   Upcoming
                 </span>
               </div>
-              <p style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted)', margin: '4px 0 0 0' }}>
+              <p style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted, #58695E)', margin: '4px 0 0 0' }}>
                 Unlocks automatically upon admission confirmation and financial guarantee issuance.
               </p>
             </div>
@@ -671,7 +757,7 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
       </div>
 
       {/* History toggle & footer actions */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', paddingTop: '1rem', borderTop: '1px solid #EBE6DE' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', paddingTop: '1rem', borderTop: '1px solid var(--border-subtle, #E1E8DE)' }}>
         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
           {application.portalUrl && (
             <a
@@ -711,21 +797,21 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
             marginTop: '0.5rem',
             padding: '1.25rem',
             borderRadius: '16px',
-            backgroundColor: '#F9F6F0',
-            border: '1px solid #EBE6DE',
+            backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+            border: '1px solid var(--border-subtle, #E1E8DE)',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-            <h4 style={{ fontSize: '0.875rem', fontWeight: 800, margin: 0 }}>Audited Timeline Records</h4>
-            <span style={{ fontSize: '0.75rem', color: 'var(--color-foreground-muted)' }}>
+            <h4 style={{ fontSize: '0.875rem', fontWeight: 800, margin: 0, color: 'var(--color-foreground, #19261F)' }}>Audited Timeline Records</h4>
+            <span style={{ fontSize: '0.75rem', color: 'var(--color-foreground-muted, #58695E)' }}>
               Verified counsellor-recorded timeline
             </span>
           </div>
 
           {historyLoading ? (
-            <p style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted)' }}>Loading history records...</p>
+            <p style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted, #58695E)' }}>Loading history records...</p>
           ) : !history || history.length === 0 ? (
-            <p style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted)' }}>No historical transitions recorded yet.</p>
+            <p style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted, #58695E)' }}>No historical transitions recorded yet.</p>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               {history.map((item) => (
@@ -737,7 +823,7 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
                     gap: '0.75rem',
                     fontSize: '0.8125rem',
                     paddingBottom: '0.5rem',
-                    borderBottom: '1px solid #E2DCD5',
+                    borderBottom: '1px solid var(--border-subtle, #E1E8DE)',
                   }}
                 >
                   <div
@@ -745,14 +831,14 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
                       width: '8px',
                       height: '8px',
                       borderRadius: '50%',
-                      backgroundColor: '#B72301',
+                      backgroundColor: 'var(--action-primary, #245B42)',
                       marginTop: '6px',
                       flexShrink: 0,
                     }}
                   />
                   <div style={{ flex: 1 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <strong>
+                      <strong style={{ color: 'var(--color-foreground, #19261F)' }}>
                         {item.eventType === 'created'
                           ? 'Application Initialized'
                           : item.eventType === 'correction'
@@ -761,16 +847,16 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
                           ? 'External Institutional Submission'
                           : `Status Transition: ${item.toStatus?.replace(/_/g, ' ').toUpperCase()}`}
                       </strong>
-                      <span style={{ fontSize: '0.75rem', color: 'var(--color-foreground-muted)' }}>
+                      <span style={{ fontSize: '0.75rem', color: 'var(--color-foreground-muted, #58695E)' }}>
                         {new Date(item.reportedAt).toLocaleString()}
                       </span>
                     </div>
                     {item.reason && (
-                      <p style={{ margin: '0.25rem 0', color: 'var(--color-foreground)' }}>
+                      <p style={{ margin: '0.25rem 0', color: 'var(--color-foreground, #19261F)' }}>
                         {item.reason}
                       </p>
                     )}
-                    <span style={{ fontSize: '0.75rem', color: 'var(--color-foreground-muted)' }}>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--color-foreground-muted, #58695E)' }}>
                       Recorded by: {item.actorName} ({item.actorRole})
                     </span>
                   </div>
@@ -783,3 +869,5 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
     </div>
   );
 };
+
+export default MyApplicationsPage;

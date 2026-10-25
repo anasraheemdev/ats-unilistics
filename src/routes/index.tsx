@@ -98,6 +98,9 @@ const StudentTasksPage = React.lazy(() =>
 const StudentMessagesPage = React.lazy(() =>
   import('@/pages/student/StudentMessagesPage').then((m) => ({ default: m.StudentMessagesPage }))
 );
+const StudentJourneyPage = React.lazy(() =>
+  import('@/pages/student/StudentJourneyPage').then((m) => ({ default: m.StudentJourneyPage }))
+);
 
 // Code-split Staff & Counsellor pages
 const StaffDashboardPage = React.lazy(() =>
@@ -177,6 +180,7 @@ export const AppRoutes: React.FC<AppRoutesProps> = ({ currentRole, onRoleChange 
         <Route element={<ProtectedRoute currentRole={currentRole} allowedRoles={['managed_student']} onRoleChange={onRoleChange} />}>
           <Route element={<StudentLayout currentRole={currentRole} onRoleChange={onRoleChange} />}>
             <Route path="/student" element={<StudentOverviewPage />} />
+            <Route path="/student/journey" element={<StudentJourneyPage />} />
             <Route path="/student/applications" element={<MyApplicationsPage />} />
             <Route path="/student/applications/:id" element={<ApplicationDetailPage />} />
             <Route path="/student/documents" element={<StudentDocumentsPage />} />
