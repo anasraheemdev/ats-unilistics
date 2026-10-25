@@ -1,13 +1,14 @@
-# UI Redesign & Real Data Integration Progress
+# [SUPERSEDED] UI Redesign & Real Data Integration Progress
+
+> [!WARNING]
+> **SUPERSEDED TRACKER - DO NOT USE FOR ACTIVE REBRAND WORK**
+> This progress tracker records the historical Warm Editorial Bento / Coral theme redesign.
+> **Active Implementation & Progress Tracker**: [docs/REBRAND_PROGRESS.md](file:///c:/Users/anasr/OneDrive/Desktop/ats-unilistics/docs/REBRAND_PROGRESS.md).
 
 **Target System**: Unilistics Application Tracking System (ATS)  
-**Status**: COMPLETED & VERIFIED  
-**Base Design Language**: Warm Editorial Bento with Kinetic Horizon Atmospheric Nuances  
-**Brand Canvas**: Warm Ivory (`#FDFBF7`), Recessed Surfaces (`#F9F6F0`), Cards (Opaque White)  
-**Primary Accent**: Brand Coral (`#FF5733` / `#FF5E36`), Accessible Primary Button (`#B72301` / `#B42901`)  
-**Typography**: Plus Jakarta Sans  
-**Automated Tests**: 242/242 passing across 15 Vitest suites  
-**Build Status**: Production bundle compiled in 5.04s (`dist/`) with 0 errors  
+**Historical Status**: COMPLETED & SUPERSEDED  
+**Base Design Language (Superseded)**: Warm Editorial Bento with Kinetic Horizon Atmospheric Nuances  
+**Active Design Authority**: Brand Kit v1.0 (Forest, Citron, Sage, DM Sans) in `docs/REBRAND_SCOPE.md`  
 
 ---
 

@@ -1,9 +1,13 @@
-# Unilistics Design System Specification: Warm Editorial Bento
+# [SUPERSEDED] Unilistics Design System Specification: Warm Editorial Bento
 
-**Version**: 2.0.0  
-**Effective Date**: October 23, 2026  
-**Core Foundation**: Warm Editorial Bento with Kinetic Horizon Atmospheric Nuances  
-**Compliance Target**: WCAG 2.2 AA Contrast & Keyboard Accessibility  
+> [!WARNING]
+> **SUPERSEDED DESIGN SPECIFICATION - DO NOT USE FOR ACTIVE IMPLEMENTATION**
+> This document (Warm Editorial Bento / Kinetic Horizon / Coral `#FF5733` palette) is retained strictly as a historical archive.
+> **Active Design Authority**: [docs/REBRAND_SCOPE.md](file:///c:/Users/anasr/OneDrive/Desktop/ats-unilistics/docs/REBRAND_SCOPE.md) and the Unilistics Brand Guidelines v1.0 (`theme/extracted_v1/brand-guidelines.html`), featuring Forest (`#245b42`), Citron (`#d7ee83`), Sage (`#b4d0b6`), Light ink (`#19261f`), Light canvas (`#f6f8f5`), and DM Sans typography.
+
+**Status**: SUPERSEDED (Archive Reference Only)  
+**Historical Date**: October 23, 2026  
+**Superseded By**: `docs/REBRAND_SCOPE.md` (October 25, 2026)  
 
 ---
 
