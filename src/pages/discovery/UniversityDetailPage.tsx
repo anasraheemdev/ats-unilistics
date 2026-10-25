@@ -14,6 +14,23 @@ import {
   Lock,
 } from 'lucide-react';
 
+function getCountryFlag(country: string): string {
+  const c = country.toLowerCase();
+  if (c === 'germany' || c === 'de') return '🇩🇪';
+  if (c === 'france' || c === 'fr') return '🇫🇷';
+  if (c === 'italy' || c === 'it') return '🇮🇹';
+  if (c === 'romania' || c === 'ro') return '🇷🇴';
+  return '🇪🇺';
+}
+
+function getInitials(name: string): string {
+  if (!name) return 'UN';
+  const parts = name.replace(/University|of|the|and|de|di|für|und|Universitatea|din/gi, '').trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return name.slice(0, 2).toUpperCase();
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[1][0]).toUpperCase();
+}
+
 export const UniversityDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [currentUserRole, setCurrentUserRole] = useState<UserRole>('visitor');
@@ -41,61 +58,37 @@ export const UniversityDetailPage: React.FC = () => {
   // Safe access gate for visitors attempting to view restricted non-preview institutions
   if (isVisitor && (!uni || !uni.isPreview)) {
     return (
-      <div style={{ maxWidth: '580px', margin: '4rem auto', padding: '0 1rem' }}>
-        <div
-          style={{
-            backgroundColor: '#ffffff',
-            borderRadius: 'var(--radius-card, 16px)',
-            border: '1px solid var(--border-subtle, #ebe6de)',
-            padding: '2.5rem 1.75rem',
-            textAlign: 'center',
-            boxShadow: '0 8px 24px rgba(0,0,0,0.06)',
-          }}
-        >
-          <div
-            style={{
-              width: '48px',
-              height: '48px',
-              borderRadius: '50%',
-              backgroundColor: 'var(--accent-peach-bg, #fff5f2)',
-              color: 'var(--action-primary, #b72301)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              margin: '0 auto 1.25rem',
-            }}
-            aria-hidden="true"
-          >
-            <Lock size={24} />
+      <div className="max-w-xl mx-auto px-4 py-16">
+        <div className="bg-white rounded-3xl p-8 sm:p-10 text-center border border-[#ebe6de] shadow-lg">
+          <div className="w-12 h-12 rounded-full bg-[#B4D0B6]/30 text-[#245B42] flex items-center justify-center mx-auto mb-4">
+            <Lock size={22} aria-hidden="true" />
           </div>
 
-          <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-charcoal, #1a1a1a)', margin: '0 0 0.5rem 0' }}>
+          <h2 className="text-xl font-extrabold text-[#133827] mb-2">
             Restricted Institution Record
           </h2>
-          <p style={{ fontSize: '0.875rem', color: 'var(--text-muted, #636b78)', margin: '0 0 1.5rem 0', lineHeight: 1.5 }}>
+          <p className="text-sm text-[#55635a] mb-6 leading-relaxed">
             This university profile and its faculty listings require a verified Explorer account. Sign in or create a free account to view the full catalogue.
           </p>
 
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+          <div className="flex items-center justify-center gap-3 flex-wrap">
             <Link
               to={`/sign-in?returnUrl=/universities/${id}`}
-              className="btn-pill btn-pill-outline"
-              style={{ padding: '0.625rem 1.25rem', fontSize: '0.875rem', fontWeight: 700 }}
+              className="px-6 py-2.5 rounded-full text-sm font-semibold text-[#133827] bg-white border border-[#ebe6de] hover:bg-[#F7F9F7] shadow-sm transition-all"
             >
               Sign In
             </Link>
             <Link
               to={`/sign-up?returnUrl=/universities/${id}`}
-              className="btn-pill btn-pill-primary"
-              style={{ padding: '0.625rem 1.25rem', fontSize: '0.875rem', fontWeight: 700 }}
+              className="px-6 py-2.5 rounded-full text-sm font-bold text-white bg-[#245B42] hover:bg-[#1D4A36] shadow-sm transition-all"
             >
               Create Free Account
             </Link>
           </div>
 
-          <div style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid var(--border-subtle, #ebe6de)' }}>
-            <Link to="/universities" style={{ fontSize: '0.8125rem', color: 'var(--action-primary, #b72301)', textDecoration: 'none', fontWeight: 600 }}>
-              ← Return to Preview Universities
+          <div className="mt-6 pt-4 border-t border-[#ebe6de]">
+            <Link to="/universities" className="text-xs font-semibold text-[#245B42] hover:underline">
+              &larr; Return to Preview Universities
             </Link>
           </div>
         </div>
@@ -105,36 +98,32 @@ export const UniversityDetailPage: React.FC = () => {
 
   if (error || !uni) {
     return (
-      <div style={{ maxWidth: '960px', margin: '2rem auto', padding: '0 1rem' }}>
+      <div className="max-w-3xl mx-auto px-4 py-12">
         <ErrorState
           title="University not found"
           message="The requested university record does not exist or has not been published in the active catalogue."
           onRetry={() => refetch()}
         />
-        <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-          <Link to="/universities" style={{ color: 'var(--action-primary, #b72301)', fontWeight: 600, textDecoration: 'none' }}>
-            ← Back to Universities Catalogue
+        <div className="text-center mt-4">
+          <Link to="/universities" className="text-sm font-semibold text-[#245B42] hover:underline">
+            &larr; Back to Universities Catalogue
           </Link>
         </div>
       </div>
     );
   }
 
+  const flag = getCountryFlag(uni.country);
+  const initials = getInitials(uni.name);
+  const isPublic = (uni.institutionalType || '').toLowerCase() === 'public';
+
   return (
-    <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '1.5rem 1rem 3rem' }}>
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-16">
       {/* Back to Catalogue Breadcrumb */}
-      <div style={{ marginBottom: '1.25rem' }}>
+      <div className="mb-5">
         <Link
           to="/universities"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.35rem',
-            fontSize: '0.8125rem',
-            fontWeight: 600,
-            color: 'var(--action-primary)',
-            textDecoration: 'none',
-          }}
+          className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#245B42] hover:underline"
         >
           <ChevronLeft size={16} />
           <span>Back to Universities</span>
@@ -142,41 +131,16 @@ export const UniversityDetailPage: React.FC = () => {
       </div>
 
       {/* Main University Header Card */}
-      <div
-        style={{
-          backgroundColor: '#ffffff',
-          borderRadius: 'var(--radius-card)',
-          padding: '2rem 1.5rem',
-          border: '1px solid var(--border-subtle)',
-          boxShadow: 'var(--shadow-card)',
-          marginBottom: '1.5rem',
-        }}
-      >
-        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem', marginBottom: '1rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <span
-              style={{
-                fontSize: '0.75rem',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                letterSpacing: '0.04em',
-                padding: '0.25rem 0.6rem',
-                borderRadius: 'var(--radius-pill)',
-                backgroundColor: 'var(--surface-recessed)',
-                color: 'var(--text-charcoal)',
-              }}
-            >
-              {uni.country.charAt(0).toUpperCase() + uni.country.slice(1)}
+      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#ebe6de] shadow-sm mb-6">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-semibold px-3 py-1 rounded-full bg-[#F7F9F7] text-[#133827] border border-[#ebe6de]">
+              {flag} {uni.country.charAt(0).toUpperCase() + uni.country.slice(1)}
             </span>
             <span
-              style={{
-                fontSize: '0.75rem',
-                fontWeight: 600,
-                padding: '0.25rem 0.6rem',
-                borderRadius: 'var(--radius-pill)',
-                backgroundColor: uni.institutionalType === 'public' ? '#E8F5E9' : '#EDE7F6',
-                color: uni.institutionalType === 'public' ? '#2E7D32' : '#5E35B1',
-              }}
+              className={`text-xs font-bold px-3 py-1 rounded-full ${
+                isPublic ? 'bg-[#B4D0B6]/40 text-[#133827]' : 'bg-[#EDE7F6] text-[#5E35B1]'
+              }`}
             >
               {uni.institutionalType ? uni.institutionalType.toUpperCase() : 'UNKNOWN'}
             </span>
@@ -187,15 +151,7 @@ export const UniversityDetailPage: React.FC = () => {
               href={uni.websiteUrl}
               target="_blank"
               rel="noopener noreferrer"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.35rem',
-                fontSize: '0.8125rem',
-                fontWeight: 600,
-                color: 'var(--action-primary)',
-                textDecoration: 'none',
-              }}
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#245B42] hover:underline"
             >
               <span>Official Institutional Portal</span>
               <ExternalLink size={14} aria-hidden="true" />
@@ -203,94 +159,99 @@ export const UniversityDetailPage: React.FC = () => {
           )}
         </div>
 
-        <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-charcoal)', lineHeight: 1.25 }}>
-          {uni.name}
-        </h1>
-
-        {uni.originalName && (
-          <p style={{ fontSize: '0.9375rem', color: 'var(--text-muted)', fontStyle: 'italic', marginTop: '0.35rem' }}>
-            {uni.originalName}
-          </p>
-        )}
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '1rem', color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-          <MapPin size={16} aria-hidden="true" />
-          <span>{uni.city}, {uni.country.charAt(0).toUpperCase() + uni.country.slice(1)}</span>
+        <div className="flex items-start gap-4">
+          <div className="w-14 h-14 rounded-2xl bg-[#F7F9F7] border border-[#ebe6de] flex items-center justify-center font-extrabold text-lg text-[#245B42] flex-shrink-0">
+            {initials}
+          </div>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#133827] leading-tight">
+              {uni.name}
+            </h1>
+            {uni.originalName && (
+              <p className="text-sm text-[#55635a] italic mt-1">
+                {uni.originalName}
+              </p>
+            )}
+            <div className="flex items-center gap-2 mt-2 text-xs sm:text-sm text-[#55635a]">
+              <MapPin size={16} className="text-[#245B42]" aria-hidden="true" />
+              <span>{uni.city}, {uni.country.charAt(0).toUpperCase() + uni.country.slice(1)}</span>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* University Attributes & Details Bento */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
-        <div style={{ backgroundColor: '#ffffff', borderRadius: 'var(--radius-card)', padding: '1.25rem', border: '1px solid var(--border-subtle)' }}>
-          <h3 style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', letterSpacing: '0.06em', marginBottom: '0.75rem' }}>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
+        <div className="bg-white rounded-3xl p-6 border border-[#ebe6de] shadow-sm">
+          <span className="text-xs font-bold uppercase tracking-wider text-[#55635a] block mb-2">
             Admission Model
-          </h3>
-          <p style={{ fontSize: '0.9375rem', fontWeight: 600, color: 'var(--text-charcoal)' }}>
-            {uni.institutionalType === 'public' ? 'State Public Higher Education' : 'Accredited Private Higher Education'}
+          </span>
+          <p className="text-sm font-bold text-[#133827]">
+            {isPublic ? 'State Public Higher Education' : 'Accredited Private Higher Education'}
           </p>
-          <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+          <p className="text-xs text-[#55635a] mt-1">
             {uni.tuitionBracket || 'Standard statutory semester contributions apply'}
           </p>
         </div>
 
-        <div style={{ backgroundColor: '#ffffff', borderRadius: 'var(--radius-card)', padding: '1.25rem', border: '1px solid var(--border-subtle)' }}>
-          <h3 style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', letterSpacing: '0.06em', marginBottom: '0.75rem' }}>
+        <div className="bg-white rounded-3xl p-6 border border-[#ebe6de] shadow-sm">
+          <span className="text-xs font-bold uppercase tracking-wider text-[#55635a] block mb-2">
             Indicative Ranking
-          </h3>
-          <p style={{ fontSize: '0.9375rem', fontWeight: 600, color: 'var(--text-charcoal)' }}>
+          </span>
+          <p className="text-sm font-bold text-[#133827]">
             {uni.ranking ? `Top #${uni.ranking} National / Regional` : 'Not published'}
           </p>
-          <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
-            Rankings are informational guides and do not impact visa qualification.
+          <p className="text-xs text-[#55635a] mt-1">
+            Informational benchmark; does not affect visa eligibility.
           </p>
         </div>
 
-        <div style={{ backgroundColor: '#ffffff', borderRadius: 'var(--radius-card)', padding: '1.25rem', border: '1px solid var(--border-subtle)' }}>
-          <h3 style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', letterSpacing: '0.06em', marginBottom: '0.75rem' }}>
+        <div className="bg-white rounded-3xl p-6 border border-[#ebe6de] shadow-sm">
+          <span className="text-xs font-bold uppercase tracking-wider text-[#55635a] block mb-2">
             Verification Status
-          </h3>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: '#2E7D32', fontWeight: 600, fontSize: '0.875rem' }}>
+          </span>
+          <div className="flex items-center gap-1.5 text-xs font-bold text-[#245B42]">
             <CheckCircle2 size={16} />
             <span>Ministry Verified Institution</span>
           </div>
-          <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
-            Recognised by the relevant Ministry of Higher Education &amp; HEC Pakistan.
+          <p className="text-xs text-[#55635a] mt-1">
+            Recognised by the National Ministry of Education &amp; HEC Pakistan.
           </p>
         </div>
       </div>
 
-      {/* Available Programs at this University */}
-      <div style={{ backgroundColor: '#ffffff', borderRadius: 'var(--radius-card)', padding: '1.5rem', border: '1px solid var(--border-subtle)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+      {/* Available Programs at this University (Two-Tone Summary Panel) */}
+      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#ebe6de] shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
           <div>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-charcoal)' }}>
+            <h2 className="text-xl font-bold text-[#133827]">
               Published Degree Programs
             </h2>
-            <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
-              Degree programs offered by {uni.name} in this catalogue.
+            <p className="text-xs sm:text-sm text-[#55635a] mt-0.5">
+              Degree curriculums offered by {uni.name} in this catalogue.
             </p>
           </div>
           <Link
             to={`/programs?search=${encodeURIComponent(uni.name)}`}
-            style={{
-              fontSize: '0.8125rem',
-              fontWeight: 600,
-              color: 'var(--action-primary)',
-              textDecoration: 'none',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.25rem',
-            }}
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#245B42] hover:underline"
           >
             <span>View in Programs Filter</span>
             <ArrowRight size={14} />
           </Link>
         </div>
 
-        <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-          To view program-level ECTS modules, application intake deadlines, and portal prerequisites, browse all curriculums indexed under this institution.
-        </p>
+        <div className="rounded-2xl bg-[#F7F9F7] p-5 border border-[#ebe6de] space-y-3 text-xs sm:text-sm text-[#2b352f]">
+          <p>
+            Curriculums indexed for {uni.name} include English and bilingual degree intakes. To review ECTS module structures, application intake deadlines, and portal prerequisites (Uni-Assist, Universitaly, or Campus France), browse all indexed programs.
+          </p>
+          <div className="pt-2 border-t border-[#ebe6de] flex items-center justify-between text-xs text-[#55635a]">
+            <span>Corridor: {uni.country.charAt(0).toUpperCase() + uni.country.slice(1)}</span>
+            <span className="text-[#245B42] font-semibold">Statutory admissions support available</span>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
+
+export default UniversityDetailPage;

@@ -19,6 +19,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { AccessRequest } from '@/types';
+import { PublicFooter } from './PublicFooter';
 
 interface DiscoveryLayoutProps {
   currentRole: UserRole;
@@ -455,6 +456,9 @@ export const DiscoveryLayout: React.FC<DiscoveryLayoutProps> = ({ currentRole, o
           <Outlet />
         </ErrorBoundary>
       </main>
+
+      {/* Footer Branding & Legal Disclosures */}
+      <PublicFooter />
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (

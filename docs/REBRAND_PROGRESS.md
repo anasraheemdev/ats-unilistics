@@ -2,8 +2,8 @@
 
 **Document Version**: 2.0.0  
 **Last Updated**: October 25, 2026  
-**Active Phase**: Phase 2 — Design Tokens, Typography, Brand Assets & Shared Controls (COMPLETED)  
-**Git Checkpoint**: Branch `checkpoint-pre-rebrand` (Commit: `checkpoint: pre-rebrand working baseline (277 tests passing)`)  
+**Active Phase**: Phase 4 — Public & Explorer Layouts, Homepage & Discovery Rebrand (COMPLETED)  
+**Git Checkpoint**: Branch `master`  
 **Design Authority**: [docs/REBRAND_SCOPE.md](file:///c:/Users/anasr/OneDrive/Desktop/ats-unilistics/docs/REBRAND_SCOPE.md)  
 **Token & Design System Specification**: [docs/DESIGN_SYSTEM_V2.md](file:///c:/Users/anasr/OneDrive/Desktop/ats-unilistics/docs/DESIGN_SYSTEM_V2.md)  
 
@@ -14,10 +14,10 @@
 Prior to initiating and following each phase of frontend changes, the application baseline was validated through comprehensive automated testing and production compilation:
 
 | Verification Stage | Command Executed | Result / Output | Status |
-| :--- | :--- | :--- | :---: |
+| :--- | :--- | :--- | :--- |
 | **TypeScript Typecheck** | `npm run typecheck` | Clean exit with code 0 (`tsc --noEmit`). | **PASS** |
-| **Automated Test Suite** | `npm test` (`vitest run`) | **18 test files passed (277 tests passed, 0 failed)** in 24.78s. | **PASS** |
-| **Production Build** | `npm run build` | Transformed 1,759 modules; compiled `dist/` in 5.24s with 0 errors. | **PASS** |
+| **Automated Test Suite** | `npm test` (`vitest run`) | **20 test files passed (302 tests passed, 0 failed)** in 19.63s. | **PASS** |
+| **Production Build** | `npm run build` | Transformed 1,761 modules; compiled `dist/` in 4.14s with 0 errors. | **PASS** |
 | **Live Database Verification** | `DatabaseCatalogueLiveVerification.test.ts` | Verified 512 universities, 4,816 programs, 50 preview allowlist entries, and 11 scholarships directly in Supabase Postgres. | **PASS** |
 
 ---
@@ -131,5 +131,27 @@ All brand assets from `theme/v1.0.zip` have been safely extracted into `theme/ex
      - Created `src/test/SharedComponentsV2.test.tsx` containing 17 unit tests verifying all controls.
      - `npm run typecheck`: **0 errors**.
      - `npm test`: **19 test files passed, 294 tests passed, 0 failed**.
-     - `npm run build`: **compiled dist/ in 5.47s with 0 errors**.
+     ### Phase 4: Public & Explorer Layouts, Homepage, and Discovery Rebrand (COMPLETED)
+- **Status**: Completed  
+- **Actions Executed**:
+  1. **Public Header & Explorer Layout**:
+     - Preserved strict boundary contract: No sidebars for visitors or explorers. Top navigation only for public & explorer.
+     - `PublicNavbar.tsx`: Restrained horizontal layout with authentic `BrandWordmark`, 5 canonical links (**Home**, **Explore Universities**, **Contact**, **Sign in**, **Sign up**). Decoupled `aria-hidden` backdrop from `role="dialog"` mobile menu drawer for full screen reader accessibility.
+     - `DiscoveryLayout.tsx`: Retained top-nav-only layout with verified explorer account menu (user avatar, display name, Sign out) and navigation tabs (**Universities**, **Programs**, **Scholarships**, **Saved**). Integrated `PublicFooter.tsx` at the bottom of the discovery viewport providing coherent branding, active corridor disclosures (Germany, France, Italy, Romania; Hungary deferred), and legal/help links.
+  2. **Rebranded Public Homepage (`HomePage.tsx`)**:
+     - Overhauled with calm Forest (`#245B42`), Sage (`#B4D0B6`), and Citron (`#D7EE83`) surfaces and DM Sans typography.
+     - Completely eliminated legacy coral gradients (`#FF5E36`, `#FF2A55`), peach orbs (`#FFF0EB`), and bloated hero metrics (e.g. "4,812 active degree intakes refreshed today").
+     - Grounded exclusively in the 4 active corridors (Germany, France, Italy, Romania: TUM, Sorbonne, PoliMi, University of Bucharest) with honest human-in-the-loop managed guidance explanations.
+     - Fully accessible interactive advisory consultation modal with `Esc` key handling and focus management.
+  3. **Rebranded Discovery Experience & 24px University Cards**:
+     - `UniversitiesDiscoveryPage.tsx`: Rendered compact contextual goal strip *only* when genuine user profile goals exist. Large clear search input with clear (`X`) button. Dedicated filter toggle button with live applied-filter count badge. Readable result count and sort controls. 24px rounded bordered university cards (`rounded-[24px]`) in deliberate responsive 3-column grid (`grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6`). Cards feature neutral initials badge, country flag, institution type, two-tone program summary panel with quiet dividers (`#ebe6de`), honest tuition disclosure (never displaying unknown as 0; using "Tuition not published"), ministry verification disclosure, and "View university" CTA. Retained 50-item public preview cap, locked silhouettes, and `FilterLockedDialog` visitor gating.
+     - `UniversityDetailPage.tsx`: 24px rounded cards, quiet dividers, two-tone program panel, and DM Sans styling.
+     - `ProgramsDiscoveryPage.tsx` & `ProgramDetailPage.tsx`: Large search, separate filter button with count badge, 24px rounded cards, two-tone curriculum panel, and honest tuition display.
+     - `ScholarshipsDiscoveryPage.tsx` & `ScholarshipDetailPage.tsx`: Large search, filter button with count badge, 24px rounded cards, two-tone funding summary panel, and visitor gated view.
+     - `SavedDiscoveryPage.tsx`: 24px rounded cards, two-tone panel, and honest tuition handling.
+  4. **Verification & Testing**:
+     - Created `src/test/PublicAndExplorerLayoutRebrand.test.tsx` (8 unit/integration tests covering PublicNavbar, ExplorerLayout, HomePage, and UniversitiesDiscoveryPage).
+     - `npm run typecheck`: **0 errors**.
+     - `npm test`: **20 test files passed, 302 tests passed, 0 failed**.
+     - `npm run build`: **compiled dist/ in 4.14s with 0 errors**.
 

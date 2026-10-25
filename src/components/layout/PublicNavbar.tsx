@@ -253,17 +253,19 @@ export const PublicNavbar: React.FC<PublicNavbarProps> = () => {
 
       {/* 5. Accessible Mobile Navigation Drawer */}
       {mobileMenuOpen && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 100,
-            backgroundColor: 'rgba(13, 21, 17, 0.72)',
-            backdropFilter: 'blur(4px)',
-          }}
-          onClick={() => setMobileMenuOpen(false)}
-          aria-hidden="true"
-        >
+        <div style={{ position: 'fixed', inset: 0, zIndex: 100 }}>
+          {/* Backdrop */}
+          <div
+            style={{
+              position: 'fixed',
+              inset: 0,
+              backgroundColor: 'rgba(13, 21, 17, 0.72)',
+              backdropFilter: 'blur(4px)',
+            }}
+            onClick={() => setMobileMenuOpen(false)}
+            aria-hidden="true"
+          />
+
           <div
             ref={drawerRef}
             id="public-mobile-drawer"

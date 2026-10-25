@@ -9,28 +9,67 @@ import { FilterLockedDialog } from '@/components/domain/FilterLockedDialog';
 import { UserRole } from '@/types';
 import {
   Search,
-  Filter,
+  SlidersHorizontal,
   ChevronLeft,
   ChevronRight,
   ArrowRight,
   X,
   MapPin,
   Lock,
+  CheckCircle2,
+  Compass,
 } from 'lucide-react';
+
+function getInitials(name: string): string {
+  if (!name) return 'UN';
+  const parts = name.replace(/University|of|the|and|de|di|für|und|Universitatea|din/gi, '').trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return name.slice(0, 2).toUpperCase();
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[1][0]).toUpperCase();
+}
+
+function getCountryDisplay(codeOrName: string): { name: string; flag: string } {
+  const c = (codeOrName || '').toLowerCase();
+  if (c === 'germany' || c === 'de') return { name: 'Germany', flag: '🇩🇪' };
+  if (c === 'france' || c === 'fr') return { name: 'France', flag: '🇫🇷' };
+  if (c === 'italy' || c === 'it') return { name: 'Italy', flag: '🇮🇹' };
+  if (c === 'romania' || c === 'ro') return { name: 'Romania', flag: '🇷🇴' };
+  return { name: codeOrName, flag: '🇪🇺' };
+}
+
+function getTuitionDisclosure(institutionType?: string): string {
+  if (institutionType?.toLowerCase() === 'public') {
+    return 'Free tuition / Semester fee only (~€250–€350/sem)';
+  }
+  if (institutionType?.toLowerCase() === 'private') {
+    return 'Accredited non-EU private tuition';
+  }
+  return 'Tuition not published';
+}
 
 export const UniversitiesDiscoveryPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [currentUserRole, setCurrentUserRole] = useState<UserRole>('visitor');
 
+  const { data: currentUser } = useQuery({
+    queryKey: ['discovery-auth-user'],
+    queryFn: () => api.auth.getCurrentUser(),
+  });
+
   useEffect(() => {
-    api.auth.getCurrentUser().then((u) => {
-      if (u?.role) {
-        setCurrentUserRole(u.role);
-      }
-    });
-  }, []);
+    if (currentUser?.role) {
+      setCurrentUserRole(currentUser.role);
+    }
+  }, [currentUser]);
 
   const isVisitor = currentUserRole === 'visitor';
+
+  // Check if genuine profile goals exist (for signed-in users with active case or goals)
+  const genuineGoals = !isVisitor && currentUser && (currentUser as any).countryInterests?.length > 0
+    ? {
+        destinations: (currentUser as any).countryInterests.map((c: string) => c.charAt(0).toUpperCase() + c.slice(1)).join(', '),
+      }
+    : null;
 
   // Locked Filter Modal State
   const [isLockedDialogOpen, setIsLockedDialogOpen] = useState(false);
@@ -50,6 +89,8 @@ export const UniversitiesDiscoveryPage: React.FC = () => {
 
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [searchInput, setSearchInput] = useState(searchParam);
+
+  const appliedFilterCount = (countryParam !== 'all' ? 1 : 0) + (institutionTypeParam !== 'all' ? 1 : 0);
 
   const updateParam = (key: string, value: string) => {
     setSearchParams((prev) => {
@@ -117,45 +158,27 @@ export const UniversitiesDiscoveryPage: React.FC = () => {
   ];
 
   const filterSidebar = (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+    <div className="flex flex-col gap-6">
       {/* Destination Country Section */}
       <div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-          <span
-            style={{
-              fontSize: '0.75rem',
-              fontWeight: 700,
-              textTransform: 'uppercase',
-              letterSpacing: '0.06em',
-              color: 'var(--text-muted, #636b78)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.35rem',
-            }}
-          >
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-xs font-bold uppercase tracking-wider text-[#55635a] flex items-center gap-1.5">
             <span>Destination Country</span>
-            {isVisitor && <Lock size={12} aria-hidden="true" style={{ color: 'var(--action-primary, #b72301)' }} />}
+            {isVisitor && <Lock size={12} aria-hidden="true" className="text-[#245B42]" />}
           </span>
 
           {!isVisitor && (countryParam !== 'all' || institutionTypeParam !== 'all' || searchParam) && (
             <button
               type="button"
               onClick={handleResetFilters}
-              style={{
-                fontSize: '0.75rem',
-                color: 'var(--action-primary, #b72301)',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                fontWeight: 600,
-              }}
+              className="text-xs text-[#245B42] hover:underline font-semibold"
             >
               Reset All
             </button>
           )}
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+        <div className="flex flex-col gap-1.5">
           {countries.map((c) => {
             if (isVisitor) {
               return (
@@ -169,44 +192,25 @@ export const UniversitiesDiscoveryPage: React.FC = () => {
                   }}
                   aria-haspopup="dialog"
                   aria-label={`${c.label} (Locked: Sign in or sign up to filter)`}
-                  style={{
-                    textAlign: 'left',
-                    padding: '0.45rem 0.65rem',
-                    borderRadius: 'var(--radius-sm, 6px)',
-                    fontSize: '0.8125rem',
-                    fontWeight: 500,
-                    color: 'var(--text-charcoal, #1a1a1a)',
-                    backgroundColor: 'transparent',
-                    border: '1px solid transparent',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                  }}
+                  className="text-left px-3 py-2 rounded-xl text-xs sm:text-sm font-medium text-[#2b352f] hover:bg-[#F7F9F7] flex items-center justify-between transition-colors"
                 >
                   <span>{c.label}</span>
-                  <Lock size={12} style={{ color: 'var(--text-muted, #636b78)' }} aria-hidden="true" />
+                  <Lock size={12} className="text-[#8a9890]" aria-hidden="true" />
                 </button>
               );
             }
 
+            const isSelected = countryParam === c.code;
             return (
               <button
                 key={c.code}
                 type="button"
                 onClick={() => updateParam('country', c.code)}
-                style={{
-                  textAlign: 'left',
-                  padding: '0.45rem 0.65rem',
-                  borderRadius: 'var(--radius-sm, 6px)',
-                  fontSize: '0.8125rem',
-                  fontWeight: countryParam === c.code ? 600 : 500,
-                  color: countryParam === c.code ? 'var(--action-primary, #b72301)' : 'var(--text-charcoal, #1a1a1a)',
-                  backgroundColor: countryParam === c.code ? 'var(--accent-peach-bg, #fff5f2)' : 'transparent',
-                  border: 'none',
-                  cursor: 'pointer',
-                  transition: 'all var(--transition-fast)',
-                }}
+                className={`text-left px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-colors ${
+                  isSelected
+                    ? 'bg-[#B4D0B6]/40 text-[#133827] font-semibold'
+                    : 'text-[#2b352f] hover:bg-[#F7F9F7]'
+                }`}
               >
                 {c.label}
               </button>
@@ -216,26 +220,15 @@ export const UniversitiesDiscoveryPage: React.FC = () => {
       </div>
 
       {/* Institution Type Section */}
-      <div style={{ borderTop: '1px solid var(--border-subtle, #ebe6de)', paddingTop: '1.25rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-          <span
-            style={{
-              fontSize: '0.75rem',
-              fontWeight: 700,
-              textTransform: 'uppercase',
-              letterSpacing: '0.06em',
-              color: 'var(--text-muted, #636b78)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.35rem',
-            }}
-          >
+      <div className="border-t border-[#ebe6de] pt-5">
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-xs font-bold uppercase tracking-wider text-[#55635a] flex items-center gap-1.5">
             <span>Institution Type</span>
-            {isVisitor && <Lock size={12} aria-hidden="true" style={{ color: 'var(--action-primary, #b72301)' }} />}
+            {isVisitor && <Lock size={12} aria-hidden="true" className="text-[#245B42]" />}
           </span>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+        <div className="flex flex-col gap-1.5">
           {institutionTypes.map((t) => {
             if (isVisitor) {
               return (
@@ -249,43 +242,25 @@ export const UniversitiesDiscoveryPage: React.FC = () => {
                   }}
                   aria-haspopup="dialog"
                   aria-label={`${t.label} (Locked: Sign in or sign up to filter)`}
-                  style={{
-                    textAlign: 'left',
-                    padding: '0.45rem 0.65rem',
-                    borderRadius: 'var(--radius-sm, 6px)',
-                    fontSize: '0.8125rem',
-                    fontWeight: 500,
-                    color: 'var(--text-charcoal, #1a1a1a)',
-                    backgroundColor: 'transparent',
-                    border: '1px solid transparent',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                  }}
+                  className="text-left px-3 py-2 rounded-xl text-xs sm:text-sm font-medium text-[#2b352f] hover:bg-[#F7F9F7] flex items-center justify-between transition-colors"
                 >
                   <span>{t.label}</span>
-                  <Lock size={12} style={{ color: 'var(--text-muted, #636b78)' }} aria-hidden="true" />
+                  <Lock size={12} className="text-[#8a9890]" aria-hidden="true" />
                 </button>
               );
             }
 
+            const isSelected = institutionTypeParam === t.code;
             return (
               <button
                 key={t.code}
                 type="button"
                 onClick={() => updateParam('type', t.code)}
-                style={{
-                  textAlign: 'left',
-                  padding: '0.45rem 0.65rem',
-                  borderRadius: 'var(--radius-sm, 6px)',
-                  fontSize: '0.8125rem',
-                  fontWeight: institutionTypeParam === t.code ? 600 : 500,
-                  color: institutionTypeParam === t.code ? 'var(--action-primary, #b72301)' : 'var(--text-charcoal, #1a1a1a)',
-                  backgroundColor: institutionTypeParam === t.code ? 'var(--accent-peach-bg, #fff5f2)' : 'transparent',
-                  border: 'none',
-                  cursor: 'pointer',
-                }}
+                className={`text-left px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-colors ${
+                  isSelected
+                    ? 'bg-[#B4D0B6]/40 text-[#133827] font-semibold'
+                    : 'text-[#2b352f] hover:bg-[#F7F9F7]'
+                }`}
               >
                 {t.label}
               </button>
@@ -297,90 +272,76 @@ export const UniversitiesDiscoveryPage: React.FC = () => {
   );
 
   return (
-    <div style={{ maxWidth: '1440px', margin: '0 auto', padding: '1.5rem 1rem 3rem' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: '1.5rem' }} className="md:grid-cols-[240px_1fr]">
-        {/* Desktop Filter Sidebar */}
+    <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-16">
+      {/* 1. Contextual Profile Goal Strip (Rendered ONLY if genuine user profile goals exist) */}
+      {genuineGoals && (
+        <div className="mb-6 p-4 rounded-2xl bg-[#B4D0B6]/25 border border-[#B4D0B6] flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <Compass size={20} className="text-[#245B42] flex-shrink-0" aria-hidden="true" />
+            <div>
+              <p className="text-xs font-bold text-[#133827]">Active Profile Goal Focus</p>
+              <p className="text-xs text-[#2b352f]">
+                Target Corridors: {genuineGoals.destinations} • Casework verification active
+              </p>
+            </div>
+          </div>
+          <Link
+            to="/request-support"
+            className="text-xs font-bold text-[#245B42] hover:underline flex-shrink-0"
+          >
+            Manage Case &rarr;
+          </Link>
+        </div>
+      )}
+
+      {/* 2. Header & Title */}
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#133827]">
+            European Universities
+          </h1>
+          <p className="text-sm text-[#55635a] mt-1">
+            Explore verified public institutions across Germany, France, Italy, and Romania with direct admissions corridors.
+          </p>
+        </div>
+
+        {/* Filter Toggle Action Button with Applied Filter Count Badge */}
+        <button
+          type="button"
+          id="mobile-filter-drawer-btn"
+          onClick={isVisitor ? handleLockedFilterAction : () => setMobileFilterOpen(true)}
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-white border border-[#ebe6de] shadow-sm text-xs sm:text-sm font-semibold text-[#133827] hover:bg-[#F7F9F7] active:scale-95 transition-all self-start sm:self-auto"
+        >
+          <SlidersHorizontal size={16} className="text-[#245B42]" aria-hidden="true" />
+          <span>Filters</span>
+          {appliedFilterCount > 0 && (
+            <span className="w-5 h-5 rounded-full bg-[#245B42] text-white text-[11px] font-bold flex items-center justify-center">
+              {appliedFilterCount}
+            </span>
+          )}
+          {isVisitor && <Lock size={12} className="text-[#245B42]" aria-hidden="true" />}
+        </button>
+      </div>
+
+      {/* 3. Search and Results Layout */}
+      <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-6 items-start">
+        {/* Desktop Sticky Filter Sidebar */}
         <aside
-          style={{
-            display: 'none',
-            backgroundColor: '#ffffff',
-            borderRadius: 'var(--radius-card, 16px)',
-            padding: '1.25rem',
-            border: '1px solid var(--border-subtle, #ebe6de)',
-            height: 'fit-content',
-            position: 'sticky',
-            top: '80px',
-          }}
-          className="md:block"
+          className="hidden md:block bg-white rounded-3xl p-6 border border-[#ebe6de] shadow-sm sticky top-24"
           aria-label="Catalogue filters"
         >
           {filterSidebar}
         </aside>
 
         {/* Main Content Area */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', minWidth: 0 }}>
-          {/* Header & Title */}
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
-              <div>
-                <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-charcoal, #1a1a1a)', margin: 0 }}>
-                  European Universities
-                </h1>
-                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted, #636b78)', marginTop: '0.25rem', margin: 0 }}>
-                  Explore verified institutions across Germany, France, Italy, and Romania with direct admissions corridors.
-                </p>
-              </div>
-
-              {/* Mobile Filter Toggle */}
-              <button
-                type="button"
-                id="mobile-filter-drawer-btn"
-                onClick={() => setMobileFilterOpen(true)}
-                className="md:hidden"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.35rem',
-                  padding: '0.5rem 0.875rem',
-                  backgroundColor: '#ffffff',
-                  border: '1px solid var(--border-subtle, #ebe6de)',
-                  borderRadius: 'var(--radius-sm, 6px)',
-                  fontSize: '0.8125rem',
-                  fontWeight: 600,
-                  color: 'var(--text-charcoal, #1a1a1a)',
-                  cursor: 'pointer',
-                }}
-              >
-                <Filter size={16} />
-                <span>Filters</span>
-                {isVisitor ? (
-                  <Lock size={12} style={{ color: 'var(--action-primary, #b72301)' }} />
-                ) : (
-                  (countryParam !== 'all' || institutionTypeParam !== 'all') && (
-                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--action-primary, #b72301)' }} />
-                  )
-                )}
-              </button>
-            </div>
-          </div>
-
-          {/* Search Bar & Controls Bar */}
-          <div
-            style={{
-              backgroundColor: '#ffffff',
-              borderRadius: 'var(--radius-card, 16px)',
-              padding: '1rem',
-              border: '1px solid var(--border-subtle, #ebe6de)',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '1rem',
-            }}
-          >
-            <form onSubmit={handleSearchSubmit} style={{ display: 'flex', gap: '0.5rem' }}>
-              <div style={{ position: 'relative', flex: 1 }}>
+        <div className="flex flex-col gap-5 min-w-0">
+          {/* Large Clear Search Bar */}
+          <div className="bg-white rounded-3xl p-4 sm:p-5 border border-[#ebe6de] shadow-sm">
+            <form onSubmit={handleSearchSubmit} className="flex gap-2 relative">
+              <div className="relative flex-1">
                 <Search
-                  size={18}
-                  style={{ position: 'absolute', left: '0.875rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted, #636b78)' }}
+                  size={20}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8a9890]"
                   aria-hidden="true"
                 />
                 <input
@@ -390,57 +351,51 @@ export const UniversitiesDiscoveryPage: React.FC = () => {
                   onChange={(e) => setSearchInput(e.target.value)}
                   placeholder={
                     isVisitor
-                      ? 'Search preview institutions by name or city (e.g. Munich, Rome, Paris)...'
+                      ? 'Search preview universities by name or city (e.g. Munich, Rome, Paris)...'
                       : 'Search by university name or city (e.g. Munich, Paris, Rome, Bucharest)...'
                   }
-                  style={{
-                    width: '100%',
-                    padding: '0.625rem 1rem 0.625rem 2.5rem',
-                    fontSize: '0.875rem',
-                    border: '1px solid var(--border-subtle, #ebe6de)',
-                    borderRadius: 'var(--radius-sm, 6px)',
-                    outline: 'none',
-                    backgroundColor: 'var(--surface-canvas, #fdfbf7)',
-                  }}
+                  className="w-full pl-12 pr-10 py-3 rounded-full text-sm text-[#1a1a1a] placeholder:text-[#8a9890] bg-[#F7F9F7] border border-[#ebe6de] outline-none focus:bg-white focus:ring-2 focus:ring-[#245B42] transition-all"
                 />
+                {searchInput && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSearchInput('');
+                      updateParam('search', '');
+                    }}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#8a9890] hover:text-[#133827]"
+                    aria-label="Clear search"
+                  >
+                    <X size={16} />
+                  </button>
+                )}
               </div>
               <button
                 type="submit"
                 id="catalogue-search-submit-btn"
-                className="btn-pill btn-pill-primary"
-                style={{ padding: '0.625rem 1.25rem', fontSize: '0.875rem' }}
+                className="px-6 py-3 rounded-full text-sm font-semibold text-white bg-[#245B42] hover:bg-[#1D4A36] shadow-sm transition-all"
               >
                 Search
               </button>
             </form>
 
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                flexWrap: 'wrap',
-                gap: '0.75rem',
-                fontSize: '0.8125rem',
-                color: 'var(--text-muted, #636b78)',
-                borderTop: '1px solid var(--border-subtle, #ebe6de)',
-                paddingTop: '0.75rem',
-              }}
-            >
+            {/* Readable Result & Sort Row */}
+            <div className="flex flex-wrap items-center justify-between gap-4 text-xs text-[#55635a] pt-4 mt-4 border-t border-[#ebe6de]">
               <div>
                 {isLoading ? (
                   <span>Searching published universities...</span>
                 ) : (
                   <span>
-                    Showing <strong>{data?.total_count || 0}</strong> {data?.total_count === 1 ? 'university' : 'universities'}
+                    Showing <strong className="text-[#133827]">{data?.total_count || 0}</strong>{' '}
+                    {data?.total_count === 1 ? 'university' : 'universities'}
                     {isVisitor && ' (Public preview cap: at most 50 institutions)'}
                   </span>
                 )}
               </div>
 
               {/* Sort Dropdown */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', position: 'relative' }}>
-                <label htmlFor="sort-by" style={{ fontSize: '0.8125rem', fontWeight: 500 }}>
+              <div className="flex items-center gap-2">
+                <label htmlFor="sort-by" className="font-medium text-[#2b352f]">
                   Sort by:
                 </label>
                 {isVisitor ? (
@@ -450,35 +405,17 @@ export const UniversitiesDiscoveryPage: React.FC = () => {
                     onClick={handleLockedFilterAction}
                     aria-haspopup="dialog"
                     aria-label="Sort options locked. Sign in or sign up required."
-                    style={{
-                      padding: '0.3rem 0.6rem',
-                      fontSize: '0.8125rem',
-                      border: '1px solid var(--border-subtle, #ebe6de)',
-                      borderRadius: 'var(--radius-sm, 6px)',
-                      backgroundColor: '#ffffff',
-                      color: 'var(--text-charcoal, #1a1a1a)',
-                      cursor: 'pointer',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.35rem',
-                    }}
+                    className="px-3 py-1.5 text-xs border border-[#ebe6de] rounded-lg bg-white text-[#133827] flex items-center gap-1.5"
                   >
                     <span>Name (A–Z)</span>
-                    <Lock size={12} style={{ color: 'var(--action-primary, #b72301)' }} />
+                    <Lock size={12} className="text-[#245B42]" />
                   </button>
                 ) : (
                   <select
                     id="sort-by"
                     value={sortByParam}
                     onChange={(e) => updateParam('sort', e.target.value)}
-                    style={{
-                      padding: '0.3rem 0.5rem',
-                      fontSize: '0.8125rem',
-                      border: '1px solid var(--border-subtle, #ebe6de)',
-                      borderRadius: 'var(--radius-sm, 6px)',
-                      backgroundColor: '#ffffff',
-                      color: 'var(--text-charcoal, #1a1a1a)',
-                    }}
+                    className="px-3 py-1.5 text-xs border border-[#ebe6de] rounded-lg bg-white text-[#133827] outline-none focus:ring-1 focus:ring-[#245B42]"
                   >
                     <option value="name_asc">Name (A–Z)</option>
                     <option value="name_desc">Name (Z–A)</option>
@@ -489,7 +426,7 @@ export const UniversitiesDiscoveryPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Results Grid / List */}
+          {/* Results Grid */}
           {isLoading ? (
             <LoadingState message="Loading verified institutions..." minHeight="300px" />
           ) : error ? (
@@ -501,215 +438,162 @@ export const UniversitiesDiscoveryPage: React.FC = () => {
           ) : !data || data.items.length === 0 ? (
             <EmptyState
               title="No published universities found"
-              description="The higher education catalogue currently does not have university records matching your query. If you are an administrator, use Catalogue Imports in the operations workspace to ingest verified institution records."
+              description="The higher education catalogue currently does not have university records matching your query. Please adjust your search terms."
               actionLabel={searchParam || countryParam !== 'all' ? 'Reset Filters' : undefined}
               onAction={searchParam || countryParam !== 'all' ? handleResetFilters : undefined}
             />
           ) : (
             <>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
-                {data.items.map((uni) => (
-                  <div
-                    key={uni.id}
-                    style={{
-                      backgroundColor: '#ffffff',
-                      borderRadius: 'var(--radius-card, 16px)',
-                      border: '1px solid var(--border-subtle, #ebe6de)',
-                      padding: '1.25rem',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'space-between',
-                      boxShadow: 'var(--shadow-card, 0 2px 8px rgba(0,0,0,0.03))',
-                      transition: 'border-color var(--transition-fast), transform var(--transition-fast)',
-                    }}
-                  >
-                    <div>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                        <span
-                          style={{
-                            fontSize: '0.6875rem',
-                            fontWeight: 700,
-                            textTransform: 'uppercase',
-                            letterSpacing: '0.04em',
-                            padding: '0.2rem 0.5rem',
-                            borderRadius: 'var(--radius-pill, 9999px)',
-                            backgroundColor: 'var(--surface-recessed, #f3efe9)',
-                            color: 'var(--text-charcoal, #1a1a1a)',
-                          }}
-                        >
-                          {uni.country_name || uni.country_code.toUpperCase()}
-                        </span>
+              {/* Responsive deliberate results grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {data.items.map((uni) => {
+                  const countryInfo = getCountryDisplay(uni.country_name || uni.country_code);
+                  const initials = getInitials(uni.name);
+                  const isPublic = (uni.institution_type || '').toLowerCase() === 'public';
+                  const tuitionText = getTuitionDisclosure(uni.institution_type);
 
-                        <span
-                          style={{
-                            fontSize: '0.6875rem',
-                            fontWeight: 600,
-                            padding: '0.2rem 0.5rem',
-                            borderRadius: 'var(--radius-pill, 9999px)',
-                            backgroundColor: uni.institution_type === 'public' ? '#E8F5E9' : '#EDE7F6',
-                            color: uni.institution_type === 'public' ? '#2E7D32' : '#5E35B1',
-                          }}
-                        >
-                          {uni.institution_type ? uni.institution_type.toUpperCase() : 'UNKNOWN'}
-                        </span>
+                  return (
+                    <div
+                      key={uni.id}
+                      className="rounded-[24px] bg-white border border-[#ebe6de] p-5 flex flex-col justify-between shadow-sm hover:shadow-md transition-all group"
+                    >
+                      <div>
+                        {/* Badges Row */}
+                        <div className="flex items-center justify-between gap-2 mb-3">
+                          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-[#F7F9F7] text-[#133827] border border-[#ebe6de]">
+                            {countryInfo.flag} {countryInfo.name}
+                          </span>
+                          <span
+                            className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full ${
+                              isPublic
+                                ? 'bg-[#B4D0B6]/40 text-[#133827]'
+                                : 'bg-[#EDE7F6] text-[#5E35B1]'
+                            }`}
+                          >
+                            {uni.institution_type ? uni.institution_type.toUpperCase() : 'INSTITUTION'}
+                          </span>
+                        </div>
+
+                        {/* Title and Identity Row */}
+                        <div className="flex items-start gap-3 mb-3">
+                          <div className="w-11 h-11 rounded-2xl bg-[#F7F9F7] border border-[#ebe6de] flex items-center justify-center font-extrabold text-sm text-[#245B42] flex-shrink-0 group-hover:bg-[#B4D0B6]/30 transition-colors">
+                            {initials}
+                          </div>
+                          <div>
+                            <h2 className="text-base font-bold text-[#133827] leading-snug line-clamp-2">
+                              {uni.name}
+                            </h2>
+                            {uni.native_name && (
+                              <p className="text-xs text-[#55635a] italic mt-0.5 line-clamp-1">
+                                {uni.native_name}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Location */}
+                        <div className="flex items-center gap-1.5 text-xs text-[#55635a] mb-4">
+                          <MapPin size={14} className="text-[#245B42] flex-shrink-0" aria-hidden="true" />
+                          <span>{uni.city}, {countryInfo.name}</span>
+                        </div>
+
+                        {/* Two-Tone Programme-Summary Panel with Quiet Dividers */}
+                        <div className="rounded-2xl bg-[#F7F9F7] p-3.5 mb-4 border border-[#ebe6de] space-y-2 text-xs">
+                          <div className="flex items-center justify-between text-[#133827]">
+                            <span className="text-[#55635a]">Curriculums:</span>
+                            <span className="font-semibold">
+                              {uni.total_programs_count ? `${uni.total_programs_count} programs indexed` : 'Published programs'}
+                            </span>
+                          </div>
+                          <div className="border-t border-[#ebe6de] pt-2 flex items-center justify-between text-[#133827]">
+                            <span className="text-[#55635a]">Tuition Scope:</span>
+                            <span className="font-semibold text-right line-clamp-1" title={tuitionText}>
+                              {tuitionText}
+                            </span>
+                          </div>
+                          <div className="border-t border-[#ebe6de] pt-2 flex items-center gap-1.5 text-[11px] text-[#55635a]">
+                            <CheckCircle2 size={13} className="text-[#245B42] flex-shrink-0" aria-hidden="true" />
+                            <span>Verified against Ministry gazette</span>
+                          </div>
+                        </div>
                       </div>
 
-                      <h2 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-charcoal, #1a1a1a)', lineHeight: 1.3, margin: '0 0 0.25rem 0' }}>
-                        {uni.name}
-                      </h2>
-
-                      {uni.native_name && (
-                        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted, #636b78)', fontStyle: 'italic', margin: '0 0 0.5rem 0' }}>
-                          {uni.native_name}
-                        </p>
-                      )}
-
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', marginTop: '0.5rem', fontSize: '0.8125rem', color: 'var(--text-muted, #636b78)' }}>
-                        <MapPin size={14} aria-hidden="true" />
-                        <span>{uni.city}</span>
+                      {/* Card Footer: View University Action */}
+                      <div className="pt-3 border-t border-[#ebe6de] flex items-center justify-between">
+                        <span className="text-xs text-[#55635a]">Corridor Profile</span>
+                        <Link
+                          to={`/universities/${uni.id}`}
+                          className="inline-flex items-center gap-1.5 text-xs font-bold text-[#245B42] hover:underline"
+                        >
+                          <span>View university</span>
+                          <ArrowRight size={14} aria-hidden="true" />
+                        </Link>
                       </div>
                     </div>
-
-                    <div style={{ marginTop: '1.25rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-subtle, #ebe6de)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span style={{ fontSize: '0.75rem', color: 'var(--text-muted, #636b78)' }}>
-                        {uni.total_programs_count ? `${uni.total_programs_count} programs published` : 'View programs'}
-                      </span>
-                      <Link
-                        to={`/universities/${uni.id}`}
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '0.25rem',
-                          fontSize: '0.8125rem',
-                          fontWeight: 600,
-                          color: 'var(--action-primary, #b72301)',
-                          textDecoration: 'none',
-                        }}
-                      >
-                        <span>Explore</span>
-                        <ArrowRight size={14} aria-hidden="true" />
-                      </Link>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
-              {/* Requirement 3: Signed-out Blurred Locked Silhouettes + Clear Action Panel */}
+              {/* Requirement: Signed-out Blurred Locked Silhouettes + Clear Action Panel */}
               {isVisitor && (
-                <div style={{ marginTop: '2.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                  {/* Small group of generic blurred silhouettes (aria-hidden, generic placeholder bars) */}
+                <div className="mt-10 flex flex-col gap-6">
+                  {/* Generic blurred silhouettes (aria-hidden, generic placeholder bars) */}
                   <div
                     aria-hidden="true"
-                    style={{
-                      display: 'grid',
-                      gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-                      gap: '1rem',
-                      filter: 'blur(3px)',
-                      opacity: 0.55,
-                      userSelect: 'none',
-                      pointerEvents: 'none',
-                    }}
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 blur-[3px] opacity-50 select-none pointer-events-none"
                   >
                     {[1, 2, 3].map((idx) => (
                       <div
                         key={`locked-generic-card-${idx}`}
-                        style={{
-                          backgroundColor: '#ffffff',
-                          borderRadius: 'var(--radius-card, 16px)',
-                          border: '1px solid var(--border-subtle, #ebe6de)',
-                          padding: '1.25rem',
-                          height: '180px',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          justifyContent: 'space-between',
-                        }}
+                        className="rounded-[24px] bg-white border border-[#ebe6de] p-5 h-56 flex flex-col justify-between"
                       >
                         <div>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                            <div style={{ width: '64px', height: '14px', backgroundColor: '#e2e8f0', borderRadius: '4px' }} />
-                            <div style={{ width: '48px', height: '14px', backgroundColor: '#e2e8f0', borderRadius: '4px' }} />
+                          <div className="flex justify-between mb-3">
+                            <div className="w-16 h-4 bg-[#e2e8f0] rounded-full" />
+                            <div className="w-12 h-4 bg-[#e2e8f0] rounded-full" />
                           </div>
-                          <div style={{ width: '80%', height: '18px', backgroundColor: '#cbd5e1', borderRadius: '4px', marginBottom: '0.5rem' }} />
-                          <div style={{ width: '45%', height: '14px', backgroundColor: '#e2e8f0', borderRadius: '4px' }} />
+                          <div className="w-4/5 h-5 bg-[#cbd5e1] rounded mb-2" />
+                          <div className="w-2/5 h-3 bg-[#e2e8f0] rounded" />
                         </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid #f1f5f9', paddingTop: '0.75rem' }}>
-                          <div style={{ width: '70px', height: '12px', backgroundColor: '#e2e8f0', borderRadius: '4px' }} />
-                          <div style={{ width: '50px', height: '12px', backgroundColor: '#e2e8f0', borderRadius: '4px' }} />
+                        <div className="p-3 bg-[#F7F9F7] rounded-xl border border-[#ebe6de]">
+                          <div className="w-full h-3 bg-[#e2e8f0] rounded mb-1.5" />
+                          <div className="w-3/4 h-3 bg-[#e2e8f0] rounded" />
                         </div>
                       </div>
                     ))}
                   </div>
 
-                  {/* Clear Panel */}
-                  <div
-                    style={{
-                      backgroundColor: '#ffffff',
-                      borderRadius: 'var(--radius-card, 16px)',
-                      border: '1px solid var(--border-subtle, #ebe6de)',
-                      boxShadow: '0 8px 24px rgba(0,0,0,0.06)',
-                      padding: '2.5rem 1.5rem',
-                      textAlign: 'center',
-                      maxWidth: '560px',
-                      margin: '0 auto',
-                      width: '100%',
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: '48px',
-                        height: '48px',
-                        borderRadius: '50%',
-                        backgroundColor: 'var(--accent-peach-bg, #fff5f2)',
-                        color: 'var(--action-primary, #b72301)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        margin: '0 auto 1rem',
-                      }}
-                      aria-hidden="true"
-                    >
-                      <Lock size={24} />
+                  {/* Clean Locked Action Panel */}
+                  <div className="rounded-3xl bg-white border border-[#ebe6de] shadow-lg p-8 sm:p-10 text-center max-w-xl mx-auto w-full">
+                    <div className="w-12 h-12 rounded-full bg-[#B4D0B6]/30 text-[#245B42] flex items-center justify-center mx-auto mb-4">
+                      <Lock size={22} aria-hidden="true" />
                     </div>
 
                     <h2
                       id="locked-panel-title"
-                      style={{
-                        fontSize: '1.25rem',
-                        fontWeight: 800,
-                        color: 'var(--text-charcoal, #1a1a1a)',
-                        margin: '0 0 0.5rem 0',
-                      }}
+                      className="text-xl font-extrabold text-[#133827] mb-2"
                     >
-                      Explore more universities
+                      Unlock the Full European Catalogue
                     </h2>
 
-                    <p
-                      style={{
-                        fontSize: '0.9375rem',
-                        color: 'var(--text-muted, #636b78)',
-                        margin: '0 0 1.5rem 0',
-                        lineHeight: 1.5,
-                      }}
-                    >
-                      Sign in or create an account to view the full catalogue and use filters.
+                    <p className="text-sm text-[#55635a] mb-6 leading-relaxed">
+                      Sign in or create a free Explorer account to access all verified university records across Germany, France, Italy, and Romania and activate destination filters.
                     </p>
 
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+                    <div className="flex items-center justify-center gap-3 flex-wrap">
                       <Link
                         to="/sign-in?returnUrl=/universities"
                         id="locked-panel-signin-btn"
-                        className="btn-pill btn-pill-outline"
-                        style={{ padding: '0.625rem 1.5rem', fontSize: '0.875rem', fontWeight: 700 }}
+                        className="px-6 py-2.5 rounded-full text-sm font-semibold text-[#133827] bg-white border border-[#ebe6de] hover:bg-[#F7F9F7] shadow-sm transition-all"
                       >
                         Sign in
                       </Link>
                       <Link
                         to="/sign-up?returnUrl=/universities"
                         id="locked-panel-signup-btn"
-                        className="btn-pill btn-pill-primary"
-                        style={{ padding: '0.625rem 1.5rem', fontSize: '0.875rem', fontWeight: 700 }}
+                        className="px-6 py-2.5 rounded-full text-sm font-bold text-white bg-[#245B42] hover:bg-[#1D4A36] shadow-sm transition-all"
                       >
-                        Sign up
+                        Create Free Account
                       </Link>
                     </div>
                   </div>
@@ -718,60 +602,37 @@ export const UniversitiesDiscoveryPage: React.FC = () => {
             </>
           )}
 
-          {/* Pagination Controls (for authenticated explorers or multiple preview pages) */}
+          {/* Pagination Controls */}
           {data && data.total_pages > 1 && (
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.75rem',
-                marginTop: '1.5rem',
-              }}
-            >
+            <div className="flex items-center justify-center gap-3 mt-6">
               <button
                 type="button"
                 disabled={pageParam <= 1}
                 onClick={() => handlePageChange(pageParam - 1)}
-                style={{
-                  padding: '0.45rem 0.75rem',
-                  borderRadius: 'var(--radius-sm, 6px)',
-                  border: '1px solid var(--border-subtle, #ebe6de)',
-                  backgroundColor: '#ffffff',
-                  fontSize: '0.8125rem',
-                  fontWeight: 600,
-                  color: pageParam <= 1 ? 'var(--text-muted, #636b78)' : 'var(--text-charcoal, #1a1a1a)',
-                  cursor: pageParam <= 1 ? 'not-allowed' : 'pointer',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.25rem',
-                }}
+                className={`px-4 py-2 rounded-xl border border-[#ebe6de] bg-white text-xs font-semibold flex items-center gap-1.5 ${
+                  pageParam <= 1
+                    ? 'text-[#8a9890] cursor-not-allowed'
+                    : 'text-[#133827] hover:bg-[#F7F9F7]'
+                }`}
               >
                 <ChevronLeft size={16} />
                 <span>Previous</span>
               </button>
 
-              <span style={{ fontSize: '0.8125rem', color: 'var(--text-charcoal, #1a1a1a)' }}>
-                Page <strong>{data.page}</strong> of <strong>{data.total_pages}</strong>
+              <span className="text-xs text-[#2b352f]">
+                Page <strong className="text-[#133827]">{data.page}</strong> of{' '}
+                <strong className="text-[#133827]">{data.total_pages}</strong>
               </span>
 
               <button
                 type="button"
                 disabled={pageParam >= data.total_pages}
                 onClick={() => handlePageChange(pageParam + 1)}
-                style={{
-                  padding: '0.45rem 0.75rem',
-                  borderRadius: 'var(--radius-sm, 6px)',
-                  border: '1px solid var(--border-subtle, #ebe6de)',
-                  backgroundColor: '#ffffff',
-                  fontSize: '0.8125rem',
-                  fontWeight: 600,
-                  color: pageParam >= data.total_pages ? 'var(--text-muted, #636b78)' : 'var(--text-charcoal, #1a1a1a)',
-                  cursor: pageParam >= data.total_pages ? 'not-allowed' : 'pointer',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.25rem',
-                }}
+                className={`px-4 py-2 rounded-xl border border-[#ebe6de] bg-white text-xs font-semibold flex items-center gap-1.5 ${
+                  pageParam >= data.total_pages
+                    ? 'text-[#8a9890] cursor-not-allowed'
+                    : 'text-[#133827] hover:bg-[#F7F9F7]'
+                }`}
               >
                 <span>Next</span>
                 <ChevronRight size={16} />
@@ -783,9 +644,9 @@ export const UniversitiesDiscoveryPage: React.FC = () => {
 
       {/* Mobile Filter Sheet */}
       {mobileFilterOpen && (
-        <div style={{ position: 'fixed', inset: 0, zIndex: 110, display: 'flex', alignItems: 'flex-end' }}>
+        <div className="fixed inset-0 z-50 flex items-end">
           <div
-            style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(26,28,30,0.4)', backdropFilter: 'blur(2px)' }}
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm"
             onClick={() => setMobileFilterOpen(false)}
             aria-hidden="true"
           />
@@ -793,30 +654,17 @@ export const UniversitiesDiscoveryPage: React.FC = () => {
             role="dialog"
             aria-modal="true"
             aria-label="Catalogue filter options"
-            style={{
-              position: 'relative',
-              width: '100%',
-              maxHeight: '80vh',
-              backgroundColor: '#ffffff',
-              borderTopLeftRadius: 'var(--radius-card, 16px)',
-              borderTopRightRadius: 'var(--radius-card, 16px)',
-              boxShadow: '0 -4px 20px rgba(0,0,0,0.15)',
-              display: 'flex',
-              flexDirection: 'column',
-              padding: '1.5rem',
-              zIndex: 111,
-              overflowY: 'auto',
-            }}
+            className="relative w-full max-h-[85vh] bg-white rounded-t-3xl shadow-2xl flex flex-col p-6 z-50 overflow-y-auto"
           >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
-              <h2 style={{ fontSize: '1.125rem', fontWeight: 700, color: 'var(--text-charcoal, #1a1a1a)', margin: 0 }}>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-[#133827]">
                 Filter Universities
               </h2>
               <button
                 type="button"
                 onClick={() => setMobileFilterOpen(false)}
                 aria-label="Close filters"
-                style={{ padding: '0.25rem', color: 'var(--text-muted, #636b78)', background: 'none', border: 'none', cursor: 'pointer' }}
+                className="p-1.5 text-[#55635a] hover:text-[#133827]"
               >
                 <X size={20} />
               </button>
@@ -824,28 +672,18 @@ export const UniversitiesDiscoveryPage: React.FC = () => {
 
             {filterSidebar}
 
-            <div style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid var(--border-subtle, #ebe6de)', display: 'flex', gap: '0.75rem' }}>
+            <div className="mt-6 pt-4 border-t border-[#ebe6de] flex gap-3">
               <button
                 type="button"
                 onClick={handleResetFilters}
-                style={{
-                  flex: 1,
-                  padding: '0.625rem',
-                  borderRadius: 'var(--radius-sm, 6px)',
-                  border: '1px solid var(--border-subtle, #ebe6de)',
-                  backgroundColor: 'transparent',
-                  fontWeight: 600,
-                  fontSize: '0.875rem',
-                  cursor: 'pointer',
-                }}
+                className="flex-1 py-2.5 rounded-full border border-[#ebe6de] text-xs font-semibold text-[#133827]"
               >
-                Reset
+                Reset All
               </button>
               <button
                 type="button"
                 onClick={() => setMobileFilterOpen(false)}
-                className="btn-pill btn-pill-primary"
-                style={{ flex: 1, padding: '0.625rem', fontSize: '0.875rem' }}
+                className="flex-1 py-2.5 rounded-full bg-[#245B42] text-white text-xs font-bold"
               >
                 {isVisitor ? 'Close' : 'Apply Filters'}
               </button>
@@ -864,3 +702,5 @@ export const UniversitiesDiscoveryPage: React.FC = () => {
     </div>
   );
 };
+
+export default UniversitiesDiscoveryPage;

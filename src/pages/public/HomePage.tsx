@@ -8,9 +8,6 @@ import {
   ShieldCheck,
   CheckCircle2,
   Euro,
-  Sparkles,
-  RefreshCw,
-  Check,
   Building2,
   GraduationCap,
   MessageSquare,
@@ -22,6 +19,9 @@ import {
   FolderLock,
   Headphones,
   Users,
+  Check,
+  RefreshCw,
+  Sparkles,
 } from 'lucide-react';
 
 export const HomePage: React.FC = () => {
@@ -111,46 +111,46 @@ export const HomePage: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#FBF9F5] text-on-surface antialiased overflow-x-hidden selection:bg-primary-fixed selection:text-on-primary-fixed">
-      {/* 1. Ambient Background Light Orbs */}
+    <div className="relative min-h-screen bg-[#FBF9F5] text-[#1a1a1a] antialiased overflow-x-hidden selection:bg-[#B4D0B6] selection:text-[#133827]">
+      {/* 1. Calm Ambient Background Orbs (Forest, Sage, Citron) */}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden="true">
-        <div className="absolute -top-32 -left-20 w-[600px] h-[600px] rounded-full bg-[#E8F7F2]/60 blur-[100px]"></div>
-        <div className="absolute top-10 right-0 w-[550px] h-[550px] rounded-full bg-[#FFF0EB]/70 blur-[110px]"></div>
-        <div className="absolute bottom-20 left-1/3 w-[450px] h-[450px] rounded-full bg-[#F3F0FA]/40 blur-[90px]"></div>
+        <div className="absolute -top-32 -left-20 w-[600px] h-[600px] rounded-full bg-[#B4D0B6]/20 blur-[120px]"></div>
+        <div className="absolute top-20 right-0 w-[550px] h-[550px] rounded-full bg-[#D7EE83]/15 blur-[130px]"></div>
+        <div className="absolute bottom-20 left-1/3 w-[450px] h-[450px] rounded-full bg-[#245B42]/10 blur-[110px]"></div>
       </div>
 
       <div className="relative z-10 flex flex-col w-full">
         {/* 2. Hero & Mission Section */}
-        <section className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 pt-8 pb-16 lg:pb-24 flex flex-col items-center text-center relative z-10">
+        <section className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 pt-12 pb-16 lg:pb-24 flex flex-col items-center text-center relative z-10">
           {/* Eyebrow Pill */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white shadow-sm mb-6 border border-surface-container">
-            <span className="w-2 h-2 rounded-full bg-emerald-600" aria-hidden="true"></span>
-            <span className="font-label-md text-label-md text-on-surface tracking-wide">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white shadow-sm mb-6 border border-[#ebe6de]">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#245B42]" aria-hidden="true"></span>
+            <span className="text-xs sm:text-sm text-[#2b352f] font-medium tracking-wide">
               Pakistan to Europe Higher Education Admissions Desk
             </span>
-            <span className="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm font-bold ml-1">
+            <span className="px-2 py-0.5 rounded-full bg-[#D7EE83] text-[#133827] text-xs font-bold tracking-wider ml-1">
               VERIFIED DESK
             </span>
           </div>
 
           {/* Main Heading */}
-          <h1 className="font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface max-w-5xl tracking-tight mb-6">
-            Your Entire Global Degree Journey.{' '}
-            <span className="bg-gradient-to-r from-primary-container via-secondary-container to-primary text-transparent bg-clip-text">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-[#133827] max-w-5xl tracking-tight mb-6 leading-tight">
+            Your Entire European Degree Journey.{' '}
+            <span className="text-[#245B42]">
               Tracked, Verified &amp; Guided.
             </span>
           </h1>
 
           {/* Subtitle */}
-          <p className="font-body-lg text-body-lg text-on-surface-variant max-w-3xl leading-relaxed mb-8">
-            Explore peer-verified public university programs across Germany, France, Italy, and Romania, track consular visa prerequisites, and collaborate in real-time with dedicated admissions counsellors.
+          <p className="text-base sm:text-lg text-[#55635a] max-w-3xl leading-relaxed mb-8">
+            Explore peer-verified public university programs across Germany, France, Italy, and Romania, track consular visa prerequisites, and collaborate directly with dedicated admissions counsellors.
           </p>
 
           {/* Dual Call to Actions */}
           <div className="flex flex-wrap items-center justify-center gap-4 mb-12">
             <a
               href="#catalogue-search"
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-body-sm-medium text-body-sm-medium text-on-primary bg-gradient-to-r from-[#FF5E36] to-[#FF2A55] shadow-lg shadow-primary-container/30 hover:opacity-95 active:scale-95 transition-all text-white no-underline"
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-sm font-semibold text-white bg-[#245B42] hover:bg-[#1D4A36] shadow-md hover:shadow-lg active:scale-95 transition-all text-white no-underline"
             >
               <span>Explore University Catalogue</span>
               <ArrowRight size={18} aria-hidden="true" />
@@ -160,102 +160,97 @@ export const HomePage: React.FC = () => {
               type="button"
               id="hero-request-advisory-btn"
               onClick={() => setIsAdvisoryModalOpen(true)}
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-body-sm-medium text-body-sm-medium text-on-surface bg-white shadow-sm hover:bg-surface-container-low active:scale-95 transition-all border border-surface-container"
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-sm font-semibold text-[#133827] bg-white shadow-sm hover:bg-[#f3efe9] active:scale-95 transition-all border border-[#ebe6de]"
             >
-              <Headphones size={20} className="text-primary" aria-hidden="true" />
+              <Headphones size={20} className="text-[#245B42]" aria-hidden="true" />
               <span>Request 1-on-1 Advisory (Free)</span>
             </button>
           </div>
 
           {/* Verified Trust Badges */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-4xl">
-            <div className="flex items-center justify-center gap-3 px-6 py-3.5 rounded-full bg-white/80 backdrop-blur-md shadow-sm border border-surface-container">
-              <CheckCircle2 size={24} className="text-emerald-600 flex-shrink-0" aria-hidden="true" />
+            <div className="flex items-center justify-center gap-3 px-6 py-4 rounded-2xl bg-white/90 backdrop-blur-md shadow-sm border border-[#ebe6de]">
+              <CheckCircle2 size={24} className="text-[#245B42] flex-shrink-0" aria-hidden="true" />
               <div className="text-left">
-                <p className="font-headline-sm text-headline-sm text-on-surface leading-tight font-bold">100%</p>
-                <p className="font-label-sm text-label-sm text-on-surface-variant">Procedural Verification</p>
+                <p className="text-base text-[#133827] leading-tight font-bold">100%</p>
+                <p className="text-xs text-[#55635a]">Procedural Verification</p>
               </div>
             </div>
 
-            <div className="flex items-center justify-center gap-3 px-6 py-3.5 rounded-full bg-white/80 backdrop-blur-md shadow-sm border border-surface-container">
-              <Euro size={24} className="text-primary flex-shrink-0" aria-hidden="true" />
+            <div className="flex items-center justify-center gap-3 px-6 py-4 rounded-2xl bg-white/90 backdrop-blur-md shadow-sm border border-[#ebe6de]">
+              <Euro size={24} className="text-[#245B42] flex-shrink-0" aria-hidden="true" />
               <div className="text-left">
-                <p className="font-headline-sm text-headline-sm text-on-surface leading-tight font-bold">4 Corridors</p>
-                <p className="font-label-sm text-label-sm text-on-surface-variant">Germany, France, Italy, Romania</p>
+                <p className="text-base text-[#133827] leading-tight font-bold">4 Corridors</p>
+                <p className="text-xs text-[#55635a]">Germany, France, Italy, Romania</p>
               </div>
             </div>
 
-            <div className="flex items-center justify-center gap-3 px-6 py-3.5 rounded-full bg-white/80 backdrop-blur-md shadow-sm border border-surface-container">
-              <ShieldCheck size={24} className="text-tertiary flex-shrink-0" aria-hidden="true" />
+            <div className="flex items-center justify-center gap-3 px-6 py-4 rounded-2xl bg-white/90 backdrop-blur-md shadow-sm border border-[#ebe6de]">
+              <ShieldCheck size={24} className="text-[#245B42] flex-shrink-0" aria-hidden="true" />
               <div className="text-left">
-                <p className="font-headline-sm text-headline-sm text-on-surface leading-tight font-bold">Statutory</p>
-                <p className="font-label-sm text-label-sm text-on-surface-variant">APS, HEC &amp; Consular Standard</p>
+                <p className="text-base text-[#133827] leading-tight font-bold">Statutory</p>
+                <p className="text-xs text-[#55635a]">APS, HEC &amp; Consular Standard</p>
               </div>
             </div>
           </div>
         </section>
 
         {/* 3. Interactive Program & Destination Search Bento */}
-        <section className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 mb-24 relative z-10" id="catalogue-search">
-          <div className="rounded-2xl p-6 sm:p-10 bg-white shadow-xl shadow-on-surface/[0.04] border border-surface-container">
+        <section className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 mb-20 relative z-10" id="catalogue-search">
+          <div className="rounded-3xl p-6 sm:p-10 bg-white shadow-xl shadow-black/[0.03] border border-[#ebe6de]">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
               <div>
-                <span className="font-label-sm text-label-sm text-primary uppercase tracking-wider font-bold">
+                <span className="text-xs font-bold text-[#245B42] uppercase tracking-wider">
                   Direct Admissions Engine
                 </span>
-                <h2 className="font-headline-xl text-headline-xl text-on-surface mt-1 font-bold">
-                  Instant Verified Program Lookup
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-[#133827] mt-1">
+                  Verified European Higher Education Lookup
                 </h2>
               </div>
-              <div className="flex items-center gap-2 font-label-md text-label-md text-on-surface-variant">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true"></span>
-                <span>4,812 active degree intakes refreshed today</span>
+              <div className="flex items-center gap-2 text-xs sm:text-sm text-[#55635a]">
+                <span className="w-2 h-2 rounded-full bg-[#245B42] animate-pulse" aria-hidden="true"></span>
+                <span>Curated programmes across 4 European corridors</span>
               </div>
             </div>
 
-            {/* Pill-shaped Large Search Bar */}
+            {/* Large Search Bar */}
             <form onSubmit={handleSearchSubmit} className="relative flex items-center mb-6">
-              <Search className="absolute left-6 text-on-surface-variant text-[24px]" size={24} aria-hidden="true" />
+              <Search className="absolute left-6 text-[#55635a]" size={22} aria-hidden="true" />
               <input
                 ref={searchInputRef}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 id="program-search-input"
-                className="w-full pl-16 pr-32 py-5 rounded-full bg-surface-container-low font-body-lg text-body-lg text-on-surface placeholder:text-on-surface-variant/70 outline-none focus:bg-white focus:shadow-md focus:ring-2 focus:ring-primary-container transition-all border border-transparent focus:border-primary-fixed"
-                placeholder="Search universities, degree programs, or scholarships (e.g. TUM, Data Science, DAAD, Erasmus)..."
+                className="w-full pl-16 pr-32 py-4 sm:py-5 rounded-full bg-[#F7F9F7] text-base text-[#1a1a1a] placeholder:text-[#8a9890] outline-none focus:bg-white focus:ring-2 focus:ring-[#245B42] transition-all border border-[#ebe6de] focus:border-[#245B42]"
+                placeholder="Search universities, degree programs, or scholarships (e.g. TUM, Data Science, DAAD)..."
                 type="text"
                 aria-label="Search degree catalogue"
               />
               <button
                 type="submit"
                 id="program-search-submit-btn"
-                className="absolute right-3 px-6 py-3 rounded-full font-body-sm-medium text-body-sm-medium text-white bg-gradient-to-r from-[#FF5E36] to-[#FF2A55] shadow-md shadow-primary-container/20 hover:opacity-95 transition-opacity"
+                className="absolute right-2.5 px-6 py-2.5 sm:py-3 rounded-full text-sm font-semibold text-white bg-[#245B42] hover:bg-[#1D4A36] shadow-sm transition-all"
               >
                 Search
               </button>
             </form>
 
-            {/* Filter Chips & Suggestion Pills */}
+            {/* Filter Chips & Corridor Presets */}
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pt-2">
-              {/* Country Filter Pills */}
+              {/* Authorized 4 Corridors Only */}
               <div className="flex items-center gap-2 flex-wrap" id="country-pill-group">
-                <span className="font-label-md text-label-md text-on-surface-variant mr-1 font-medium">Hot destinations:</span>
+                <span className="text-xs sm:text-sm text-[#55635a] mr-1 font-semibold">Active Corridors:</span>
                 {[
                   { name: 'Germany', flag: '🇩🇪' },
                   { name: 'France', flag: '🇫🇷' },
                   { name: 'Italy', flag: '🇮🇹' },
                   { name: 'Romania', flag: '🇷🇴' },
-                  { name: 'United Kingdom', flag: '🇬🇧' },
-                  { name: 'Netherlands', flag: '🇳🇱' },
-                  { name: 'Sweden', flag: '🇸🇪' },
-                  { name: 'Switzerland', flag: '🇨🇭' },
-                  { name: 'Ireland', flag: '🇮🇪' },
                 ].map((item) => (
                   <button
                     key={item.name}
                     type="button"
                     onClick={() => handleSelectCountry(item.name)}
-                    className="px-3.5 py-1.5 rounded-full font-label-md text-label-md bg-surface-container-low text-on-surface hover:bg-surface-container-highest transition-colors active:scale-95 flex items-center gap-1.5 border border-surface-container"
+                    className="px-3.5 py-1.5 rounded-full text-xs sm:text-sm bg-[#F7F9F7] text-[#133827] hover:bg-[#B4D0B6]/30 transition-colors active:scale-95 flex items-center gap-1.5 border border-[#ebe6de]"
                   >
                     <span>{item.name}</span> <span>{item.flag}</span>
                   </button>
@@ -264,222 +259,220 @@ export const HomePage: React.FC = () => {
 
               {/* Quick Query Suggestions */}
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="font-label-md text-label-md text-on-surface-variant font-medium">Presets:</span>
+                <span className="text-xs sm:text-sm text-[#55635a] font-semibold">Presets:</span>
                 <button
                   type="button"
                   onClick={() => handleSelectPreset("Tuition-Free Master's")}
-                  className="px-3 py-1 rounded-full font-label-sm text-label-sm bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-colors border border-emerald-200"
+                  className="px-3 py-1 rounded-full text-xs font-medium bg-[#B4D0B6]/30 text-[#133827] hover:bg-[#B4D0B6]/50 transition-colors border border-[#B4D0B6]"
                 >
                   Tuition-Free Master&apos;s
                 </button>
                 <button
                   type="button"
                   onClick={() => handleSelectPreset('100% English Taught')}
-                  className="px-3 py-1 rounded-full font-label-sm text-label-sm bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors border border-blue-200"
+                  className="px-3 py-1 rounded-full text-xs font-medium bg-[#D7EE83]/30 text-[#133827] hover:bg-[#D7EE83]/50 transition-colors border border-[#D7EE83]"
                 >
                   100% English Taught
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleSelectPreset('Direct Intake 2025')}
-                  className="px-3 py-1 rounded-full font-label-sm text-label-sm bg-amber-50 text-amber-700 hover:bg-amber-100 transition-colors border border-amber-200"
+                  onClick={() => handleSelectPreset('Winter Intake')}
+                  className="px-3 py-1 rounded-full text-xs font-medium bg-[#f3efe9] text-[#2b352f] hover:bg-[#ebe6de] transition-colors border border-[#ebe6de]"
                 >
-                  Direct Intake 2025
+                  Winter Intake
                 </button>
               </div>
             </div>
 
-            {/* Dynamic Results Teaser Row */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8 pt-8 border-t border-surface-container-low">
-              {/* Card 1 */}
+            {/* Corridor Teaser Row (Authentic Institutions) */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8 pt-8 border-t border-[#ebe6de]">
+              {/* Card 1: Germany */}
               <div
                 onClick={() => navigate('/universities?country=germany')}
-                className="p-5 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer flex flex-col justify-between border border-surface-container"
+                className="p-5 rounded-2xl bg-[#F7F9F7] hover:bg-white hover:shadow-md transition-all cursor-pointer flex flex-col justify-between border border-[#ebe6de]"
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <span className="font-label-sm text-label-sm px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-semibold">
+                    <span className="text-xs px-2.5 py-1 rounded-full bg-[#B4D0B6]/40 text-[#133827] font-semibold">
                       €0 Tuition (TUM)
                     </span>
-                    <span className="font-label-sm text-label-sm text-on-surface-variant">Fall 2025</span>
+                    <span className="text-xs text-[#55635a]">Germany 🇩🇪</span>
                   </div>
-                  <h3 className="font-headline-sm text-headline-sm text-on-surface font-bold">
-                    M.Sc. Robotics, Cognition &amp; Intelligence
+                  <h3 className="text-base font-bold text-[#133827]">
+                    Technical University of Munich
                   </h3>
-                  <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
-                    Technical University of Munich • Munich, Germany
+                  <p className="text-xs text-[#55635a] mt-1">
+                    Munich, Germany • Public Research University
                   </p>
                 </div>
-                <div className="mt-4 pt-3 flex items-center justify-between font-label-md text-label-md text-primary font-semibold">
+                <div className="mt-4 pt-3 flex items-center justify-between text-xs text-[#245B42] font-semibold border-t border-[#ebe6de]">
                   <span>APS &amp; VPD Verification Ready</span>
-                  <ChevronRight size={18} aria-hidden="true" />
+                  <ChevronRight size={16} aria-hidden="true" />
                 </div>
               </div>
 
-              {/* Card 2 */}
+              {/* Card 2: France */}
               <div
-                onClick={() => navigate('/universities')}
-                className="p-5 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer flex flex-col justify-between border border-surface-container"
+                onClick={() => navigate('/universities?country=france')}
+                className="p-5 rounded-2xl bg-[#F7F9F7] hover:bg-white hover:shadow-md transition-all cursor-pointer flex flex-col justify-between border border-[#ebe6de]"
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <span className="font-label-sm text-label-sm px-2.5 py-1 rounded-full bg-blue-100 text-blue-800 font-semibold">
-                      Full Scholarship Option
+                    <span className="text-xs px-2.5 py-1 rounded-full bg-[#D7EE83]/40 text-[#133827] font-semibold">
+                      State Subsidized
                     </span>
-                    <span className="font-label-sm text-label-sm text-on-surface-variant">Sept 2025</span>
+                    <span className="text-xs text-[#55635a]">France 🇫🇷</span>
                   </div>
-                  <h3 className="font-headline-sm text-headline-sm text-on-surface font-bold">
-                    M.Sc. Artificial Intelligence &amp; Data Ethics
+                  <h3 className="text-base font-bold text-[#133827]">
+                    Sorbonne University
                   </h3>
-                  <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
-                    University of Edinburgh • Edinburgh, UK
+                  <p className="text-xs text-[#55635a] mt-1">
+                    Paris, France • Public Sorbonne Alliance
                   </p>
                 </div>
-                <div className="mt-4 pt-3 flex items-center justify-between font-label-md text-label-md text-primary font-semibold">
-                  <span>Common App &amp; UCAS Bridge</span>
-                  <ChevronRight size={18} aria-hidden="true" />
+                <div className="mt-4 pt-3 flex items-center justify-between text-xs text-[#245B42] font-semibold border-t border-[#ebe6de]">
+                  <span>Campus France Protocol Ready</span>
+                  <ChevronRight size={16} aria-hidden="true" />
                 </div>
               </div>
 
-              {/* Card 3 */}
+              {/* Card 3: Italy */}
               <div
-                onClick={() => navigate('/universities')}
-                className="p-5 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer flex flex-col justify-between border border-surface-container"
+                onClick={() => navigate('/universities?country=italy')}
+                className="p-5 rounded-2xl bg-[#F7F9F7] hover:bg-white hover:shadow-md transition-all cursor-pointer flex flex-col justify-between border border-[#ebe6de]"
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <span className="font-label-sm text-label-sm px-2.5 py-1 rounded-full bg-purple-100 text-purple-800 font-semibold">
-                      Erasmus+ Mundus Grant
+                    <span className="text-xs px-2.5 py-1 rounded-full bg-[#B4D0B6]/40 text-[#133827] font-semibold">
+                      DSU Regional Grant
                     </span>
-                    <span className="font-label-sm text-label-sm text-on-surface-variant">Spring 2026</span>
+                    <span className="text-xs text-[#55635a]">Italy 🇮🇹</span>
                   </div>
-                  <h3 className="font-headline-sm text-headline-sm text-on-surface font-bold">
-                    M.Sc. Sustainable Energy Technology
+                  <h3 className="text-base font-bold text-[#133827]">
+                    Politecnico di Milano
                   </h3>
-                  <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
-                    TU Delft • Delft, Netherlands
+                  <p className="text-xs text-[#55635a] mt-1">
+                    Milan, Italy • Public Technical University
                   </p>
                 </div>
-                <div className="mt-4 pt-3 flex items-center justify-between font-label-md text-label-md text-primary font-semibold">
-                  <span>Studielink Auto-Sync</span>
-                  <ChevronRight size={18} aria-hidden="true" />
+                <div className="mt-4 pt-3 flex items-center justify-between text-xs text-[#245B42] font-semibold border-t border-[#ebe6de]">
+                  <span>Universitaly Pre-enrollment Ready</span>
+                  <ChevronRight size={16} aria-hidden="true" />
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* 4. Global University Partners / Institutional Ticker */}
-        <section className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 mb-24 relative z-10 text-center">
-          <p className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-8 font-semibold">
-            Direct Admission Data Partnerships With 350+ European &amp; Global Institutions
+        {/* 4. Global University Partners / Institutional Ticker (4 Corridors) */}
+        <section className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 mb-20 relative z-10 text-center">
+          <p className="text-xs font-semibold text-[#55635a] uppercase tracking-wider mb-6">
+            Admissions Data Sourced Directly From Accredited European Institutions
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-8 lg:gap-14 opacity-80">
-            <div className="flex items-center gap-2 text-on-surface font-headline-sm text-headline-sm font-semibold">
-              <Building2 className="text-primary" size={28} aria-hidden="true" />
+          <div className="flex flex-wrap items-center justify-center gap-8 lg:gap-12 opacity-85">
+            <div className="flex items-center gap-2 text-[#133827] text-sm font-semibold">
+              <Building2 className="text-[#245B42]" size={22} aria-hidden="true" />
               <span>TU Munich</span>
             </div>
-            <div className="flex items-center gap-2 text-on-surface font-headline-sm text-headline-sm font-semibold">
-              <GraduationCap className="text-tertiary" size={28} aria-hidden="true" />
-              <span>Univ. of Edinburgh</span>
+            <div className="flex items-center gap-2 text-[#133827] text-sm font-semibold">
+              <GraduationCap className="text-[#245B42]" size={22} aria-hidden="true" />
+              <span>Sorbonne Université</span>
             </div>
-            <div className="flex items-center gap-2 text-on-surface font-headline-sm text-headline-sm font-semibold">
-              <Building2 className="text-[#FF5E36]" size={28} aria-hidden="true" />
-              <span>TU Delft</span>
+            <div className="flex items-center gap-2 text-[#133827] text-sm font-semibold">
+              <Building2 className="text-[#245B42]" size={22} aria-hidden="true" />
+              <span>Politecnico di Milano</span>
             </div>
-            <div className="flex items-center gap-2 text-on-surface font-headline-sm text-headline-sm font-semibold">
-              <Compass className="text-emerald-600" size={28} aria-hidden="true" />
-              <span>ETH Zurich</span>
+            <div className="flex items-center gap-2 text-[#133827] text-sm font-semibold">
+              <Compass className="text-[#245B42]" size={22} aria-hidden="true" />
+              <span>Univ. of Bucharest</span>
             </div>
-            <div className="flex items-center gap-2 text-on-surface font-headline-sm text-headline-sm font-semibold">
-              <Sparkles className="text-purple-600" size={28} aria-hidden="true" />
-              <span>Karolinska Inst.</span>
+            <div className="flex items-center gap-2 text-[#133827] text-sm font-semibold">
+              <BookOpen className="text-[#245B42]" size={22} aria-hidden="true" />
+              <span>Heidelberg University</span>
             </div>
-            <div className="flex items-center gap-2 text-on-surface font-headline-sm text-headline-sm font-semibold">
-              <BookOpen className="text-amber-600" size={28} aria-hidden="true" />
-              <span>Trinity College Dublin</span>
+            <div className="flex items-center gap-2 text-[#133827] text-sm font-semibold">
+              <Sparkles className="text-[#245B42]" size={22} aria-hidden="true" />
+              <span>Sapienza Univ. of Rome</span>
             </div>
           </div>
         </section>
 
         {/* 5. Core Platform Pillars (Bento Grid) */}
-        <section className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 mb-24 relative z-10">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="font-label-sm text-label-sm text-primary uppercase tracking-wider font-bold">
-              Unilistics Core Architecture
+        <section className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 mb-20 relative z-10">
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <span className="text-xs font-bold text-[#245B42] uppercase tracking-wider">
+              Unilistics Casework Architecture
             </span>
-            <h2 className="font-headline-xl text-headline-xl text-on-surface mt-2 mb-4 font-bold">
-              Engineered to eliminate admissions friction
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-[#133827] mt-2 mb-4">
+              Engineered to eliminate admissions and visa friction
             </h2>
-            <p className="font-body-lg text-body-lg text-on-surface-variant">
-              Admissions are fragmented across regional portals, foreign credential bodies, and archaic consular rules. Unilistics centralizes the entire protocol into one luminous, synchronized workspace.
+            <p className="text-base text-[#55635a]">
+              European admissions involve state credentials bodies, foreign equivalency assessments, and strict consular deadlines. Unilistics centralizes this protocol into one synchronized workspace.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Pillar 1 */}
-            <div className="rounded-2xl p-8 bg-white shadow-lg shadow-on-surface/[0.03] flex flex-col justify-between group hover:-translate-y-1 transition-transform border border-surface-container">
+            <div className="rounded-3xl p-8 bg-white shadow-lg shadow-black/[0.02] flex flex-col justify-between group hover:-translate-y-1 transition-all border border-[#ebe6de]">
               <div>
-                <div className="w-14 h-14 rounded-full bg-primary-fixed flex items-center justify-center text-primary mb-6">
-                  <Compass size={28} aria-hidden="true" />
+                <div className="w-12 h-12 rounded-2xl bg-[#B4D0B6]/30 flex items-center justify-center text-[#245B42] mb-6">
+                  <Compass size={26} aria-hidden="true" />
                 </div>
-                <span className="font-label-sm text-label-sm text-primary uppercase font-bold">Pillar 01</span>
-                <h3 className="font-headline-md text-headline-md text-on-surface mt-1 mb-3 font-bold">
-                  Smart Catalogue Explorer
+                <span className="text-xs font-bold text-[#245B42] uppercase">Pillar 01</span>
+                <h3 className="text-xl font-bold text-[#133827] mt-1 mb-3">
+                  Verified Catalogue Explorer
                 </h3>
-                <p className="font-body-sm text-body-sm text-on-surface-variant leading-relaxed mb-6">
-                  Algorithmic filtering calibrated for international applicants. Model tuition fees, language barriers, ECTS module equivalency, and live intake closing countdowns down to the minute.
+                <p className="text-sm text-[#55635a] leading-relaxed mb-6">
+                  Filter higher education curriculums calibrated for Pakistani degree holders. View tuition fee schedules, language benchmarks, ECTS credit equivalencies, and live intake deadlines.
                 </p>
-                {/* Mini Feature Metric Illustration */}
-                <div className="p-4 rounded-xl bg-surface-container-low mb-6 border border-surface-container">
+                <div className="p-4 rounded-2xl bg-[#F7F9F7] mb-6 border border-[#ebe6de]">
                   <div className="flex justify-between items-center mb-2">
-                    <span className="font-label-sm text-label-sm text-on-surface-variant">ECTS Compatibility Meter</span>
-                    <span className="font-label-sm text-label-sm text-emerald-600 font-bold">100% Match (180 ECTS)</span>
+                    <span className="text-xs text-[#55635a]">Credit Equivalency Check</span>
+                    <span className="text-xs text-[#245B42] font-bold">180 ECTS Standard</span>
                   </div>
-                  <div className="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
-                    <div className="bg-gradient-to-r from-emerald-500 to-teal-400 h-2 rounded-full w-full"></div>
+                  <div className="w-full bg-[#ebe6de] h-2 rounded-full overflow-hidden">
+                    <div className="bg-[#245B42] h-2 rounded-full w-full"></div>
                   </div>
                 </div>
               </div>
               <Link
                 to="/universities"
-                className="flex items-center text-primary font-body-sm-medium text-body-sm-medium gap-1 group-hover:gap-2 transition-all no-underline font-semibold"
+                className="flex items-center text-[#245B42] text-sm font-semibold gap-1 group-hover:gap-2 transition-all no-underline"
               >
                 <span>Explore catalogue filters</span>
-                <ArrowRight size={18} aria-hidden="true" />
+                <ArrowRight size={16} aria-hidden="true" />
               </Link>
             </div>
 
             {/* Pillar 2 */}
-            <div className="rounded-2xl p-8 bg-white shadow-lg shadow-on-surface/[0.03] flex flex-col justify-between group hover:-translate-y-1 transition-transform border border-surface-container">
+            <div className="rounded-3xl p-8 bg-white shadow-lg shadow-black/[0.02] flex flex-col justify-between group hover:-translate-y-1 transition-all border border-[#ebe6de]">
               <div>
-                <div className="w-14 h-14 rounded-full bg-tertiary-fixed flex items-center justify-center text-tertiary mb-6">
-                  <FolderLock size={28} aria-hidden="true" />
+                <div className="w-12 h-12 rounded-2xl bg-[#D7EE83]/30 flex items-center justify-center text-[#245B42] mb-6">
+                  <FolderLock size={26} aria-hidden="true" />
                 </div>
-                <span className="font-label-sm text-label-sm text-tertiary uppercase font-bold">Pillar 02</span>
-                <h3 className="font-headline-md text-headline-md text-on-surface mt-1 mb-3 font-bold">
+                <span className="text-xs font-bold text-[#245B42] uppercase">Pillar 02</span>
+                <h3 className="text-xl font-bold text-[#133827] mt-1 mb-3">
                   Verified Document Vault
                 </h3>
-                <p className="font-body-sm text-body-sm text-on-surface-variant leading-relaxed mb-6">
-                  Zero-knowledge encrypted repository with auto-OCR parsing. Instantly audit apostilled transcripts, IELTS/TOEFL scores, motivation letters, and consular bank solvency affidavits.
+                <p className="text-sm text-[#55635a] leading-relaxed mb-6">
+                  Structured audit checklist for academic transcripts, HEC attestation, German APS certificates, language proficiency results, and consular financial documentation.
                 </p>
-                {/* Document Status Visual */}
-                <div className="p-4 rounded-xl bg-surface-container-low mb-6 space-y-2.5 border border-surface-container">
-                  <div className="flex items-center justify-between text-[13px]">
-                    <span className="flex items-center gap-2 text-on-surface font-body-sm-medium">
-                      <CheckCircle2 size={16} className="text-emerald-600" aria-hidden="true" />
-                      Official Bachelor Degree VPD
+                <div className="p-4 rounded-2xl bg-[#F7F9F7] mb-6 space-y-2.5 border border-[#ebe6de]">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="flex items-center gap-2 text-[#133827] font-medium">
+                      <CheckCircle2 size={16} className="text-[#245B42]" aria-hidden="true" />
+                      HEC Attested Degree
                     </span>
-                    <span className="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-semibold">
+                    <span className="px-2 py-0.5 rounded-full bg-[#B4D0B6]/40 text-[#133827] font-semibold">
                       Verified
                     </span>
                   </div>
-                  <div className="flex items-center justify-between text-[13px]">
-                    <span className="flex items-center gap-2 text-on-surface font-body-sm-medium">
-                      <CheckCircle2 size={16} className="text-emerald-600" aria-hidden="true" />
-                      IELTS Academic (Band 8.0)
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="flex items-center gap-2 text-[#133827] font-medium">
+                      <CheckCircle2 size={16} className="text-[#245B42]" aria-hidden="true" />
+                      APS Certificate Issued
                     </span>
-                    <span className="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-semibold">
+                    <span className="px-2 py-0.5 rounded-full bg-[#B4D0B6]/40 text-[#133827] font-semibold">
                       Verified
                     </span>
                   </div>
@@ -487,40 +480,39 @@ export const HomePage: React.FC = () => {
               </div>
               <Link
                 to="/help"
-                className="flex items-center text-tertiary font-body-sm-medium text-body-sm-medium gap-1 group-hover:gap-2 transition-all no-underline font-semibold"
+                className="flex items-center text-[#245B42] text-sm font-semibold gap-1 group-hover:gap-2 transition-all no-underline"
               >
-                <span>Learn about zero-fail verification</span>
-                <ArrowRight size={18} aria-hidden="true" />
+                <span>Learn about document auditing</span>
+                <ArrowRight size={16} aria-hidden="true" />
               </Link>
             </div>
 
             {/* Pillar 3 */}
-            <div className="rounded-2xl p-8 bg-white shadow-lg shadow-on-surface/[0.03] flex flex-col justify-between group hover:-translate-y-1 transition-transform border border-surface-container">
+            <div className="rounded-3xl p-8 bg-white shadow-lg shadow-black/[0.02] flex flex-col justify-between group hover:-translate-y-1 transition-all border border-[#ebe6de]">
               <div>
-                <div className="w-14 h-14 rounded-full bg-secondary-fixed flex items-center justify-center text-secondary mb-6">
-                  <Users size={28} aria-hidden="true" />
+                <div className="w-12 h-12 rounded-2xl bg-[#B4D0B6]/30 flex items-center justify-center text-[#245B42] mb-6">
+                  <Users size={26} aria-hidden="true" />
                 </div>
-                <span className="font-label-sm text-label-sm text-secondary uppercase font-bold">Pillar 03</span>
-                <h3 className="font-headline-md text-headline-md text-on-surface mt-1 mb-3 font-bold">
-                  Real-time Counsellor Sync
+                <span className="text-xs font-bold text-[#245B42] uppercase">Pillar 03</span>
+                <h3 className="text-xl font-bold text-[#133827] mt-1 mb-3">
+                  Human Counsellor Collaboration
                 </h3>
-                <p className="font-body-sm text-body-sm text-on-surface-variant leading-relaxed mb-6">
-                  Direct case-management chat with accredited advisors. Receive milestone reminders, real-time feedback on SOP drafts, and instant webhook updates as your institutional application progresses.
+                <p className="text-sm text-[#55635a] leading-relaxed mb-6">
+                  Direct casework with assigned staff counsellors. Review SOP and motivation letter drafts, receive intake deadline reminders, and track university portal submissions.
                 </p>
-                {/* Mini Chat Notification Simulation */}
-                <div className="p-4 rounded-xl bg-surface-container-low mb-6 flex items-start gap-3 border border-surface-container">
-                  <div className="w-8 h-8 rounded-full bg-primary-container text-white flex items-center justify-center font-label-md text-label-md flex-shrink-0 font-bold">
-                    SJ
+                <div className="p-4 rounded-2xl bg-[#F7F9F7] mb-6 flex items-start gap-3 border border-[#ebe6de]">
+                  <div className="w-8 h-8 rounded-full bg-[#245B42] text-white flex items-center justify-center text-xs font-bold flex-shrink-0">
+                    AC
                   </div>
                   <div className="text-left">
                     <div className="flex items-center gap-1.5">
-                      <span className="font-body-sm-medium text-body-sm-medium text-on-surface font-semibold">
-                        Sarah Jenkins (Advisor)
+                      <span className="text-xs font-semibold text-[#133827]">
+                        Admissions Counsellor
                       </span>
-                      <span className="font-label-sm text-label-sm text-on-surface-variant">10m ago</span>
+                      <span className="text-[11px] text-[#55635a]">Active review</span>
                     </div>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
-                      &quot;Your TUM curriculum analysis is approved. We can submit via Uni-Assist tomorrow.&quot;
+                    <p className="text-xs text-[#55635a] mt-0.5">
+                      &quot;Your curriculum analysis satisfies the prerequisite ECTS modules. Uni-Assist dossier ready.&quot;
                     </p>
                   </div>
                 </div>
@@ -528,205 +520,177 @@ export const HomePage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsAdvisoryModalOpen(true)}
-                className="flex items-center text-secondary font-body-sm-medium text-body-sm-medium gap-1 group-hover:gap-2 transition-all font-semibold"
+                className="flex items-center text-[#245B42] text-sm font-semibold gap-1 group-hover:gap-2 transition-all text-left"
               >
-                <span>Book advisory session</span>
-                <ArrowRight size={18} aria-hidden="true" />
+                <span>Request managed guidance</span>
+                <ArrowRight size={16} aria-hidden="true" />
               </button>
             </div>
           </div>
         </section>
 
-        {/* 6. Live Application Tracker Preview (Interactive Showcase) */}
-        <section className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 mb-24 relative z-10">
-          <div className="rounded-2xl p-6 sm:p-12 bg-gradient-to-br from-white via-white/95 to-surface-container-low shadow-xl border border-surface-container">
-            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 mb-10 pb-8 border-b border-surface-container-high">
+        {/* 6. Live Application Tracker Preview (Casework Showcase) */}
+        <section className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 mb-20 relative z-10">
+          <div className="rounded-3xl p-6 sm:p-10 bg-white shadow-xl shadow-black/[0.03] border border-[#ebe6de]">
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 mb-8 pb-6 border-b border-[#ebe6de]">
               <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 font-label-sm text-label-sm mb-3 border border-emerald-200">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true"></span>
-                  Live Synced Student Record
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#B4D0B6]/30 text-[#133827] text-xs font-semibold mb-2 border border-[#B4D0B6]">
+                  <span className="w-2 h-2 rounded-full bg-[#245B42] animate-pulse" aria-hidden="true"></span>
+                  Representative Casework Milestone
                 </div>
-                <h2 className="font-headline-xl text-headline-xl text-on-surface font-bold">
-                  Inside the Applicant Experience
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-[#133827]">
+                  Inside the Managed Student Workspace
                 </h2>
-                <p className="font-body-lg text-body-lg text-on-surface-variant mt-1">
-                  Watch how applicant Elena Rostova tracks her master&apos;s admission progress seamlessly across institutions.
+                <p className="text-sm text-[#55635a] mt-1">
+                  How applicants and counsellors track European university admissions and visa prerequisites.
                 </p>
               </div>
-              <div className="flex items-center gap-3 self-stretch sm:self-auto justify-end">
-                <span className="px-4 py-2 rounded-full bg-surface-container font-label-md text-label-md text-on-surface font-mono">
-                  Intake ID: #DE-TUM-2025-09
-                </span>
+              <div className="flex items-center gap-3">
                 <Link
                   to={currentRole === 'visitor' ? '/sign-in' : '/student'}
-                  className="px-5 py-2 rounded-full bg-primary text-white font-body-sm-medium text-body-sm-medium shadow-md shadow-primary-container/20 hover:opacity-95 transition-opacity no-underline"
+                  className="px-6 py-2.5 rounded-full bg-[#245B42] text-white text-sm font-semibold hover:bg-[#1D4A36] transition-colors no-underline"
                 >
-                  Launch Live Portal
+                  {currentRole === 'visitor' ? 'Sign In to Portal' : 'My Student Workspace'}
                 </Link>
               </div>
             </div>
 
-            {/* Application Card Mosaic */}
+            {/* Application Milestone Mosaic */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-              {/* Main Milestone Tracker (8 Columns) */}
-              <div className="lg:col-span-8 rounded-2xl p-6 sm:p-8 bg-white shadow-sm flex flex-col justify-between border border-surface-container">
+              {/* Main Milestone Stepper (8 Cols) */}
+              <div className="lg:col-span-8 rounded-2xl p-6 bg-[#F7F9F7] flex flex-col justify-between border border-[#ebe6de]">
                 <div>
                   <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-headline-sm font-bold">
+                      <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-[#245B42] font-bold border border-[#ebe6de]">
                         TUM
                       </div>
                       <div>
-                        <h3 className="font-headline-sm text-headline-sm text-on-surface font-bold">
+                        <h3 className="text-base font-bold text-[#133827]">
                           Technical University of Munich
                         </h3>
-                        <p className="font-body-sm text-body-sm text-on-surface-variant">
+                        <p className="text-xs text-[#55635a]">
                           M.Sc. Robotics, Cognition, Intelligence • Munich Campus
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="px-3 py-1 rounded-full font-label-sm text-label-sm bg-blue-100 text-blue-800 font-semibold">
-                        Stage 4 of 6: Institutional Review
-                      </span>
-                    </div>
+                    <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[#B4D0B6]/40 text-[#133827]">
+                      Stage 4: Faculty Evaluation
+                    </span>
                   </div>
 
-                  {/* Interactive Milestone Stepper Nodes */}
+                  {/* Stepper Nodes */}
                   <div className="my-8">
                     <div className="flex items-center justify-between relative">
-                      {/* Stepper Bar Background */}
-                      <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-1 bg-surface-container-high z-0"></div>
-                      {/* Stepper Bar Active Progress */}
-                      <div className="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-gradient-to-r from-emerald-500 to-[#FF5E36] w-[65%] z-0"></div>
+                      <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-1 bg-[#ebe6de] z-0"></div>
+                      <div className="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-[#245B42] w-[65%] z-0"></div>
 
-                      {/* Step 1 (Completed) */}
                       <div className="relative z-10 flex flex-col items-center">
-                        <div className="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-sm">
+                        <div className="w-8 h-8 rounded-full bg-[#245B42] text-white flex items-center justify-center shadow-sm">
                           <Check size={16} aria-hidden="true" />
                         </div>
-                        <span className="font-label-sm text-label-sm text-on-surface mt-2 font-medium">VPD Issued</span>
+                        <span className="text-[11px] text-[#133827] mt-2 font-medium">VPD Issued</span>
                       </div>
 
-                      {/* Step 2 (Completed) */}
                       <div className="relative z-10 flex flex-col items-center">
-                        <div className="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-sm">
+                        <div className="w-8 h-8 rounded-full bg-[#245B42] text-white flex items-center justify-center shadow-sm">
                           <Check size={16} aria-hidden="true" />
                         </div>
-                        <span className="font-label-sm text-label-sm text-on-surface mt-2 font-medium">APS Certified</span>
+                        <span className="text-[11px] text-[#133827] mt-2 font-medium">APS Certified</span>
                       </div>
 
-                      {/* Step 3 (Completed) */}
                       <div className="relative z-10 flex flex-col items-center">
-                        <div className="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-sm">
+                        <div className="w-8 h-8 rounded-full bg-[#245B42] text-white flex items-center justify-center shadow-sm">
                           <Check size={16} aria-hidden="true" />
                         </div>
-                        <span className="font-label-sm text-label-sm text-on-surface mt-2 font-medium">SOP Verified</span>
+                        <span className="text-[11px] text-[#133827] mt-2 font-medium">SOP Approved</span>
                       </div>
 
-                      {/* Step 4 (Active In Progress) */}
                       <div className="relative z-10 flex flex-col items-center">
-                        <div className="w-8 h-8 rounded-full bg-[#FF5E36] text-white flex items-center justify-center shadow-md shadow-primary-container/40 ring-4 ring-[#FF5E36]/20">
-                          <RefreshCw size={16} className="animate-spin" aria-hidden="true" />
+                        <div className="w-8 h-8 rounded-full bg-[#245B42] text-white flex items-center justify-center shadow-sm ring-4 ring-[#B4D0B6]/60">
+                          <RefreshCw size={14} className="animate-spin" aria-hidden="true" />
                         </div>
-                        <span className="font-label-sm text-label-sm text-primary font-bold mt-2">Faculty Audit</span>
+                        <span className="text-[11px] text-[#245B42] font-bold mt-2">Faculty Audit</span>
                       </div>
 
-                      {/* Step 5 (Upcoming) */}
                       <div className="relative z-10 flex flex-col items-center">
-                        <div className="w-8 h-8 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center">
-                          <span className="w-2 h-2 rounded-full bg-on-surface-variant"></span>
+                        <div className="w-8 h-8 rounded-full bg-white text-[#55635a] border border-[#ebe6de] flex items-center justify-center">
+                          <span className="w-2 h-2 rounded-full bg-[#8a9890]"></span>
                         </div>
-                        <span className="font-label-sm text-label-sm text-on-surface-variant mt-2">Offer Letter</span>
+                        <span className="text-[11px] text-[#55635a] mt-2">Offer Letter</span>
                       </div>
 
-                      {/* Step 6 (Upcoming) */}
                       <div className="relative z-10 flex flex-col items-center">
-                        <div className="w-8 h-8 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center">
-                          <span className="w-2 h-2 rounded-full bg-on-surface-variant"></span>
+                        <div className="w-8 h-8 rounded-full bg-white text-[#55635a] border border-[#ebe6de] flex items-center justify-center">
+                          <span className="w-2 h-2 rounded-full bg-[#8a9890]"></span>
                         </div>
-                        <span className="font-label-sm text-label-sm text-on-surface-variant mt-2">Visa Sync</span>
+                        <span className="text-[11px] text-[#55635a] mt-2">Visa Sync</span>
                       </div>
                     </div>
                   </div>
 
-                  {/* Task Checkbox Summary */}
-                  <div className="bg-surface-container-low p-4 rounded-xl space-y-3 mt-6 border border-surface-container">
-                    <div className="flex items-center justify-between text-on-surface font-body-sm-medium text-body-sm-medium">
-                      <span>Intake Tasks: 3 of 7 completed</span>
-                      <span className="text-primary font-bold">42% Overall Readiness</span>
+                  {/* Task Summary */}
+                  <div className="bg-white p-4 rounded-xl space-y-2 border border-[#ebe6de]">
+                    <div className="flex items-center justify-between text-xs font-semibold text-[#133827]">
+                      <span>Checklist Milestones</span>
+                      <span className="text-[#245B42]">60% Readiness</span>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[13px]">
-                      <div className="flex items-center gap-2 text-on-surface-variant">
-                        <CheckCircle2 size={18} className="text-emerald-600" aria-hidden="true" />
-                        <span>Submit TUMonline Curriculum Matrix</span>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                      <div className="flex items-center gap-2 text-[#55635a]">
+                        <CheckCircle2 size={16} className="text-[#245B42]" aria-hidden="true" />
+                        <span>TUMonline Curriculum Form</span>
                       </div>
-                      <div className="flex items-center gap-2 text-on-surface-variant">
-                        <CheckCircle2 size={18} className="text-emerald-600" aria-hidden="true" />
-                        <span>German Health Insurance Exemption</span>
+                      <div className="flex items-center gap-2 text-[#55635a]">
+                        <CheckCircle2 size={16} className="text-[#245B42]" aria-hidden="true" />
+                        <span>Statutory Health Insurance</span>
                       </div>
-                      <div className="flex items-center gap-2 text-on-surface font-body-sm-medium">
-                        <Clock size={18} className="text-primary" aria-hidden="true" />
-                        <span>Upload Blocked Account Confirmation</span>
+                      <div className="flex items-center gap-2 text-[#133827] font-medium">
+                        <Clock size={16} className="text-[#245B42]" aria-hidden="true" />
+                        <span>Blocked Account Baseline (€11,208)</span>
                       </div>
-                      <div className="flex items-center gap-2 text-on-surface-variant">
-                        <div className="w-[18px] h-[18px] rounded-full border-2 border-on-surface-variant/40" aria-hidden="true"></div>
-                        <span>Enrollment Acceptance Fee Transfer</span>
+                      <div className="flex items-center gap-2 text-[#55635a]">
+                        <div className="w-4 h-4 rounded-full border-2 border-[#8a9890]" aria-hidden="true"></div>
+                        <span>Embassy Appointment Booking</span>
                       </div>
                     </div>
                   </div>
-                </div>
-
-                {/* Footer Meta */}
-                <div className="mt-6 pt-4 border-t border-surface-container-low flex flex-wrap items-center justify-between gap-2 text-on-surface-variant font-label-md text-label-md">
-                  <span className="flex items-center gap-1.5">
-                    <RefreshCw size={14} className="text-emerald-600 animate-spin" aria-hidden="true" />
-                    Direct TUMonline webhook sync active (last ping: 4 min ago)
-                  </span>
-                  <Link to="/student" className="text-primary hover:underline font-semibold no-underline">
-                    View full dossier &rarr;
-                  </Link>
                 </div>
               </div>
 
-              {/* Advisor Case File & Insights (4 Columns) */}
-              <div className="lg:col-span-4 rounded-2xl p-6 sm:p-8 bg-white shadow-sm flex flex-col justify-between border border-surface-container">
+              {/* Counsellor Guidance Card (4 Cols) */}
+              <div className="lg:col-span-4 rounded-2xl p-6 bg-[#F7F9F7] flex flex-col justify-between border border-[#ebe6de]">
                 <div>
                   <div className="flex items-center gap-3 mb-4">
-                    <img
-                      className="w-12 h-12 rounded-full object-cover ring-2 ring-primary-fixed"
-                      alt="Sarah Jenkins"
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIUyBU9_fzriNdHMjzND-ioGLzvBJ5CzN7VocznW8h5D8JC8fBItk_aV_4y_VYa2LZgnY2cw3YGE10maDSKQO87LwaRWO9KvfJWdbBTuZKMekzJwhf_a2p6_yqCw5FGVygOTGXI3XWKbO2RewyE-blToe6JykpqeEDyb-5fyMWNBYOrGOtHdxq_KCmF5tSYAqAsPYLUXyz7hAxlY145tKmuwNO_wDUHj1g54eSvxxWklUtWuwfAgdA"
-                    />
+                    <div className="w-12 h-12 rounded-full bg-[#245B42] text-white flex items-center justify-center font-bold text-sm">
+                      MK
+                    </div>
                     <div>
-                      <h4 className="font-headline-sm text-headline-sm text-on-surface leading-tight font-bold">
-                        Sarah Jenkins
+                      <h4 className="text-sm font-bold text-[#133827]">
+                        Muhammad Khan
                       </h4>
-                      <p className="font-label-sm text-label-sm text-primary font-semibold">
-                        Senior DAAD Advisory Fellow
+                      <p className="text-xs text-[#245B42] font-semibold">
+                        European Admissions Counsellor
                       </p>
                     </div>
                   </div>
 
-                  {/* Advisor Note Quote Box */}
-                  <div className="p-4 rounded-xl bg-amber-50/70 border-l-4 border-amber-400 mb-6">
-                    <p className="font-body-sm text-body-sm text-on-surface leading-snug">
-                      &quot;Elena, we have completely satisfied TUM&apos;s theoretical computer science module minimums. I have placed your blocked account affidavit in priority queue for consular review.&quot;
+                  <div className="p-4 rounded-xl bg-white border border-[#ebe6de] mb-4">
+                    <p className="text-xs text-[#2b352f] leading-relaxed">
+                      &quot;Transcripts and English proof verified. We have submitted your curriculum matrix to the faculty admissions board.&quot;
                     </p>
                   </div>
 
-                  {/* Quick Document Verifications */}
-                  <div className="space-y-3">
-                    <span className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-semibold">
-                      Verified Dossier Items
+                  <div className="space-y-2">
+                    <span className="text-[11px] font-bold text-[#55635a] uppercase tracking-wider">
+                      Verified Documents
                     </span>
-                    <div className="flex items-center justify-between p-2.5 rounded-full bg-surface-container-low px-4 border border-surface-container">
-                      <span className="font-body-sm text-body-sm text-on-surface truncate pr-2">Apostilled Transcript.pdf</span>
-                      <CheckCircle2 size={18} className="text-emerald-600 flex-shrink-0" aria-hidden="true" />
+                    <div className="flex items-center justify-between p-2 rounded-xl bg-white px-3 border border-[#ebe6de] text-xs">
+                      <span className="text-[#133827] truncate">HEC_Attested_Transcript.pdf</span>
+                      <CheckCircle2 size={16} className="text-[#245B42] flex-shrink-0" aria-hidden="true" />
                     </div>
-                    <div className="flex items-center justify-between p-2.5 rounded-full bg-surface-container-low px-4 border border-surface-container">
-                      <span className="font-body-sm text-body-sm text-on-surface truncate pr-2">IELTS_Academic_8.0.pdf</span>
-                      <CheckCircle2 size={18} className="text-emerald-600 flex-shrink-0" aria-hidden="true" />
+                    <div className="flex items-center justify-between p-2 rounded-xl bg-white px-3 border border-[#ebe6de] text-xs">
+                      <span className="text-[#133827] truncate">APS_Certificate_Verified.pdf</span>
+                      <CheckCircle2 size={16} className="text-[#245B42] flex-shrink-0" aria-hidden="true" />
                     </div>
                   </div>
                 </div>
@@ -734,70 +698,70 @@ export const HomePage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsAdvisoryModalOpen(true)}
-                  className="w-full mt-6 py-2.5 rounded-full font-body-sm-medium text-body-sm-medium text-on-surface bg-surface-container hover:bg-surface-container-high transition-colors flex items-center justify-center gap-2 font-medium"
+                  className="w-full mt-6 py-2.5 rounded-full text-xs font-semibold text-[#133827] bg-white hover:bg-[#f3efe9] transition-colors flex items-center justify-center gap-2 border border-[#ebe6de]"
                 >
-                  <MessageSquare size={18} aria-hidden="true" />
-                  <span>Open Advisor Thread (3 New)</span>
+                  <MessageSquare size={16} aria-hidden="true" />
+                  <span>Request Casework Consultation</span>
                 </button>
               </div>
             </div>
           </div>
         </section>
 
-        {/* 7. Scholarship & Tuition Transparency Guarantee */}
-        <section className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 mb-24 relative z-10">
+        {/* 7. Data Standard & Statutory Transparency Guarantee */}
+        <section className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 mb-20 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-5">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm mb-4 font-bold">
-                <ShieldCheck size={16} aria-hidden="true" />
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#B4D0B6]/30 text-[#133827] text-xs font-bold mb-4 border border-[#B4D0B6]">
+                <ShieldCheck size={16} className="text-[#245B42]" aria-hidden="true" />
                 The Unilistics Data Standard
               </div>
-              <h2 className="font-headline-xl text-headline-xl text-on-surface mb-4 leading-tight font-bold">
-                Zero speculation. Every tuition euro, deadline &amp; prerequisite verified.
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#133827] mb-4 leading-tight">
+                Zero speculation. Every tuition fee, deadline &amp; prerequisite verified.
               </h2>
-              <p className="font-body-lg text-body-lg text-on-surface-variant mb-6">
-                Unlike static university search aggregators, our intelligence team performs bi-weekly direct audits against university academic senates, state education ministries, and consular embassy updates.
+              <p className="text-sm sm:text-base text-[#55635a] mb-6 leading-relaxed">
+                Admissions criteria and consular requirements are audited against official university senates, state higher education portals, and consular embassy directives.
               </p>
 
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center flex-shrink-0 mt-0.5 font-bold">
+                  <div className="w-8 h-8 rounded-full bg-[#B4D0B6]/40 text-[#245B42] flex items-center justify-center flex-shrink-0 mt-0.5">
                     <RefreshCw size={16} aria-hidden="true" />
                   </div>
                   <div>
-                    <h4 className="font-body-lg-medium text-body-lg-medium text-on-surface font-semibold">
-                      14-Day Senate Verification Cycle
+                    <h4 className="text-sm font-bold text-[#133827]">
+                      Periodic Senate Verification
                     </h4>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant">
-                      All intake deadlines and language benchmark alterations are refreshed directly against official university gazettes.
+                    <p className="text-xs text-[#55635a]">
+                      Intake deadlines and prerequisite revisions are updated against official academic publications.
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-800 flex items-center justify-center flex-shrink-0 mt-0.5 font-bold">
+                  <div className="w-8 h-8 rounded-full bg-[#D7EE83]/40 text-[#133827] flex items-center justify-center flex-shrink-0 mt-0.5">
                     <Euro size={16} aria-hidden="true" />
                   </div>
                   <div>
-                    <h4 className="font-body-lg-medium text-body-lg-medium text-on-surface font-semibold">
-                      Hidden Fee Auditing
+                    <h4 className="text-sm font-bold text-[#133827]">
+                      Transparent Semester Contributions
                     </h4>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant">
-                      We decode campus semester contributions (Semesterbeitrag), transit passes, and state non-EU tuition surcharge exemptions.
+                    <p className="text-xs text-[#55635a]">
+                      Audited semesterbeitrag, student union transit passes, and state tuition surcharge exemptions.
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-full bg-purple-100 text-purple-800 flex items-center justify-center flex-shrink-0 mt-0.5 font-bold">
+                  <div className="w-8 h-8 rounded-full bg-[#B4D0B6]/40 text-[#245B42] flex items-center justify-center flex-shrink-0 mt-0.5">
                     <CheckCircle2 size={16} aria-hidden="true" />
                   </div>
                   <div>
-                    <h4 className="font-body-lg-medium text-body-lg-medium text-on-surface font-semibold">
+                    <h4 className="text-sm font-bold text-[#133827]">
                       Consular Blocked Account Alignment
                     </h4>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant">
-                      Calculators synchronized with the Federal Foreign Office&apos;s latest living cost stipulations (€11,208/yr baseline).
+                    <p className="text-xs text-[#55635a]">
+                      Calibrated with current living expense guidelines (€11,208/yr baseline for Germany).
                     </p>
                   </div>
                 </div>
@@ -805,95 +769,94 @@ export const HomePage: React.FC = () => {
             </div>
 
             <div className="lg:col-span-7">
-              <div className="rounded-2xl p-6 sm:p-8 bg-white shadow-xl relative overflow-hidden border border-surface-container">
+              <div className="rounded-3xl p-6 sm:p-8 bg-white shadow-xl shadow-black/[0.03] border border-[#ebe6de]">
                 <div className="flex items-center justify-between mb-6">
-                  <span className="font-label-md text-label-md font-bold text-on-surface">
-                    Recent University Senate Verifications
+                  <span className="text-sm font-bold text-[#133827]">
+                    Recent Institutional Audits
                   </span>
-                  <span className="font-label-sm text-label-sm text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200 font-semibold">
-                    All Systems Normal
+                  <span className="text-xs text-[#245B42] bg-[#B4D0B6]/30 px-3 py-1 rounded-full border border-[#B4D0B6] font-semibold">
+                    Corridors Verified
                   </span>
                 </div>
 
-                {/* Verification Feed Rows */}
+                {/* Verification Feed (Only 4 Corridors) */}
                 <div className="space-y-3">
-                  <div className="p-4 rounded-xl bg-surface-container-low flex items-center justify-between border border-surface-container">
+                  <div className="p-4 rounded-xl bg-[#F7F9F7] flex items-center justify-between border border-[#ebe6de]">
                     <div className="flex items-center gap-3">
-                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" aria-hidden="true"></span>
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#245B42]" aria-hidden="true"></span>
                       <div>
-                        <p className="font-body-sm-medium text-body-sm-medium text-on-surface font-semibold">
-                          Ludwig Maximilian University of Munich (LMU)
+                        <p className="text-xs sm:text-sm font-semibold text-[#133827]">
+                          LMU Munich (Germany 🇩🇪)
                         </p>
-                        <p className="font-label-sm text-label-sm text-on-surface-variant">
-                          M.Sc. Data Science: German B2 proficiency requirement waived for 2025
+                        <p className="text-xs text-[#55635a]">
+                          M.Sc. Data Science: English curriculum &amp; VPD requirements confirmed
                         </p>
                       </div>
                     </div>
-                    <span className="font-label-sm text-label-sm text-on-surface-variant flex-shrink-0">Verified 2h ago</span>
+                    <span className="text-[11px] text-[#55635a] flex-shrink-0">Verified 2h ago</span>
                   </div>
 
-                  <div className="p-4 rounded-xl bg-surface-container-low flex items-center justify-between border border-surface-container">
+                  <div className="p-4 rounded-xl bg-[#F7F9F7] flex items-center justify-between border border-[#ebe6de]">
                     <div className="flex items-center gap-3">
-                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" aria-hidden="true"></span>
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#245B42]" aria-hidden="true"></span>
                       <div>
-                        <p className="font-body-sm-medium text-body-sm-medium text-on-surface font-semibold">
-                          Erasmus University Rotterdam
+                        <p className="text-xs sm:text-sm font-semibold text-[#133827]">
+                          Sorbonne University (France 🇫🇷)
                         </p>
-                        <p className="font-label-sm text-label-sm text-on-surface-variant">
-                          Rotterdam School of Management: GMAT Focus Edition conversion locked
+                        <p className="text-xs text-[#55635a]">
+                          Campus France Etudes en France portal window published
                         </p>
                       </div>
                     </div>
-                    <span className="font-label-sm text-label-sm text-on-surface-variant flex-shrink-0">Verified 5h ago</span>
+                    <span className="text-[11px] text-[#55635a] flex-shrink-0">Verified 5h ago</span>
                   </div>
 
-                  <div className="p-4 rounded-xl bg-surface-container-low flex items-center justify-between border border-surface-container">
+                  <div className="p-4 rounded-xl bg-[#F7F9F7] flex items-center justify-between border border-[#ebe6de]">
                     <div className="flex items-center gap-3">
-                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" aria-hidden="true"></span>
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#245B42]" aria-hidden="true"></span>
                       <div>
-                        <p className="font-body-sm-medium text-body-sm-medium text-on-surface font-semibold">
-                          University of Manchester
+                        <p className="text-xs sm:text-sm font-semibold text-[#133827]">
+                          Politecnico di Milano (Italy 🇮🇹)
                         </p>
-                        <p className="font-label-sm text-label-sm text-on-surface-variant">
-                          Faculty of Science &amp; Engineering: Global Futures Scholarship round live
+                        <p className="text-xs text-[#55635a]">
+                          Universitaly pre-enrollment &amp; DSU grant window verified
                         </p>
                       </div>
                     </div>
-                    <span className="font-label-sm text-label-sm text-on-surface-variant flex-shrink-0">Verified 9h ago</span>
+                    <span className="text-[11px] text-[#55635a] flex-shrink-0">Verified 9h ago</span>
                   </div>
 
-                  <div className="p-4 rounded-xl bg-surface-container-low flex items-center justify-between border border-surface-container">
+                  <div className="p-4 rounded-xl bg-[#F7F9F7] flex items-center justify-between border border-[#ebe6de]">
                     <div className="flex items-center gap-3">
-                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" aria-hidden="true"></span>
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#245B42]" aria-hidden="true"></span>
                       <div>
-                        <p className="font-body-sm-medium text-body-sm-medium text-on-surface font-semibold">
-                          KTH Royal Institute of Technology
+                        <p className="text-xs sm:text-sm font-semibold text-[#133827]">
+                          University of Bucharest (Romania 🇷🇴)
                         </p>
-                        <p className="font-label-sm text-label-sm text-on-surface-variant">
-                          Stockholm tuition waivers confirmed: 15% increase in STEM allocations
+                        <p className="text-xs text-[#55635a]">
+                          Ministry acceptance letter (Scrisoare de Acceptare) timeline verified
                         </p>
                       </div>
                     </div>
-                    <span className="font-label-sm text-label-sm text-on-surface-variant flex-shrink-0">Verified 1d ago</span>
+                    <span className="text-[11px] text-[#55635a] flex-shrink-0">Verified 1d ago</span>
                   </div>
                 </div>
 
-                {/* Procedural Standard Banner */}
-                <div className="mt-6 pt-6 border-t border-surface-container-low flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="mt-6 pt-6 border-t border-[#ebe6de] flex flex-col sm:flex-row items-center justify-between gap-4">
                   <div className="flex items-center gap-3">
-                    <CheckCircle2 size={28} className="text-primary flex-shrink-0" aria-hidden="true" />
+                    <CheckCircle2 size={24} className="text-[#245B42] flex-shrink-0" aria-hidden="true" />
                     <div>
-                      <p className="font-body-sm-medium text-body-sm-medium text-on-surface font-bold">
-                        The Unilistics Procedural Accuracy Standard
+                      <p className="text-xs sm:text-sm font-bold text-[#133827]">
+                        Procedural Accuracy Guarantee
                       </p>
-                      <p className="font-label-sm text-label-sm text-on-surface-variant">
-                        Structured prerequisite verification aligned with statutory embassy and admissions protocols.
+                      <p className="text-xs text-[#55635a]">
+                        Structured prerequisite verification aligned with statutory protocols.
                       </p>
                     </div>
                   </div>
                   <Link
                     to="/help"
-                    className="px-4 py-2 rounded-full font-label-md text-label-md text-primary bg-primary-fixed hover:bg-primary-fixed-dim transition-colors flex-shrink-0 font-bold no-underline"
+                    className="px-4 py-2 rounded-full text-xs font-bold text-[#133827] bg-[#B4D0B6]/40 hover:bg-[#B4D0B6]/60 transition-colors flex-shrink-0 no-underline"
                   >
                     View Audit Protocol
                   </Link>
@@ -903,33 +866,32 @@ export const HomePage: React.FC = () => {
           </div>
         </section>
 
-        {/* 8. Bottom Action CTA Banner */}
+        {/* 8. Bottom Action CTA Banner (Forest & Citron Surfaces) */}
         <section className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 mb-20 relative z-10">
-          <div className="rounded-3xl p-8 sm:p-14 bg-gradient-to-r from-primary-container via-secondary-container to-primary text-white shadow-2xl relative overflow-hidden">
-            {/* Decorative Ambient Light Orbs Inside CTA */}
-            <div className="absolute -right-10 -bottom-10 w-96 h-96 rounded-full bg-white/10 blur-3xl pointer-events-none" aria-hidden="true"></div>
-            <div className="absolute -left-10 -top-10 w-72 h-72 rounded-full bg-white/10 blur-2xl pointer-events-none" aria-hidden="true"></div>
+          <div className="rounded-3xl p-8 sm:p-14 bg-gradient-to-r from-[#245B42] via-[#1D4A36] to-[#133827] text-white shadow-2xl relative overflow-hidden">
+            <div className="absolute -right-10 -bottom-10 w-96 h-96 rounded-full bg-white/5 blur-3xl pointer-events-none" aria-hidden="true"></div>
+            <div className="absolute -left-10 -top-10 w-72 h-72 rounded-full bg-[#D7EE83]/10 blur-2xl pointer-events-none" aria-hidden="true"></div>
 
             <div className="relative z-10 max-w-3xl">
-              <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md font-label-sm text-label-sm text-white uppercase tracking-wide inline-block mb-4 font-bold">
+              <span className="px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-bold text-[#D7EE83] uppercase tracking-wide inline-block mb-4">
                 European Higher Education Corridors
               </span>
-              <h2 className="font-display-lg text-display-lg-mobile md:text-display-lg font-bold text-white tracking-tight mb-4">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-4">
                 Ready to plan your international degree?
               </h2>
-              <p className="font-body-lg text-body-lg text-white/90 mb-8 max-w-2xl leading-relaxed">
+              <p className="text-sm sm:text-base text-white/85 mb-8 max-w-2xl leading-relaxed">
                 Explore curated public university catalogues across Germany, France, Italy, and Romania with verified entry requirements and consular visa guidance.
               </p>
               <div className="flex flex-wrap items-center gap-4">
                 <Link
                   to="/universities"
-                  className="px-8 py-3.5 rounded-full font-body-sm-medium text-body-sm-medium text-primary bg-white hover:bg-surface-container-low shadow-lg active:scale-95 transition-all no-underline font-bold"
+                  className="px-8 py-3.5 rounded-full text-sm font-bold text-[#133827] bg-[#D7EE83] hover:bg-[#c9e36e] shadow-lg active:scale-95 transition-all no-underline"
                 >
                   Explore University Catalogue
                 </Link>
                 <Link
                   to={currentRole === 'visitor' ? '/sign-in' : '/student'}
-                  className="px-8 py-3.5 rounded-full font-body-sm-medium text-body-sm-medium text-white bg-white/20 hover:bg-white/30 backdrop-blur-md active:scale-95 transition-all no-underline font-semibold"
+                  className="px-8 py-3.5 rounded-full text-sm font-semibold text-white bg-white/15 hover:bg-white/25 backdrop-blur-md active:scale-95 transition-all no-underline border border-white/20"
                 >
                   {currentRole === 'visitor' ? 'Sign In to Portal' : 'My Student Workspace'}
                 </Link>
@@ -939,10 +901,10 @@ export const HomePage: React.FC = () => {
         </section>
       </div>
 
-      {/* 10. Advisory Modal: Request 1-on-1 Advisory */}
+      {/* 9. Advisory Modal: Request 1-on-1 Advisory */}
       {isAdvisoryModalOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-150"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-150"
           role="dialog"
           aria-modal="true"
           aria-labelledby="advisory-modal-title"
@@ -952,40 +914,40 @@ export const HomePage: React.FC = () => {
         >
           <div
             ref={modalRef}
-            className="w-full max-w-lg rounded-3xl p-8 bg-white shadow-2xl relative border border-surface-container animate-in zoom-in-95 duration-150"
+            className="w-full max-w-lg rounded-3xl p-8 bg-white shadow-2xl relative border border-[#ebe6de] animate-in zoom-in-95 duration-150"
           >
             <button
               type="button"
               id="close-advisory-modal-btn"
               onClick={() => setIsAdvisoryModalOpen(false)}
-              className="absolute top-6 right-6 w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors"
+              className="absolute top-6 right-6 w-8 h-8 rounded-full bg-[#F7F9F7] flex items-center justify-center text-[#55635a] hover:text-[#133827] transition-colors"
               aria-label="Close advisory dialog"
             >
               <X size={18} aria-hidden="true" />
             </button>
 
-            <span className="font-label-sm text-label-sm text-primary uppercase font-bold tracking-wider">
-              Advisory Concierge
+            <span className="text-xs font-bold text-[#245B42] uppercase tracking-wider">
+              Advisory Desk
             </span>
-            <h3 id="advisory-modal-title" className="font-headline-md text-headline-md text-on-surface mt-1 mb-2 font-bold">
-              Book Free 1-on-1 Academic Audit
+            <h3 id="advisory-modal-title" className="text-xl font-bold text-[#133827] mt-1 mb-2">
+              Request 1-on-1 Academic Eligibility Review
             </h3>
-            <p className="font-body-sm text-body-sm text-on-surface-variant mb-6">
-              Connect with an accredited DAAD or European admissions fellow for a 30-minute eligibility appraisal.
+            <p className="text-xs sm:text-sm text-[#55635a] mb-6">
+              Connect with an accredited European admissions counsellor for an initial profile appraisal.
             </p>
 
             {advisorySubmitted ? (
-              <div className="p-6 rounded-2xl bg-emerald-50 border border-emerald-200 text-center space-y-2">
-                <CheckCircle2 size={36} className="text-emerald-600 mx-auto" aria-hidden="true" />
-                <h4 className="font-headline-sm text-headline-sm text-emerald-900 font-bold">Request Dispatched</h4>
-                <p className="font-body-sm text-body-sm text-emerald-800">
-                  Your advisory request has been dispatched. An advisor will contact you within 4 hours.
+              <div className="p-6 rounded-2xl bg-[#B4D0B6]/20 border border-[#B4D0B6] text-center space-y-2">
+                <CheckCircle2 size={36} className="text-[#245B42] mx-auto" aria-hidden="true" />
+                <h4 className="text-base font-bold text-[#133827]">Request Dispatched</h4>
+                <p className="text-xs text-[#2b352f]">
+                  Your advisory request has been dispatched. An admissions counsellor will contact you within 4 hours.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleAdvisorySubmit} className="space-y-4">
                 <div>
-                  <label htmlFor="adv-name" className="block font-label-md text-label-md text-on-surface mb-1.5 font-semibold">
+                  <label htmlFor="adv-name" className="block text-xs font-semibold text-[#133827] mb-1.5">
                     Full Legal Name
                   </label>
                   <input
@@ -993,14 +955,14 @@ export const HomePage: React.FC = () => {
                     required
                     value={advisoryFormData.fullName}
                     onChange={(e) => setAdvisoryFormData({ ...advisoryFormData, fullName: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-full bg-surface-container-low font-body-sm text-body-sm text-on-surface outline-none focus:ring-2 focus:ring-primary-container border border-surface-container"
-                    placeholder="Elena Rostova"
+                    className="w-full px-4 py-2.5 rounded-full bg-[#F7F9F7] text-sm text-[#1a1a1a] outline-none focus:ring-2 focus:ring-[#245B42] border border-[#ebe6de]"
+                    placeholder="e.g. Fatima Ali"
                     type="text"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="adv-email" className="block font-label-md text-label-md text-on-surface mb-1.5 font-semibold">
+                  <label htmlFor="adv-email" className="block text-xs font-semibold text-[#133827] mb-1.5">
                     Email Address
                   </label>
                   <input
@@ -1008,21 +970,21 @@ export const HomePage: React.FC = () => {
                     required
                     value={advisoryFormData.email}
                     onChange={(e) => setAdvisoryFormData({ ...advisoryFormData, email: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-full bg-surface-container-low font-body-sm text-body-sm text-on-surface outline-none focus:ring-2 focus:ring-primary-container border border-surface-container"
-                    placeholder="elena@example.com"
+                    className="w-full px-4 py-2.5 rounded-full bg-[#F7F9F7] text-sm text-[#1a1a1a] outline-none focus:ring-2 focus:ring-[#245B42] border border-[#ebe6de]"
+                    placeholder="fatima@example.com"
                     type="email"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="adv-dest" className="block font-label-md text-label-md text-on-surface mb-1.5 font-semibold">
-                    Target Destination &amp; Degree
+                  <label htmlFor="adv-dest" className="block text-xs font-semibold text-[#133827] mb-1.5">
+                    Target Corridor &amp; Degree
                   </label>
                   <input
                     id="adv-dest"
                     value={advisoryFormData.targetDestination}
                     onChange={(e) => setAdvisoryFormData({ ...advisoryFormData, targetDestination: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-full bg-surface-container-low font-body-sm text-body-sm text-on-surface outline-none focus:ring-2 focus:ring-primary-container border border-surface-container"
+                    className="w-full px-4 py-2.5 rounded-full bg-[#F7F9F7] text-sm text-[#1a1a1a] outline-none focus:ring-2 focus:ring-[#245B42] border border-[#ebe6de]"
                     placeholder="e.g. Germany — Master in Computer Science"
                     type="text"
                   />
@@ -1032,9 +994,9 @@ export const HomePage: React.FC = () => {
                   <button
                     type="submit"
                     id="confirm-advisory-slot-btn"
-                    className="w-full py-3.5 rounded-full font-body-sm-medium text-body-sm-medium text-white bg-gradient-to-r from-[#FF5E36] to-[#FF2A55] shadow-md shadow-primary-container/30 hover:opacity-95 transition-opacity font-bold"
+                    className="w-full py-3.5 rounded-full text-sm font-bold text-white bg-[#245B42] hover:bg-[#1D4A36] shadow-sm transition-all"
                   >
-                    Confirm Advisory Slot (Free)
+                    Confirm Advisory Request (Free)
                   </button>
                 </div>
               </form>
@@ -1045,3 +1007,5 @@ export const HomePage: React.FC = () => {
     </div>
   );
 };
+
+export default HomePage;

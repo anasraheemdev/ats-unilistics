@@ -7,14 +7,23 @@ import { ErrorState } from '@/components/common/ErrorState';
 import { EmptyState } from '@/components/common/EmptyState';
 import {
   Search,
-  Filter,
+  SlidersHorizontal,
   ChevronLeft,
   ChevronRight,
   ArrowRight,
-  Shield,
-  Calendar,
   X,
+  Lock,
+  CheckCircle2,
 } from 'lucide-react';
+
+function getCountryFlag(country: string): string {
+  const c = country.toLowerCase();
+  if (c === 'germany' || c === 'de') return '🇩🇪';
+  if (c === 'france' || c === 'fr') return '🇫🇷';
+  if (c === 'italy' || c === 'it') return '🇮🇹';
+  if (c === 'romania' || c === 'ro') return '🇷🇴';
+  return '🇪🇺';
+}
 
 export const ScholarshipsDiscoveryPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -26,6 +35,8 @@ export const ScholarshipsDiscoveryPage: React.FC = () => {
 
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [searchInput, setSearchInput] = useState(searchParam);
+
+  const appliedFilterCount = (countryParam !== 'all' ? 1 : 0) + (coverageParam !== 'all' ? 1 : 0);
 
   const updateParam = (key: string, value: string) => {
     setSearchParams((prev) => {
@@ -87,213 +98,148 @@ export const ScholarshipsDiscoveryPage: React.FC = () => {
   ];
 
   const filterSidebar = (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+    <div className="flex flex-col gap-6">
       <div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.625rem' }}>
-          <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)' }}>
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-xs font-bold uppercase tracking-wider text-[#55635a]">
             Destination
           </span>
-          {(countryParam !== 'all' || coverageParam !== 'all' || searchParam) && (
+          {appliedFilterCount > 0 && (
             <button
               type="button"
               onClick={handleResetFilters}
-              style={{ fontSize: '0.75rem', color: 'var(--action-primary)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600 }}
+              className="text-xs text-[#245B42] hover:underline font-semibold"
             >
               Reset All
             </button>
           )}
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-          {countries.map((c) => (
-            <button
-              key={c.code}
-              type="button"
-              onClick={() => updateParam('country', c.code)}
-              style={{
-                textAlign: 'left',
-                padding: '0.4rem 0.6rem',
-                borderRadius: 'var(--radius-sm)',
-                fontSize: '0.8125rem',
-                fontWeight: countryParam === c.code ? 600 : 500,
-                color: countryParam === c.code ? 'var(--action-primary)' : 'var(--text-charcoal)',
-                backgroundColor: countryParam === c.code ? 'var(--accent-peach-bg)' : 'transparent',
-                border: 'none',
-                cursor: 'pointer',
-              }}
-            >
-              {c.label}
-            </button>
-          ))}
+        <div className="flex flex-col gap-1.5">
+          {countries.map((c) => {
+            const isSelected = countryParam === c.code;
+            return (
+              <button
+                key={c.code}
+                type="button"
+                onClick={() => updateParam('country', c.code)}
+                className={`text-left px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-colors ${
+                  isSelected
+                    ? 'bg-[#B4D0B6]/40 text-[#133827] font-semibold'
+                    : 'text-[#2b352f] hover:bg-[#F7F9F7]'
+                }`}
+              >
+                {c.label}
+              </button>
+            );
+          })}
         </div>
       </div>
 
-      <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '1rem' }}>
-        <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)', marginBottom: '0.625rem' }}>
-          Funding Coverage
+      <div className="border-t border-[#ebe6de] pt-5">
+        <span className="block text-xs font-bold uppercase tracking-wider text-[#55635a] mb-3">
+          Funding Model
         </span>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-          {coverageTypes.map((t) => (
-            <button
-              key={t.code}
-              type="button"
-              onClick={() => updateParam('coverage', t.code)}
-              style={{
-                textAlign: 'left',
-                padding: '0.4rem 0.6rem',
-                borderRadius: 'var(--radius-sm)',
-                fontSize: '0.8125rem',
-                fontWeight: coverageParam === t.code ? 600 : 500,
-                color: coverageParam === t.code ? 'var(--action-primary)' : 'var(--text-charcoal)',
-                backgroundColor: coverageParam === t.code ? 'var(--accent-peach-bg)' : 'transparent',
-                border: 'none',
-                cursor: 'pointer',
-              }}
-            >
-              {t.label}
-            </button>
-          ))}
+        <div className="flex flex-col gap-1.5">
+          {coverageTypes.map((cv) => {
+            const isSelected = coverageParam === cv.code;
+            return (
+              <button
+                key={cv.code}
+                type="button"
+                onClick={() => updateParam('coverage', cv.code)}
+                className={`text-left px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-colors ${
+                  isSelected
+                    ? 'bg-[#B4D0B6]/40 text-[#133827] font-semibold'
+                    : 'text-[#2b352f] hover:bg-[#F7F9F7]'
+                }`}
+              >
+                {cv.label}
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>
   );
 
   return (
-    <div style={{ maxWidth: '1440px', margin: '0 auto', padding: '1.5rem 1rem 3rem' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: '1.5rem' }} className="md:grid-cols-[240px_1fr]">
-        {/* Desktop Filter Sidebar */}
+    <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-16">
+      {/* Header & Title */}
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#133827]">
+            Scholarships &amp; Grants
+          </h1>
+          <p className="text-sm text-[#55635a] mt-1">
+            Explore verified government, regional, and institutional funding schemes across Europe.
+          </p>
+        </div>
+
+        {/* Filter Toggle Action */}
+        <button
+          type="button"
+          onClick={() => setMobileFilterOpen(true)}
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-white border border-[#ebe6de] shadow-sm text-xs sm:text-sm font-semibold text-[#133827] hover:bg-[#F7F9F7] active:scale-95 transition-all self-start sm:self-auto"
+        >
+          <SlidersHorizontal size={16} className="text-[#245B42]" aria-hidden="true" />
+          <span>Filters</span>
+          {appliedFilterCount > 0 && (
+            <span className="w-5 h-5 rounded-full bg-[#245B42] text-white text-[11px] font-bold flex items-center justify-center">
+              {appliedFilterCount}
+            </span>
+          )}
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-6 items-start">
+        {/* Desktop Sticky Filter Sidebar */}
         <aside
-          style={{
-            display: 'none',
-            backgroundColor: '#ffffff',
-            borderRadius: 'var(--radius-card)',
-            padding: '1.25rem',
-            border: '1px solid var(--border-subtle)',
-            height: 'fit-content',
-            position: 'sticky',
-            top: '80px',
-          }}
-          className="md:block"
-          aria-label="Scholarship filters"
+          className="hidden md:block bg-white rounded-3xl p-6 border border-[#ebe6de] shadow-sm sticky top-24"
+          aria-label="Catalogue filters"
         >
           {filterSidebar}
         </aside>
 
         {/* Main Content Area */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', minWidth: 0 }}>
-          {/* Header & Title */}
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
-              <div>
-                <h1 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-charcoal)' }}>
-                  Scholarships &amp; Grants
-                </h1>
-                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
-                  Verified government, regional, and institutional funding schemes for Pakistani students in Europe.
-                </p>
-              </div>
-
-              {/* Mobile Filter Toggle */}
-              <button
-                type="button"
-                onClick={() => setMobileFilterOpen(true)}
-                className="md:hidden"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.35rem',
-                  padding: '0.5rem 0.875rem',
-                  backgroundColor: '#ffffff',
-                  border: '1px solid var(--border-subtle)',
-                  borderRadius: 'var(--radius-sm)',
-                  fontSize: '0.8125rem',
-                  fontWeight: 600,
-                  color: 'var(--text-charcoal)',
-                }}
-              >
-                <Filter size={16} />
-                <span>Filters</span>
-                {(countryParam !== 'all' || coverageParam !== 'all') && (
-                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--action-primary)' }} />
-                )}
-              </button>
-            </div>
-          </div>
-
-          {/* Gated Access State for Visitors */}
+        <div className="flex flex-col gap-5 min-w-0">
           {data?.is_gated ? (
-            <div
-              style={{
-                backgroundColor: '#ffffff',
-                borderRadius: 'var(--radius-card)',
-                padding: '2.5rem 1.5rem',
-                border: '1px solid var(--border-subtle)',
-                textAlign: 'center',
-                boxShadow: 'var(--shadow-card)',
-              }}
-            >
-              <div
-                style={{
-                  width: '48px',
-                  height: '48px',
-                  borderRadius: 'var(--radius-full)',
-                  backgroundColor: 'var(--accent-peach-bg)',
-                  color: 'var(--action-primary)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto 1.25rem',
-                }}
-              >
-                <Shield size={24} aria-hidden="true" />
+            <div className="bg-white rounded-3xl p-8 sm:p-12 border border-[#ebe6de] shadow-md text-center max-w-xl mx-auto w-full my-6">
+              <div className="w-12 h-12 rounded-full bg-[#B4D0B6]/30 text-[#245B42] flex items-center justify-center mx-auto mb-4">
+                <Lock size={22} aria-hidden="true" />
               </div>
-              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-charcoal, #1a1a1a)', marginBottom: '0.5rem' }}>
-                Verified Scholarship Access Gated
+
+              <h2 className="text-xl font-extrabold text-[#133827] mb-2">
+                Verified Scholarship Directory
               </h2>
-              <p style={{ fontSize: '0.875rem', color: 'var(--text-muted, #636b78)', maxWidth: '520px', margin: '0 auto 1.5rem', lineHeight: 1.5 }}>
-                Regional European scholarships and application window criteria are available to verified Explorer accounts. Sign up for free or sign in to browse authenticated funding opportunities.
+              <p className="text-sm text-[#55635a] mb-6 leading-relaxed">
+                European regional scholarships and official application windows require a verified Explorer account. Sign up for free or sign in to browse authenticated funding opportunities.
               </p>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
-                <Link
-                  to="/sign-up?returnUrl=/scholarships"
-                  id="scholarships-gated-signup-btn"
-                  className="btn-pill btn-pill-primary"
-                  style={{ padding: '0.625rem 1.25rem', fontSize: '0.875rem', fontWeight: 700 }}
-                >
-                  Create Free Account
-                </Link>
+              <div className="flex items-center justify-center gap-3 flex-wrap">
                 <Link
                   to="/sign-in?returnUrl=/scholarships"
                   id="scholarships-gated-signin-btn"
-                  className="btn-pill btn-pill-outline"
-                  style={{
-                    padding: '0.625rem 1.25rem',
-                    fontSize: '0.875rem',
-                    fontWeight: 600,
-                  }}
+                  className="px-6 py-2.5 rounded-full text-sm font-semibold text-[#133827] bg-white border border-[#ebe6de] hover:bg-[#F7F9F7] shadow-sm transition-all"
                 >
                   Sign In to Account
+                </Link>
+                <Link
+                  to="/sign-up?returnUrl=/scholarships"
+                  id="scholarships-gated-signup-btn"
+                  className="px-6 py-2.5 rounded-full text-sm font-bold text-white bg-[#245B42] hover:bg-[#1D4A36] shadow-sm transition-all"
+                >
+                  Create Free Account
                 </Link>
               </div>
             </div>
           ) : (
             <>
-              {/* Search Bar & Controls Bar */}
-              <div
-                style={{
-                  backgroundColor: '#ffffff',
-                  borderRadius: 'var(--radius-card)',
-                  padding: '1rem',
-                  border: '1px solid var(--border-subtle)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '1rem',
-                }}
-              >
-                <form onSubmit={handleSearchSubmit} style={{ display: 'flex', gap: '0.5rem' }}>
-                  <div style={{ position: 'relative', flex: 1 }}>
+              {/* Large Clear Search Bar */}
+              <div className="bg-white rounded-3xl p-4 sm:p-5 border border-[#ebe6de] shadow-sm">
+                <form onSubmit={handleSearchSubmit} className="flex gap-2 relative">
+                  <div className="relative flex-1">
                     <Search
-                      size={18}
-                      style={{ position: 'absolute', left: '0.875rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }}
+                      size={20}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8a9890]"
                       aria-hidden="true"
                     />
                     <input
@@ -301,52 +247,43 @@ export const ScholarshipsDiscoveryPage: React.FC = () => {
                       value={searchInput}
                       onChange={(e) => setSearchInput(e.target.value)}
                       placeholder="Search scholarships by scheme title or provider..."
-                      style={{
-                        width: '100%',
-                        padding: '0.625rem 1rem 0.625rem 2.5rem',
-                        fontSize: '0.875rem',
-                        border: '1px solid var(--border-subtle)',
-                        borderRadius: 'var(--radius-sm)',
-                        outline: 'none',
-                        backgroundColor: 'var(--surface-canvas)',
-                      }}
+                      className="w-full pl-12 pr-10 py-3 rounded-full text-sm text-[#1a1a1a] placeholder:text-[#8a9890] bg-[#F7F9F7] border border-[#ebe6de] outline-none focus:bg-white focus:ring-2 focus:ring-[#245B42] transition-all"
                     />
+                    {searchInput && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSearchInput('');
+                          updateParam('search', '');
+                        }}
+                        className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#8a9890] hover:text-[#133827]"
+                        aria-label="Clear search"
+                      >
+                        <X size={16} />
+                      </button>
+                    )}
                   </div>
                   <button
                     type="submit"
-                    className="btn-pill btn-pill-primary"
-                    style={{ padding: '0.625rem 1.25rem', fontSize: '0.875rem' }}
+                    className="px-6 py-3 rounded-full text-sm font-semibold text-white bg-[#245B42] hover:bg-[#1D4A36] shadow-sm transition-all"
                   >
                     Search
                   </button>
                 </form>
 
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    flexWrap: 'wrap',
-                    gap: '0.75rem',
-                    fontSize: '0.8125rem',
-                    color: 'var(--text-muted)',
-                    borderTop: '1px solid var(--border-subtle)',
-                    paddingTop: '0.75rem',
-                  }}
-                >
-                  <div>
-                    {isLoading ? (
-                      <span>Searching verified scholarships...</span>
-                    ) : (
-                      <span>
-                        Showing <strong>{data?.total_count || 0}</strong> {data?.total_count === 1 ? 'scholarship' : 'scholarships'}
-                      </span>
-                    )}
-                  </div>
+                <div className="text-xs text-[#55635a] pt-4 mt-4 border-t border-[#ebe6de]">
+                  {isLoading ? (
+                    <span>Searching verified scholarships...</span>
+                  ) : (
+                    <span>
+                      Showing <strong className="text-[#133827]">{data?.total_count || 0}</strong>{' '}
+                      {data?.total_count === 1 ? 'scholarship' : 'scholarships'}
+                    </span>
+                  )}
                 </div>
               </div>
 
-              {/* Results Grid / List */}
+              {/* Results Grid */}
               {isLoading ? (
                 <LoadingState message="Loading verified scholarship records..." minHeight="300px" />
               ) : error ? (
@@ -358,143 +295,109 @@ export const ScholarshipsDiscoveryPage: React.FC = () => {
               ) : !data || data.items.length === 0 ? (
                 <EmptyState
                   title="No scholarships found"
-                  description="No scholarship records match your active query. If you are an administrator, use Catalogue Imports to ingest verified scholarship records."
+                  description="No scholarship records match your active query. Please adjust your criteria."
                   actionLabel={searchParam || countryParam !== 'all' ? 'Reset Filters' : undefined}
                   onAction={searchParam || countryParam !== 'all' ? handleResetFilters : undefined}
                 />
               ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1rem' }}>
-                  {data.items.map((sch) => (
-                    <div
-                      key={sch.id}
-                      style={{
-                        backgroundColor: '#ffffff',
-                        borderRadius: 'var(--radius-card)',
-                        border: '1px solid var(--border-subtle)',
-                        padding: '1.25rem',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                        boxShadow: 'var(--shadow-card)',
-                      }}
-                    >
-                      <div>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                          <span
-                            style={{
-                              fontSize: '0.6875rem',
-                              fontWeight: 700,
-                              textTransform: 'uppercase',
-                              padding: '0.2rem 0.5rem',
-                              borderRadius: 'var(--radius-pill)',
-                              backgroundColor: 'var(--surface-recessed)',
-                              color: 'var(--text-charcoal)',
-                            }}
-                          >
-                            {sch.country_name || sch.country_code.toUpperCase()}
-                          </span>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {data.items.map((sch) => {
+                    const flag = getCountryFlag(sch.country_name || sch.country_code);
 
-                          <span
-                            style={{
-                              fontSize: '0.6875rem',
-                              fontWeight: 700,
-                              padding: '0.2rem 0.5rem',
-                              borderRadius: 'var(--radius-pill)',
-                              backgroundColor: '#E8F5E9',
-                              color: '#2E7D32',
-                            }}
-                          >
-                            {sch.coverage_type || 'VERIFIED GRANT'}
-                          </span>
+                    return (
+                      <div
+                        key={sch.id}
+                        className="rounded-[24px] bg-white border border-[#ebe6de] p-5 flex flex-col justify-between shadow-sm hover:shadow-md transition-all group"
+                      >
+                        <div>
+                          {/* Badges */}
+                          <div className="flex items-center justify-between gap-2 mb-3">
+                            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-[#F7F9F7] text-[#133827] border border-[#ebe6de]">
+                              {flag} {(sch.country_name || sch.country_code).toUpperCase()}
+                            </span>
+
+                            <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#B4D0B6]/40 text-[#133827]">
+                              {sch.coverage_type ? sch.coverage_type.replace(/_/g, ' ').toUpperCase() : 'VERIFIED GRANT'}
+                            </span>
+                          </div>
+
+                          <p className="text-xs font-semibold text-[#55635a] mb-1 line-clamp-1">
+                            {sch.provider || 'European Authority'}
+                          </p>
+
+                          <h2 className="text-base font-bold text-[#133827] leading-snug mb-3 line-clamp-2">
+                            {sch.name}
+                          </h2>
+
+                          {/* Two-Tone Summary Panel with Quiet Dividers */}
+                          <div className="rounded-2xl bg-[#F7F9F7] p-3.5 mb-4 border border-[#ebe6de] space-y-2 text-xs">
+                            <div className="flex items-center justify-between text-[#133827]">
+                              <span className="text-[#55635a]">Funding Scope:</span>
+                              <span className="font-semibold">
+                                {sch.stipend_amount_eur ? `€${sch.stipend_amount_eur.toLocaleString()}/yr stipend` : 'Tuition waiver / Full grant'}
+                              </span>
+                            </div>
+                            {sch.annual_deadline_date && (
+                              <div className="flex items-center justify-between text-[#133827] pt-1.5 border-t border-[#ebe6de]">
+                                <span className="text-[#55635a]">Window Deadline:</span>
+                                <span className="font-semibold">{sch.annual_deadline_date}</span>
+                              </div>
+                            )}
+                            <div className="flex items-center gap-1.5 text-[11px] text-[#55635a] pt-1.5 border-t border-[#ebe6de]">
+                              <CheckCircle2 size={13} className="text-[#245B42] flex-shrink-0" aria-hidden="true" />
+                              <span>Official European authority verification</span>
+                            </div>
+                          </div>
                         </div>
 
-                        <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginBottom: '0.25rem' }}>
-                          {sch.provider || 'Regional Authority'}
-                        </p>
-
-                        <h2 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-charcoal)', lineHeight: 1.3, marginBottom: '0.75rem' }}>
-                          {sch.name}
-                        </h2>
-
-                        {sch.annual_deadline_date && (
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
-                            <Calendar size={13} aria-hidden="true" />
-                            <span>Deadline: {sch.annual_deadline_date}</span>
-                          </div>
-                        )}
+                        {/* Card Footer: Criteria Action */}
+                        <div className="pt-3 border-t border-[#ebe6de] flex items-center justify-between">
+                          <span className="text-xs text-[#55635a]">Funding Scheme</span>
+                          <Link
+                            to={`/scholarships/${sch.id}`}
+                            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#245B42] hover:underline"
+                          >
+                            <span>View criteria</span>
+                            <ArrowRight size={14} aria-hidden="true" />
+                          </Link>
+                        </div>
                       </div>
-
-                      <div style={{ marginTop: '1.25rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                          {sch.stipend_amount_eur ? `Stipend: €${sch.stipend_amount_eur}/yr` : 'Full / Partial Coverage'}
-                        </span>
-                        <Link
-                          to={`/scholarships/${sch.id}`}
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '0.25rem',
-                            fontSize: '0.8125rem',
-                            fontWeight: 600,
-                            color: 'var(--action-primary)',
-                            textDecoration: 'none',
-                          }}
-                        >
-                          <span>Criteria</span>
-                          <ArrowRight size={14} aria-hidden="true" />
-                        </Link>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
 
-              {/* Pagination Controls */}
+              {/* Pagination */}
               {data && data.total_pages > 1 && (
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', marginTop: '1.5rem' }}>
+                <div className="flex items-center justify-center gap-3 mt-6">
                   <button
                     type="button"
                     disabled={pageParam <= 1}
                     onClick={() => handlePageChange(pageParam - 1)}
-                    style={{
-                      padding: '0.45rem 0.75rem',
-                      borderRadius: 'var(--radius-sm)',
-                      border: '1px solid var(--border-subtle)',
-                      backgroundColor: '#ffffff',
-                      fontSize: '0.8125rem',
-                      fontWeight: 600,
-                      color: pageParam <= 1 ? 'var(--text-muted)' : 'var(--text-charcoal)',
-                      cursor: pageParam <= 1 ? 'not-allowed' : 'pointer',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.25rem',
-                    }}
+                    className={`px-4 py-2 rounded-xl border border-[#ebe6de] bg-white text-xs font-semibold flex items-center gap-1.5 ${
+                      pageParam <= 1
+                        ? 'text-[#8a9890] cursor-not-allowed'
+                        : 'text-[#133827] hover:bg-[#F7F9F7]'
+                    }`}
                   >
                     <ChevronLeft size={16} />
                     <span>Previous</span>
                   </button>
 
-                  <span style={{ fontSize: '0.8125rem', color: 'var(--text-charcoal)' }}>
-                    Page <strong>{data.page}</strong> of <strong>{data.total_pages}</strong>
+                  <span className="text-xs text-[#2b352f]">
+                    Page <strong className="text-[#133827]">{data.page}</strong> of{' '}
+                    <strong className="text-[#133827]">{data.total_pages}</strong>
                   </span>
 
                   <button
                     type="button"
                     disabled={pageParam >= data.total_pages}
                     onClick={() => handlePageChange(pageParam + 1)}
-                    style={{
-                      padding: '0.45rem 0.75rem',
-                      borderRadius: 'var(--radius-sm)',
-                      border: '1px solid var(--border-subtle)',
-                      backgroundColor: '#ffffff',
-                      fontSize: '0.8125rem',
-                      fontWeight: 600,
-                      color: pageParam >= data.total_pages ? 'var(--text-muted)' : 'var(--text-charcoal)',
-                      cursor: pageParam >= data.total_pages ? 'not-allowed' : 'pointer',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.25rem',
-                    }}
+                    className={`px-4 py-2 rounded-xl border border-[#ebe6de] bg-white text-xs font-semibold flex items-center gap-1.5 ${
+                      pageParam >= data.total_pages
+                        ? 'text-[#8a9890] cursor-not-allowed'
+                        : 'text-[#133827] hover:bg-[#F7F9F7]'
+                    }`}
                   >
                     <span>Next</span>
                     <ChevronRight size={16} />
@@ -508,9 +411,9 @@ export const ScholarshipsDiscoveryPage: React.FC = () => {
 
       {/* Mobile Filter Sheet */}
       {mobileFilterOpen && (
-        <div style={{ position: 'fixed', inset: 0, zIndex: 110, display: 'flex', alignItems: 'flex-end' }}>
+        <div className="fixed inset-0 z-50 flex items-end">
           <div
-            style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(26,28,30,0.4)', backdropFilter: 'blur(2px)' }}
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm"
             onClick={() => setMobileFilterOpen(false)}
             aria-hidden="true"
           />
@@ -518,30 +421,17 @@ export const ScholarshipsDiscoveryPage: React.FC = () => {
             role="dialog"
             aria-modal="true"
             aria-label="Filter scholarships"
-            style={{
-              position: 'relative',
-              width: '100%',
-              maxHeight: '80vh',
-              backgroundColor: '#ffffff',
-              borderTopLeftRadius: 'var(--radius-card)',
-              borderTopRightRadius: 'var(--radius-card)',
-              boxShadow: '0 -4px 20px rgba(0,0,0,0.15)',
-              display: 'flex',
-              flexDirection: 'column',
-              padding: '1.5rem',
-              zIndex: 111,
-              overflowY: 'auto',
-            }}
+            className="relative w-full max-h-[85vh] bg-white rounded-t-3xl shadow-2xl flex flex-col p-6 z-50 overflow-y-auto"
           >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
-              <h2 style={{ fontSize: '1.125rem', fontWeight: 700, color: 'var(--text-charcoal)' }}>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-[#133827]">
                 Filter Scholarships
               </h2>
               <button
                 type="button"
                 onClick={() => setMobileFilterOpen(false)}
                 aria-label="Close filters"
-                style={{ padding: '0.25rem', color: 'var(--text-muted)' }}
+                className="p-1.5 text-[#55635a] hover:text-[#133827]"
               >
                 <X size={20} />
               </button>
@@ -549,28 +439,18 @@ export const ScholarshipsDiscoveryPage: React.FC = () => {
 
             {filterSidebar}
 
-            <div style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid var(--border-subtle)', display: 'flex', gap: '0.75rem' }}>
+            <div className="mt-6 pt-4 border-t border-[#ebe6de] flex gap-3">
               <button
                 type="button"
                 onClick={handleResetFilters}
-                style={{
-                  flex: 1,
-                  padding: '0.625rem',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1px solid var(--border-subtle)',
-                  backgroundColor: 'transparent',
-                  fontWeight: 600,
-                  fontSize: '0.875rem',
-                  cursor: 'pointer',
-                }}
+                className="flex-1 py-2.5 rounded-full border border-[#ebe6de] text-xs font-semibold text-[#133827]"
               >
-                Reset
+                Reset All
               </button>
               <button
                 type="button"
                 onClick={() => setMobileFilterOpen(false)}
-                className="btn-pill btn-pill-primary"
-                style={{ flex: 1, padding: '0.625rem', fontSize: '0.875rem' }}
+                className="flex-1 py-2.5 rounded-full bg-[#245B42] text-white text-xs font-bold"
               >
                 Apply Filters
               </button>
@@ -581,3 +461,5 @@ export const ScholarshipsDiscoveryPage: React.FC = () => {
     </div>
   );
 };
+
+export default ScholarshipsDiscoveryPage;

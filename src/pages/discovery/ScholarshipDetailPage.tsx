@@ -12,6 +12,15 @@ import {
   Building2,
 } from 'lucide-react';
 
+function getCountryFlag(country: string): string {
+  const c = country.toLowerCase();
+  if (c === 'germany' || c === 'de') return '🇩🇪';
+  if (c === 'france' || c === 'fr') return '🇫🇷';
+  if (c === 'italy' || c === 'it') return '🇮🇹';
+  if (c === 'romania' || c === 'ro') return '🇷🇴';
+  return '🇪🇺';
+}
+
 export const ScholarshipDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
 
@@ -27,36 +36,30 @@ export const ScholarshipDetailPage: React.FC = () => {
 
   if (error || !sch) {
     return (
-      <div style={{ maxWidth: '960px', margin: '2rem auto', padding: '0 1rem' }}>
+      <div className="max-w-3xl mx-auto px-4 py-12">
         <ErrorState
           title="Scholarship not found"
           message="The requested scholarship scheme does not exist or has not been published in the active catalogue."
           onRetry={() => refetch()}
         />
-        <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-          <Link to="/scholarships" style={{ color: 'var(--action-primary)', fontWeight: 600, textDecoration: 'none' }}>
-            ← Back to Scholarships Catalogue
+        <div className="text-center mt-4">
+          <Link to="/scholarships" className="text-sm font-semibold text-[#245B42] hover:underline">
+            &larr; Back to Scholarships Catalogue
           </Link>
         </div>
       </div>
     );
   }
 
+  const flag = getCountryFlag(sch.country);
+
   return (
-    <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '1.5rem 1rem 3rem' }}>
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-16">
       {/* Breadcrumb Navigation */}
-      <div style={{ marginBottom: '1.25rem' }}>
+      <div className="mb-5">
         <Link
           to="/scholarships"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.35rem',
-            fontSize: '0.8125rem',
-            fontWeight: 600,
-            color: 'var(--action-primary)',
-            textDecoration: 'none',
-          }}
+          className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#245B42] hover:underline"
         >
           <ChevronLeft size={16} />
           <span>Back to Scholarships</span>
@@ -64,43 +67,14 @@ export const ScholarshipDetailPage: React.FC = () => {
       </div>
 
       {/* Main Header Card */}
-      <div
-        style={{
-          backgroundColor: '#ffffff',
-          borderRadius: 'var(--radius-card)',
-          padding: '2rem 1.5rem',
-          border: '1px solid var(--border-subtle)',
-          boxShadow: 'var(--shadow-card)',
-          marginBottom: '1.5rem',
-        }}
-      >
-        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem', marginBottom: '1rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <span
-              style={{
-                fontSize: '0.75rem',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                letterSpacing: '0.04em',
-                padding: '0.25rem 0.6rem',
-                borderRadius: 'var(--radius-pill)',
-                backgroundColor: 'var(--surface-recessed)',
-                color: 'var(--text-charcoal)',
-              }}
-            >
-              {sch.country.charAt(0).toUpperCase() + sch.country.slice(1)}
+      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#ebe6de] shadow-sm mb-6">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-semibold px-3 py-1 rounded-full bg-[#F7F9F7] text-[#133827] border border-[#ebe6de]">
+              {flag} {sch.country.charAt(0).toUpperCase() + sch.country.slice(1)}
             </span>
 
-            <span
-              style={{
-                fontSize: '0.75rem',
-                fontWeight: 600,
-                padding: '0.25rem 0.6rem',
-                borderRadius: 'var(--radius-pill)',
-                backgroundColor: '#E8F5E9',
-                color: '#2E7D32',
-              }}
-            >
+            <span className="text-xs font-bold px-3 py-1 rounded-full bg-[#B4D0B6]/30 text-[#133827]">
               {sch.coverageType || 'VERIFIED GRANT'}
             </span>
           </div>
@@ -110,15 +84,7 @@ export const ScholarshipDetailPage: React.FC = () => {
               href={sch.officialUrl}
               target="_blank"
               rel="noopener noreferrer"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.35rem',
-                fontSize: '0.8125rem',
-                fontWeight: 600,
-                color: 'var(--action-primary)',
-                textDecoration: 'none',
-              }}
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#245B42] hover:underline"
             >
               <span>Official Scheme Website</span>
               <ExternalLink size={14} aria-hidden="true" />
@@ -126,56 +92,70 @@ export const ScholarshipDetailPage: React.FC = () => {
           )}
         </div>
 
-        <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-charcoal)', lineHeight: 1.25 }}>
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-[#133827] leading-tight mb-2">
           {sch.title}
         </h1>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.75rem', color: 'var(--text-muted)', fontSize: '0.9375rem' }}>
-          <Building2 size={16} aria-hidden="true" />
+        <div className="flex items-center gap-2 text-xs sm:text-sm text-[#55635a]">
+          <Building2 size={16} className="text-[#245B42]" aria-hidden="true" />
           <span>{sch.provider}</span>
         </div>
       </div>
 
       {/* Scholarship Attributes Bento */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
-        <div style={{ backgroundColor: '#ffffff', borderRadius: 'var(--radius-card)', padding: '1.25rem', border: '1px solid var(--border-subtle)' }}>
-          <h3 style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', letterSpacing: '0.06em', marginBottom: '0.75rem' }}>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
+        <div className="bg-white rounded-3xl p-6 border border-[#ebe6de] shadow-sm">
+          <span className="text-xs font-bold uppercase tracking-wider text-[#55635a] block mb-2">
             Funding Model &amp; Coverage
-          </h3>
-          <p style={{ fontSize: '1.125rem', fontWeight: 700, color: 'var(--text-charcoal)' }}>
+          </span>
+          <p className="text-base font-bold text-[#133827]">
             {sch.coverageType}
           </p>
-          <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginTop: '0.35rem' }}>
+          <p className="text-xs text-[#55635a] mt-1.5 leading-relaxed">
             Coverage guidelines are calibrated for Pakistani students applying to European partner institutions.
           </p>
         </div>
 
-        <div style={{ backgroundColor: '#ffffff', borderRadius: 'var(--radius-card)', padding: '1.25rem', border: '1px solid var(--border-subtle)' }}>
-          <h3 style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', letterSpacing: '0.06em', marginBottom: '0.75rem' }}>
+        <div className="bg-white rounded-3xl p-6 border border-[#ebe6de] shadow-sm">
+          <span className="text-xs font-bold uppercase tracking-wider text-[#55635a] block mb-2">
             Annual Application Window
-          </h3>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--text-charcoal)', fontWeight: 600, fontSize: '1rem' }}>
-            <Calendar size={16} />
+          </span>
+          <div className="flex items-center gap-2 text-sm font-bold text-[#133827]">
+            <Calendar size={16} className="text-[#245B42]" />
             <span>{sch.applicationWindowText || 'Not published'}</span>
           </div>
-          <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginTop: '0.35rem' }}>
+          <p className="text-xs text-[#55635a] mt-1.5 leading-relaxed">
             Applications are typically reviewed once per academic year preceding the autumn intake.
           </p>
         </div>
 
-        <div style={{ backgroundColor: '#ffffff', borderRadius: 'var(--radius-card)', padding: '1.25rem', border: '1px solid var(--border-subtle)' }}>
-          <h3 style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', letterSpacing: '0.06em', marginBottom: '0.75rem' }}>
+        <div className="bg-white rounded-3xl p-6 border border-[#ebe6de] shadow-sm">
+          <span className="text-xs font-bold uppercase tracking-wider text-[#55635a] block mb-2">
             Pakistani Applicant Eligibility
-          </h3>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: '#2E7D32', fontWeight: 600, fontSize: '0.875rem' }}>
+          </span>
+          <div className="flex items-center gap-1.5 text-xs font-bold text-[#245B42]">
             <CheckCircle2 size={16} />
             <span>Eligible for Pakistani Passport Holders</span>
           </div>
-          <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginTop: '0.35rem' }}>
+          <p className="text-xs text-[#55635a] mt-1.5 leading-relaxed">
             Requires attested degree certificates and proof of university offer/admission.
           </p>
         </div>
       </div>
+
+      {/* Eligibility Detail Panel */}
+      {sch.eligibilitySummary && (
+        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#ebe6de] shadow-sm">
+          <h2 className="text-lg font-bold text-[#133827] mb-3">
+            Eligibility &amp; Selection Criteria
+          </h2>
+          <div className="rounded-2xl bg-[#F7F9F7] p-5 border border-[#ebe6de] text-xs sm:text-sm text-[#2b352f] leading-relaxed">
+            {sch.eligibilitySummary}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+
+export default ScholarshipDetailPage;

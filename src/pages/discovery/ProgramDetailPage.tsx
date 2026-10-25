@@ -12,6 +12,34 @@ import {
   Sparkles,
 } from 'lucide-react';
 
+function getCountryFlag(country: string): string {
+  const c = country.toLowerCase();
+  if (c === 'germany' || c === 'de') return '🇩🇪';
+  if (c === 'france' || c === 'fr') return '🇫🇷';
+  if (c === 'italy' || c === 'it') return '🇮🇹';
+  if (c === 'romania' || c === 'ro') return '🇷🇴';
+  return '🇪🇺';
+}
+
+function getTuitionDisplay(tuition?: number | null): { title: string; subtitle: string } {
+  if (tuition === 0) {
+    return {
+      title: '€0 Tuition (State Funded)',
+      subtitle: 'Statutory semester contributions (approx. €150–€350) cover transit pass and student services.',
+    };
+  }
+  if (tuition != null && tuition > 0) {
+    return {
+      title: `€${tuition.toLocaleString()} / academic year`,
+      subtitle: 'Indicative fee schedule for third-country international applicants.',
+    };
+  }
+  return {
+    title: 'Tuition not published',
+    subtitle: 'Consult the university academic department or faculty fee statute for exact rates.',
+  };
+}
+
 export const ProgramDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const queryClient = useQueryClient();
@@ -36,36 +64,31 @@ export const ProgramDetailPage: React.FC = () => {
 
   if (error || !prog) {
     return (
-      <div style={{ maxWidth: '960px', margin: '2rem auto', padding: '0 1rem' }}>
+      <div className="max-w-3xl mx-auto px-4 py-12">
         <ErrorState
           title="Degree Program not found"
           message="The requested degree program does not exist or has not been published in the active catalogue."
           onRetry={() => refetch()}
         />
-        <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-          <Link to="/programs" style={{ color: 'var(--action-primary)', fontWeight: 600, textDecoration: 'none' }}>
-            ← Back to Degree Programs
+        <div className="text-center mt-4">
+          <Link to="/programs" className="text-sm font-semibold text-[#245B42] hover:underline">
+            &larr; Back to Degree Programs
           </Link>
         </div>
       </div>
     );
   }
 
+  const flag = getCountryFlag(prog.country);
+  const tuitionInfo = getTuitionDisplay(prog.tuitionPerYearEur);
+
   return (
-    <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '1.5rem 1rem 3rem' }}>
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-16">
       {/* Breadcrumb Navigation */}
-      <div style={{ marginBottom: '1.25rem' }}>
+      <div className="mb-5">
         <Link
           to="/programs"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.35rem',
-            fontSize: '0.8125rem',
-            fontWeight: 600,
-            color: 'var(--action-primary)',
-            textDecoration: 'none',
-          }}
+          className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#245B42] hover:underline"
         >
           <ChevronLeft size={16} />
           <span>Back to Degree Programs</span>
@@ -73,56 +96,18 @@ export const ProgramDetailPage: React.FC = () => {
       </div>
 
       {/* Main Header Card */}
-      <div
-        style={{
-          backgroundColor: '#ffffff',
-          borderRadius: 'var(--radius-card)',
-          padding: '2rem 1.5rem',
-          border: '1px solid var(--border-subtle)',
-          boxShadow: 'var(--shadow-card)',
-          marginBottom: '1.5rem',
-        }}
-      >
-        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem', marginBottom: '1rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <span
-              style={{
-                fontSize: '0.75rem',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                letterSpacing: '0.04em',
-                padding: '0.25rem 0.6rem',
-                borderRadius: 'var(--radius-pill)',
-                backgroundColor: 'var(--surface-recessed)',
-                color: 'var(--text-charcoal)',
-              }}
-            >
-              {prog.country.charAt(0).toUpperCase() + prog.country.slice(1)}
+      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#ebe6de] shadow-sm mb-6">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-xs font-semibold px-3 py-1 rounded-full bg-[#F7F9F7] text-[#133827] border border-[#ebe6de]">
+              {flag} {prog.country.charAt(0).toUpperCase() + prog.country.slice(1)}
             </span>
 
-            <span
-              style={{
-                fontSize: '0.75rem',
-                fontWeight: 600,
-                padding: '0.25rem 0.6rem',
-                borderRadius: 'var(--radius-pill)',
-                backgroundColor: '#E3F2FD',
-                color: '#1565C0',
-              }}
-            >
+            <span className="text-xs font-bold px-3 py-1 rounded-full bg-[#B4D0B6]/30 text-[#133827]">
               {prog.degreeLevel === 'bachelor' ? "Bachelor's Degree" : "Master's Degree"}
             </span>
 
-            <span
-              style={{
-                fontSize: '0.75rem',
-                fontWeight: 600,
-                padding: '0.25rem 0.6rem',
-                borderRadius: 'var(--radius-pill)',
-                backgroundColor: '#EDE7F6',
-                color: '#5E35B1',
-              }}
-            >
+            <span className="text-xs font-bold px-3 py-1 rounded-full bg-[#D7EE83]/30 text-[#133827]">
               {prog.instructionLanguage ? prog.instructionLanguage.toUpperCase() : 'ENGLISH'}
             </span>
           </div>
@@ -131,103 +116,89 @@ export const ProgramDetailPage: React.FC = () => {
           <button
             type="button"
             onClick={() => prog && bookmarkMutation.mutate(prog.id)}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              padding: '0.4rem 0.75rem',
-              borderRadius: 'var(--radius-pill)',
-              border: '1px solid var(--border-subtle)',
-              backgroundColor: 'var(--surface-canvas)',
-              fontSize: '0.8125rem',
-              fontWeight: 600,
-              color: 'var(--text-charcoal)',
-              cursor: 'pointer',
-            }}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-[#ebe6de] bg-[#F7F9F7] text-xs font-semibold text-[#133827] hover:bg-white transition-colors"
           >
-            <Bookmark size={16} />
+            <Bookmark size={16} className="text-[#245B42]" />
             <span>Save Program</span>
           </button>
         </div>
 
-        <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-charcoal)', lineHeight: 1.25 }}>
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-[#133827] leading-tight mb-2">
           {prog.title}
         </h1>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.75rem', color: 'var(--text-muted)', fontSize: '0.9375rem' }}>
-          <Building2 size={16} aria-hidden="true" />
+        <div className="flex items-center gap-2 text-xs sm:text-sm text-[#55635a]">
+          <Building2 size={16} className="text-[#245B42]" aria-hidden="true" />
           <span>{prog.universityName}</span>
         </div>
       </div>
 
       {/* Program Details Bento */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
-        <div style={{ backgroundColor: '#ffffff', borderRadius: 'var(--radius-card)', padding: '1.25rem', border: '1px solid var(--border-subtle)' }}>
-          <h3 style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', letterSpacing: '0.06em', marginBottom: '0.75rem' }}>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
+        <div className="bg-white rounded-3xl p-6 border border-[#ebe6de] shadow-sm">
+          <span className="text-xs font-bold uppercase tracking-wider text-[#55635a] block mb-2">
             Annual Tuition Benchmark
-          </h3>
-          <p style={{ fontSize: '1.25rem', fontWeight: 700, color: prog.tuitionPerYearEur === 0 ? '#2E7D32' : 'var(--text-charcoal)' }}>
-            {prog.tuitionPerYearEur === 0 ? '€0 Tuition (Tuition-Free)' : `€${prog.tuitionPerYearEur} / academic year`}
+          </span>
+          <p className="text-base font-bold text-[#133827]">
+            {tuitionInfo.title}
           </p>
-          <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginTop: '0.35rem' }}>
-            {prog.tuitionPerYearEur === 0
-              ? 'Statutory semester administrative contributions (approx €150-€350) still apply for transit/student union.'
-              : 'Indicative fee for third-country non-EU applicants.'}
+          <p className="text-xs text-[#55635a] mt-1.5 leading-relaxed">
+            {tuitionInfo.subtitle}
           </p>
         </div>
 
-        <div style={{ backgroundColor: '#ffffff', borderRadius: 'var(--radius-card)', padding: '1.25rem', border: '1px solid var(--border-subtle)' }}>
-          <h3 style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', letterSpacing: '0.06em', marginBottom: '0.75rem' }}>
-            Application Portal &amp; Protocol
-          </h3>
-          <p style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-charcoal)' }}>
+        <div className="bg-white rounded-3xl p-6 border border-[#ebe6de] shadow-sm">
+          <span className="text-xs font-bold uppercase tracking-wider text-[#55635a] block mb-2">
+            Application Protocol &amp; Portal
+          </span>
+          <p className="text-base font-bold text-[#133827]">
             {(prog as any).applicationPortal || 'Uni-Assist / Direct University Submission'}
           </p>
-          <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginTop: '0.35rem' }}>
+          <p className="text-xs text-[#55635a] mt-1.5 leading-relaxed">
             {prog.applicationDeadlineText ? `Upcoming Deadline: ${prog.applicationDeadlineText}` : 'Deadlines follow statutory winter/summer intake rounds.'}
           </p>
         </div>
 
-        <div style={{ backgroundColor: '#ffffff', borderRadius: 'var(--radius-card)', padding: '1.25rem', border: '1px solid var(--border-subtle)' }}>
-          <h3 style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', letterSpacing: '0.06em', marginBottom: '0.75rem' }}>
+        <div className="bg-white rounded-3xl p-6 border border-[#ebe6de] shadow-sm">
+          <span className="text-xs font-bold uppercase tracking-wider text-[#55635a] block mb-2">
             Language Benchmark
-          </h3>
-          <p style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-charcoal)' }}>
+          </span>
+          <p className="text-base font-bold text-[#133827]">
             {prog.instructionLanguage ? `${prog.instructionLanguage.toUpperCase()} Medium of Instruction` : 'English Proficiency'}
           </p>
-          <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginTop: '0.35rem' }}>
-            IELTS Academic 6.5+ / TOEFL iBT 90+ typically expected unless prior English medium certificate is accepted.
+          <p className="text-xs text-[#55635a] mt-1.5 leading-relaxed">
+            IELTS Academic 6.5+ / TOEFL iBT 90+ typically expected unless prior English medium certificate is verified.
           </p>
         </div>
       </div>
 
-      {/* Upgrade / Managed Application Support CTA Card */}
-      <div
-        style={{
-          backgroundColor: '#ffffff',
-          borderRadius: 'var(--radius-card)',
-          padding: '1.75rem',
-          border: '1px solid var(--border-subtle)',
-          boxShadow: 'var(--shadow-card)',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '1rem',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--action-primary)' }}>
+      {/* Admission Requirements & Summary Panel */}
+      {prog.admissionRequirementsSummary && (
+        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#ebe6de] shadow-sm mb-6">
+          <h2 className="text-lg font-bold text-[#133827] mb-3">
+            Academic Prerequisite Summary
+          </h2>
+          <div className="rounded-2xl bg-[#F7F9F7] p-5 border border-[#ebe6de] text-xs sm:text-sm text-[#2b352f] leading-relaxed">
+            {prog.admissionRequirementsSummary}
+          </div>
+        </div>
+      )}
+
+      {/* Managed Application Support CTA Card */}
+      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#ebe6de] shadow-sm">
+        <div className="flex items-center gap-2 text-[#245B42] mb-2">
           <Sparkles size={20} />
-          <h2 style={{ fontSize: '1.125rem', fontWeight: 700, color: 'var(--text-charcoal)' }}>
+          <h2 className="text-lg font-bold text-[#133827]">
             Apply to this Program with Unilistics Managed Support
           </h2>
         </div>
-        <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
+        <p className="text-xs sm:text-sm text-[#55635a] leading-relaxed mb-6">
           Our accredited counsellors oversee your entire dossier assembly, official HEC and MOFA apostille verification, VPD/pre-evaluation checks, portal submissions, and visa interview preparation.
         </p>
         <div>
           <Link
             to="/request-support"
-            className="btn-pill btn-pill-primary"
-            style={{ padding: '0.625rem 1.25rem', fontSize: '0.875rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold text-white bg-[#245B42] hover:bg-[#1D4A36] shadow-sm transition-all no-underline"
           >
             <span>Request Managed Application Case</span>
             <ExternalLink size={14} />
@@ -237,3 +208,5 @@ export const ProgramDetailPage: React.FC = () => {
     </div>
   );
 };
+
+export default ProgramDetailPage;

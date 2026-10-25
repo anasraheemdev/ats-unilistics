@@ -8,6 +8,25 @@ import { ErrorState } from '@/components/common/ErrorState';
 import { EmptyState } from '@/components/common/EmptyState';
 import { ArrowRight, Trash2 } from 'lucide-react';
 
+function getCountryFlag(country: string): string {
+  const c = (country || '').toLowerCase();
+  if (c === 'germany' || c === 'de') return '🇩🇪';
+  if (c === 'france' || c === 'fr') return '🇫🇷';
+  if (c === 'italy' || c === 'it') return '🇮🇹';
+  if (c === 'romania' || c === 'ro') return '🇷🇴';
+  return '🇪🇺';
+}
+
+function getTuitionText(tuitionEur?: number | null): string {
+  if (tuitionEur === 0) {
+    return '€0 Tuition (State Funded)';
+  }
+  if (tuitionEur != null && tuitionEur > 0) {
+    return `€${tuitionEur.toLocaleString()}/yr`;
+  }
+  return 'Tuition not published';
+}
+
 export const SavedDiscoveryPage: React.FC = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -26,12 +45,12 @@ export const SavedDiscoveryPage: React.FC = () => {
   });
 
   return (
-    <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '1.5rem 1rem 3rem' }}>
-      <div style={{ marginBottom: '1.5rem' }}>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-charcoal)' }}>
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-16">
+      <div className="mb-6">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-[#133827]">
           Saved Degree Programs
         </h1>
-        <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+        <p className="text-sm text-[#55635a] mt-1">
           Your bookmarked programs for comparative review and managed application support requests.
         </p>
       </div>
@@ -52,88 +71,73 @@ export const SavedDiscoveryPage: React.FC = () => {
           onAction={() => navigate('/programs')}
         />
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1rem' }}>
-          {savedPrograms.map((prog: CatalogueProgramItem) => (
-            <div
-              key={prog.id}
-              style={{
-                backgroundColor: '#ffffff',
-                borderRadius: 'var(--radius-card)',
-                border: '1px solid var(--border-subtle)',
-                padding: '1.25rem',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                boxShadow: 'var(--shadow-card)',
-              }}
-            >
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                  <span
-                    style={{
-                      fontSize: '0.6875rem',
-                      fontWeight: 700,
-                      textTransform: 'uppercase',
-                      padding: '0.2rem 0.5rem',
-                      borderRadius: 'var(--radius-pill)',
-                      backgroundColor: 'var(--surface-recessed)',
-                      color: 'var(--text-charcoal)',
-                    }}
-                  >
-                    {(prog.country_name || prog.country_code).toUpperCase()}
-                  </span>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {savedPrograms.map((prog: CatalogueProgramItem) => {
+            const flag = getCountryFlag(prog.country_name || prog.country_code);
+            const tuitionStr = getTuitionText(prog.annual_tuition_eur);
 
-                  <button
-                    type="button"
-                    onClick={() => removeBookmarkMutation.mutate(prog.id)}
-                    title="Remove bookmark"
-                    aria-label="Remove bookmark"
-                    style={{
-                      padding: '0.35rem',
-                      borderRadius: 'var(--radius-full)',
-                      color: 'var(--text-muted)',
-                      border: 'none',
-                      backgroundColor: 'transparent',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <Trash2 size={16} />
-                  </button>
+            return (
+              <div
+                key={prog.id}
+                className="rounded-[24px] bg-white border border-[#ebe6de] p-5 flex flex-col justify-between shadow-sm hover:shadow-md transition-all group"
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-[#F7F9F7] text-[#133827] border border-[#ebe6de]">
+                      {flag} {(prog.country_name || prog.country_code).toUpperCase()}
+                    </span>
+
+                    <button
+                      type="button"
+                      onClick={() => removeBookmarkMutation.mutate(prog.id)}
+                      title="Remove bookmark"
+                      aria-label="Remove bookmark"
+                      className="p-1.5 rounded-full text-[#8a9890] hover:text-red-600 hover:bg-red-50 transition-colors"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+
+                  <p className="text-xs font-semibold text-[#55635a] mb-1 line-clamp-1">
+                    {prog.university_name}
+                  </p>
+
+                  <h2 className="text-base font-bold text-[#133827] leading-snug mb-3 line-clamp-2">
+                    {prog.program_name}
+                  </h2>
+
+                  {/* Two-Tone Summary Panel with Quiet Dividers */}
+                  <div className="rounded-2xl bg-[#F7F9F7] p-3.5 mb-4 border border-[#ebe6de] space-y-1.5 text-xs">
+                    <div className="flex items-center justify-between text-[#133827]">
+                      <span className="text-[#55635a]">Degree Level:</span>
+                      <span className="font-semibold">
+                        {prog.degree_level === 'bachelor' ? "Bachelor's" : "Master's"}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-[#133827] pt-1.5 border-t border-[#ebe6de]">
+                      <span className="text-[#55635a]">Tuition Rate:</span>
+                      <span className="font-semibold">{tuitionStr}</span>
+                    </div>
+                  </div>
                 </div>
 
-                <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginBottom: '0.25rem' }}>
-                  {prog.university_name}
-                </p>
-
-                <h2 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-charcoal)', lineHeight: 1.3 }}>
-                  {prog.program_name}
-                </h2>
+                <div className="pt-3 border-t border-[#ebe6de] flex items-center justify-between">
+                  <span className="text-xs text-[#55635a]">Saved Curriculum</span>
+                  <Link
+                    to={`/programs/${prog.id}`}
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#245B42] hover:underline"
+                  >
+                    <span>View details</span>
+                    <ArrowRight size={14} aria-hidden="true" />
+                  </Link>
+                </div>
               </div>
-
-              <div style={{ marginTop: '1.25rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                  {prog.annual_tuition_eur === 0 ? '€0 Tuition' : `€${prog.annual_tuition_eur}/yr`}
-                </span>
-                <Link
-                  to={`/programs/${prog.id}`}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.25rem',
-                    fontSize: '0.8125rem',
-                    fontWeight: 600,
-                    color: 'var(--action-primary)',
-                    textDecoration: 'none',
-                  }}
-                >
-                  <span>View Details</span>
-                  <ArrowRight size={14} aria-hidden="true" />
-                </Link>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
   );
 };
+
+export default SavedDiscoveryPage;
