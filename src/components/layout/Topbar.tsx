@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { NotificationDrawer } from '@/components/domain/NotificationDrawer';
+import { SearchDialog } from '@/components/domain/SearchDialog';
 import { UserRole } from '@/types';
 import { useTheme } from '@/lib/theme';
 import { Menu, ChevronRight, Search, Sun, Moon, LogOut } from 'lucide-react';
@@ -28,20 +29,20 @@ export const Topbar: React.FC<TopbarProps> = ({
   const location = useLocation();
   const navigate = useNavigate();
   const { resolvedTheme, toggleTheme } = useTheme();
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   // Search shortcut: Ctrl+K or Cmd+K
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
-        const searchPath = currentRole === 'managed_student' ? '/student/explore' : '/universities';
-        navigate(searchPath);
+        setIsSearchOpen(true);
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentRole, navigate]);
+  }, []);
 
   // Auto-generate fallback breadcrumb if none supplied
   const pathSegments = location.pathname.split('/').filter(Boolean);
@@ -57,8 +58,7 @@ export const Topbar: React.FC<TopbarProps> = ({
   const initial = displayName.charAt(0).toUpperCase();
 
   const handleSearchClick = () => {
-    const searchPath = currentRole === 'managed_student' ? '/student/explore' : '/universities';
-    navigate(searchPath);
+    setIsSearchOpen(true);
   };
 
   const handleSignOut = async () => {
@@ -300,6 +300,13 @@ export const Topbar: React.FC<TopbarProps> = ({
           </div>
         )}
       </div>
+
+      <SearchDialog
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+        currentRole={currentRole}
+        userId={userName || userEmail || 'anonymous'}
+      />
     </header>
   );
 };

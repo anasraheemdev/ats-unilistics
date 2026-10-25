@@ -95,8 +95,8 @@ export const ContactPage: React.FC = () => {
             gap: '0.4rem',
             padding: '0.25rem 0.75rem',
             borderRadius: 'var(--radius-pill)',
-            backgroundColor: 'var(--accent-peach-bg)',
-            color: 'var(--action-primary)',
+            backgroundColor: 'rgba(36, 91, 66, 0.08)',
+            color: 'var(--color-primary, #245B42)',
             fontSize: '0.75rem',
             fontWeight: 700,
             textTransform: 'uppercase',
@@ -111,7 +111,7 @@ export const ContactPage: React.FC = () => {
           style={{
             fontSize: '2.25rem',
             fontWeight: 800,
-            color: 'var(--text-charcoal)',
+            color: 'var(--color-foreground)',
             letterSpacing: '-0.025em',
             lineHeight: 1.2,
             marginBottom: '0.75rem',
@@ -122,7 +122,7 @@ export const ContactPage: React.FC = () => {
         <p
           style={{
             fontSize: '1rem',
-            color: 'var(--text-muted)',
+            color: 'var(--color-foreground-muted)',
             lineHeight: 1.5,
           }}
         >
@@ -146,7 +146,7 @@ export const ContactPage: React.FC = () => {
               style={{
                 fontSize: '1.125rem',
                 fontWeight: 700,
-                color: 'var(--text-charcoal)',
+                color: 'var(--color-foreground)',
                 marginBottom: '1rem',
                 display: 'flex',
                 alignItems: 'center',
@@ -159,14 +159,14 @@ export const ContactPage: React.FC = () => {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '0.875rem' }}>
               <div>
-                <strong style={{ color: 'var(--text-charcoal)' }}>Primary Office:</strong>
-                <p style={{ margin: '0.25rem 0 0', color: 'var(--text-muted)' }}>
+                <strong style={{ color: 'var(--color-foreground)' }}>Primary Office:</strong>
+                <p style={{ margin: '0.25rem 0 0', color: 'var(--color-foreground-muted)' }}>
                   Unilistics Admissions Operations Desk • Islamabad, Pakistan
                 </p>
               </div>
 
               <div>
-                <strong style={{ color: 'var(--text-charcoal)' }}>Supported Higher Education Corridors:</strong>
+                <strong style={{ color: 'var(--color-foreground)' }}>Supported Higher Education Corridors:</strong>
                 <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', marginTop: '0.35rem' }}>
                   {['Germany (DAAD/Uni-assist)', 'France (Campus France EEF)', 'Italy (Universitaly/CIMEA)', 'Romania (Ministerul Educației)'].map(
                     (corridor) => (
@@ -178,7 +178,7 @@ export const ContactPage: React.FC = () => {
                           borderRadius: 'var(--radius-pill)',
                           backgroundColor: 'var(--surface-recessed)',
                           border: '1px solid var(--border-subtle)',
-                          color: 'var(--text-body)',
+                          color: 'var(--color-foreground)',
                           fontWeight: 600,
                         }}
                       >
@@ -190,16 +190,16 @@ export const ContactPage: React.FC = () => {
               </div>
 
               <div>
-                <strong style={{ color: 'var(--text-charcoal)' }}>Desk Operational Hours:</strong>
-                <p style={{ margin: '0.25rem 0 0', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                <strong style={{ color: 'var(--color-foreground)' }}>Desk Operational Hours:</strong>
+                <p style={{ margin: '0.25rem 0 0', color: 'var(--color-foreground-muted)', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
                   <Clock size={15} className="text-primary" />
                   <span>Monday – Friday, 09:00 – 18:00 PKT (UTC+5)</span>
                 </p>
               </div>
 
               <div>
-                <strong style={{ color: 'var(--text-charcoal)' }}>Target Response Standard:</strong>
-                <p style={{ margin: '0.25rem 0 0', color: 'var(--text-muted)' }}>
+                <strong style={{ color: 'var(--color-foreground)' }}>Target Response Standard:</strong>
+                <p style={{ margin: '0.25rem 0 0', color: 'var(--color-foreground-muted)' }}>
                   Submissions are reviewed within 24–48 business hours by assigned educational staff.
                 </p>
               </div>
@@ -228,7 +228,7 @@ export const ContactPage: React.FC = () => {
               to={ROUTES.HELP}
               className="btn-pill"
               style={{
-                backgroundColor: '#ffffff',
+                backgroundColor: 'var(--surface-card)',
                 color: 'var(--accent-mint-text)',
                 border: '1px solid var(--accent-mint-border)',
                 fontSize: '0.8125rem',
@@ -249,13 +249,13 @@ export const ContactPage: React.FC = () => {
               style={{
                 fontSize: '1.25rem',
                 fontWeight: 700,
-                color: 'var(--text-charcoal)',
+                color: 'var(--color-foreground)',
                 marginBottom: '0.5rem',
               }}
             >
               Submit an Official Inquiry
             </h2>
-            <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginBottom: '1.5rem', lineHeight: 1.4 }}>
+            <p style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted)', marginBottom: '1.5rem', lineHeight: 1.4 }}>
               Fill in your details below. Inquiries are securely routed to the Unilistics casework queue.
             </p>
 

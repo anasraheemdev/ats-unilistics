@@ -178,11 +178,11 @@ export const SignInPage: React.FC<SignInPageProps> = ({ onRoleChange }) => {
             </Link>
 
             <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.25rem' }}>
-              <Link to="/request-access" style={{ fontWeight: 600, color: 'var(--action-primary, #b72301)', textDecoration: 'none' }}>
+              <Link to="/request-access" style={{ fontWeight: 600, color: 'var(--action-primary, #245B42)', textDecoration: 'none' }}>
                 Request Managed Guidance
               </Link>
               <span>•</span>
-              <Link to="/request-status" style={{ fontWeight: 600, color: 'var(--action-primary, #b72301)', textDecoration: 'none' }}>
+              <Link to="/request-status" style={{ fontWeight: 600, color: 'var(--action-primary, #245B42)', textDecoration: 'none' }}>
                 Check Status
               </Link>
             </div>

@@ -3,6 +3,7 @@ import { NavLink, Link, useLocation } from 'react-router-dom';
 import { UserRole } from '@/types';
 import { ROUTES } from '@/config/routes';
 import { BrandWordmark } from '@/components/ui/BrandWordmark';
+import { SearchDialog } from '@/components/domain/SearchDialog';
 import {
   Menu,
   X,
@@ -11,6 +12,7 @@ import {
   House,
   LogIn,
   UserPlus,
+  Search,
 } from 'lucide-react';
 
 interface PublicNavbarProps {
@@ -18,8 +20,9 @@ interface PublicNavbarProps {
   onRoleChange?: (newRole: UserRole) => void;
 }
 
-export const PublicNavbar: React.FC<PublicNavbarProps> = () => {
+export const PublicNavbar: React.FC<PublicNavbarProps> = ({ currentRole = 'visitor' }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const location = useLocation();
   const drawerRef = useRef<HTMLDivElement>(null);
@@ -30,10 +33,13 @@ export const PublicNavbar: React.FC<PublicNavbarProps> = () => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
 
-  // Keyboard accessibility: Escape key and focus management
+  // Keyboard accessibility: Escape key and Ctrl+K search shortcut
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && mobileMenuOpen) {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setIsSearchOpen(true);
+      } else if (e.key === 'Escape' && mobileMenuOpen) {
         setMobileMenuOpen(false);
         menuButtonRef.current?.focus();
       }
@@ -173,8 +179,47 @@ export const PublicNavbar: React.FC<PublicNavbarProps> = () => {
             </NavLink>
           </nav>
 
-          {/* 3. Desktop Authentication Actions */}
+          {/* 3. Desktop Search & Authentication Actions */}
           <div className="hidden sm:flex" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
+            {/* Quick Search Button */}
+            <button
+              type="button"
+              id="public-nav-search-btn"
+              onClick={() => setIsSearchOpen(true)}
+              aria-label="Search universities, programmes, destinations (Ctrl+K)"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                padding: '0.45rem 0.875rem',
+                fontSize: '0.8125rem',
+                fontWeight: 500,
+                color: 'var(--color-foreground-muted)',
+                backgroundColor: 'var(--surface-panel)',
+                border: '1px solid var(--border-subtle)',
+                borderRadius: 'var(--radius-pill)',
+                cursor: 'pointer',
+                minHeight: '40px',
+                transition: 'border-color var(--transition-fast)',
+              }}
+            >
+              <Search size={15} strokeWidth={2} aria-hidden="true" />
+              <span>Search</span>
+              <kbd
+                style={{
+                  fontSize: '0.625rem',
+                  fontWeight: 700,
+                  padding: '0.1rem 0.35rem',
+                  borderRadius: '4px',
+                  backgroundColor: 'var(--surface-card)',
+                  border: '1px solid var(--border-subtle)',
+                  color: 'var(--color-foreground-muted)',
+                }}
+              >
+                ⌘K
+              </kbd>
+            </button>
+
             {/* Sign in */}
             <Link
               to={ROUTES.SIGN_IN}
@@ -467,6 +512,14 @@ export const PublicNavbar: React.FC<PublicNavbarProps> = () => {
           </div>
         </div>
       )}
+
+      {/* Search Dialog Modal */}
+      <SearchDialog
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+        currentRole={currentRole}
+        userId="visitor"
+      />
     </>
   );
 };

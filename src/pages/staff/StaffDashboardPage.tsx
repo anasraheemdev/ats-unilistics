@@ -95,7 +95,7 @@ export const StaffDashboardPage: React.FC = () => {
       count: metrics.requestsAwaitingReview,
       icon: Inbox,
       badge: 'Live Queue',
-      color: '#B72301',
+      color: 'var(--action-primary)',
       visible: !isCounsellor,
     },
     {
@@ -149,8 +149,8 @@ export const StaffDashboardPage: React.FC = () => {
                 fontWeight: 700,
                 padding: '3px 10px',
                 borderRadius: '9999px',
-                backgroundColor: '#FFEFEA',
-                color: '#B72301',
+                backgroundColor: 'rgba(36, 91, 66, 0.08)',
+                color: 'var(--color-primary, #245B42)',
                 textTransform: 'uppercase',
                 letterSpacing: '0.04em',
               }}
@@ -365,8 +365,8 @@ export const StaffDashboardPage: React.FC = () => {
                     style={{
                       padding: '1.25rem',
                       borderRadius: '16px',
-                      backgroundColor: isSelected ? '#FFF5F2' : '#FDFBF7',
-                      border: isSelected ? '2px solid #FF5733' : '1px solid #EBE6DE',
+                      backgroundColor: isSelected ? 'rgba(36, 91, 66, 0.08)' : 'var(--surface-recessed)',
+                      border: isSelected ? '2px solid var(--action-primary)' : '1px solid var(--border-subtle)',
                       cursor: 'pointer',
                       display: 'flex',
                       flexDirection: 'column',
@@ -381,14 +381,14 @@ export const StaffDashboardPage: React.FC = () => {
                             width: '40px',
                             height: '40px',
                             borderRadius: '50%',
-                            backgroundColor: '#FFFFFF',
-                            border: '1px solid #EBE6DE',
+                            backgroundColor: 'var(--surface-card)',
+                            border: '1px solid var(--border-subtle)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             fontWeight: 800,
                             fontSize: '0.9375rem',
-                            color: '#1A1A1A',
+                            color: 'var(--color-foreground)',
                           }}
                         >
                           {c.studentName ? c.studentName.charAt(0).toUpperCase() : 'S'}
@@ -409,17 +409,17 @@ export const StaffDashboardPage: React.FC = () => {
                           fontWeight: 700,
                           padding: '3px 8px',
                           borderRadius: '9999px',
-                          backgroundColor: '#E0F2FE',
-                          color: '#0369A1',
+                          backgroundColor: 'rgba(36, 91, 66, 0.08)',
+                          color: 'var(--color-primary)',
                         }}
                       >
                         {c.currentStage.replace(/_/g, ' ').toUpperCase()}
                       </span>
                     </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.75rem', color: 'var(--color-foreground-muted)', borderTop: '1px solid #F0ECE4', paddingTop: '0.5rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.75rem', color: 'var(--color-foreground-muted)', borderTop: '1px solid var(--border-subtle)', paddingTop: '0.5rem' }}>
                       <span>Next: <strong>{c.nextRequiredAction || 'Dossier Review'}</strong></span>
-                      <span style={{ color: '#B72301', fontWeight: 600 }}>Select for Update →</span>
+                      <span style={{ color: 'var(--action-primary)', fontWeight: 600 }}>Select for Update →</span>
                     </div>
                   </div>
                 );
@@ -433,7 +433,9 @@ export const StaffDashboardPage: React.FC = () => {
           className="bento-card"
           style={{
             padding: '1.75rem',
-            backgroundColor: '#FFFFFF',
+            backgroundColor: 'var(--surface-card)',
+            border: '1px solid var(--border-subtle)',
+            borderRadius: 'var(--radius-card, 24px)',
             display: 'flex',
             flexDirection: 'column',
             gap: '1.25rem',
@@ -448,8 +450,8 @@ export const StaffDashboardPage: React.FC = () => {
                 fontWeight: 700,
                 padding: '2px 8px',
                 borderRadius: '9999px',
-                backgroundColor: '#FFEFEA',
-                color: '#B72301',
+                backgroundColor: 'rgba(36, 91, 66, 0.08)',
+                color: 'var(--color-primary, #245B42)',
                 textTransform: 'uppercase',
               }}
             >
@@ -503,14 +505,14 @@ export const StaffDashboardPage: React.FC = () => {
                 <div
                   style={{
                     padding: '1.25rem 1rem',
-                    border: '2px dashed #E2DCD5',
+                    border: '2px dashed var(--border-subtle)',
                     borderRadius: '16px',
                     textAlign: 'center',
-                    backgroundColor: '#FDFBF7',
+                    backgroundColor: 'var(--surface-recessed)',
                     cursor: 'pointer',
                   }}
                 >
-                  <Upload size={22} style={{ color: '#B72301', margin: '0 auto 0.25rem' }} />
+                  <Upload size={22} style={{ color: 'var(--color-primary)', margin: '0 auto 0.25rem' }} />
                   <span style={{ fontSize: '0.8125rem', fontWeight: 600, display: 'block' }}>
                     Upload Confirmation Slip or SWIFT Receipt
                   </span>

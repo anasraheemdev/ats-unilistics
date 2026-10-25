@@ -81,8 +81,8 @@ export const SignUpPage: React.FC<SignUpPageProps> = ({ onRoleChange }) => {
             gap: '0.35rem',
             padding: '0.25rem 0.65rem',
             borderRadius: 'var(--radius-pill, 9999px)',
-            backgroundColor: 'var(--accent-peach-bg, #fff5f2)',
-            color: 'var(--action-primary, #b72301)',
+            backgroundColor: 'rgba(36, 91, 66, 0.08)',
+            color: 'var(--color-primary, #245B42)',
             fontSize: '0.75rem',
             fontWeight: 700,
             textTransform: 'uppercase',
@@ -195,7 +195,7 @@ export const SignUpPage: React.FC<SignUpPageProps> = ({ onRoleChange }) => {
                 }}
                 style={{
                   marginTop: '0.15rem',
-                  accentColor: 'var(--action-primary, #b72301)',
+                  accentColor: 'var(--action-primary, #245B42)',
                   cursor: 'pointer',
                   width: '16px',
                   height: '16px',
@@ -203,11 +203,11 @@ export const SignUpPage: React.FC<SignUpPageProps> = ({ onRoleChange }) => {
               />
               <span>
                 I agree to the{' '}
-                <Link to="/terms" target="_blank" style={{ color: 'var(--action-primary, #b72301)', textDecoration: 'underline' }}>
+                <Link to="/terms" target="_blank" style={{ color: 'var(--action-primary, #245B42)', textDecoration: 'underline' }}>
                   Terms of Service
                 </Link>{' '}
                 and understand that data is handled in accordance with the{' '}
-                <Link to="/privacy" target="_blank" style={{ color: 'var(--action-primary, #b72301)', textDecoration: 'underline' }}>
+                <Link to="/privacy-policy" target="_blank" style={{ color: 'var(--action-primary, #245B42)', textDecoration: 'underline' }}>
                   Privacy Policy
                 </Link>
                 .
@@ -237,15 +237,15 @@ export const SignUpPage: React.FC<SignUpPageProps> = ({ onRoleChange }) => {
           style={{
             marginTop: '1.5rem',
             paddingTop: '1.25rem',
-            borderTop: '1px solid var(--border-subtle, #ebe6de)',
+            borderTop: '1px solid var(--border-subtle)',
             fontSize: '0.8125rem',
-            color: 'var(--text-muted, #636b78)',
+            color: 'var(--color-foreground-muted)',
             textAlign: 'center',
           }}
         >
           <p style={{ margin: '0 0 0.5rem 0' }}>
             Already have an account?{' '}
-            <Link to="/sign-in" style={{ fontWeight: 600, color: 'var(--action-primary, #b72301)', textDecoration: 'none' }}>
+            <Link to="/sign-in" style={{ fontWeight: 600, color: 'var(--action-primary, #245B42)', textDecoration: 'none' }}>
               Sign In
             </Link>
           </p>

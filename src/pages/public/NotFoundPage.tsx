@@ -1,21 +1,38 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { ROUTES } from '@/config/routes';
 import { Compass, Home, Building2 } from 'lucide-react';
 
 export const NotFoundPage: React.FC = () => {
   return (
-    <div style={{ maxWidth: '640px', margin: '4rem auto', padding: '0 1rem', textAlign: 'center' }}>
-      <Card padding="lg">
+    <div
+      style={{
+        maxWidth: '640px',
+        margin: '4rem auto',
+        padding: '0 1rem',
+        textAlign: 'center',
+        fontFamily: 'var(--font-family-base, "DM Sans", sans-serif)',
+        color: 'var(--color-foreground)',
+      }}
+    >
+      <div
+        className="bento-card"
+        style={{
+          padding: '2.5rem 2rem',
+          backgroundColor: 'var(--surface-card)',
+          border: '1px solid var(--border-subtle)',
+          borderRadius: '24px',
+          boxShadow: 'var(--shadow-sm)',
+        }}
+      >
         <div
           style={{
             width: '64px',
             height: '64px',
-            borderRadius: 'var(--radius-pill)',
-            backgroundColor: 'var(--accent-peach-bg)',
-            color: 'var(--action-primary)',
+            borderRadius: 'var(--radius-pill, 9999px)',
+            backgroundColor: 'rgba(36, 91, 66, 0.08)',
+            color: 'var(--action-primary, #245B42)',
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -23,14 +40,14 @@ export const NotFoundPage: React.FC = () => {
           }}
           aria-hidden="true"
         >
-          <Compass size={32} />
+          <Compass size={32} strokeWidth={2} />
         </div>
 
         <h1
           style={{
             fontSize: '1.75rem',
             fontWeight: 800,
-            color: 'var(--text-charcoal)',
+            color: 'var(--color-foreground)',
             marginBottom: '0.5rem',
             letterSpacing: '-0.02em',
           }}
@@ -41,9 +58,9 @@ export const NotFoundPage: React.FC = () => {
         <p
           style={{
             fontSize: '0.9375rem',
-            color: 'var(--text-muted)',
+            color: 'var(--color-foreground-muted)',
             lineHeight: 1.5,
-            marginBottom: '1.5rem',
+            marginBottom: '1.75rem',
           }}
         >
           The destination URL you requested does not exist or was malformed. Protected dashboards and operational desks cannot be accessed through arbitrary or concatenated addresses.
@@ -75,7 +92,9 @@ export const NotFoundPage: React.FC = () => {
             </Button>
           </Link>
         </div>
-      </Card>
+      </div>
     </div>
   );
 };
+
+export default NotFoundPage;

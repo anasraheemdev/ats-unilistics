@@ -228,3 +228,49 @@ All brand assets from `theme/v1.0.zip` have been safely extracted into `theme/ex
      - `npx vitest run src/test/JourneyMapAndCaseworkRebrand.test.tsx`: **15/15 passed** (100%).
      - Full test suite `npm test`: **22 test files passed, 329 tests passed, 0 failed** (100%).
      - Production build `npm run build`: **compiled dist/ in 18.03s with 0 errors** (1,767 modules transformed).
+
+### Phase 7: Final Rebrand Across Every Remaining Route & Component (COMPLETED)
+- **Status**: Completed  
+- **Authority**:
+  - Search Modal Reference (Screenshot 3: `theme/WhatsApp Image 2026-10-24 at 1.40.23 AM (1).jpeg`)
+  - Settings Reference (Screenshot 4: `034088e0-845a-4c51-b89b-a6be286014a9.jpg`)
+  - Operational Workspaces Reference (Screenshot 5: `theme/WhatsApp Image 2026-10-24 at 1.40.24 AM (1).jpeg`)
+- **Actions Executed**:
+  1. **Accessible Search Modal Dialog (`SearchDialog.tsx`)**:
+     - Matched light reference: pill search header, close control button, Esc key listener, focus trap.
+     - 2-column mobile category tiles where they fit (Everything, Destinations, Universities, Programmes, Scholarships) with Forest green active background and Citron icons.
+     - Restrained vector search illustration (curated SVG dossier dossier scene; zero stock photos or unverified raster graphics).
+     - Plain quick-action rows leading directly to real, active pages.
+     - Real per-user search history (`unilistics_recent_searches_${userId}`) strictly isolated per account with clear action; zero data leakage across accounts.
+     - Discloses unsupported query scope (e.g. searching private student casework terms as an anonymous visitor) rather than fabricating global mock data.
+     - Integrated seamlessly into `Topbar.tsx` (accessible via search button and `Ctrl+K`/`⌘K` shortcut) and `PublicNavbar.tsx`.
+  2. **Airy Settings & Account Rebrand (`ExplorerAccountPage.tsx`)**:
+     - Matched light reference: airy grouped rows, subtle section labels (Account, Preferences, Privacy & Legal, Support & Session), fine dividers, simple left icons, right chevrons.
+     - Real profile card with uppercase initials avatar, user's full legal name, verified email, residence city, and entitlement tier badge.
+     - Working accessible modals for **Personal Information** (viewing academic background and city) and **Login & Security** (password reset dispatch and verified email badge).
+     - Working **Appearance** switcher using `useTheme()` with instant toggle between Light and Dark modes.
+     - Working **Notifications** channel preferences dialog.
+     - Strict compliance: absolutely NO "Credits and plans", test wallets, synthetic credit balances, or fake payment pricing.
+  3. **Staff & Admin Operations Rebrand**:
+     - `AdminOverviewPage.tsx`: Overhauled metric cards with `DESIGN_SYSTEM_V2` semantic tokens (Citron, Sage, Forest, Amber), eliminated hardcoded peach/coral tokens (`var(--accent-peach-bg)`, `#B78103`, `#FFF9E6`), aligned typography to `var(--color-foreground)` and `var(--color-foreground-muted)`.
+     - `StaffDashboardPage.tsx`: Replaced legacy coral badges and accents (`#B72301`, `#FFEFEA`, `#FFF5F2`, `#FF5733`) with Forest/Citron tokens, updated case card selection states, fast action terminal, and file upload dropzones.
+     - `StaffSettingsPage.tsx`: Rebranded with 24px bento cards, semantic status badges, and explicit Super Administrator privilege isolation notice.
+     - `StaffHelpEditorialPage.tsx`: Modernized tab filter pills with `DESIGN_SYSTEM_V2` tokens, eliminating ad-hoc sky blue.
+     - `SupportDeskPage.tsx`: Modernized general inquiry and explorer boundary notice.
+  4. **Auth, Legal & Edge Routes Rebrand**:
+     - `SignInPage.tsx`: Replaced legacy `#b72301` fallbacks with `var(--action-primary, #245B42)`.
+     - `SignUpPage.tsx`: Replaced `#accent-peach-bg` and `#b72301` with Sage badges and Forest action tokens.
+     - `TermsPage.tsx`: Overhauled header badges, text contrast, and links with `DESIGN_SYSTEM_V2` tokens.
+     - `PrivacyPolicyPage.tsx`: Overhauled with `DESIGN_SYSTEM_V2` surfaces and verified synthetic data mandate.
+     - `NotFoundPage.tsx` (404): Redesigned with 24px bento card, compass icon in Sage badge, and clean portal navigation links.
+     - `ContactPage.tsx`: Replaced `#accent-peach-bg` and legacy text tokens with `DESIGN_SYSTEM_V2` tokens.
+     - `ForgotPasswordPage.tsx` & `SetPasswordPage.tsx`: Verified clean design system compliance.
+  5. **Dead Code & Legacy Asset Removal**:
+     - Deleted obsolete, unreferenced pages containing legacy coral tokens: `src/pages/public/LandingPage.tsx`, `src/pages/explorer/ExplorerCataloguePage.tsx`, `src/pages/explorer/SavedProgramsPage.tsx`.
+     - Removed legacy coral logos from `public/images/unilistics/`: `logo.png` (1.36 MB) and `unilistics-logo.png` (1.03 MB).
+     - Verified zero active occurrences of old coral colors (`#FF5E36`, `#FF2A55`, `#FFEFEA`, `#B72301`, `#fff5f2`) across all components in `src`.
+  6. **Comprehensive Automated Verification & Testing**:
+     - Created `src/test/RemainingRoutesAndSettingsRebrand.test.tsx` (11 unit/integration tests for SearchDialog, ExplorerAccountPage settings, NotFoundPage, StaffSettingsPage, TermsPage, and PrivacyPolicyPage).
+     - `npx vitest run src/test/RemainingRoutesAndSettingsRebrand.test.tsx`: **11/11 passed** (100%).
+     - Full test suite `npm test`: **23 test files passed, 340 tests passed, 0 failed** (100%).
+     - Production build `npm run build`: **compiled dist/ in 8.62s with 0 errors** (1,768 modules transformed).

@@ -200,15 +200,16 @@ export const StaffHelpEditorialPage: React.FC = () => {
             type="button"
             onClick={() => setStatusFilter(tab.id as any)}
             style={{
-              padding: '6px 14px',
-              borderRadius: 'var(--radius-md)',
+              padding: '0.4rem 1rem',
+              borderRadius: 'var(--radius-pill)',
               border: '1px solid',
-              borderColor: statusFilter === tab.id ? 'var(--color-primary)' : 'var(--color-border)',
-              backgroundColor: statusFilter === tab.id ? 'rgba(56, 189, 248, 0.12)' : 'var(--color-surface)',
-              color: statusFilter === tab.id ? 'var(--color-primary)' : 'var(--color-foreground)',
+              borderColor: statusFilter === tab.id ? 'var(--action-primary)' : 'var(--border-subtle)',
+              backgroundColor: statusFilter === tab.id ? 'rgba(36, 91, 66, 0.08)' : 'var(--surface-card)',
+              color: statusFilter === tab.id ? 'var(--action-primary)' : 'var(--color-foreground)',
               fontWeight: statusFilter === tab.id ? 700 : 500,
               fontSize: '0.8125rem',
               cursor: 'pointer',
+              transition: 'all var(--transition-fast)',
             }}
           >
             {tab.label}
