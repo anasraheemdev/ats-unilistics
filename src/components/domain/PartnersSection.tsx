@@ -10,7 +10,7 @@ export const PartnersSection: React.FC = () => {
       className="partners-section-wrapper"
       aria-labelledby="partners-section-heading"
       style={{
-        padding: '4.5rem 1.5rem',
+        padding: '5rem 1.5rem',
         backgroundColor: 'var(--surface-canvas, #F6F8F5)',
         borderTop: '1px solid var(--border-subtle, #E1E8DE)',
         borderBottom: '1px solid var(--border-subtle, #E1E8DE)',
@@ -20,7 +20,7 @@ export const PartnersSection: React.FC = () => {
     >
       <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
         {/* Section Header */}
-        <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 2.75rem' }}>
+        <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 3rem' }}>
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -78,7 +78,7 @@ export const PartnersSection: React.FC = () => {
           </motion.div>
         </div>
 
-        {/* Continuous Horizontal Logo Marquee */}
+        {/* Continuous Horizontal Logo Marquee (Borderless, Enlarged & Floating) */}
         <div
           className="partners-marquee-container"
           aria-label="Partner and evaluation authority logos"
@@ -86,16 +86,16 @@ export const PartnersSection: React.FC = () => {
             position: 'relative',
             width: '100%',
             overflow: 'hidden',
-            padding: '1rem 0',
-            maskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
-            WebkitMaskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
+            padding: '1.25rem 0',
+            maskImage: 'linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)',
           }}
         >
           <div
             className="partners-marquee-track"
             style={{
               display: 'flex',
-              gap: '1.75rem',
+              gap: '3.5rem',
               width: 'max-content',
               alignItems: 'center',
             }}
@@ -110,15 +110,14 @@ export const PartnersSection: React.FC = () => {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  width: '180px',
+                  minWidth: '150px',
                   height: '76px',
-                  padding: '0.75rem 1.25rem',
-                  borderRadius: 'var(--radius-control, 16px)',
-                  backgroundColor: '#FFFFFF',
-                  border: '1px solid var(--border-subtle, #E1E8DE)',
-                  boxShadow: '0 2px 8px rgba(25, 38, 31, 0.04)',
-                  transition: 'all 220ms ease',
+                  background: 'transparent',
+                  border: 'none',
+                  boxShadow: 'none',
+                  padding: '0.25rem 0.5rem',
                   flexShrink: 0,
+                  cursor: 'pointer',
                 }}
               >
                 <img
@@ -127,13 +126,11 @@ export const PartnersSection: React.FC = () => {
                   loading="lazy"
                   className="partner-logo-img"
                   style={{
-                    maxHeight: '44px',
-                    maxWidth: '140px',
+                    maxHeight: '58px',
+                    maxWidth: '190px',
                     width: 'auto',
                     height: 'auto',
                     objectFit: 'contain',
-                    filter: 'grayscale(100%) opacity(0.8)',
-                    transition: 'filter 220ms ease, opacity 220ms ease, transform 220ms ease',
                   }}
                 />
               </div>

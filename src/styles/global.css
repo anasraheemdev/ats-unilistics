@@ -2079,7 +2079,7 @@ a {
 }
 
 .partners-marquee-track {
-  animation: marquee-scroll 38s linear infinite;
+  animation: marquee-scroll 42s linear infinite;
   will-change: transform;
 }
 
@@ -2088,16 +2088,38 @@ a {
   animation-play-state: paused;
 }
 
-.partner-marquee-pill:hover,
-.partner-logo-card:hover {
-  border-color: var(--action-primary, #245B42) !important;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 14px rgba(36, 91, 66, 0.12) !important;
+.partner-logo-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.partner-logo-img {
+  max-height: 58px;
+  max-width: 190px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  filter: grayscale(100%) contrast(1.08) opacity(0.72);
+  transition: filter 250ms ease, opacity 250ms ease, transform 250ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .partner-logo-card:hover .partner-logo-img {
-  filter: grayscale(0%) opacity(1) !important;
-  transform: scale(1.05);
+  filter: grayscale(0%) contrast(1) opacity(1) !important;
+  transform: scale(1.12);
+}
+
+@media (max-width: 768px) {
+  .partner-logo-img {
+    max-height: 46px;
+    max-width: 140px;
+  }
 }
 
 .partner-card-hoverable:hover {
