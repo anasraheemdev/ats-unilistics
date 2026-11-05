@@ -146,18 +146,18 @@ export const InteractiveWorldMap: React.FC = () => {
     <section
       id="destinations-world-map"
       style={{
-        paddingTop: '3.25rem',
-        paddingBottom: '3.5rem',
+        paddingTop: '2.25rem',
+        paddingBottom: '2.25rem',
         paddingLeft: '1.25rem',
         paddingRight: '1.25rem',
         backgroundColor: 'var(--surface-canvas, #F7F6F2)',
         position: 'relative',
         overflow: 'hidden',
-        scrollMarginTop: '96px',
+        scrollMarginTop: '80px',
       }}
       aria-label="Interactive Real World Destinations and Corridors Map"
     >
-      <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -194,11 +194,11 @@ export const InteractiveWorldMap: React.FC = () => {
 
           <h2
             style={{
-              fontSize: 'clamp(1.85rem, 3.5vw, 2.75rem)',
+              fontSize: 'clamp(1.4rem, 2.2vw, 1.85rem)',
               fontWeight: 800,
               letterSpacing: '-0.025em',
               color: 'var(--color-foreground, #19261F)',
-              margin: '0 0 1rem 0',
+              margin: '0 0 0.35rem 0',
               lineHeight: 1.2,
             }}
           >
@@ -210,10 +210,10 @@ export const InteractiveWorldMap: React.FC = () => {
 
           <p
             style={{
-              fontSize: '1.0625rem',
-              color: 'var(--color-foreground-muted, #58695E)',
-              maxWidth: '680px',
-              margin: '0 auto',
+              fontSize: '0.875rem',
+            color: 'var(--color-foreground-muted, #58695E)',
+            maxWidth: '640px',
+            margin: '0 auto',
               lineHeight: 1.6,
             }}
           >
@@ -229,7 +229,7 @@ export const InteractiveWorldMap: React.FC = () => {
               justifyContent: 'center',
               gap: '0.625rem',
               flexWrap: 'wrap',
-              marginTop: '1.75rem',
+              marginTop: '1rem',
             }}
           >
             {CORRIDORS.map((corridor) => {
@@ -243,9 +243,9 @@ export const InteractiveWorldMap: React.FC = () => {
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '0.5rem',
-                    padding: '0.55rem 1.125rem',
+                    padding: '0.35rem 0.85rem',
                     borderRadius: 'var(--radius-pill, 9999px)',
-                    fontSize: '0.875rem',
+                    fontSize: '0.78rem',
                     fontWeight: isSelected ? 700 : 500,
                     backgroundColor: isSelected ? 'var(--action-primary, #245B42)' : 'var(--surface-card, #FFFFFF)',
                     color: isSelected ? 'var(--color-on-primary, #FFFFFF)' : 'var(--color-foreground, #19261F)',
@@ -288,10 +288,10 @@ export const InteractiveWorldMap: React.FC = () => {
           style={{
             position: 'relative',
             backgroundColor: 'var(--surface-card, #FCFCFA)',
-            borderRadius: '28px',
+            borderRadius: '18px',
             border: '1px solid var(--border-subtle, #E5E2D8)',
-            boxShadow: '0 20px 48px -12px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.04)',
-            padding: '1.75rem',
+            boxShadow: '0 8px 24px -6px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.02)',
+            padding: '0.85rem',
             overflow: 'hidden',
           }}
         >
@@ -325,7 +325,7 @@ export const InteractiveWorldMap: React.FC = () => {
                 position: 'relative',
                 width: '100%',
                 minWidth: '780px',
-                borderRadius: '20px',
+                borderRadius: '12px',
                 backgroundColor: 'var(--map-bg, #FAF9F4)',
                 overflow: 'hidden',
               }}
@@ -572,11 +572,11 @@ export const InteractiveWorldMap: React.FC = () => {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.5rem',
-                    padding: '0.5rem 0.85rem',
+                    padding: '0.35rem 0.65rem',
                     backgroundColor: '#19261F',
                     color: '#FFFFFF',
-                    borderRadius: '14px',
-                    boxShadow: '0 10px 28px rgba(25, 38, 31, 0.35)',
+                    borderRadius: '10px',
+                    boxShadow: '0 4px 14px rgba(25, 38, 31, 0.25)',
                     border: '1px solid rgba(215, 238, 131, 0.4)',
                     whiteSpace: 'nowrap',
                   }}
@@ -591,7 +591,7 @@ export const InteractiveWorldMap: React.FC = () => {
                     }}
                   />
                   <div>
-                    <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#D7EE83' }}>
+                    <div style={{ fontSize: '0.68rem', fontWeight: 800, color: '#D7EE83' }}>
                       PK • Pakistan
                     </div>
                     <div style={{ fontSize: '0.625rem', color: '#E1E8DE' }}>Student Departure Desk</div>
@@ -619,9 +619,9 @@ export const InteractiveWorldMap: React.FC = () => {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.625rem',
-                    padding: '0.55rem 0.95rem',
+                    padding: '0.35rem 0.65rem',
                     backgroundColor: 'var(--surface-card, #FFFFFF)',
-                    borderRadius: '16px',
+                    borderRadius: '10px',
                     border: selectedCorridorId === 'germany'
                       ? '2px solid var(--action-primary, #245B42)'
                       : '1px solid var(--border-subtle, rgba(0, 0, 0, 0.08))',
@@ -635,7 +635,7 @@ export const InteractiveWorldMap: React.FC = () => {
                 >
                   <div
                     style={{
-                      fontSize: '0.8125rem',
+                      fontSize: '0.72rem',
                       fontWeight: 800,
                       color: selectedCorridorId === 'germany' ? 'var(--color-on-primary, #FFFFFF)' : 'var(--color-foreground, #19261F)',
                       backgroundColor: selectedCorridorId === 'germany' ? 'var(--action-primary, #245B42)' : 'var(--surface-card-subtle, #EDF2E9)',
@@ -673,9 +673,9 @@ export const InteractiveWorldMap: React.FC = () => {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.625rem',
-                    padding: '0.55rem 0.95rem',
+                    padding: '0.35rem 0.65rem',
                     backgroundColor: 'var(--surface-card, #FFFFFF)',
-                    borderRadius: '16px',
+                    borderRadius: '10px',
                     border: selectedCorridorId === 'italy'
                       ? '2px solid var(--action-primary, #245B42)'
                       : '1px solid var(--border-subtle, rgba(0, 0, 0, 0.08))',
@@ -693,17 +693,17 @@ export const InteractiveWorldMap: React.FC = () => {
                       fontWeight: 800,
                       color: selectedCorridorId === 'italy' ? 'var(--color-on-primary, #FFFFFF)' : 'var(--color-foreground, #19261F)',
                       backgroundColor: selectedCorridorId === 'italy' ? 'var(--action-primary, #245B42)' : 'var(--surface-card-subtle, #EDF2E9)',
-                      padding: '0.2rem 0.5rem',
-                      borderRadius: '8px',
+                      padding: '0.15rem 0.45rem',
+                      borderRadius: '6px',
                     }}
                   >
                     IT
                   </div>
                   <div>
-                    <div style={{ fontSize: '0.8125rem', fontWeight: 800, color: 'var(--color-foreground, #19261F)' }}>
+                    <div style={{ fontSize: '0.72rem', fontWeight: 800, color: 'var(--color-foreground, #19261F)' }}>
                       Italy
                     </div>
-                    <div style={{ fontSize: '0.6875rem', color: 'var(--color-foreground-muted, #58695E)' }}>Art &amp; Architecture (DSU)</div>
+                    <div style={{ fontSize: '0.6rem', color: 'var(--color-foreground-muted, #58695E)' }}>Art &amp; Architecture (DSU)</div>
                   </div>
                 </button>
               </div>
@@ -727,9 +727,9 @@ export const InteractiveWorldMap: React.FC = () => {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.5rem',
-                    padding: '0.45rem 0.85rem',
+                    padding: '0.35rem 0.65rem',
                     backgroundColor: 'var(--surface-card, #FFFFFF)',
-                    borderRadius: '14px',
+                    borderRadius: '10px',
                     border: selectedCorridorId === 'france'
                       ? '2px solid var(--action-primary, #245B42)'
                       : '1px solid var(--border-subtle, rgba(0, 0, 0, 0.08))',
@@ -754,8 +754,8 @@ export const InteractiveWorldMap: React.FC = () => {
                     FR
                   </div>
                   <div>
-                    <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--color-foreground, #19261F)' }}>France</div>
-                    <div style={{ fontSize: '0.625rem', color: 'var(--color-foreground-muted, #58695E)' }}>Grandes Écoles Track</div>
+                    <div style={{ fontSize: '0.72rem', fontWeight: 800, color: 'var(--color-foreground, #19261F)' }}>France</div>
+                    <div style={{ fontSize: '0.6rem', color: 'var(--color-foreground-muted, #58695E)' }}>Grandes Écoles Track</div>
                   </div>
                 </button>
               </div>
@@ -779,9 +779,9 @@ export const InteractiveWorldMap: React.FC = () => {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.5rem',
-                    padding: '0.45rem 0.85rem',
+                    padding: '0.35rem 0.65rem',
                     backgroundColor: 'var(--surface-card, #FFFFFF)',
-                    borderRadius: '14px',
+                    borderRadius: '10px',
                     border: selectedCorridorId === 'romania'
                       ? '2px solid var(--action-primary, #245B42)'
                       : '1px solid var(--border-subtle, rgba(0, 0, 0, 0.08))',
@@ -806,8 +806,8 @@ export const InteractiveWorldMap: React.FC = () => {
                     RO
                   </div>
                   <div>
-                    <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--color-foreground, #19261F)' }}>Romania</div>
-                    <div style={{ fontSize: '0.625rem', color: 'var(--color-foreground-muted, #58695E)' }}>Direct Ministry Letter</div>
+                    <div style={{ fontSize: '0.72rem', fontWeight: 800, color: 'var(--color-foreground, #19261F)' }}>Romania</div>
+                    <div style={{ fontSize: '0.6rem', color: 'var(--color-foreground-muted, #58695E)' }}>Direct Ministry Letter</div>
                   </div>
                 </button>
               </div>
@@ -1015,60 +1015,60 @@ export const InteractiveWorldMap: React.FC = () => {
           <AnimatePresence mode="wait">
             <motion.div
               key={selectedCorridor.id}
-              initial={{ opacity: 0, y: 15 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.25 }}
               style={{
-                marginTop: '1.5rem',
-                padding: '1.5rem',
+                marginTop: '0.75rem',
+                padding: '0.75rem 1rem',
                 backgroundColor: 'var(--surface-card-subtle, #F3F6F1)',
-                borderRadius: '20px',
+                borderRadius: '12px',
                 border: '1px solid var(--border-subtle, #DCE5D8)',
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-                gap: '1.5rem',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+                gap: '0.85rem',
                 alignItems: 'center',
               }}
             >
               {/* Column 1: Corridor Identity & Statutory Protocol */}
               <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '0.5rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', marginBottom: '0.25rem' }}>
                   <span
                     style={{
-                      fontSize: '0.8125rem',
+                      fontSize: '0.72rem',
                       fontWeight: 800,
                       backgroundColor: 'var(--action-primary, #245B42)',
                       color: 'var(--color-on-primary, #FFFFFF)',
-                      padding: '0.2rem 0.5rem',
-                      borderRadius: '8px',
+                      padding: '0.15rem 0.45rem',
+                      borderRadius: '6px',
                     }}
                   >
                     {selectedCorridor.code}
                   </span>
-                  <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--color-foreground, #19261F)', margin: 0 }}>
+                  <h3 style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--color-foreground, #19261F)', margin: 0 }}>
                     {selectedCorridor.name} Admissions Corridor
                   </h3>
                 </div>
-                <p style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted, #58695E)', margin: '0 0 0.75rem' }}>
+                <p style={{ fontSize: '0.75rem', color: 'var(--color-foreground-muted, #58695E)', margin: '0 0 0.35rem' }}>
                   {selectedCorridor.tagline}
                 </p>
-                <div style={{ fontSize: '0.75rem', color: 'var(--color-foreground, #19261F)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                  <strong style={{ color: 'var(--action-primary, #245B42)' }}>Statutory Visa Protocol:</strong>
+                <div style={{ fontSize: '0.7rem', color: 'var(--color-foreground, #19261F)', display: 'flex', alignItems: 'center', gap: '0.35rem', flexWrap: 'wrap' }}>
+                  <strong style={{ color: 'var(--action-primary, #245B42)' }}>Protocol:</strong>
                   <span>{selectedCorridor.visaProtocol}</span>
                 </div>
 
                 {/* Popular Fields Pills */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: '0.85rem' }}>
-                  {selectedCorridor.topFields.map((field) => (
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem', marginTop: '0.45rem' }}>
+                  {selectedCorridor.topFields.slice(0, 3).map((field) => (
                     <span
                       key={field}
                       style={{
-                        fontSize: '0.6875rem',
+                        fontSize: '0.62rem',
                         fontWeight: 600,
                         backgroundColor: 'var(--surface-card, #FFFFFF)',
                         color: 'var(--color-foreground, #19261F)',
-                        padding: '0.2rem 0.5rem',
+                        padding: '0.12rem 0.45rem',
                         borderRadius: 'var(--radius-pill, 9999px)',
                         border: '1px solid var(--border-subtle, #E1E8DE)',
                       }}
@@ -1080,20 +1080,20 @@ export const InteractiveWorldMap: React.FC = () => {
               </div>
 
               {/* Column 2: Financial & Admissions Benchmarks */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
                 <div>
-                  <div style={{ fontSize: '0.6875rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--color-foreground-muted, #718578)', letterSpacing: '0.04em' }}>
+                  <div style={{ fontSize: '0.62rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--color-foreground-muted, #718578)', letterSpacing: '0.04em' }}>
                     Tuition Benchmark
                   </div>
-                  <div style={{ fontSize: '0.875rem', fontWeight: 800, color: 'var(--color-foreground, #19261F)', marginTop: '2px' }}>
+                  <div style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--color-foreground, #19261F)', marginTop: '1px' }}>
                     {selectedCorridor.tuitionNote}
                   </div>
                 </div>
                 <div>
-                  <div style={{ fontSize: '0.6875rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--color-foreground-muted, #718578)', letterSpacing: '0.04em' }}>
+                  <div style={{ fontSize: '0.62rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--color-foreground-muted, #718578)', letterSpacing: '0.04em' }}>
                     Admissions Intake
                   </div>
-                  <div style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--color-foreground, #19261F)', marginTop: '2px' }}>
+                  <div style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--color-foreground, #19261F)', marginTop: '1px' }}>
                     {selectedCorridor.intakeNote}
                   </div>
                 </div>
@@ -1103,19 +1103,19 @@ export const InteractiveWorldMap: React.FC = () => {
               <div
                 style={{
                   display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'flex-start',
+                  alignItems: 'center',
                   justifyContent: 'space-between',
-                  gap: '1rem',
+                  gap: '0.75rem',
+                  flexWrap: 'wrap',
                 }}
               >
                 <div>
-                  <div style={{ fontSize: '0.6875rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--color-foreground-muted, #718578)', letterSpacing: '0.04em' }}>
+                  <div style={{ fontSize: '0.62rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--color-foreground-muted, #718578)', letterSpacing: '0.04em' }}>
                     Catalogues Indexed
                   </div>
-                  <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--action-primary, #245B42)', lineHeight: 1.1 }}>
+                  <div style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--action-primary, #245B42)', lineHeight: 1.1 }}>
                     {selectedCorridor.universitiesIndexed}{' '}
-                    <span style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--color-foreground-muted, #58695E)' }}>Institutions</span>
+                    <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-foreground-muted, #58695E)' }}>Institutions</span>
                   </div>
                 </div>
 
@@ -1124,20 +1124,21 @@ export const InteractiveWorldMap: React.FC = () => {
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
-                    gap: '0.5rem',
-                    padding: '0.625rem 1.25rem',
+                    gap: '0.35rem',
+                    padding: '0.45rem 1rem',
                     borderRadius: 'var(--radius-pill, 9999px)',
                     backgroundColor: 'var(--action-primary, #245B42)',
                     color: 'var(--color-on-primary, #FFFFFF)',
-                    fontSize: '0.8125rem',
+                    fontSize: '0.75rem',
                     fontWeight: 700,
                     textDecoration: 'none',
-                    boxShadow: '0 4px 12px rgba(36, 91, 66, 0.25)',
+                    boxShadow: '0 2px 8px rgba(36, 91, 66, 0.2)',
                     transition: 'all 150ms ease',
+                    whiteSpace: 'nowrap',
                   }}
                 >
                   <span>View {selectedCorridor.name} Universities</span>
-                  <ArrowRight size={14} />
+                  <ArrowRight size={12} />
                 </Link>
               </div>
             </motion.div>
