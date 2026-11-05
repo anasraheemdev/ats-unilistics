@@ -42,3 +42,4 @@ with sync_playwright() as p:
     print("Captured card_professor_full.png and 03_explore_professors_tab.png")
     
     browser.close()
+

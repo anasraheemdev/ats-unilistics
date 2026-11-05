@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
@@ -24,6 +24,9 @@ import {
   CheckCircle,
   FlaskConical,
   BookOpen,
+  ChevronLeft,
+  ChevronRight,
+  ShieldCheck,
 } from 'lucide-react';
 import { ProfessorVectorAvatar } from './ProfessorVectorAvatar';
 import { UniversityLogoBadge } from './UniversityLogoBadge';
@@ -127,7 +130,7 @@ const UNIVERSITIES_OPPORTUNITIES: UniversityOpportunity[] = [
     countryCode: 'de',
     countryFlag: '🇩🇪',
     regionName: 'Bavaria',
-    backgroundImage: '/images/hero_student_europe.jpg',
+    backgroundImage: '/images/tum_munich_architecture.jpg',
     qsRank: '#37 QS',
     institutionType: 'Public',
     isVerified: true,
@@ -167,7 +170,7 @@ const UNIVERSITIES_OPPORTUNITIES: UniversityOpportunity[] = [
     countryCode: 'ro',
     countryFlag: '🇷🇴',
     regionName: 'Bucharest-Ilfov',
-    backgroundImage: '/images/guidance_intro_visual.jpg',
+    backgroundImage: '/images/bucharest_university_architecture.jpg',
     qsRank: '#801 QS',
     institutionType: 'Public',
     isVerified: true,
@@ -187,7 +190,7 @@ const UNIVERSITIES_OPPORTUNITIES: UniversityOpportunity[] = [
     countryCode: 'de',
     countryFlag: '🇩🇪',
     regionName: 'North Rhine-Westphalia',
-    backgroundImage: '/images/student_library_explorer.jpg',
+    backgroundImage: '/images/aachen_architecture.jpg',
     qsRank: '#106 QS',
     institutionType: 'Public',
     isVerified: true,
@@ -378,7 +381,7 @@ const PROFESSORS_OPPORTUNITIES: ProfessorResearchOpportunity[] = [
   {
     id: 'prof-meier',
     professorName: 'Prof. Dr. Klaus Meier',
-    title: 'Chair of Autonomous Perception Systems',
+    title: 'Chair of Cognitive Systems & Vision',
     department: 'Department of Informatics & Robotics',
     university: 'Technical University of Munich',
     city: 'Munich',
@@ -595,6 +598,56 @@ export const ExploreOpportunitiesSection: React.FC = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>('all');
   const [selectedResearchTag, setSelectedResearchTag] = useState<string>('all');
 
+  // Carousel Refs & States for Smooth Horizontal Single-Row Scrolling
+  const universitiesCarouselRef = useRef<HTMLDivElement>(null);
+  const scholarshipsCarouselRef = useRef<HTMLDivElement>(null);
+  const professorsCarouselRef = useRef<HTMLDivElement>(null);
+
+  const [isPaused, setIsPaused] = useState(false);
+  const [activeUniIndex, setActiveUniIndex] = useState(0);
+  const [activeSchIndex, setActiveSchIndex] = useState(0);
+  const [activeProfIndex, setActiveProfIndex] = useState(0);
+
+  // Smooth scroll handler
+  const scrollTrack = (ref: React.RefObject<HTMLDivElement | null>, direction: 'left' | 'right') => {
+    if (!ref.current) return;
+    const cardWidth = 380;
+    const scrollAmount = direction === 'left' ? -cardWidth : cardWidth;
+    ref.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  };
+
+  // Autoplay glide effect every 4.5 seconds when not hovered
+  useEffect(() => {
+    if (isPaused) return;
+
+    const interval = setInterval(() => {
+      let activeRef: React.RefObject<HTMLDivElement | null> | null = null;
+      if (activeTab === 'universities') activeRef = universitiesCarouselRef;
+      else if (activeTab === 'scholarships') activeRef = scholarshipsCarouselRef;
+      else if (activeTab === 'professors') activeRef = professorsCarouselRef;
+
+      if (!activeRef?.current) return;
+      const el = activeRef.current;
+      const maxScroll = el.scrollWidth - el.clientWidth;
+      if (el.scrollLeft >= maxScroll - 20) {
+        el.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        el.scrollBy({ left: 380, behavior: 'smooth' });
+      }
+    }, 4500);
+
+    return () => clearInterval(interval);
+  }, [activeTab, isPaused]);
+
+  // Track scroll position to update dot indicators
+  const handleScroll = (ref: React.RefObject<HTMLDivElement | null>, setIndex: (idx: number) => void) => {
+    if (!ref.current) return;
+    const scrollPos = ref.current.scrollLeft;
+    const cardWidth = 380;
+    const newIdx = Math.round(scrollPos / cardWidth);
+    setIndex(Math.max(0, Math.min(newIdx, 5)));
+  };
+
   // Interactive Saved / Share Toast State
   const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(new Set());
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -615,7 +668,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
   };
 
   const tabs = [
-    { id: 'universities', label: 'Explore Universities', icon: Building2, count: '180+ Indexed' },
+    { id: 'universities', label: 'Explore Universities', icon: Building2, count: '180,000 Indexed' },
     { id: 'scholarships', label: 'Explore Scholarships', icon: Award, count: 'Verified Grants' },
     { id: 'professors', label: 'Explore Professors & Research', icon: Atom, count: 'Academic Directory' },
   ];
@@ -663,7 +716,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
         overflow: 'hidden',
       }}
     >
-      <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
         {/* Section Header */}
         <div style={{ textAlign: 'center', maxWidth: '840px', margin: '0 auto 2.75rem' }}>
           <motion.div
@@ -822,7 +875,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
         </div>
 
         {/* =========================================================================
-            TAB 1: UNIVERSITIES DISCOVERY EXPERIENCE (REFERENCE COMPLIANT CARD)
+            TAB 1: UNIVERSITIES DISCOVERY EXPERIENCE (6 CARDS IN ONE ROW CAROUSEL)
             ========================================================================= */}
         {activeTab === 'universities' && (
           <motion.div
@@ -832,13 +885,122 @@ export const ExploreOpportunitiesSection: React.FC = () => {
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.3 }}
           >
+            {/* Carousel Navigation Header */}
             <div
               style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))',
-                gap: '2rem',
-                marginBottom: '3rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '1rem',
+                flexWrap: 'wrap',
+                gap: '0.75rem',
+                padding: '0 0.25rem',
               }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                <span
+                  style={{
+                    fontSize: '0.8rem',
+                    fontWeight: 700,
+                    color: 'var(--action-primary, #245B42)',
+                    backgroundColor: 'rgba(36, 91, 66, 0.08)',
+                    padding: '0.25rem 0.8rem',
+                    borderRadius: 'var(--radius-pill, 9999px)',
+                  }}
+                >
+                  Featured European Institutions (180,000 Indexed)
+                </span>
+                <span style={{ fontSize: '0.78rem', color: '#6A7D71', fontWeight: 500 }}>
+                  Swipe or use controls to browse all 6
+                </span>
+              </div>
+
+              {/* Controls: Indicators + Prev/Next buttons */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                  {filteredUniversities.map((_, dotIdx) => (
+                    <button
+                      key={dotIdx}
+                      type="button"
+                      aria-label={`Go to university ${dotIdx + 1}`}
+                      onClick={() => {
+                        universitiesCarouselRef.current?.scrollTo({
+                          left: dotIdx * 380,
+                          behavior: 'smooth',
+                        });
+                        setActiveUniIndex(dotIdx);
+                      }}
+                      style={{
+                        width: activeUniIndex === dotIdx ? '20px' : '8px',
+                        height: '8px',
+                        borderRadius: '9999px',
+                        backgroundColor: activeUniIndex === dotIdx ? 'var(--action-primary, #245B42)' : '#D0DCD2',
+                        border: 'none',
+                        cursor: 'pointer',
+                        padding: 0,
+                        transition: 'all 200ms ease',
+                      }}
+                    />
+                  ))}
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <button
+                    type="button"
+                    aria-label="Previous universities"
+                    onClick={() => scrollTrack(universitiesCarouselRef, 'left')}
+                    style={{
+                      width: '38px',
+                      height: '38px',
+                      borderRadius: '50%',
+                      backgroundColor: '#FFFFFF',
+                      border: '1px solid #D5E0D7',
+                      color: '#19261F',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
+                      transition: 'all 150ms ease',
+                    }}
+                  >
+                    <ChevronLeft size={18} />
+                  </button>
+
+                  <button
+                    type="button"
+                    aria-label="Next universities"
+                    onClick={() => scrollTrack(universitiesCarouselRef, 'right')}
+                    style={{
+                      width: '38px',
+                      height: '38px',
+                      borderRadius: '50%',
+                      backgroundColor: '#FFFFFF',
+                      border: '1px solid #D5E0D7',
+                      color: '#19261F',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
+                      transition: 'all 150ms ease',
+                    }}
+                  >
+                    <ChevronRight size={18} />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* 6 Cards in ONE Horizontal Carousel Row */}
+            <div
+              ref={universitiesCarouselRef}
+              className="opportunities-carousel-track"
+              onMouseEnter={() => setIsPaused(true)}
+              onMouseLeave={() => setIsPaused(false)}
+              onTouchStart={() => setIsPaused(true)}
+              onTouchEnd={() => setIsPaused(false)}
+              onScroll={() => handleScroll(universitiesCarouselRef, setActiveUniIndex)}
             >
               {filteredUniversities.map((uni) => {
                 const isBookmarked = bookmarkedIds.has(uni.id);
@@ -847,7 +1009,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                 return (
                   <div
                     key={uni.id}
-                    className="opportunity-card-hover"
+                    className="opportunities-carousel-card opportunity-card-hover"
                     style={{
                       backgroundColor: '#FFFFFF',
                       borderRadius: '28px',
@@ -1405,7 +1567,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
               })}
             </div>
 
-            <div style={{ textAlign: 'center' }}>
+            <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
               <Link
                 to={ROUTES.UNIVERSITIES}
                 id="explore-universities-primary-cta"
@@ -1432,7 +1594,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
         )}
 
         {/* =========================================================================
-            TAB 2: SCHOLARSHIPS DISCOVERY (DISTINCT GRANT CERTIFICATE DESIGN)
+            TAB 2: SCHOLARSHIPS DISCOVERY (6 CARDS IN ONE ROW CAROUSEL)
             ========================================================================= */}
         {activeTab === 'scholarships' && (
           <motion.div
@@ -1442,13 +1604,121 @@ export const ExploreOpportunitiesSection: React.FC = () => {
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.3 }}
           >
+            {/* Carousel Navigation Header */}
             <div
               style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))',
-                gap: '2rem',
-                marginBottom: '3rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '1rem',
+                flexWrap: 'wrap',
+                gap: '0.75rem',
+                padding: '0 0.25rem',
               }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                <span
+                  style={{
+                    fontSize: '0.8rem',
+                    fontWeight: 700,
+                    color: 'var(--action-primary, #245B42)',
+                    backgroundColor: 'rgba(36, 91, 66, 0.08)',
+                    padding: '0.25rem 0.8rem',
+                    borderRadius: 'var(--radius-pill, 9999px)',
+                  }}
+                >
+                  Verified European Grants &amp; Scholarships
+                </span>
+                <span style={{ fontSize: '0.78rem', color: '#6A7D71', fontWeight: 500 }}>
+                  Swipe or use controls to browse all 6
+                </span>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                  {filteredScholarships.map((_, dotIdx) => (
+                    <button
+                      key={dotIdx}
+                      type="button"
+                      aria-label={`Go to scholarship ${dotIdx + 1}`}
+                      onClick={() => {
+                        scholarshipsCarouselRef.current?.scrollTo({
+                          left: dotIdx * 380,
+                          behavior: 'smooth',
+                        });
+                        setActiveSchIndex(dotIdx);
+                      }}
+                      style={{
+                        width: activeSchIndex === dotIdx ? '20px' : '8px',
+                        height: '8px',
+                        borderRadius: '9999px',
+                        backgroundColor: activeSchIndex === dotIdx ? 'var(--action-primary, #245B42)' : '#D0DCD2',
+                        border: 'none',
+                        cursor: 'pointer',
+                        padding: 0,
+                        transition: 'all 200ms ease',
+                      }}
+                    />
+                  ))}
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <button
+                    type="button"
+                    aria-label="Previous scholarships"
+                    onClick={() => scrollTrack(scholarshipsCarouselRef, 'left')}
+                    style={{
+                      width: '38px',
+                      height: '38px',
+                      borderRadius: '50%',
+                      backgroundColor: '#FFFFFF',
+                      border: '1px solid #D5E0D7',
+                      color: '#19261F',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
+                      transition: 'all 150ms ease',
+                    }}
+                  >
+                    <ChevronLeft size={18} />
+                  </button>
+
+                  <button
+                    type="button"
+                    aria-label="Next scholarships"
+                    onClick={() => scrollTrack(scholarshipsCarouselRef, 'right')}
+                    style={{
+                      width: '38px',
+                      height: '38px',
+                      borderRadius: '50%',
+                      backgroundColor: '#FFFFFF',
+                      border: '1px solid #D5E0D7',
+                      color: '#19261F',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
+                      transition: 'all 150ms ease',
+                    }}
+                  >
+                    <ChevronRight size={18} />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* 6 Cards in ONE Horizontal Carousel Row */}
+            <div
+              ref={scholarshipsCarouselRef}
+              className="opportunities-carousel-track"
+              onMouseEnter={() => setIsPaused(true)}
+              onMouseLeave={() => setIsPaused(false)}
+              onTouchStart={() => setIsPaused(true)}
+              onTouchEnd={() => setIsPaused(false)}
+              onScroll={() => handleScroll(scholarshipsCarouselRef, setActiveSchIndex)}
             >
               {filteredScholarships.map((sch) => {
                 const isBookmarked = bookmarkedIds.has(sch.id);
@@ -1457,7 +1727,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                 return (
                   <div
                     key={sch.id}
-                    className="opportunity-card-hover"
+                    className="opportunities-carousel-card opportunity-card-hover"
                     style={{
                       backgroundColor: '#FFFFFF',
                       borderRadius: '24px',
@@ -1471,7 +1741,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                       transition: 'all 240ms ease',
                     }}
                   >
-                    {/* Prestigious Grant Authority Certificate Header (Distinct from University) */}
+                    {/* Prestigious Grant Authority Certificate Header */}
                     <div
                       style={{
                         padding: '1.4rem 1.4rem 1.15rem',
@@ -1480,7 +1750,6 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                         position: 'relative',
                       }}
                     >
-                      {/* Top Row: Provider Emblem & Funding Ribbon Badge */}
                       <div
                         style={{
                           display: 'flex',
@@ -1491,7 +1760,6 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                         }}
                       >
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                          {/* Official Agency Logo / Crest */}
                           <div
                             style={{
                               width: '52px',
@@ -1547,7 +1815,6 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                           </div>
                         </div>
 
-                        {/* Top-Right Funding Value Ribbon */}
                         <span
                           style={{
                             padding: '0.35rem 0.8rem',
@@ -1568,7 +1835,6 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                         </span>
                       </div>
 
-                      {/* Grant Title */}
                       <h3
                         style={{
                           fontSize: '1.18rem',
@@ -1605,7 +1871,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                       }}
                     >
                       <div>
-                        {/* Financial Coverage Matrix Strip (Tuition, Stipend, Travel) */}
+                        {/* Financial Coverage Matrix Strip */}
                         <div
                           style={{
                             backgroundColor: '#F6F9F6',
@@ -1647,7 +1913,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                           </div>
                         </div>
 
-                        {/* Grant Target Level & Direct Coverage Text */}
+                        {/* Grant Target Level */}
                         <div
                           style={{
                             display: 'flex',
@@ -1837,7 +2103,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
               })}
             </div>
 
-            <div style={{ textAlign: 'center' }}>
+            <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
               <Link
                 to={ROUTES.SCHOLARSHIPS}
                 id="explore-scholarships-primary-cta"
@@ -1864,7 +2130,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
         )}
 
         {/* =========================================================================
-            TAB 3: PROFESSORS & RESEARCH (DISTINCT ACADEMIC FACULTY LAB DESIGN)
+            TAB 3: PROFESSORS & RESEARCH (6 CARDS IN ONE ROW EXECUTIVE CAROUSEL)
             ========================================================================= */}
         {activeTab === 'professors' && (
           <motion.div
@@ -1882,7 +2148,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                 justifyContent: 'center',
                 gap: '0.5rem',
                 flexWrap: 'wrap',
-                marginBottom: '2rem',
+                marginBottom: '1.75rem',
               }}
               role="tablist"
               aria-label="Filter professors by research specialization"
@@ -1912,13 +2178,121 @@ export const ExploreOpportunitiesSection: React.FC = () => {
               ))}
             </div>
 
+            {/* Carousel Navigation Header */}
             <div
               style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))',
-                gap: '2rem',
-                marginBottom: '3rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '1rem',
+                flexWrap: 'wrap',
+                gap: '0.75rem',
+                padding: '0 0.25rem',
               }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                <span
+                  style={{
+                    fontSize: '0.8rem',
+                    fontWeight: 700,
+                    color: 'var(--action-primary, #245B42)',
+                    backgroundColor: 'rgba(36, 91, 66, 0.08)',
+                    padding: '0.25rem 0.8rem',
+                    borderRadius: 'var(--radius-pill, 9999px)',
+                  }}
+                >
+                  European Research Chairs &amp; Faculty Supervision
+                </span>
+                <span style={{ fontSize: '0.78rem', color: '#6A7D71', fontWeight: 500 }}>
+                  Swipe or use controls to browse all 6
+                </span>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                  {filteredProfessors.map((_, dotIdx) => (
+                    <button
+                      key={dotIdx}
+                      type="button"
+                      aria-label={`Go to faculty ${dotIdx + 1}`}
+                      onClick={() => {
+                        professorsCarouselRef.current?.scrollTo({
+                          left: dotIdx * 380,
+                          behavior: 'smooth',
+                        });
+                        setActiveProfIndex(dotIdx);
+                      }}
+                      style={{
+                        width: activeProfIndex === dotIdx ? '20px' : '8px',
+                        height: '8px',
+                        borderRadius: '9999px',
+                        backgroundColor: activeProfIndex === dotIdx ? 'var(--action-primary, #245B42)' : '#D0DCD2',
+                        border: 'none',
+                        cursor: 'pointer',
+                        padding: 0,
+                        transition: 'all 200ms ease',
+                      }}
+                    />
+                  ))}
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <button
+                    type="button"
+                    aria-label="Previous faculty"
+                    onClick={() => scrollTrack(professorsCarouselRef, 'left')}
+                    style={{
+                      width: '38px',
+                      height: '38px',
+                      borderRadius: '50%',
+                      backgroundColor: '#FFFFFF',
+                      border: '1px solid #D5E0D7',
+                      color: '#19261F',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
+                      transition: 'all 150ms ease',
+                    }}
+                  >
+                    <ChevronLeft size={18} />
+                  </button>
+
+                  <button
+                    type="button"
+                    aria-label="Next faculty"
+                    onClick={() => scrollTrack(professorsCarouselRef, 'right')}
+                    style={{
+                      width: '38px',
+                      height: '38px',
+                      borderRadius: '50%',
+                      backgroundColor: '#FFFFFF',
+                      border: '1px solid #D5E0D7',
+                      color: '#19261F',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
+                      transition: 'all 150ms ease',
+                    }}
+                  >
+                    <ChevronRight size={18} />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* 6 Cards in ONE Horizontal Carousel Row */}
+            <div
+              ref={professorsCarouselRef}
+              className="opportunities-carousel-track"
+              onMouseEnter={() => setIsPaused(true)}
+              onMouseLeave={() => setIsPaused(false)}
+              onTouchStart={() => setIsPaused(true)}
+              onTouchEnd={() => setIsPaused(false)}
+              onScroll={() => handleScroll(professorsCarouselRef, setActiveProfIndex)}
             >
               {filteredProfessors.map((prof) => {
                 const isBookmarked = bookmarkedIds.has(prof.id);
@@ -1927,12 +2301,12 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                 return (
                   <div
                     key={prof.id}
-                    className="opportunity-card-hover"
+                    className="opportunities-carousel-card opportunity-card-hover"
                     style={{
                       backgroundColor: '#FFFFFF',
-                      borderRadius: '24px',
-                      border: '1px solid #DFE7DD',
-                      boxShadow: '0 10px 30px -8px rgba(36, 91, 66, 0.08), 0 3px 10px rgba(0, 0, 0, 0.02)',
+                      borderRadius: '26px',
+                      border: '1px solid #DCE6DA',
+                      boxShadow: '0 12px 32px -8px rgba(22, 54, 38, 0.08), 0 3px 12px rgba(0, 0, 0, 0.03)',
                       overflow: 'hidden',
                       display: 'flex',
                       flexDirection: 'column',
@@ -1941,13 +2315,14 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                       transition: 'all 240ms ease',
                     }}
                   >
-                    {/* Faculty Chair Header with Prominent Avatar Crest (Distinct from University) */}
+                    {/* Faculty Chair Header with Executive Academic Crest */}
                     <div
                       style={{
-                        padding: '1.4rem 1.4rem 1.15rem',
-                        background: 'linear-gradient(135deg, #122B1E 0%, #1E4632 100%)',
+                        padding: '1.45rem 1.4rem 1.25rem',
+                        background: 'linear-gradient(145deg, #092015 0%, #133926 50%, #0C281B 100%)',
                         color: '#FFFFFF',
                         position: 'relative',
+                        boxShadow: 'inset 0 -1px 0 rgba(255,255,255,0.08)',
                       }}
                     >
                       {/* Top Badges Row */}
@@ -1957,7 +2332,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                           alignItems: 'center',
                           justifyContent: 'space-between',
                           gap: '0.5rem',
-                          marginBottom: '1rem',
+                          marginBottom: '1.1rem',
                         }}
                       >
                         <span
@@ -1965,64 +2340,83 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                             display: 'inline-flex',
                             alignItems: 'center',
                             gap: '0.35rem',
-                            padding: '0.28rem 0.65rem',
+                            padding: '0.3rem 0.75rem',
                             borderRadius: 'var(--radius-pill, 9999px)',
-                            backgroundColor: 'rgba(215, 238, 131, 0.15)',
+                            backgroundColor: 'rgba(215, 238, 131, 0.14)',
                             border: '1px solid rgba(215, 238, 131, 0.35)',
                             color: 'var(--brand-citron, #D7EE83)',
-                            fontSize: '0.75rem',
+                            fontSize: '0.76rem',
                             fontWeight: 700,
+                            letterSpacing: '0.02em',
                           }}
                         >
-                          <Atom size={12} />
+                          <Atom size={13} />
                           <span>{prof.disciplineBadge}</span>
                         </span>
 
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                           <span
                             style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '0.3rem',
                               padding: '0.28rem 0.65rem',
                               borderRadius: 'var(--radius-pill, 9999px)',
-                              backgroundColor: 'rgba(255, 255, 255, 0.12)',
+                              backgroundColor: 'rgba(255, 255, 255, 0.14)',
+                              backdropFilter: 'blur(8px)',
                               color: '#FFFFFF',
                               fontSize: '0.72rem',
                               fontWeight: 700,
                             }}
                           >
-                            {prof.roleBadge}
+                            <ShieldCheck size={12} style={{ color: 'var(--brand-citron, #D7EE83)' }} />
+                            <span>{prof.roleBadge}</span>
                           </span>
                           <CountryFlagIcon countryCode={prof.countryCode} width={18} height={12} />
                         </div>
                       </div>
 
-                      {/* Professor Profile: Avatar + Name + University */}
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.95rem' }}>
-                        {/* Vector Avatar in Crest */}
+                      {/* Professor Profile: Medallion Avatar + Name + University */}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        {/* Luxury Double-Ringed Avatar Medallion */}
                         <div
                           style={{
-                            width: '68px',
-                            height: '68px',
+                            width: '72px',
+                            height: '72px',
                             borderRadius: '50%',
-                            backgroundColor: '#FFFFFF',
-                            padding: '2px',
-                            boxShadow: '0 4px 14px rgba(0, 0, 0, 0.3)',
+                            background: 'linear-gradient(135deg, #D7EE83 0%, #245B42 100%)',
+                            padding: '2.5px',
+                            boxShadow: '0 6px 18px rgba(0, 0, 0, 0.32)',
                             flexShrink: 0,
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                           }}
                         >
-                          <ProfessorVectorAvatar professorId={prof.id} name={prof.professorName} size={64} />
+                          <div
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              borderRadius: '50%',
+                              backgroundColor: '#FFFFFF',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              overflow: 'hidden',
+                            }}
+                          >
+                            <ProfessorVectorAvatar professorId={prof.id} name={prof.professorName} size={66} />
+                          </div>
                         </div>
 
                         <div style={{ overflow: 'hidden' }}>
                           <h3
                             style={{
-                              fontSize: '1.24rem',
+                              fontSize: '1.26rem',
                               fontWeight: 800,
                               color: '#FFFFFF',
                               lineHeight: 1.2,
-                              margin: '0 0 0.25rem',
+                              margin: '0 0 0.2rem',
                               letterSpacing: '-0.02em',
                             }}
                           >
@@ -2031,20 +2425,36 @@ export const ExploreOpportunitiesSection: React.FC = () => {
 
                           <div
                             style={{
-                              fontSize: '0.8rem',
+                              fontSize: '0.84rem',
+                              color: 'var(--brand-citron, #D7EE83)',
+                              fontWeight: 700,
+                              lineHeight: 1.25,
+                              marginBottom: '0.2rem',
+                            }}
+                          >
+                            {prof.title}
+                          </div>
+
+                          <div
+                            style={{
+                              fontSize: '0.78rem',
                               color: 'rgba(255, 255, 255, 0.85)',
                               lineHeight: 1.3,
                               fontWeight: 500,
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '0.3rem',
                             }}
                           >
-                            {prof.university} • {prof.city}
+                            <MapPin size={12} style={{ color: 'var(--brand-citron, #D7EE83)', flexShrink: 0 }} />
+                            <span>{prof.university} • {prof.city}</span>
                           </div>
                         </div>
                       </div>
 
                       {/* Tagline / Research Mission */}
-                      <div style={{ marginTop: '0.75rem', paddingTop: '0.65rem', borderTop: '1px solid rgba(255, 255, 255, 0.12)' }}>
-                        <p style={{ margin: 0, fontSize: '0.78rem', color: 'rgba(255, 255, 255, 0.9)', fontStyle: 'italic' }}>
+                      <div style={{ marginTop: '0.85rem', paddingTop: '0.75rem', borderTop: '1px solid rgba(255, 255, 255, 0.12)' }}>
+                        <p style={{ margin: 0, fontSize: '0.79rem', color: 'rgba(255, 255, 255, 0.92)', fontStyle: 'italic', lineHeight: 1.4 }}>
                           "{prof.motto}"
                         </p>
                       </div>
@@ -2071,15 +2481,15 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                             display: 'flex',
                             alignItems: 'center',
                             gap: '0.65rem',
-                            marginBottom: '1.15rem',
+                            marginBottom: '1.1rem',
                           }}
                         >
                           <div
                             style={{
-                              width: '32px',
-                              height: '32px',
-                              borderRadius: '8px',
-                              backgroundColor: 'rgba(36, 91, 66, 0.1)',
+                              width: '34px',
+                              height: '34px',
+                              borderRadius: '10px',
+                              backgroundColor: 'rgba(36, 91, 66, 0.12)',
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'center',
@@ -2090,10 +2500,10 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                             <FlaskConical size={18} />
                           </div>
                           <div style={{ overflow: 'hidden' }}>
-                            <div style={{ fontSize: '0.7rem', color: '#58695E', fontWeight: 600, textTransform: 'uppercase' }}>
+                            <div style={{ fontSize: '0.7rem', color: '#58695E', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                               Research Lab
                             </div>
-                            <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#19261F', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            <div style={{ fontSize: '0.84rem', fontWeight: 800, color: '#19261F', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                               {prof.labName}
                             </div>
                           </div>
@@ -2118,18 +2528,19 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                           <span
                             style={{
                               fontSize: '0.72rem',
-                              fontWeight: 700,
+                              fontWeight: 800,
                               color: 'var(--action-primary, #245B42)',
                               backgroundColor: 'rgba(36, 91, 66, 0.08)',
-                              padding: '0.2rem 0.55rem',
+                              padding: '0.22rem 0.6rem',
                               borderRadius: 'var(--radius-pill, 9999px)',
+                              whiteSpace: 'nowrap',
                             }}
                           >
                             {prof.openTopicsCount} Open Tracks
                           </span>
                         </div>
 
-                        {/* Active Open Research Topics (Distinct Feature) */}
+                        {/* Active Open Research Topics */}
                         <div style={{ marginBottom: '1.15rem' }}>
                           <div style={{ fontSize: '0.74rem', fontWeight: 700, color: '#58695E', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '0.45rem' }}>
                             Active Supervision Topics
@@ -2146,9 +2557,10 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                                   color: '#26382E',
                                   lineHeight: 1.35,
                                   backgroundColor: '#F9FBF9',
-                                  padding: '0.35rem 0.6rem',
+                                  padding: '0.4rem 0.65rem',
                                   borderRadius: '8px',
                                   border: '1px solid #EAF0E9',
+                                  fontWeight: 500,
                                 }}
                               >
                                 <BookOpen size={13} style={{ color: '#245B42', flexShrink: 0, marginTop: '0.15rem' }} />
@@ -2163,7 +2575,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                           style={{
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '0.5rem',
+                            gap: '0.45rem',
                             flexWrap: 'wrap',
                             marginBottom: '1.25rem',
                           }}
@@ -2295,7 +2707,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
               })}
             </div>
 
-            <div style={{ textAlign: 'center' }}>
+            <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
               <Link
                 to={ROUTES.PROGRAMS}
                 id="explore-professors-primary-cta"

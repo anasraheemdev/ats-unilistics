@@ -2170,6 +2170,37 @@ a {
   box-shadow: 0 4px 12px rgba(36, 91, 66, 0.22) !important;
 }
 
+/* 5. Opportunities Carousel Track */
+.opportunities-carousel-track {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 0.75rem 0.25rem 1.5rem;
+}
+
+.opportunities-carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.opportunities-carousel-card {
+  flex: 0 0 355px;
+  width: 355px;
+  scroll-snap-align: start;
+}
+
+@media (max-width: 480px) {
+  .opportunities-carousel-card {
+    flex: 0 0 88vw;
+    width: 88vw;
+  }
+}
+
 /* Respect Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   .partners-marquee-track {
