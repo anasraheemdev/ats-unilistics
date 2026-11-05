@@ -8,6 +8,7 @@ export const ROUTES = {
   HOME: '/',
   UNIVERSITIES: '/universities',
   PROGRAMS: '/programs',
+  PROFESSORS: '/professors',
   SCHOLARSHIPS: '/scholarships',
   SAVED: '/saved',
   CONTACT: '/contact',

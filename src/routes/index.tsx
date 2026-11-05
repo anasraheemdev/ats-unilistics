@@ -176,6 +176,7 @@ export const AppRoutes: React.FC<AppRoutesProps> = ({ currentRole, onRoleChange 
           <Route path="/universities/:id" element={<UniversityDetailPage />} />
           <Route path="/programs" element={<ProgramsDiscoveryPage />} />
           <Route path="/programs/:id" element={<ProgramDetailPage />} />
+          <Route path="/professors" element={<Navigate to="/programs" replace />} />
           <Route path="/scholarships" element={<ScholarshipsDiscoveryPage />} />
           <Route path="/scholarships/:id" element={<ScholarshipDetailPage />} />
           <Route path="/saved" element={<SavedDiscoveryPage />} />

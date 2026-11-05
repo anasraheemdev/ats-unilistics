@@ -132,7 +132,7 @@ describe('Public and Explorer Layouts & Rebrand Test Suite', () => {
       expect(screen.getByPlaceholderText(/Search universities/i)).toBeDefined();
       expect(screen.getByRole('button', { name: /^Explore$/i })).toBeDefined();
       expect(screen.getByRole('link', { name: /Need a helping hand\? Get guidance/i })).toBeDefined();
-      expect(screen.getByText(/Explore opportunities/i)).toBeDefined();
+      expect(screen.getAllByText(/Explore opportunities/i).length).toBeGreaterThan(0);
       expect(screen.getByText(/Organise your documents/i)).toBeDefined();
       expect(screen.getByText(/Track every step/i)).toBeDefined();
     });

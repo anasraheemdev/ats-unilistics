@@ -2063,3 +2063,84 @@ a {
     align-items: flex-start;
   }
 }
+
+/* ==============================================================================
+ * ELEVATED HOMEPAGE SECTIONS: PARTNERS, ALUMNI, AMBASSADORS & OPPORTUNITIES
+ * ============================================================================== */
+
+/* 1. Partners Marquee Animation */
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.partners-marquee-track {
+  animation: marquee-scroll 38s linear infinite;
+  will-change: transform;
+}
+
+.partners-marquee-container:hover .partners-marquee-track,
+.partners-marquee-container:focus-within .partners-marquee-track {
+  animation-play-state: paused;
+}
+
+.partner-marquee-pill:hover {
+  border-color: var(--action-primary, #245B42) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(36, 91, 66, 0.12) !important;
+}
+
+.partner-card-hoverable:hover {
+  border-color: var(--action-primary, #245B42) !important;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(36, 91, 66, 0.08) !important;
+}
+
+/* 2. Alumni Success Stories */
+.alumni-card-hoverable:hover {
+  border-color: var(--action-primary, #245B42) !important;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(25, 38, 31, 0.08) !important;
+}
+
+/* 3. Ambassadors Video Cards */
+.ambassador-featured-card:hover .video-thumb-zoom {
+  transform: scale(1.03);
+  opacity: 0.95 !important;
+}
+
+.ambassador-featured-card:hover .play-pulse-btn {
+  transform: translate(-50%, -50%) scale(1.08);
+  box-shadow: 0 0 40px rgba(215, 238, 131, 0.7) !important;
+}
+
+.supporting-video-card:hover {
+  border-color: rgba(215, 238, 131, 0.4) !important;
+  transform: translateX(4px);
+  background-color: #192D21 !important;
+}
+
+/* 4. Explore Opportunities Cards */
+.opportunity-card-hover:hover {
+  border-color: var(--action-primary, #245B42) !important;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(36, 91, 66, 0.08) !important;
+}
+
+/* Respect Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .partners-marquee-track {
+    animation: none;
+    overflow-x: auto;
+  }
+  .alumni-card-hoverable:hover,
+  .partner-card-hoverable:hover,
+  .supporting-video-card:hover,
+  .opportunity-card-hover:hover {
+    transform: none !important;
+  }
+}

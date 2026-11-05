@@ -23,6 +23,10 @@ import { api } from '@/lib/api';
 import { DestinationCountry } from '@/types';
 import { InteractiveWorldMap } from '@/components/domain/InteractiveWorldMap';
 import { JourneyRoadmap } from '@/components/domain/JourneyRoadmap';
+import { ExploreOpportunitiesSection } from '@/components/domain/ExploreOpportunitiesSection';
+import { PartnersSection } from '@/components/domain/PartnersSection';
+import { AlumniSection } from '@/components/domain/AlumniSection';
+import { AmbassadorsVideoSection } from '@/components/domain/AmbassadorsVideoSection';
 
 export const HomePage: React.FC = () => {
   const navigate = useNavigate();
@@ -320,10 +324,16 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 2. Interactive World & European Corridors Map (Section 3/4 requested by user!) */}
+      {/* 2. Interactive Explore Opportunities: Universities, Scholarships, Faculty & Research */}
+      <ExploreOpportunitiesSection />
+
+      {/* 3. Interactive World & European Corridors Map */}
       <InteractiveWorldMap />
 
-      {/* 3. Your Journey. Your Choice: Exploration vs Managed Support (Matching Reference 1) */}
+      {/* 4. Trusted Institutional Network & Statutory Partners Marquee */}
+      <PartnersSection />
+
+      {/* 5. Your Journey. Your Choice: Exploration vs Managed Support */}
       <section
         id="exploration-vs-managed-section"
         className="choice-section-wrapper"
@@ -541,10 +551,16 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 4. How Your Journey Progresses: Interactive Curved Winding Roadmap */}
+      {/* 6. How Your Journey Progresses: Interactive Curved Winding Roadmap */}
       <JourneyRoadmap />
 
-      {/* 6. Frequently Asked Questions (Modern Categorized Interactive Accordion) */}
+      {/* 7. Alumni Success Stories: Where Our Students Are Now */}
+      <AlumniSection />
+
+      {/* 8. Student Ambassadors Video Testimonials: Authentic On-Campus Voices */}
+      <AmbassadorsVideoSection />
+
+      {/* 9. Frequently Asked Questions (Modern Categorized Interactive Accordion) */}
       <section id="faq-section" className="faq-section-wrapper" aria-labelledby="faq-section-title">
         <div className="faq-container">
           <motion.div
