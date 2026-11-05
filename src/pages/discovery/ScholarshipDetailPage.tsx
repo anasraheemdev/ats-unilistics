@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useLocation } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import { LoadingState } from '@/components/common/LoadingState';
@@ -23,6 +23,10 @@ function getCountryFlag(country: string): string {
 
 export const ScholarshipDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const location = useLocation();
+
+  const isStudentWorkspace = location.pathname.startsWith('/student');
+  const backUrl = isStudentWorkspace ? '/student/scholarships' : '/scholarships';
 
   const { data: sch, isLoading, error, refetch } = useQuery({
     queryKey: ['scholarship-detail', id],
@@ -43,7 +47,7 @@ export const ScholarshipDetailPage: React.FC = () => {
           onRetry={() => refetch()}
         />
         <div className="text-center mt-4">
-          <Link to="/scholarships" className="text-sm font-semibold text-[#245B42] hover:underline">
+          <Link to={backUrl} className="text-sm font-semibold text-[#245B42] hover:underline">
             &larr; Back to Scholarships Catalogue
           </Link>
         </div>
@@ -58,7 +62,7 @@ export const ScholarshipDetailPage: React.FC = () => {
       {/* Breadcrumb Navigation */}
       <div className="mb-5">
         <Link
-          to="/scholarships"
+          to={backUrl}
           className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#245B42] hover:underline"
         >
           <ChevronLeft size={16} />

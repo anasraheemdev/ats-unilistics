@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { PublicNavbar } from './PublicNavbar';
 import { PublicFooter } from './PublicFooter';
@@ -17,6 +17,10 @@ interface PublicLayoutProps {
  * NO sidebar menu on public pages!
  */
 export const PublicLayout: React.FC<PublicLayoutProps> = ({ currentRole, onRoleChange }) => {
+  useEffect(() => {
+    document.body.style.overflow = '';
+  }, []);
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: 'var(--color-background)' }}>
       <SkipLink targetId="main-content" />

@@ -46,6 +46,8 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           aria-invalid={Boolean(error)}
           aria-describedby={describedBy}
           style={{
+            width: '100%',
+            boxSizing: 'border-box',
             padding: '0.75rem 0.875rem',
             borderRadius: 'var(--radius-control)', // 16px control radius from guidelines
             border: `1px solid ${error ? 'var(--color-destructive)' : 'var(--color-border)'}`,

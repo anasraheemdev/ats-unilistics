@@ -51,6 +51,8 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           aria-invalid={Boolean(error)}
           aria-describedby={describedBy}
           style={{
+            width: '100%',
+            boxSizing: 'border-box',
             minHeight: 'var(--touch-target-default, 48px)', // 48px touch target from guidelines
             padding: '0.625rem 0.875rem',
             borderRadius: 'var(--radius-control)',          // 16px control radius from guidelines

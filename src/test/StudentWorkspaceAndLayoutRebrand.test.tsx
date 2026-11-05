@@ -57,7 +57,7 @@ describe('Managed Student Shell & Workspace Rebrand Suite', () => {
   });
 
   describe('1. Desktop Sidebar Specification', () => {
-    it('renders with slim desktop width (216px, within 204–224px reference scale)', () => {
+    it('renders with approved desktop width (256px expanded and 76px collapsed)', () => {
       const onRoleChange = vi.fn();
       const onToggleCollapse = vi.fn();
       const onCloseMobile = vi.fn();
@@ -81,8 +81,8 @@ describe('Managed Student Shell & Workspace Rebrand Suite', () => {
 
       const asideElement = screen.getByLabelText(/Student Workspace sidebar/i);
       expect(asideElement).toBeInTheDocument();
-      expect(asideElement.style.width).toBe('216px');
-      expect(asideElement.style.minWidth).toBe('216px');
+      expect(asideElement.style.width).toBe('256px');
+      expect(asideElement.style.minWidth).toBe('256px');
     });
 
     it('renders grouped navigation destinations preserving Applications, Documents, Tasks, and Messages', () => {

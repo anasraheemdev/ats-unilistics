@@ -106,12 +106,17 @@ export const PublicFooter: React.FC = () => {
           </h3>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             <li>
-              <a href="/#how-it-works" style={{ color: 'inherit', textDecoration: 'none' }}>
-                How It Works
-              </a>
+              <Link to="/support" style={{ color: 'inherit', textDecoration: 'none' }}>
+                Support & Guidance Hub
+              </Link>
             </li>
             <li>
-              <Link to="/request-support" style={{ color: 'inherit', textDecoration: 'none' }}>
+              <Link to="/how-it-works" style={{ color: 'inherit', textDecoration: 'none' }}>
+                How It Works
+              </Link>
+            </li>
+            <li>
+              <Link to="/request-guidance" style={{ color: 'inherit', textDecoration: 'none' }}>
                 Request Managed Guidance
               </Link>
             </li>
@@ -121,7 +126,7 @@ export const PublicFooter: React.FC = () => {
               </Link>
             </li>
             <li>
-              <Link to="/support" style={{ color: 'inherit', textDecoration: 'none' }}>
+              <Link to="/support-desk" style={{ color: 'inherit', textDecoration: 'none' }}>
                 Support Desk
               </Link>
             </li>
@@ -149,6 +154,11 @@ export const PublicFooter: React.FC = () => {
           </h3>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             <li>
+              <Link to="/corridors-and-legal" style={{ color: 'inherit', textDecoration: 'none' }}>
+                Corridors & Legal Overview
+              </Link>
+            </li>
+            <li>
               <Link to="/privacy" style={{ color: 'inherit', textDecoration: 'none' }}>
                 Privacy Policy
               </Link>
@@ -156,6 +166,11 @@ export const PublicFooter: React.FC = () => {
             <li>
               <Link to="/terms" style={{ color: 'inherit', textDecoration: 'none' }}>
                 Terms of Service
+              </Link>
+            </li>
+            <li>
+              <Link to="/contact" style={{ color: 'inherit', textDecoration: 'none' }}>
+                Contact Operations
               </Link>
             </li>
             <li>

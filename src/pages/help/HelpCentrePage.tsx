@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { useQuery } from '@tanstack/react-query';
-import { api, formatUtcInTimezone } from '@/lib/api';
+import { api, formatUtcInTimezone, sanitizeMarkdownHtml } from '@/lib/api';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
@@ -46,6 +48,22 @@ export const HelpCentrePage: React.FC<HelpCentrePageProps> = ({ currentRole = 'v
   const [selectedCountry, setSelectedCountry] = useState<string>('all');
   const [selectedTopic, setSelectedTopic] = useState<HelpArticleTopic | 'all'>('all');
   const [selectedArticle, setSelectedArticle] = useState<HelpArticle | null>(null);
+
+  // Lock body scroll and listen for Escape key when article modal is open
+  useEffect(() => {
+    if (!selectedArticle) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSelectedArticle(null);
+      }
+    };
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [selectedArticle]);
 
   // AI Assistant state (Feature-flagged)
   const aiConfig = api.aiAssistant.getConfig();
@@ -327,27 +345,27 @@ export const HelpCentrePage: React.FC<HelpCentrePageProps> = ({ currentRole = 'v
         )}
       </div>
 
-      {/* Feature-Flagged AI Assistant Subsystem */}
+      {/* Procedural AI Assistant Subsystem */}
       <Card padding="lg" style={{ border: '1px solid var(--color-border)', backgroundColor: 'var(--color-surface)' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
             <Bot size={20} style={{ color: 'var(--color-primary)' }} />
             <h3 style={{ fontSize: '1.125rem', fontWeight: 700, margin: 0 }}>
-              Grounded AI Guide Assistant (Feature-Flagged)
+              Procedural Guide Assistant
             </h3>
           </div>
           <Badge variant={aiConfig.enabled ? 'success' : 'default'} size="sm">
-            {aiConfig.enabled ? 'Enabled' : 'Disabled (Default Policy)'}
+            {aiConfig.enabled ? 'Active' : 'Temporarily Offline'}
           </Badge>
         </div>
 
         {!aiConfig.enabled ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            <Alert variant="info" title="Autonomous Agent Restriction">
-              {aiConfig.blockerReason}
+            <Alert variant="info" title="Assistant Inactive During Review">
+              Automated procedural assistance is temporarily offline while intake guidelines and statutory consular rules undergo editorial review. Please refer to the reviewed articles above or contact your counsellor for direct guidance.
             </Alert>
             <p style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted)', margin: 0 }}>
-              Platform operating contracts strictly forbid autonomous agent speculation on statutory matters. All applicants are routed to reviewed articles above and direct human counsellor support.
+              Platform standards require all statutory guidance to be backed by official sources. For immediate case assistance, reach out directly to your assigned counsellor or our support desk.
             </p>
           </div>
         ) : (
@@ -448,10 +466,14 @@ export const HelpCentrePage: React.FC<HelpCentrePageProps> = ({ currentRole = 'v
           onClick={() => setSelectedArticle(null)}
         >
           <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="article-modal-title"
             style={{
-              backgroundColor: 'var(--color-surface)',
-              borderRadius: 'var(--radius-lg)',
-              maxWidth: '720px',
+              backgroundColor: 'var(--surface-card, #FFFFFF)',
+              border: '1px solid var(--border-subtle, #E1E8DE)',
+              borderRadius: 'var(--radius-card, 24px)',
+              maxWidth: '760px',
               width: '100%',
               padding: '2rem',
               display: 'flex',
@@ -482,14 +504,24 @@ export const HelpCentrePage: React.FC<HelpCentrePageProps> = ({ currentRole = 'v
                     v{selectedArticle.version}
                   </Badge>
                 </div>
-                <h2 style={{ fontSize: '1.375rem', fontWeight: 800, margin: 0 }}>
+                <h2 id="article-modal-title" style={{ fontSize: '1.375rem', fontWeight: 800, margin: 0, color: 'var(--color-foreground, #19261F)' }}>
                   {selectedArticle.title}
                 </h2>
               </div>
               <button
                 type="button"
+                aria-label="Close article dialog"
                 onClick={() => setSelectedArticle(null)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-foreground-muted)' }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: 'var(--color-foreground-muted)',
+                  padding: '0.25rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
               >
                 <X size={22} />
               </button>
@@ -499,27 +531,141 @@ export const HelpCentrePage: React.FC<HelpCentrePageProps> = ({ currentRole = 'v
             <div
               style={{
                 padding: '0.875rem 1rem',
-                backgroundColor: 'rgba(56, 189, 248, 0.08)',
-                borderLeft: '4px solid var(--color-primary)',
-                borderRadius: 'var(--radius-sm)',
+                backgroundColor: 'rgba(36, 91, 66, 0.06)',
+                borderLeft: '4px solid var(--action-primary, #245B42)',
+                borderRadius: 'var(--radius-sm, 8px)',
                 fontSize: '0.875rem',
                 lineHeight: 1.5,
+                color: 'var(--color-foreground, #19261F)',
               }}
             >
               {selectedArticle.summary}
             </div>
 
-            {/* Sanitized Content */}
+            {/* Sanitized Markdown Content */}
             <div
+              className="article-markdown-body"
               style={{
-                fontSize: '0.875rem',
-                lineHeight: 1.6,
-                color: 'var(--color-foreground)',
-                whiteSpace: 'pre-wrap',
+                fontSize: '0.9375rem',
+                lineHeight: 1.65,
+                color: 'var(--color-foreground, #19261F)',
                 fontFamily: 'inherit',
               }}
             >
-              {selectedArticle.content}
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={{
+                  h1: ({ ...props }) => (
+                    <h3
+                      style={{
+                        fontSize: '1.25rem',
+                        fontWeight: 700,
+                        margin: '1.5rem 0 0.5rem',
+                        color: 'var(--color-foreground, #19261F)',
+                      }}
+                      {...props}
+                    />
+                  ),
+                  h2: ({ ...props }) => (
+                    <h4
+                      style={{
+                        fontSize: '1.125rem',
+                        fontWeight: 700,
+                        margin: '1.25rem 0 0.375rem',
+                        color: 'var(--color-foreground, #19261F)',
+                      }}
+                      {...props}
+                    />
+                  ),
+                  h3: ({ ...props }) => (
+                    <h5
+                      style={{
+                        fontSize: '1rem',
+                        fontWeight: 600,
+                        margin: '1rem 0 0.25rem',
+                        color: 'var(--color-foreground, #19261F)',
+                      }}
+                      {...props}
+                    />
+                  ),
+                  p: ({ ...props }) => (
+                    <p style={{ margin: '0 0 0.875rem', lineHeight: 1.6 }} {...props} />
+                  ),
+                  ul: ({ ...props }) => (
+                    <ul style={{ paddingLeft: '1.5rem', margin: '0 0 0.875rem' }} {...props} />
+                  ),
+                  ol: ({ ...props }) => (
+                    <ol style={{ paddingLeft: '1.5rem', margin: '0 0 0.875rem' }} {...props} />
+                  ),
+                  li: ({ ...props }) => (
+                    <li style={{ marginBottom: '0.375rem' }} {...props} />
+                  ),
+                  table: ({ ...props }) => (
+                    <div style={{ overflowX: 'auto', margin: '1rem 0' }}>
+                      <table
+                        style={{
+                          width: '100%',
+                          borderCollapse: 'collapse',
+                          fontSize: '0.875rem',
+                        }}
+                        {...props}
+                      />
+                    </div>
+                  ),
+                  th: ({ ...props }) => (
+                    <th
+                      style={{
+                        borderBottom: '2px solid var(--border-subtle, #E1E8DE)',
+                        padding: '0.5rem',
+                        textAlign: 'left',
+                        fontWeight: 600,
+                      }}
+                      {...props}
+                    />
+                  ),
+                  td: ({ ...props }) => (
+                    <td
+                      style={{
+                        borderBottom: '1px solid var(--border-subtle, #E1E8DE)',
+                        padding: '0.5rem',
+                      }}
+                      {...props}
+                    />
+                  ),
+                  blockquote: ({ ...props }) => (
+                    <blockquote
+                      style={{
+                        borderLeft: '4px solid var(--action-primary, #245B42)',
+                        paddingLeft: '1rem',
+                        margin: '1rem 0',
+                        color: 'var(--color-foreground-muted, #58695E)',
+                        fontStyle: 'italic',
+                      }}
+                      {...props}
+                    />
+                  ),
+                  a: ({ href, children, ...props }) => {
+                    const safeHref = href && isSafeExternalUrl(href) ? href : '#';
+                    return (
+                      <a
+                        href={safeHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          color: 'var(--action-primary, #245B42)',
+                          fontWeight: 600,
+                          textDecoration: 'underline',
+                        }}
+                        {...props}
+                      >
+                        {children}
+                      </a>
+                    );
+                  },
+                }}
+              >
+                {sanitizeMarkdownHtml(selectedArticle.content)}
+              </ReactMarkdown>
             </div>
 
             {/* Metadata Footer */}

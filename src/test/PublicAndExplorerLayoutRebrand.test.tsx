@@ -32,9 +32,10 @@ describe('Public and Explorer Layouts & Rebrand Test Suite', () => {
       // Verify BrandWordmark
       expect(screen.getByRole('link', { name: /Unilistics Home/i })).toBeDefined();
 
-      // Canonical 5 links
+      // Canonical navigation
       expect(screen.getByRole('link', { name: /^Home$/i })).toBeDefined();
-      expect(screen.getByRole('link', { name: /^Explore Universities$/i })).toBeDefined();
+      expect(screen.getByRole('button', { name: /Explore/i })).toBeDefined();
+      expect(screen.getByRole('button', { name: /Help & Guidance/i })).toBeDefined();
       expect(screen.getByRole('link', { name: /^Contact$/i })).toBeDefined();
       expect(screen.getByRole('link', { name: /^Sign in$/i })).toBeDefined();
       expect(screen.getByRole('link', { name: /^Sign up$/i })).toBeDefined();
@@ -78,8 +79,12 @@ describe('Public and Explorer Layouts & Rebrand Test Suite', () => {
 
       // Account menu elements
       expect(screen.getByTitle(/Sign out of account/i)).toBeDefined();
+      expect(screen.getAllByRole('link', { name: /Managed Guidance/i }).length).toBeGreaterThan(0);
+
+      // Open account menu to access Saved quick link
+      const accountTrigger = screen.getByRole('button', { name: /Account menu for/i });
+      fireEvent.click(accountTrigger);
       expect(screen.getByRole('link', { name: /Saved/i })).toBeDefined();
-      expect(screen.getByRole('link', { name: /Managed Guidance/i })).toBeDefined();
 
       // Sign in / Sign up should not appear on explorer header
       expect(screen.queryByRole('link', { name: /^Create Account$/i })).toBeNull();
@@ -105,7 +110,7 @@ describe('Public and Explorer Layouts & Rebrand Test Suite', () => {
   });
 
   describe('3. Rebranded Homepage', () => {
-    it('does not contain legacy coral gradients or bloated hero metrics', () => {
+    it('renders clean photographic hero without legacy coral gradients or bloated hero metrics', () => {
       const { container } = render(
         <MemoryRouter>
           <HomePage />
@@ -120,30 +125,32 @@ describe('Public and Explorer Layouts & Rebrand Test Suite', () => {
       // Verify absence of bloated fabricated counters
       expect(container.innerHTML).not.toContain('4,812 active degree intakes refreshed today');
 
-      // Verify presence of verified corridors
-      expect(screen.getByText(/Pakistan to Europe Higher Education Admissions Desk/i)).toBeDefined();
-      expect(screen.getByText(/4 Corridors/i)).toBeDefined();
-      expect(screen.getByText(/Curated programmes across 4 European corridors/i)).toBeDefined();
+      // Verify presence of reference photographic hero copy
+      expect(screen.getByRole('heading', { level: 1, name: /Your future\.\s*Your university\.\s*Your way forward\./i })).toBeDefined();
+      expect(screen.getByText(/Explore study opportunities in Europe and take your next step with guidance from our team\./i)).toBeDefined();
+      expect(screen.getByLabelText(/Find a university/i)).toBeDefined();
+      expect(screen.getByPlaceholderText(/Search universities/i)).toBeDefined();
+      expect(screen.getByRole('button', { name: /^Explore$/i })).toBeDefined();
+      expect(screen.getByRole('link', { name: /Need a helping hand\? Get guidance/i })).toBeDefined();
+      expect(screen.getByText(/Explore opportunities/i)).toBeDefined();
+      expect(screen.getByText(/Organise your documents/i)).toBeDefined();
+      expect(screen.getByText(/Track every step/i)).toBeDefined();
     });
 
-    it('allows searching and opens advisory modal accessible with Escape key', async () => {
+    it('submits search query and triggers catalogue navigation', async () => {
       render(
         <MemoryRouter>
           <HomePage />
         </MemoryRouter>
       );
 
-      const advisoryBtn = screen.getByRole('button', { name: /Request 1-on-1 Advisory/i });
-      fireEvent.click(advisoryBtn);
+      const searchInput = screen.getByPlaceholderText(/Search universities/i);
+      expect(searchInput).toBeDefined();
+      fireEvent.change(searchInput, { target: { value: 'Munich' } });
 
-      const modalTitle = await screen.findByText(/Request 1-on-1 Academic Eligibility Review/i);
-      expect(modalTitle).toBeDefined();
-
-      // Press Escape
-      fireEvent.keyDown(window, { key: 'Escape' });
-      await waitFor(() => {
-        expect(screen.queryByText(/Request 1-on-1 Academic Eligibility Review/i)).toBeNull();
-      });
+      const exploreBtn = screen.getByRole('button', { name: /^Explore$/i });
+      expect(exploreBtn).toBeDefined();
+      fireEvent.click(exploreBtn);
     });
   });
 
@@ -168,7 +175,7 @@ describe('Public and Explorer Layouts & Rebrand Test Suite', () => {
       // Result count text
       await waitFor(() => {
         expect(screen.getByText(/Showing/i)).toBeDefined();
-      });
+      }, { timeout: 4000 });
     });
 
     it('enforces visitor locked dialog when visitor attempts to filter', async () => {

@@ -22,6 +22,8 @@ vi.mock('@/lib/api', () => ({
       getCaseWorkflowSteps: vi.fn(),
       getTasks: vi.fn().mockResolvedValue([]),
       getDocuments: vi.fn().mockResolvedValue([]),
+      createTask: vi.fn(),
+      completeOnboarding: vi.fn(),
     },
     workflows: {
       getTemplates: vi.fn(),
@@ -140,7 +142,7 @@ const mockCaseWorkflowSteps: CaseWorkflowStep[] = [
     title: 'National Student Visa Filing & Biometrics',
     stage: 'visa_prep',
     responsibleActor: 'student',
-    status: 'blocked',
+    status: 'locked',
     isParallel: false,
     targetOutcomeType: 'visa_processing',
     visibility: 'student_and_staff',
@@ -325,7 +327,7 @@ describe('Desktop Journey Map & Casework Rebrand Test Suite', () => {
       expect(screen.getByText('Applications through arrival')).toBeInTheDocument();
     });
 
-    it('renders the active location highlight with "You are here" badge for current in-progress step', () => {
+    it('renders the active location highlight and in-progress status', () => {
       const onSelect = vi.fn();
       render(
         <JourneyMap
@@ -336,8 +338,9 @@ describe('Desktop Journey Map & Casework Rebrand Test Suite', () => {
         />
       );
 
-      // "You are here" floating badge must be rendered
-      expect(screen.getByText('You are here')).toBeInTheDocument();
+      // In progress status must be rendered on the active node and in legend
+      expect(screen.getAllByText('In progress').length).toBeGreaterThan(0);
+      expect(screen.getByText('Active / In progress')).toBeInTheDocument();
     });
 
     it('explicitly maps statuses: completed shows Completed, blocked shows Review required (never collapsed into complete)', () => {
@@ -399,6 +402,7 @@ describe('Desktop Journey Map & Casework Rebrand Test Suite', () => {
       expect(screen.getByText('Blocked / Review required')).toBeInTheDocument();
       expect(screen.getByText('Skipped / N/A')).toBeInTheDocument();
       expect(screen.getByText('Not started')).toBeInTheDocument();
+      expect(screen.getAllByText('Locked').length).toBeGreaterThan(0);
     });
   });
 
@@ -442,7 +446,7 @@ describe('Desktop Journey Map & Casework Rebrand Test Suite', () => {
   });
 
   describe('3. JourneyStepDetailPanel Real Casework Inspection', () => {
-    it('renders step details, operational guidance, evidence checklist, and action button', () => {
+    it('renders step details, operational guidance, evidence checklist, and action button when unlocked', () => {
       const activeStep = mockCaseWorkflowSteps[0]; // HEC attestation
       const templateStep = mockTemplateSteps[0];
 
@@ -483,6 +487,26 @@ describe('Desktop Journey Map & Casework Rebrand Test Suite', () => {
       expect(screen.getByText('Blocked / Review Required')).toBeInTheDocument();
       expect(screen.getByText(/BAföG updated benchmark deposit proof required/)).toBeInTheDocument();
       expect(screen.getByText('Message advisory team')).toBeInTheDocument();
+    });
+
+    it('explains why step is locked and provides no actionable form when locked', () => {
+      const lockedStep = mockCaseWorkflowSteps[5]; // National visa filing
+
+      render(
+        <MemoryRouter>
+          <JourneyStepDetailPanel
+            step={lockedStep}
+            templateStep={null}
+            counsellorName="Dr. Tariq Mahmood"
+            isLocked={true}
+          />
+        </MemoryRouter>
+      );
+
+      expect(screen.getByText('Milestone Locked')).toBeInTheDocument();
+      expect(screen.getByText(/This milestone is currently locked/)).toBeInTheDocument();
+      expect(screen.getByText('No student action required until milestone is unlocked')).toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /Complete/i })).not.toBeInTheDocument();
     });
 
     it('renders empty prompt when no step is selected', () => {
@@ -542,7 +566,7 @@ describe('Desktop Journey Map & Casework Rebrand Test Suite', () => {
       fireEvent.click(mapToggle);
 
       await waitFor(() => {
-        expect(screen.getByText('You are here')).toBeInTheDocument();
+        expect(screen.getByText('Active / In progress')).toBeInTheDocument();
       });
     });
 
@@ -559,19 +583,131 @@ describe('Desktop Journey Map & Casework Rebrand Test Suite', () => {
         expect(screen.getByText('Your journey')).toBeInTheDocument();
       });
 
-      // Application buttons should exist for both TUM and Politecnico di Milano
       expect(screen.getAllByText('Technical University of Munich (TUM)').length).toBeGreaterThan(0);
       const polimiButton = screen.getByText('Politecnico di Milano');
       expect(polimiButton).toBeInTheDocument();
 
-      // Click Politecnico di Milano
       fireEvent.click(polimiButton);
-
-      // Verify getCaseWorkflowSteps was called with the second application ID
       expect(api.student.getCaseWorkflowSteps).toHaveBeenCalledWith('case-001', 'app-polimi-02');
     });
 
-    it('renders genuine empty state when student has no active case (no fake demo journey)', async () => {
+    it('Scenario 1: No case with an approved template renders full locked preview without fake illustration', async () => {
+      (api.student.getOverviewCase as any).mockResolvedValue(null);
+
+      render(
+        <QueryClientProvider client={createTestQueryClient()}>
+          <MemoryRouter>
+            <StudentJourneyPage />
+          </MemoryRouter>
+        </QueryClientProvider>
+      );
+
+      // Replaces oversized "No active student case found" illustration
+      await waitFor(() => {
+        expect(screen.getByText('Your journey')).toBeInTheDocument();
+      });
+
+      expect(screen.getByText('Template Preview · Overview')).toBeInTheDocument();
+      expect(screen.getAllByText(/Your journey is waiting to be activated by the team/).length).toBeGreaterThan(0);
+      expect(screen.queryByAltText('No active case illustration')).not.toBeInTheDocument();
+
+      // Lock status indicators should be present on nodes and inspector
+      expect(screen.getAllByText('Locked').length).toBeGreaterThan(0);
+      expect(screen.getByText('No student action required until milestone is unlocked')).toBeInTheDocument();
+    });
+
+    it('Scenario 2: No progress / zero unlocks on an existing case shows all steps locked', async () => {
+      const allLockedSteps: CaseWorkflowStep[] = mockCaseWorkflowSteps.map((s) => ({
+        ...s,
+        status: 'locked',
+      }));
+      (api.student.getCaseWorkflowSteps as any).mockResolvedValue(allLockedSteps);
+
+      render(
+        <QueryClientProvider client={createTestQueryClient()}>
+          <MemoryRouter>
+            <StudentJourneyPage />
+          </MemoryRouter>
+        </QueryClientProvider>
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('Your journey')).toBeInTheDocument();
+      });
+
+      expect(screen.getAllByText(/Your journey is waiting to be activated by the team/).length).toBeGreaterThan(0);
+      expect(screen.getAllByText('Locked').length).toBeGreaterThan(0);
+    });
+
+    it('Scenario 3: An explicitly unlocked first step shows Available/In progress with 0 completed reported', async () => {
+      const step1Unlocked: CaseWorkflowStep[] = mockCaseWorkflowSteps.map((s, idx) => ({
+        ...s,
+        status: idx === 0 ? 'in_progress' : 'locked',
+        completedAt: undefined,
+      }));
+      (api.student.getCaseWorkflowSteps as any).mockResolvedValue(step1Unlocked);
+
+      render(
+        <QueryClientProvider client={createTestQueryClient()}>
+          <MemoryRouter>
+            <StudentJourneyPage />
+          </MemoryRouter>
+        </QueryClientProvider>
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('Your journey')).toBeInTheDocument();
+      });
+
+      // 0 of 6 milestones completed honestly reported
+      expect(screen.getByText(/0 of 6 milestones completed/)).toBeInTheDocument();
+      expect(document.getElementById('btn-continue-journey')).toBeInTheDocument();
+    });
+
+    it('Scenario 4: Template unavailable displays clear configuration gap notice without fabricating steps', async () => {
+      (api.student.getOverviewCase as any).mockResolvedValue({
+        ...mockStudentCase,
+        targetCountry: 'romania',
+      });
+      (api.student.getApplications as any).mockResolvedValue([]);
+      (api.workflows.getTemplates as any).mockResolvedValue([]); // No templates published
+
+      render(
+        <QueryClientProvider client={createTestQueryClient()}>
+          <MemoryRouter>
+            <StudentJourneyPage />
+          </MemoryRouter>
+        </QueryClientProvider>
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('Workflow template not yet published')).toBeInTheDocument();
+      });
+
+      expect(screen.getByText(/Administration has not published an approved workflow template/)).toBeInTheDocument();
+    });
+
+    it('Scenario 5: Failed fetch displays honest error state with Retry button (not a fake locked state)', async () => {
+      const networkError = new Error('Network connection timeout');
+      (networkError as any).status = 500;
+      (api.student.getOverviewCase as any).mockRejectedValue(networkError);
+
+      render(
+        <QueryClientProvider client={createTestQueryClient()}>
+          <MemoryRouter>
+            <StudentJourneyPage />
+          </MemoryRouter>
+        </QueryClientProvider>
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('Unable to load admissions roadmap')).toBeInTheDocument();
+      });
+
+      expect(screen.getByRole('button', { name: /Try again/i })).toBeInTheDocument();
+    });
+
+    it('Scenario 6: Confirm viewing the map creates no case or progress records', async () => {
       (api.student.getOverviewCase as any).mockResolvedValue(null);
 
       render(
@@ -583,14 +719,15 @@ describe('Desktop Journey Map & Casework Rebrand Test Suite', () => {
       );
 
       await waitFor(() => {
-        expect(screen.getByText('No active student case found')).toBeInTheDocument();
+        expect(screen.getByText('Your journey')).toBeInTheDocument();
       });
 
-      expect(screen.getByText(/Once your educational profile and country targets are approved/)).toBeInTheDocument();
-      expect(screen.getByText('Request Managed Support')).toBeInTheDocument();
+      // Confirm no mutating API calls were made
+      expect(api.student.completeOnboarding).not.toHaveBeenCalled();
+      expect(api.student.createTask).not.toHaveBeenCalled();
     });
 
-    it('links top Continue button to the permitted active action', async () => {
+    it('links top Continue button to permitted action when journey is active', async () => {
       render(
         <QueryClientProvider client={createTestQueryClient()}>
           <MemoryRouter>

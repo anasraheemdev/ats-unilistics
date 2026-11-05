@@ -45,7 +45,7 @@ export const StudentBottomDock: React.FC = () => {
   return (
     <nav
       aria-label="Student mobile navigation dock"
-      className="md:hidden"
+      className="mobile-only-dock"
       style={{
         position: 'fixed',
         bottom: 0,

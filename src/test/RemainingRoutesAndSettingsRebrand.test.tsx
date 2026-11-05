@@ -291,8 +291,8 @@ describe('Remaining Routes & Rebranded Settings Tests', () => {
         </MemoryRouter>
       );
 
-      expect(screen.getByText('Terms of Service & Procedural Disclaimers')).toBeInTheDocument();
-      expect(screen.getByText(/Procedural Guides as Content, Not Statutory Policy/i)).toBeInTheDocument();
+      expect(screen.getByRole('heading', { level: 1, name: /Terms of Service/i })).toBeInTheDocument();
+      expect(screen.getAllByText(/Procedural Guides as Content, Not Statutory Policy/i).length).toBeGreaterThanOrEqual(1);
       expect(container.innerHTML).not.toContain('#b72301');
       expect(container.innerHTML).not.toContain('var(--accent-peach-bg)');
     });
@@ -304,8 +304,8 @@ describe('Remaining Routes & Rebranded Settings Tests', () => {
         </MemoryRouter>
       );
 
-      expect(screen.getByText('Privacy Policy & Synthetic Data Protection')).toBeInTheDocument();
-      expect(screen.getByText(/Strict Prohibition on Real Student PII/i)).toBeInTheDocument();
+      expect(screen.getByRole('heading', { level: 1, name: /Privacy Policy/i })).toBeInTheDocument();
+      expect(screen.getAllByText(/Prohibition on Real Student PII/i).length).toBeGreaterThanOrEqual(1);
       expect(container.innerHTML).not.toContain('#b72301');
       expect(container.innerHTML).not.toContain('var(--accent-peach-bg)');
     });

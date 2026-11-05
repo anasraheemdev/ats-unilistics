@@ -24,7 +24,8 @@ export const StudentMessagesPage: React.FC = () => {
   });
 
   const caseId = studentCase?.id || 'case-primary-active';
-  const counsellorName = studentCase?.assignedCounsellorName || 'Senior Admissions Advisor';
+  const hasCounsellor = Boolean(studentCase?.assignedCounsellorName);
+  const counsellorName = studentCase?.assignedCounsellorName || 'No counsellor assigned yet';
 
   // Fetch messages (student view = false, hides internal staff notes)
   const {
@@ -107,7 +108,7 @@ export const StudentMessagesPage: React.FC = () => {
             Direct Advisory Channel
           </span>
           <span style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted, #58695E)' }}>
-            • Case Ref: <code style={{ fontWeight: 600 }}>{studentCase?.id ? `#${studentCase.id.slice(0, 10).toUpperCase()}` : '#UNI-ACTIVE'}</code>
+            • Case Ref: <code style={{ fontWeight: 600 }}>{studentCase?.id ? `#${studentCase.id.slice(0, 10).toUpperCase()}` : 'Case setup in progress'}</code>
           </span>
         </div>
 
@@ -175,10 +176,12 @@ export const StudentMessagesPage: React.FC = () => {
                 <h3 style={{ fontSize: '1.0625rem', fontWeight: 800, color: 'var(--color-foreground)', margin: 0 }}>
                   {counsellorName}
                 </h3>
-                <CheckCircle size={15} style={{ color: '#065F46' }} />
+                {hasCounsellor && <CheckCircle size={15} style={{ color: '#065F46' }} />}
               </div>
               <p style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted)', margin: '2px 0 0 0' }}>
-                Senior Educational Counsellor • Assigned to your dossier
+                {hasCounsellor
+                  ? 'Educational Counsellor • Assigned to your application'
+                  : 'Your dedicated counsellor will be assigned once review completes'}
               </p>
             </div>
           </div>

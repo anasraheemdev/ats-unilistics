@@ -80,7 +80,7 @@ export const StudentDocumentsPage: React.FC = () => {
   });
 
   const caseId = studentCase?.id || 'case-primary-active';
-  const counsellorName = studentCase?.assignedCounsellorName || 'Senior Admissions Advisor';
+  const counsellorName = studentCase?.assignedCounsellorName || 'No counsellor assigned yet';
 
   // Query documents for current case
   const {
@@ -273,7 +273,7 @@ export const StudentDocumentsPage: React.FC = () => {
             Verified Document Storage
           </span>
           <span style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted)' }}>
-            • Admissions Case Ref: <code style={{ fontWeight: 600, color: 'var(--color-foreground)' }}>{studentCase?.id ? `#${studentCase.id.slice(0, 10).toUpperCase()}` : '#UNI-ACTIVE'}</code>
+            • Admissions Case Ref: <code style={{ fontWeight: 600, color: 'var(--color-foreground)' }}>{studentCase?.id ? `#${studentCase.id.slice(0, 10).toUpperCase()}` : 'Case setup in progress'}</code>
           </span>
         </div>
 

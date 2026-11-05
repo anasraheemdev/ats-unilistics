@@ -178,6 +178,15 @@
   --accent-blue-bg: #EFF6FF;
   --accent-blue-border: #BFDBFE;
   --accent-blue-text: #1D4ED8;
+
+  /* Map & Geographic Tokens (Light) */
+  --map-bg: #FAF9F4;
+  --map-landmass: #DFDACF;
+  --map-landmass-stroke: #CBC5B8;
+  --map-corridor-resting: #D4DEC9;
+  --map-hub-resting: #CDE4D2;
+  --map-corridor-active: #245B42;
+  --map-grid-line: rgba(0, 0, 0, 0.035);
 }
 
 /* ---------------------------------------------------------------------------
@@ -294,6 +303,15 @@
   --accent-blue-bg: #0F223D;
   --accent-blue-border: #1D4377;
   --accent-blue-text: #93C5FD;
+
+  /* Map & Geographic Tokens (Dark) */
+  --map-bg: #111D16;
+  --map-landmass: #1E2E25;
+  --map-landmass-stroke: #2E4537;
+  --map-corridor-resting: #284435;
+  --map-hub-resting: #234735;
+  --map-corridor-active: #D7EE83;
+  --map-grid-line: rgba(255, 255, 255, 0.04);
 }
 
 /* ---------------------------------------------------------------------------

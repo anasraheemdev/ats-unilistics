@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from 'react';
-import { NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { NavGroupConfig } from '@/config/navigation';
 import { BrandWordmark } from '@/components/ui/BrandWordmark';
 import { UserRole } from '@/types';
 import { api } from '@/lib/api';
+import { useTheme } from '@/lib/theme';
 import {
   House,
   GraduationCap,
@@ -92,6 +93,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const navigate = useNavigate();
   const location = useLocation();
   const drawerRef = useRef<HTMLDivElement>(null);
+  const { resolvedTheme } = useTheme();
 
   // Close mobile drawer on route change
   useEffect(() => {
@@ -139,33 +141,40 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {/* Top Header / Branding */}
         <div
           style={{
-            padding: isCollapsed ? '1rem 0.5rem' : '1.25rem 1.25rem 1rem',
+            padding: isCollapsed ? '0.75rem 0.375rem' : '1.25rem 1.25rem 1rem',
             borderBottom: '1px solid var(--border-subtle)',
             display: 'flex',
+            flexDirection: isCollapsed ? 'column' : 'row',
             alignItems: 'center',
             justifyContent: isCollapsed ? 'center' : 'space-between',
-            gap: '0.5rem',
+            gap: isCollapsed ? '0.625rem' : '0.5rem',
             minHeight: '64px',
+            boxSizing: 'border-box',
+            flexShrink: 0,
           }}
         >
           {isCollapsed ? (
-            <div
+            <Link
+              to="/"
               style={{
                 width: '36px',
                 height: '36px',
-                borderRadius: 'var(--radius-control)',
-                backgroundColor: 'var(--action-primary)',
-                color: 'var(--color-on-primary)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontWeight: 700,
-                fontSize: '1rem',
+                textDecoration: 'none',
               }}
-              title="unilistics"
+              title="Unilistics Portal"
+              aria-label="Unilistics Portal"
             >
-              u
-            </div>
+              <img
+                src={resolvedTheme === 'dark' ? '/images/brand/reversed-icon.svg' : '/images/brand/original-icon.svg'}
+                alt="Unilistics"
+                width={32}
+                height={32}
+                style={{ objectFit: 'contain', width: '32px', height: '32px', display: 'block' }}
+              />
+            </Link>
           ) : (
             <div>
               <BrandWordmark size="sm" showTagline={false} />
@@ -209,7 +218,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
               title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
               style={{
-                padding: '0.5rem',
+                padding: '0.375rem',
                 borderRadius: 'var(--radius-pill)',
                 color: 'var(--color-foreground-muted)',
                 backgroundColor: 'var(--surface-card)',
@@ -218,8 +227,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 justifyContent: 'center',
                 border: '1px solid var(--border-subtle)',
                 cursor: 'pointer',
-                minHeight: '36px',
-                minWidth: '36px',
+                minHeight: '32px',
+                minWidth: '32px',
+                flexShrink: 0,
               }}
             >
               {collapsed ? <ChevronRight size={16} strokeWidth={2} /> : <ChevronLeft size={16} strokeWidth={2} />}
@@ -231,7 +241,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <nav
           style={{
             flex: 1,
+            minHeight: 0,
             overflowY: 'auto',
+            overscrollBehavior: 'contain',
             padding: isCollapsed ? '1rem 0.375rem' : '1.25rem 0.75rem',
             display: 'flex',
             flexDirection: 'column',
@@ -266,7 +278,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       key={item.id}
                       to={item.path}
                       end={item.end}
-                      title={isCollapsed ? item.label : undefined}
+                      title={item.label}
+                      aria-label={item.label}
                       style={({ isActive }) => ({
                         display: 'flex',
                         alignItems: 'center',
@@ -315,38 +328,34 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </div>
             </div>
           ))}
-        </nav>
 
-        {/* Optional Supportive Panel (Desktop Reference: "Big plans. Small steps.") */}
-        {!isCollapsed && currentRole === 'managed_student' && (
-          <div
-            style={{
-              padding: '0 0.75rem 0.875rem',
-            }}
-          >
+          {/* Supportive guidance panel (visible when expanded for managed students) */}
+          {!isCollapsed && currentRole === 'managed_student' && (
             <div
               style={{
-                padding: '0.875rem 1rem',
+                marginTop: 'auto',
+                padding: '0.875rem',
                 borderRadius: 'var(--radius-control, 16px)',
-                backgroundColor: 'var(--surface-recessed, #EDF2E9)',
-                border: '1px solid var(--border-subtle, #E1E8DE)',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '0.35rem',
+                backgroundColor: 'rgba(180, 208, 182, 0.15)',
+                border: '1px solid var(--border-subtle)',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--action-primary, #245B42)' }}>
-                <GraduationCap size={16} strokeWidth={2.25} aria-hidden={true} />
-                <span style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '-0.01em' }}>
-                  Big plans. Small steps.
-                </span>
+              <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--action-primary)' }}>
+                Big plans. Small steps.
               </div>
-              <p style={{ fontSize: '0.6875rem', color: 'var(--color-foreground-muted, #58695E)', margin: 0, lineHeight: 1.4 }}>
+              <div
+                style={{
+                  fontSize: '0.6875rem',
+                  color: 'var(--color-foreground-muted)',
+                  marginTop: '0.25rem',
+                  lineHeight: 1.4,
+                }}
+              >
                 Keep your documents and deadlines verified for European admissions.
-              </p>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </nav>
 
         {/* Bottom User Account & Sign Out */}
         <div
@@ -411,7 +420,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       whiteSpace: 'nowrap',
                     }}
                   >
-                    {displayName}
+                    {userName && !userName.toLowerCase().includes('managed')
+                      ? userName
+                      : userEmail && !userEmail.endsWith('.local')
+                      ? userEmail
+                      : 'Admissions Account'}
                   </span>
                   <span
                     style={{
@@ -422,7 +435,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       whiteSpace: 'nowrap',
                     }}
                   >
-                    {currentRole.replace('_', ' ')}
+                    {currentRole ? currentRole.replace('_', ' ') : 'student'}
                   </span>
                 </div>
               </div>
@@ -457,17 +470,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <>
-      {/* Desktop Sticky Sidebar */}
+      {/* Desktop Fixed Sidebar */}
       <aside
-        className="hidden md:block"
+        className="desktop-only-sidebar"
         style={{
-          width: collapsed ? '68px' : '216px',
-          minWidth: collapsed ? '68px' : '216px',
-          height: '100vh',
-          position: 'sticky',
+          width: collapsed ? '76px' : '256px',
+          minWidth: collapsed ? '76px' : '256px',
+          maxWidth: collapsed ? '76px' : '256px',
+          height: '100dvh',
+          position: 'fixed',
           top: 0,
+          bottom: 0,
+          left: 0,
           zIndex: 40,
-          transition: 'width 200ms ease, min-width 200ms ease',
+          boxSizing: 'border-box',
+          transition: 'width 200ms ease, min-width 200ms ease, max-width 200ms ease',
         }}
         aria-label={`${workspaceTitle} sidebar`}
       >
@@ -483,7 +500,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             zIndex: 100,
             display: 'flex',
           }}
-          className="md:hidden"
+          className="mobile-only-drawer"
         >
           {/* Backdrop */}
           <div

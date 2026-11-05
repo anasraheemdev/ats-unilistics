@@ -546,7 +546,10 @@ export type WorkflowStepStatus =
   | 'needs_action'
   | 'in_progress'
   | 'completed'
-  | 'reopened';
+  | 'reopened'
+  | 'locked'
+  | 'available'
+  | 'pending';
 
 export interface WorkflowTemplate {
   id: string;

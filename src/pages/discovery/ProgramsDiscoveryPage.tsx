@@ -1,47 +1,63 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams, useLocation } from 'react-router-dom';
 import { api } from '@/lib/api';
 import { LoadingState } from '@/components/common/LoadingState';
 import { ErrorState } from '@/components/common/ErrorState';
 import { EmptyState } from '@/components/common/EmptyState';
+import { FilterLockedDialog } from '@/components/domain/FilterLockedDialog';
+import { ProgramCard } from '@/components/domain/ProgramCard';
+import { UserRole } from '@/types';
 import {
   Search,
   SlidersHorizontal,
   ChevronLeft,
   ChevronRight,
-  Bookmark,
-  ArrowRight,
   X,
-  Calendar,
-  CheckCircle2,
+  Lock,
+  Compass,
 } from 'lucide-react';
-
-function getCountryFlag(country: string): string {
-  const c = country.toLowerCase();
-  if (c === 'germany' || c === 'de') return '🇩🇪';
-  if (c === 'france' || c === 'fr') return '🇫🇷';
-  if (c === 'italy' || c === 'it') return '🇮🇹';
-  if (c === 'romania' || c === 'ro') return '🇷🇴';
-  return '🇪🇺';
-}
-
-function getTuitionText(tuitionEur?: number | null, tuitionType?: string): string {
-  if (tuitionEur === 0 || tuitionType === 'free') {
-    return '€0 (State Funded)';
-  }
-  if (tuitionEur != null && tuitionEur > 0) {
-    return `€${tuitionEur.toLocaleString()}/yr`;
-  }
-  if (tuitionType === 'subsidized') {
-    return 'State Subsidized (< €1,000)';
-  }
-  return 'Tuition not published';
-}
 
 export const ProgramsDiscoveryPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
   const queryClient = useQueryClient();
+  const isStudentWorkspace = location.pathname.startsWith('/student');
+
+  const [currentUserRole, setCurrentUserRole] = useState<UserRole>('visitor');
+
+  const { data: currentUser } = useQuery({
+    queryKey: ['discovery-auth-user'],
+    queryFn: () => api.auth.getCurrentUser(),
+  });
+
+  useEffect(() => {
+    if (currentUser?.role) {
+      setCurrentUserRole(currentUser.role);
+    }
+  }, [currentUser]);
+
+  const isVisitor = currentUserRole === 'visitor';
+
+  // Genuine goals banner
+  const genuineGoals =
+    !isVisitor && currentUser && (currentUser as any).countryInterests?.length > 0
+      ? {
+          destinations: (currentUser as any).countryInterests
+            .map((c: string) => c.charAt(0).toUpperCase() + c.slice(1))
+            .join(', '),
+        }
+      : null;
+
+  // Locked Filter Modal State
+  const [isLockedDialogOpen, setIsLockedDialogOpen] = useState(false);
+  const [initiatingEl, setInitiatingEl] = useState<HTMLElement | null>(null);
+
+  const handleLockedFilterAction = (e: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>) => {
+    e.preventDefault();
+    setInitiatingEl(e.currentTarget);
+    setIsLockedDialogOpen(true);
+  };
 
   const countryParam = searchParams.get('country') || 'all';
   const degreeLevelParam = searchParams.get('level') || 'all';
@@ -58,7 +74,8 @@ export const ProgramsDiscoveryPage: React.FC = () => {
     (countryParam !== 'all' ? 1 : 0) +
     (degreeLevelParam !== 'all' ? 1 : 0) +
     (languageParam !== 'all' ? 1 : 0) +
-    (tuitionTypeParam !== 'all' ? 1 : 0);
+    (tuitionTypeParam !== 'all' ? 1 : 0) +
+    (searchParam ? 1 : 0);
 
   const updateParam = (key: string, value: string) => {
     setSearchParams((prev) => {
@@ -79,6 +96,7 @@ export const ProgramsDiscoveryPage: React.FC = () => {
       next.set('page', String(newPage));
       return next;
     });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -92,23 +110,40 @@ export const ProgramsDiscoveryPage: React.FC = () => {
     setMobileFilterOpen(false);
   };
 
+  // Block filter URL bypasses for visitors:
+  const effectiveCountry = isVisitor ? undefined : countryParam === 'all' ? undefined : countryParam;
+  const effectiveLevel = isVisitor ? undefined : degreeLevelParam === 'all' ? undefined : degreeLevelParam;
+  const effectiveLang = isVisitor ? undefined : languageParam === 'all' ? undefined : languageParam;
+  const effectiveTuition = isVisitor ? undefined : tuitionTypeParam === 'all' ? undefined : tuitionTypeParam;
+  const effectiveSort = isVisitor ? 'title_asc' : sortByParam;
+
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['discovery-programs', countryParam, degreeLevelParam, languageParam, tuitionTypeParam, searchParam, sortByParam, pageParam],
+    queryKey: [
+      'discovery-programs',
+      currentUserRole,
+      effectiveCountry,
+      effectiveLevel,
+      effectiveLang,
+      effectiveTuition,
+      searchParam,
+      effectiveSort,
+      pageParam,
+    ],
     queryFn: () =>
       api.programs.browse({
-        country: countryParam,
-        degreeLevel: degreeLevelParam,
-        language: languageParam,
-        tuitionType: tuitionTypeParam,
-        search: searchParam,
-        sortBy: sortByParam,
+        country: effectiveCountry,
+        degreeLevel: effectiveLevel,
+        language: effectiveLang,
+        tuitionType: effectiveTuition,
+        search: searchParam || undefined,
+        sortBy: effectiveSort,
         page: pageParam,
         pageSize: 12,
       }),
   });
 
   const bookmarkMutation = useMutation({
-    mutationFn: (progId: string) => api.bookmarks.toggle(progId),
+    mutationFn: (programId: string) => api.bookmarks.toggle(programId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['discovery-programs'] });
       queryClient.invalidateQueries({ queryKey: ['saved-programs'] });
@@ -124,201 +159,407 @@ export const ProgramsDiscoveryPage: React.FC = () => {
   ];
 
   const degreeLevels = [
-    { code: 'all', label: 'All Degree Levels' },
-    { code: 'bachelors', label: "Bachelor's Degree" },
-    { code: 'masters', label: "Master's Degree" },
+    { code: 'all', label: 'All Levels' },
+    { code: 'bachelor', label: "Bachelor's Degree" },
+    { code: 'master', label: "Master's Degree" },
   ];
 
   const languages = [
-    { code: 'all', label: 'All Teaching Languages' },
-    { code: 'english', label: 'English-Taught' },
-    { code: 'german', label: 'German' },
-    { code: 'french', label: 'French' },
-    { code: 'italian', label: 'Italian' },
-    { code: 'romanian', label: 'Romanian' },
+    { code: 'all', label: 'All Languages' },
+    { code: 'en', label: 'English Taught' },
+    { code: 'de', label: 'German Taught' },
+    { code: 'fr', label: 'French Taught' },
+    { code: 'it', label: 'Italian Taught' },
+    { code: 'ro', label: 'Romanian Taught' },
   ];
 
   const tuitionTypes = [
-    { code: 'all', label: 'All Tuition Rates' },
-    { code: 'free', label: 'Tuition-Free (€0/yr)' },
-    { code: 'low_cost', label: 'Subsidized (< €1,000)' },
+    { code: 'all', label: 'All Schedules' },
+    { code: 'free', label: 'Tuition-Free / €0' },
+    { code: 'subsidized', label: 'Subsidized (< €1,000)' },
     { code: 'standard', label: 'Standard Non-EU Fee' },
   ];
 
+  const renderFilterOption = (
+    paramKey: string,
+    currentValue: string,
+    options: { code: string; label: string }[],
+    sectionPrefix: string
+  ) => {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+        {options.map((opt) => {
+          if (isVisitor) {
+            return (
+              <button
+                key={opt.code}
+                type="button"
+                id={`filter-${sectionPrefix}-${opt.code}`}
+                onClick={handleLockedFilterAction}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') handleLockedFilterAction(e);
+                }}
+                aria-haspopup="dialog"
+                aria-label={`${opt.label} (Locked: Sign in or sign up to filter)`}
+                style={{
+                  textAlign: 'left',
+                  padding: '0.5rem 0.75rem',
+                  borderRadius: 'var(--radius-control, 12px)',
+                  fontSize: '0.8125rem',
+                  fontWeight: 500,
+                  color: 'var(--color-foreground, #19261F)',
+                  backgroundColor: 'transparent',
+                  border: '1px solid transparent',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  cursor: 'pointer',
+                  transition: 'background-color 150ms ease',
+                }}
+              >
+                <span>{opt.label}</span>
+                <Lock size={12} style={{ color: 'var(--color-foreground-muted, #58695E)' }} aria-hidden="true" />
+              </button>
+            );
+          }
+
+          const isSelected = currentValue === opt.code;
+          return (
+            <button
+              key={opt.code}
+              type="button"
+              onClick={() => updateParam(paramKey, opt.code)}
+              style={{
+                textAlign: 'left',
+                padding: '0.5rem 0.75rem',
+                borderRadius: 'var(--radius-control, 12px)',
+                fontSize: '0.8125rem',
+                fontWeight: isSelected ? 700 : 500,
+                color: isSelected ? 'var(--action-primary, #245B42)' : 'var(--color-foreground, #19261F)',
+                backgroundColor: isSelected ? 'var(--surface-recessed, #EDF2E9)' : 'transparent',
+                border: isSelected ? '1px solid var(--border-subtle, #E1E8DE)' : '1px solid transparent',
+                cursor: 'pointer',
+                transition: 'background-color 150ms ease',
+              }}
+            >
+              {opt.label}
+            </button>
+          );
+        })}
+      </div>
+    );
+  };
+
   const filterSidebar = (
-    <div className="flex flex-col gap-6">
-      {/* Destination Country */}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+      {/* Destination Country Section */}
       <div>
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-xs font-bold uppercase tracking-wider text-[#55635a]">
-            Destination Country
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+          <span
+            style={{
+              fontSize: '0.75rem',
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              letterSpacing: '0.06em',
+              color: 'var(--color-foreground-muted, #58695E)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+            }}
+          >
+            <span>Destination Country</span>
+            {isVisitor && <Lock size={12} aria-hidden="true" style={{ color: 'var(--action-primary, #245B42)' }} />}
           </span>
-          {appliedFilterCount > 0 && (
+
+          {!isVisitor && appliedFilterCount > 0 && (
             <button
               type="button"
               onClick={handleResetFilters}
-              className="text-xs text-[#245B42] hover:underline font-semibold"
+              style={{
+                fontSize: '0.75rem',
+                color: 'var(--action-primary, #245B42)',
+                fontWeight: 600,
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                padding: 0,
+              }}
             >
               Reset All
             </button>
           )}
         </div>
-        <div className="flex flex-col gap-1.5">
-          {countries.map((c) => {
-            const isSelected = countryParam === c.code;
-            return (
-              <button
-                key={c.code}
-                type="button"
-                onClick={() => updateParam('country', c.code)}
-                className={`text-left px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-colors ${
-                  isSelected
-                    ? 'bg-[#B4D0B6]/40 text-[#133827] font-semibold'
-                    : 'text-[#2b352f] hover:bg-[#F7F9F7]'
-                }`}
-              >
-                {c.label}
-              </button>
-            );
-          })}
-        </div>
+        {renderFilterOption('country', countryParam, countries, 'country')}
       </div>
 
-      {/* Degree Level */}
-      <div className="border-t border-[#ebe6de] pt-5">
-        <span className="block text-xs font-bold uppercase tracking-wider text-[#55635a] mb-3">
-          Degree Level
-        </span>
-        <div className="flex flex-col gap-1.5">
-          {degreeLevels.map((l) => {
-            const isSelected = degreeLevelParam === l.code;
-            return (
-              <button
-                key={l.code}
-                type="button"
-                onClick={() => updateParam('level', l.code)}
-                className={`text-left px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-colors ${
-                  isSelected
-                    ? 'bg-[#B4D0B6]/40 text-[#133827] font-semibold'
-                    : 'text-[#2b352f] hover:bg-[#F7F9F7]'
-                }`}
-              >
-                {l.label}
-              </button>
-            );
-          })}
+      {/* Degree Level Section */}
+      <div style={{ borderTop: '1px solid var(--border-subtle, #E1E8DE)', paddingTop: '1.25rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+          <span
+            style={{
+              fontSize: '0.75rem',
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              letterSpacing: '0.06em',
+              color: 'var(--color-foreground-muted, #58695E)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+            }}
+          >
+            <span>Degree Level</span>
+            {isVisitor && <Lock size={12} aria-hidden="true" style={{ color: 'var(--action-primary, #245B42)' }} />}
+          </span>
         </div>
+        {renderFilterOption('level', degreeLevelParam, degreeLevels, 'level')}
       </div>
 
-      {/* Teaching Language */}
-      <div className="border-t border-[#ebe6de] pt-5">
-        <span className="block text-xs font-bold uppercase tracking-wider text-[#55635a] mb-3">
-          Teaching Language
-        </span>
-        <div className="flex flex-col gap-1.5">
-          {languages.map((lg) => {
-            const isSelected = languageParam === lg.code;
-            return (
-              <button
-                key={lg.code}
-                type="button"
-                onClick={() => updateParam('lang', lg.code)}
-                className={`text-left px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-colors ${
-                  isSelected
-                    ? 'bg-[#B4D0B6]/40 text-[#133827] font-semibold'
-                    : 'text-[#2b352f] hover:bg-[#F7F9F7]'
-                }`}
-              >
-                {lg.label}
-              </button>
-            );
-          })}
+      {/* Teaching Language Section */}
+      <div style={{ borderTop: '1px solid var(--border-subtle, #E1E8DE)', paddingTop: '1.25rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+          <span
+            style={{
+              fontSize: '0.75rem',
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              letterSpacing: '0.06em',
+              color: 'var(--color-foreground-muted, #58695E)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+            }}
+          >
+            <span>Teaching Language</span>
+            {isVisitor && <Lock size={12} aria-hidden="true" style={{ color: 'var(--action-primary, #245B42)' }} />}
+          </span>
         </div>
+        {renderFilterOption('lang', languageParam, languages, 'lang')}
       </div>
 
-      {/* Tuition Rate */}
-      <div className="border-t border-[#ebe6de] pt-5">
-        <span className="block text-xs font-bold uppercase tracking-wider text-[#55635a] mb-3">
-          Tuition Rate
-        </span>
-        <div className="flex flex-col gap-1.5">
-          {tuitionTypes.map((tt) => {
-            const isSelected = tuitionTypeParam === tt.code;
-            return (
-              <button
-                key={tt.code}
-                type="button"
-                onClick={() => updateParam('tuition', tt.code)}
-                className={`text-left px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-colors ${
-                  isSelected
-                    ? 'bg-[#B4D0B6]/40 text-[#133827] font-semibold'
-                    : 'text-[#2b352f] hover:bg-[#F7F9F7]'
-                }`}
-              >
-                {tt.label}
-              </button>
-            );
-          })}
+      {/* Tuition Schedule Section */}
+      <div style={{ borderTop: '1px solid var(--border-subtle, #E1E8DE)', paddingTop: '1.25rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+          <span
+            style={{
+              fontSize: '0.75rem',
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              letterSpacing: '0.06em',
+              color: 'var(--color-foreground-muted, #58695E)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+            }}
+          >
+            <span>Tuition Schedule</span>
+            {isVisitor && <Lock size={12} aria-hidden="true" style={{ color: 'var(--action-primary, #245B42)' }} />}
+          </span>
         </div>
+        {renderFilterOption('tuition', tuitionTypeParam, tuitionTypes, 'tuition')}
       </div>
     </div>
   );
 
+  const startItem = data && data.total_count > 0 ? (pageParam - 1) * 12 + 1 : 0;
+  const endItem = data ? Math.min(pageParam * 12, data.total_count) : 0;
+
   return (
-    <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-16">
-      {/* Header & Title */}
-      <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div
+      style={{
+        maxWidth: '1280px',
+        margin: '0 auto',
+        padding: '1.5rem 1rem 4rem',
+        fontFamily: 'var(--font-family-base, "DM Sans", sans-serif)',
+      }}
+    >
+      {/* 1. Context Banner for Genuine Explorer Profiles */}
+      {genuineGoals && (
+        <div
+          style={{
+            marginBottom: '1.5rem',
+            padding: '0.75rem 1rem',
+            borderRadius: 'var(--radius-control, 16px)',
+            backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+            border: '1px solid var(--border-subtle, #E1E8DE)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '1rem',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
+            <Compass size={20} style={{ color: 'var(--action-primary, #245B42)', flexShrink: 0 }} aria-hidden="true" />
+            <div>
+              <p style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-foreground, #19261F)', margin: 0 }}>
+                Active Profile Goal Focus
+              </p>
+              <p style={{ fontSize: '0.75rem', color: 'var(--color-foreground-muted, #58695E)', margin: '2px 0 0' }}>
+                Target Corridors: {genuineGoals.destinations} • Program matching active
+              </p>
+            </div>
+          </div>
+          <Link
+            to="/request-guidance"
+            style={{
+              fontSize: '0.75rem',
+              fontWeight: 700,
+              color: 'var(--action-primary, #245B42)',
+              textDecoration: 'none',
+              flexShrink: 0,
+            }}
+          >
+            Manage Case &rarr;
+          </Link>
+        </div>
+      )}
+
+      {/* 2. Header & Title */}
+      <div
+        style={{
+          marginBottom: '1.5rem',
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '1rem',
+        }}
+      >
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#133827]">
+          <h1
+            style={{
+              fontSize: '2rem',
+              fontWeight: 800,
+              letterSpacing: '-0.025em',
+              color: 'var(--color-foreground, #19261F)',
+              margin: 0,
+            }}
+          >
             Degree Programs
           </h1>
-          <p className="text-sm text-[#55635a] mt-1">
-            Browse verified Bachelor’s and Master’s curriculums with language requirements, admission portals, and tuition benchmarks.
+          <p
+            style={{
+              fontSize: '0.875rem',
+              color: 'var(--color-foreground-muted, #58695E)',
+              margin: '0.25rem 0 0',
+              maxWidth: '680px',
+            }}
+          >
+            Explore accredited Bachelor's and Master's programs across Germany, France, Italy, and Romania.
           </p>
         </div>
 
-        {/* Mobile Filter Toggle */}
+        {/* Filter Toggle Action Button with Applied Filter Count Badge */}
         <button
           type="button"
-          onClick={() => setMobileFilterOpen(true)}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-white border border-[#ebe6de] shadow-sm text-xs sm:text-sm font-semibold text-[#133827] hover:bg-[#F7F9F7] active:scale-95 transition-all self-start sm:self-auto"
+          id="mobile-filter-drawer-btn"
+          onClick={isVisitor ? handleLockedFilterAction : () => setMobileFilterOpen(true)}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            padding: '0.625rem 1.125rem',
+            borderRadius: 'var(--radius-pill, 9999px)',
+            backgroundColor: 'var(--surface-card, #FFFFFF)',
+            border: '1px solid var(--border-subtle, #E1E8DE)',
+            boxShadow: 'var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.05))',
+            fontSize: '0.8125rem',
+            fontWeight: 600,
+            color: 'var(--color-foreground, #19261F)',
+            cursor: 'pointer',
+          }}
         >
-          <SlidersHorizontal size={16} className="text-[#245B42]" aria-hidden="true" />
+          <SlidersHorizontal size={16} style={{ color: 'var(--action-primary, #245B42)' }} aria-hidden="true" />
           <span>Filters</span>
           {appliedFilterCount > 0 && (
-            <span className="w-5 h-5 rounded-full bg-[#245B42] text-white text-[11px] font-bold flex items-center justify-center">
+            <span
+              style={{
+                width: '20px',
+                height: '20px',
+                borderRadius: '50%',
+                backgroundColor: 'var(--action-primary, #245B42)',
+                color: 'var(--color-on-primary, #FFFFFF)',
+                fontSize: '0.6875rem',
+                fontWeight: 700,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
               {appliedFilterCount}
             </span>
           )}
+          {isVisitor && <Lock size={12} style={{ color: 'var(--action-primary, #245B42)' }} aria-hidden="true" />}
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-6 items-start">
+      {/* 3. Search and Results Layout */}
+      <div className="catalogue-layout">
         {/* Desktop Sticky Filter Sidebar */}
         <aside
-          className="hidden md:block bg-white rounded-3xl p-6 border border-[#ebe6de] shadow-sm sticky top-24"
+          className="desktop-only"
+          style={{
+            backgroundColor: 'var(--surface-card, #FFFFFF)',
+            borderRadius: 'var(--radius-card, 20px)',
+            padding: '1.5rem',
+            border: '1px solid var(--border-subtle, #E1E8DE)',
+            boxShadow: 'var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.05))',
+            position: 'sticky',
+            top: '5.5rem',
+          }}
           aria-label="Catalogue filters"
         >
           {filterSidebar}
         </aside>
 
         {/* Main Content Area */}
-        <div className="flex flex-col gap-5 min-w-0">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', minWidth: 0, flex: 1 }}>
           {/* Large Clear Search Bar */}
-          <div className="bg-white rounded-3xl p-4 sm:p-5 border border-[#ebe6de] shadow-sm">
-            <form onSubmit={handleSearchSubmit} className="flex gap-2 relative">
-              <div className="relative flex-1">
+          <div
+            style={{
+              backgroundColor: 'var(--surface-card, #FFFFFF)',
+              borderRadius: 'var(--radius-card, 20px)',
+              padding: '1rem 1.25rem',
+              border: '1px solid var(--border-subtle, #E1E8DE)',
+              boxShadow: 'var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.05))',
+            }}
+          >
+            <form onSubmit={handleSearchSubmit} style={{ display: 'flex', gap: '0.5rem', position: 'relative' }}>
+              <div style={{ position: 'relative', flex: 1 }}>
                 <Search
-                  size={20}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8a9890]"
+                  size={18}
+                  style={{
+                    position: 'absolute',
+                    left: '1rem',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    color: 'var(--color-foreground-muted, #58695E)',
+                  }}
                   aria-hidden="true"
                 />
                 <input
                   type="text"
+                  id="catalogue-search-input"
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
-                  placeholder="Search program by title, discipline, or university..."
-                  className="w-full pl-12 pr-10 py-3 rounded-full text-sm text-[#1a1a1a] placeholder:text-[#8a9890] bg-[#F7F9F7] border border-[#ebe6de] outline-none focus:bg-white focus:ring-2 focus:ring-[#245B42] transition-all"
+                  placeholder={
+                    isVisitor
+                      ? 'Search preview programs by title, discipline, or university...'
+                      : 'Search programs by title, discipline, or university...'
+                  }
+                  style={{
+                    width: '100%',
+                    boxSizing: 'border-box',
+                    minHeight: '48px',
+                    paddingLeft: '2.75rem',
+                    paddingRight: '2.5rem',
+                    borderRadius: 'var(--radius-pill, 9999px)',
+                    fontSize: '0.875rem',
+                    color: 'var(--color-foreground, #19261F)',
+                    backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+                    border: '1px solid var(--border-subtle, #E1E8DE)',
+                    outline: 'none',
+                    fontFamily: 'inherit',
+                  }}
                 />
                 {searchInput && (
                   <button
@@ -327,7 +568,17 @@ export const ProgramsDiscoveryPage: React.FC = () => {
                       setSearchInput('');
                       updateParam('search', '');
                     }}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#8a9890] hover:text-[#133827]"
+                    style={{
+                      position: 'absolute',
+                      right: '0.875rem',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      background: 'none',
+                      border: 'none',
+                      color: 'var(--color-foreground-muted, #58695E)',
+                      cursor: 'pointer',
+                      padding: 0,
+                    }}
                     aria-label="Clear search"
                   >
                     <X size={16} />
@@ -336,48 +587,276 @@ export const ProgramsDiscoveryPage: React.FC = () => {
               </div>
               <button
                 type="submit"
-                className="px-6 py-3 rounded-full text-sm font-semibold text-white bg-[#245B42] hover:bg-[#1D4A36] shadow-sm transition-all"
+                id="catalogue-search-submit-btn"
+                style={{
+                  padding: '0 1.5rem',
+                  minHeight: '48px',
+                  borderRadius: 'var(--radius-pill, 9999px)',
+                  fontSize: '0.875rem',
+                  fontWeight: 700,
+                  color: 'var(--color-on-primary, #FFFFFF)',
+                  backgroundColor: 'var(--action-primary, #245B42)',
+                  border: 'none',
+                  cursor: 'pointer',
+                  boxShadow: 'var(--shadow-sm)',
+                  flexShrink: 0,
+                }}
               >
                 Search
               </button>
             </form>
 
-            {/* Result Count and Sort Row */}
-            <div className="flex flex-wrap items-center justify-between gap-4 text-xs text-[#55635a] pt-4 mt-4 border-t border-[#ebe6de]">
+            {/* Readable Result & Sort Row */}
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '1rem',
+                fontSize: '0.75rem',
+                color: 'var(--color-foreground-muted, #58695E)',
+                paddingTop: '0.875rem',
+                marginTop: '0.875rem',
+                borderTop: '1px solid var(--border-subtle, #E1E8DE)',
+              }}
+            >
               <div>
                 {isLoading ? (
                   <span>Searching published degree programs...</span>
-                ) : (
+                ) : data && data.total_count > 0 ? (
                   <span>
-                    Showing <strong className="text-[#133827]">{data?.total_count || 0}</strong>{' '}
-                    {data?.total_count === 1 ? 'program' : 'programs'}
-                    {data?.is_preview_restricted && ' (Visitor preview cap active)'}
+                    Showing <strong style={{ color: 'var(--color-foreground, #19261F)' }}>{startItem}–{endItem}</strong> of{' '}
+                    <strong style={{ color: 'var(--color-foreground, #19261F)' }}>{data.total_count}</strong>{' '}
+                    {data.total_count === 1 ? 'program' : 'programs'}
+                    {isVisitor && data.is_preview_restricted && ' (Preview sample)'}
                   </span>
+                ) : (
+                  <span>No programs found</span>
                 )}
               </div>
 
-              <div className="flex items-center gap-2">
-                <label htmlFor="sort-by-prog" className="font-medium text-[#2b352f]">
+              {/* Sort Dropdown */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <label htmlFor="sort-by-prog" style={{ fontWeight: 600, color: 'var(--color-foreground, #19261F)' }}>
                   Sort by:
                 </label>
-                <select
-                  id="sort-by-prog"
-                  value={sortByParam}
-                  onChange={(e) => updateParam('sort', e.target.value)}
-                  className="px-3 py-1.5 text-xs border border-[#ebe6de] rounded-lg bg-white text-[#133827] outline-none focus:ring-1 focus:ring-[#245B42]"
-                >
-                  <option value="title_asc">Title (A–Z)</option>
-                  <option value="title_desc">Title (Z–A)</option>
-                  <option value="tuition_asc">Tuition (Low to High)</option>
-                  <option value="tuition_desc">Tuition (High to Low)</option>
-                </select>
+                {isVisitor ? (
+                  <button
+                    type="button"
+                    id="sort-by-locked-btn"
+                    onClick={handleLockedFilterAction}
+                    aria-haspopup="dialog"
+                    aria-label="Sort options locked. Sign in or sign up required."
+                    style={{
+                      padding: '0.35rem 0.75rem',
+                      fontSize: '0.75rem',
+                      border: '1px solid var(--border-subtle, #E1E8DE)',
+                      borderRadius: 'var(--radius-control, 8px)',
+                      backgroundColor: 'var(--surface-card, #FFFFFF)',
+                      color: 'var(--color-foreground, #19261F)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <span>Title (A–Z)</span>
+                    <Lock size={12} style={{ color: 'var(--action-primary, #245B42)' }} />
+                  </button>
+                ) : (
+                  <select
+                    id="sort-by-prog"
+                    value={sortByParam}
+                    onChange={(e) => updateParam('sort', e.target.value)}
+                    style={{
+                      padding: '0.35rem 0.75rem',
+                      fontSize: '0.75rem',
+                      border: '1px solid var(--border-subtle, #E1E8DE)',
+                      borderRadius: 'var(--radius-control, 8px)',
+                      backgroundColor: 'var(--surface-card, #FFFFFF)',
+                      color: 'var(--color-foreground, #19261F)',
+                      outline: 'none',
+                    }}
+                  >
+                    <option value="title_asc">Title (A–Z)</option>
+                    <option value="title_desc">Title (Z–A)</option>
+                    <option value="tuition_asc">Tuition (Low to High)</option>
+                    <option value="tuition_desc">Tuition (High to Low)</option>
+                  </select>
+                )}
               </div>
             </div>
           </div>
 
+          {/* Active Filter Chips Row */}
+          {appliedFilterCount > 0 && (
+            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.5rem', padding: '0.25rem 0' }}>
+              <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-foreground-muted, #58695E)' }}>
+                Active filters:
+              </span>
+
+              {countryParam !== 'all' && (
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.375rem',
+                    padding: '0.25rem 0.75rem',
+                    borderRadius: 'var(--radius-pill, 9999px)',
+                    fontSize: '0.75rem',
+                    fontWeight: 500,
+                    backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+                    color: 'var(--color-foreground, #19261F)',
+                    border: '1px solid var(--border-subtle, #E1E8DE)',
+                  }}
+                >
+                  <span>Country: {countries.find((c) => c.code === countryParam)?.label || countryParam}</span>
+                  <button
+                    type="button"
+                    onClick={() => updateParam('country', 'all')}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: 'var(--color-foreground-muted, #58695E)' }}
+                    aria-label="Remove country filter"
+                  >
+                    <X size={12} />
+                  </button>
+                </span>
+              )}
+
+              {degreeLevelParam !== 'all' && (
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.375rem',
+                    padding: '0.25rem 0.75rem',
+                    borderRadius: 'var(--radius-pill, 9999px)',
+                    fontSize: '0.75rem',
+                    fontWeight: 500,
+                    backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+                    color: 'var(--color-foreground, #19261F)',
+                    border: '1px solid var(--border-subtle, #E1E8DE)',
+                  }}
+                >
+                  <span>Level: {degreeLevels.find((l) => l.code === degreeLevelParam)?.label || degreeLevelParam}</span>
+                  <button
+                    type="button"
+                    onClick={() => updateParam('level', 'all')}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: 'var(--color-foreground-muted, #58695E)' }}
+                    aria-label="Remove degree level filter"
+                  >
+                    <X size={12} />
+                  </button>
+                </span>
+              )}
+
+              {languageParam !== 'all' && (
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.375rem',
+                    padding: '0.25rem 0.75rem',
+                    borderRadius: 'var(--radius-pill, 9999px)',
+                    fontSize: '0.75rem',
+                    fontWeight: 500,
+                    backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+                    color: 'var(--color-foreground, #19261F)',
+                    border: '1px solid var(--border-subtle, #E1E8DE)',
+                  }}
+                >
+                  <span>Language: {languages.find((lg) => lg.code === languageParam)?.label || languageParam}</span>
+                  <button
+                    type="button"
+                    onClick={() => updateParam('lang', 'all')}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: 'var(--color-foreground-muted, #58695E)' }}
+                    aria-label="Remove language filter"
+                  >
+                    <X size={12} />
+                  </button>
+                </span>
+              )}
+
+              {tuitionTypeParam !== 'all' && (
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.375rem',
+                    padding: '0.25rem 0.75rem',
+                    borderRadius: 'var(--radius-pill, 9999px)',
+                    fontSize: '0.75rem',
+                    fontWeight: 500,
+                    backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+                    color: 'var(--color-foreground, #19261F)',
+                    border: '1px solid var(--border-subtle, #E1E8DE)',
+                  }}
+                >
+                  <span>Tuition: {tuitionTypes.find((t) => t.code === tuitionTypeParam)?.label || tuitionTypeParam}</span>
+                  <button
+                    type="button"
+                    onClick={() => updateParam('tuition', 'all')}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: 'var(--color-foreground-muted, #58695E)' }}
+                    aria-label="Remove tuition filter"
+                  >
+                    <X size={12} />
+                  </button>
+                </span>
+              )}
+
+              {searchParam && (
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.375rem',
+                    padding: '0.25rem 0.75rem',
+                    borderRadius: 'var(--radius-pill, 9999px)',
+                    fontSize: '0.75rem',
+                    fontWeight: 500,
+                    backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+                    color: 'var(--color-foreground, #19261F)',
+                    border: '1px solid var(--border-subtle, #E1E8DE)',
+                  }}
+                >
+                  <span>Search: &ldquo;{searchParam}&rdquo;</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSearchInput('');
+                      updateParam('search', '');
+                    }}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: 'var(--color-foreground-muted, #58695E)' }}
+                    aria-label="Clear search"
+                  >
+                    <X size={12} />
+                  </button>
+                </span>
+              )}
+
+              <button
+                type="button"
+                onClick={handleResetFilters}
+                style={{
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  color: 'var(--action-primary, #245B42)',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: 0,
+                  marginLeft: '0.25rem',
+                  textDecoration: 'underline',
+                }}
+              >
+                Clear all filters
+              </button>
+            </div>
+          )}
+
           {/* Results Grid */}
           {isLoading ? (
-            <LoadingState message="Loading verified degree programs..." minHeight="300px" />
+            <LoadingState message="Loading degree programs..." minHeight="300px" />
           ) : error ? (
             <ErrorState
               title="Unable to load degree programs"
@@ -388,105 +867,24 @@ export const ProgramsDiscoveryPage: React.FC = () => {
             <EmptyState
               title="No degree programs found"
               description="The catalogue currently does not have degree program records matching your active filters. Please adjust your criteria."
-              actionLabel={searchParam || countryParam !== 'all' || degreeLevelParam !== 'all' ? 'Reset Filters' : undefined}
-              onAction={searchParam || countryParam !== 'all' || degreeLevelParam !== 'all' ? handleResetFilters : undefined}
+              actionLabel={appliedFilterCount > 0 ? 'Reset Filters' : undefined}
+              onAction={appliedFilterCount > 0 ? handleResetFilters : undefined}
             />
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="catalogue-grid">
               {data.items.map((prog) => {
-                const flag = getCountryFlag(prog.country_name || prog.country_code);
-                const tuitionStr = getTuitionText(prog.annual_tuition_eur, prog.tuition_type);
-                const isFree = prog.annual_tuition_eur === 0 || prog.tuition_type === 'free';
+                const detailUrl = isStudentWorkspace
+                  ? `/student/programs/${prog.id}`
+                  : `/programs/${prog.id}`;
 
                 return (
-                  <div
+                  <ProgramCard
                     key={prog.id}
-                    className="rounded-[24px] bg-white border border-[#ebe6de] p-5 flex flex-col justify-between shadow-sm hover:shadow-md transition-all group"
-                  >
-                    <div>
-                      {/* Top Badges & Bookmark */}
-                      <div className="flex items-center justify-between gap-2 mb-3">
-                        <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-[#F7F9F7] text-[#133827] border border-[#ebe6de]">
-                          {flag} {(prog.country_name || prog.country_code).toUpperCase()}
-                        </span>
-
-                        <button
-                          type="button"
-                          onClick={() => bookmarkMutation.mutate(prog.id)}
-                          title={prog.is_bookmarked ? 'Remove bookmark' : 'Save program'}
-                          aria-label={prog.is_bookmarked ? 'Remove bookmark' : 'Save program'}
-                          className={`p-2 rounded-full border transition-colors ${
-                            prog.is_bookmarked
-                              ? 'bg-[#B4D0B6]/40 text-[#245B42] border-[#B4D0B6]'
-                              : 'bg-transparent text-[#8a9890] hover:text-[#133827] border-transparent hover:border-[#ebe6de]'
-                          }`}
-                        >
-                          <Bookmark size={16} fill={prog.is_bookmarked ? 'currentColor' : 'none'} />
-                        </button>
-                      </div>
-
-                      {/* University Name */}
-                      <p className="text-xs font-semibold text-[#55635a] mb-1 line-clamp-1">
-                        {prog.university_name}
-                      </p>
-
-                      {/* Program Title */}
-                      <h2 className="text-base font-bold text-[#133827] leading-snug mb-3 line-clamp-2">
-                        {prog.program_name}
-                      </h2>
-
-                      {/* Attribute Pills */}
-                      <div className="flex flex-wrap gap-1.5 mb-4">
-                        <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#B4D0B6]/30 text-[#133827]">
-                          {prog.degree_level === 'bachelor' ? "Bachelor's" : "Master's"}
-                        </span>
-                        <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#D7EE83]/30 text-[#133827]">
-                          {prog.teaching_language ? prog.teaching_language.toUpperCase() : 'ENGLISH'}
-                        </span>
-                        <span
-                          className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full ${
-                            isFree
-                              ? 'bg-[#E8F5E9] text-[#245B42]'
-                              : 'bg-[#F7F9F7] text-[#133827] border border-[#ebe6de]'
-                          }`}
-                        >
-                          {tuitionStr}
-                        </span>
-                      </div>
-
-                      {/* Two-Tone Programme Summary Panel with Quiet Dividers */}
-                      <div className="rounded-2xl bg-[#F7F9F7] p-3.5 mb-4 border border-[#ebe6de] space-y-2 text-xs">
-                        {prog.next_intake_deadline && (
-                          <div className="flex items-center gap-1.5 text-[#55635a]">
-                            <Calendar size={13} className="text-[#245B42] flex-shrink-0" aria-hidden="true" />
-                            <span>Deadline: <strong>{prog.next_intake_deadline}</strong></span>
-                          </div>
-                        )}
-                        <div className="flex items-center justify-between text-[#55635a] pt-1.5 border-t border-[#ebe6de]">
-                          <span>Portal Protocol:</span>
-                          <span className="font-semibold text-[#133827]">
-                            {prog.application_portal.split('/')[0]}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-1.5 text-[11px] text-[#55635a] pt-1.5 border-t border-[#ebe6de]">
-                          <CheckCircle2 size={13} className="text-[#245B42] flex-shrink-0" aria-hidden="true" />
-                          <span>Prerequisites verified against university regulations</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Card Footer: Details Action */}
-                    <div className="pt-3 border-t border-[#ebe6de] flex items-center justify-between">
-                      <span className="text-xs text-[#55635a]">Curriculum Record</span>
-                      <Link
-                        to={`/programs/${prog.id}`}
-                        className="inline-flex items-center gap-1.5 text-xs font-bold text-[#245B42] hover:underline"
-                      >
-                        <span>View program</span>
-                        <ArrowRight size={14} aria-hidden="true" />
-                      </Link>
-                    </div>
-                  </div>
+                    program={prog}
+                    detailUrl={detailUrl}
+                    onBookmarkToggle={isVisitor ? undefined : (id) => bookmarkMutation.mutate(id)}
+                    isBookmarking={bookmarkMutation.isPending}
+                  />
                 );
               })}
             </div>
@@ -494,35 +892,62 @@ export const ProgramsDiscoveryPage: React.FC = () => {
 
           {/* Pagination Controls */}
           {data && data.total_pages > 1 && (
-            <div className="flex items-center justify-center gap-3 mt-6">
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.5rem',
+                marginTop: '1.5rem',
+                paddingTop: '1.5rem',
+                borderTop: '1px solid var(--border-subtle, #E1E8DE)',
+              }}
+            >
               <button
                 type="button"
-                disabled={pageParam <= 1}
                 onClick={() => handlePageChange(pageParam - 1)}
-                className={`px-4 py-2 rounded-xl border border-[#ebe6de] bg-white text-xs font-semibold flex items-center gap-1.5 ${
-                  pageParam <= 1
-                    ? 'text-[#8a9890] cursor-not-allowed'
-                    : 'text-[#133827] hover:bg-[#F7F9F7]'
-                }`}
+                disabled={pageParam <= 1}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.25rem',
+                  padding: '0.5rem 0.875rem',
+                  borderRadius: 'var(--radius-pill, 9999px)',
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  border: '1px solid var(--border-subtle, #E1E8DE)',
+                  backgroundColor: 'var(--surface-card, #FFFFFF)',
+                  color: pageParam <= 1 ? 'var(--color-foreground-muted, #58695E)' : 'var(--color-foreground, #19261F)',
+                  cursor: pageParam <= 1 ? 'not-allowed' : 'pointer',
+                  opacity: pageParam <= 1 ? 0.6 : 1,
+                }}
               >
                 <ChevronLeft size={16} />
                 <span>Previous</span>
               </button>
 
-              <span className="text-xs text-[#2b352f]">
-                Page <strong className="text-[#133827]">{data.page}</strong> of{' '}
-                <strong className="text-[#133827]">{data.total_pages}</strong>
+              <span style={{ fontSize: '0.75rem', color: 'var(--color-foreground-muted, #58695E)', padding: '0 0.5rem' }}>
+                Page <strong style={{ color: 'var(--color-foreground, #19261F)' }}>{pageParam}</strong> of {data.total_pages}
               </span>
 
               <button
                 type="button"
-                disabled={pageParam >= data.total_pages}
                 onClick={() => handlePageChange(pageParam + 1)}
-                className={`px-4 py-2 rounded-xl border border-[#ebe6de] bg-white text-xs font-semibold flex items-center gap-1.5 ${
-                  pageParam >= data.total_pages
-                    ? 'text-[#8a9890] cursor-not-allowed'
-                    : 'text-[#133827] hover:bg-[#F7F9F7]'
-                }`}
+                disabled={pageParam >= data.total_pages}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.25rem',
+                  padding: '0.5rem 0.875rem',
+                  borderRadius: 'var(--radius-pill, 9999px)',
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  border: '1px solid var(--border-subtle, #E1E8DE)',
+                  backgroundColor: 'var(--surface-card, #FFFFFF)',
+                  color: pageParam >= data.total_pages ? 'var(--color-foreground-muted, #58695E)' : 'var(--color-foreground, #19261F)',
+                  cursor: pageParam >= data.total_pages ? 'not-allowed' : 'pointer',
+                  opacity: pageParam >= data.total_pages ? 0.6 : 1,
+                }}
               >
                 <span>Next</span>
                 <ChevronRight size={16} />
@@ -532,29 +957,62 @@ export const ProgramsDiscoveryPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Filter Sheet */}
+      {/* Accessible Mobile Filter Drawer Dialog */}
       {mobileFilterOpen && (
-        <div className="fixed inset-0 z-50 flex items-end">
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 100,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-end',
+          }}
+        >
           <div
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm"
+            style={{
+              position: 'fixed',
+              inset: 0,
+              backgroundColor: 'rgba(13, 21, 17, 0.72)',
+              backdropFilter: 'blur(4px)',
+            }}
             onClick={() => setMobileFilterOpen(false)}
             aria-hidden="true"
           />
           <div
             role="dialog"
             aria-modal="true"
-            aria-label="Filter degree programs"
-            className="relative w-full max-h-[85vh] bg-white rounded-t-3xl shadow-2xl flex flex-col p-6 z-50 overflow-y-auto"
+            aria-label="Catalogue filter options"
+            style={{
+              position: 'relative',
+              width: '100%',
+              maxHeight: '85vh',
+              backgroundColor: 'var(--surface-card, #FFFFFF)',
+              borderTopLeftRadius: '24px',
+              borderTopRightRadius: '24px',
+              boxShadow: 'var(--shadow-floating)',
+              display: 'flex',
+              flexDirection: 'column',
+              padding: '1.5rem',
+              zIndex: 101,
+              overflowY: 'auto',
+            }}
           >
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-[#133827]">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+              <h2 style={{ fontSize: '1.125rem', fontWeight: 800, color: 'var(--color-foreground, #19261F)', margin: 0 }}>
                 Filter Programs
               </h2>
               <button
                 type="button"
                 onClick={() => setMobileFilterOpen(false)}
                 aria-label="Close filters"
-                className="p-1.5 text-[#55635a] hover:text-[#133827]"
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  padding: '0.35rem',
+                  color: 'var(--color-foreground-muted, #58695E)',
+                  cursor: 'pointer',
+                }}
               >
                 <X size={20} />
               </button>
@@ -562,25 +1020,61 @@ export const ProgramsDiscoveryPage: React.FC = () => {
 
             {filterSidebar}
 
-            <div className="mt-6 pt-4 border-t border-[#ebe6de] flex gap-3">
+            <div
+              style={{
+                marginTop: '1.5rem',
+                paddingTop: '1rem',
+                borderTop: '1px solid var(--border-subtle, #E1E8DE)',
+                display: 'flex',
+                gap: '0.75rem',
+              }}
+            >
               <button
                 type="button"
                 onClick={handleResetFilters}
-                className="flex-1 py-2.5 rounded-full border border-[#ebe6de] text-xs font-semibold text-[#133827]"
+                style={{
+                  flex: 1,
+                  padding: '0.625rem',
+                  borderRadius: 'var(--radius-pill, 9999px)',
+                  border: '1px solid var(--border-subtle, #E1E8DE)',
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  color: 'var(--color-foreground, #19261F)',
+                  backgroundColor: 'transparent',
+                  cursor: 'pointer',
+                }}
               >
                 Reset All
               </button>
               <button
                 type="button"
                 onClick={() => setMobileFilterOpen(false)}
-                className="flex-1 py-2.5 rounded-full bg-[#245B42] text-white text-xs font-bold"
+                style={{
+                  flex: 1,
+                  padding: '0.625rem',
+                  borderRadius: 'var(--radius-pill, 9999px)',
+                  backgroundColor: 'var(--action-primary, #245B42)',
+                  color: 'var(--color-on-primary, #FFFFFF)',
+                  fontSize: '0.75rem',
+                  fontWeight: 700,
+                  border: 'none',
+                  cursor: 'pointer',
+                }}
               >
-                Apply Filters
+                {isVisitor ? 'Close' : 'Apply Filters'}
               </button>
             </div>
           </div>
         </div>
       )}
+
+      {/* Accessible Filter Locked Dialog */}
+      <FilterLockedDialog
+        isOpen={isLockedDialogOpen}
+        onClose={() => setIsLockedDialogOpen(false)}
+        initiatingElement={initiatingEl}
+        returnUrl="/programs"
+      />
     </div>
   );
 };

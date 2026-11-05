@@ -20,6 +20,7 @@ export const StudentJourneyNav: React.FC<JourneyNavProps> = ({ taskBadge, messag
     <div
       role="navigation"
       aria-label="Student Journey Casework Navigation"
+      className="casework-subnav-mobile"
       style={{
         display: 'flex',
         alignItems: 'center',

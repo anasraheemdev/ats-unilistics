@@ -34,6 +34,23 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ currentRole, onRoleCha
     });
   }, [currentRole]);
 
+  // Disable body scrolling only inside managed shell on desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = '';
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      document.body.style.overflow = '';
+    };
+  }, []);
+
   const toggleCollapse = () => {
     setCollapsed((prev) => {
       const next = !prev;
@@ -46,8 +63,17 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ currentRole, onRoleCha
     });
   };
 
+  const sidebarWidth = collapsed ? '76px' : '256px';
+
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--surface-canvas)' }}>
+    <div
+      className="workspace-shell"
+      style={
+        {
+          '--workspace-sidebar-width': sidebarWidth,
+        } as React.CSSProperties
+      }
+    >
       <SkipLink targetId="main-content" />
 
       {/* Persistent Desktop Sidebar */}
@@ -65,7 +91,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ currentRole, onRoleCha
       />
 
       {/* Main Workspace Column */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+      <div className="workspace-main-column">
         <Topbar
           currentRole={currentRole}
           userName={userName}
@@ -76,11 +102,8 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ currentRole, onRoleCha
         <main
           id="main-content"
           tabIndex={-1}
-          style={{
-            flex: 1,
-            padding: '1.5rem',
-            outline: 'none',
-          }}
+          style={{ outline: 'none' }}
+          className="workspace-main-content"
         >
           <div style={{ maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
             <ErrorBoundary>

@@ -23,6 +23,127 @@ export interface RoleNavigationConfig {
   groups: NavGroupConfig[];
 }
 
+export interface NavDropdownItem {
+  id: string;
+  label: string;
+  ariaLabel?: string;
+  path: string;
+  description: string;
+  iconName: string;
+  requiresAuth?: boolean;
+}
+
+export interface PublicNavSection {
+  id: string;
+  label: string;
+  type: 'link' | 'dropdown';
+  path?: string;
+  iconName?: string;
+  activeMatchPrefixes?: string[];
+  items?: NavDropdownItem[];
+}
+
+export const PUBLIC_NAV_CONFIG: PublicNavSection[] = [
+  {
+    id: 'nav-home',
+    label: 'Home',
+    type: 'link',
+    path: '/',
+    iconName: 'House',
+  },
+  {
+    id: 'nav-explore',
+    label: 'Explore',
+    type: 'dropdown',
+    iconName: 'Compass',
+    activeMatchPrefixes: ['/universities', '/programs', '/scholarships', '/saved', '/explorer'],
+    items: [
+      {
+        id: 'exp-unis',
+        label: 'Universities',
+        ariaLabel: 'Explore Universities',
+        path: '/universities',
+        description: 'Accredited European institutions across Germany, France, Italy, Romania',
+        iconName: 'GraduationCap',
+      },
+      {
+        id: 'exp-progs',
+        label: 'Programs',
+        path: '/programs',
+        description: 'English-taught Bachelors & Masters curricula',
+        iconName: 'FileText',
+      },
+      {
+        id: 'exp-schol',
+        label: 'Scholarships',
+        path: '/scholarships',
+        description: 'DAAD, Erasmus Mundus, and national merit funding',
+        iconName: 'Heart',
+      },
+      {
+        id: 'exp-saved',
+        label: 'Saved',
+        ariaLabel: 'Saved',
+        path: '/saved',
+        description: 'Your bookmarked institutions and programs',
+        iconName: 'Bookmark',
+        requiresAuth: true,
+      },
+    ],
+  },
+  {
+    id: 'nav-help',
+    label: 'Help & Guidance',
+    type: 'dropdown',
+    iconName: 'CircleHelp',
+    activeMatchPrefixes: ['/how-it-works', '/country-corridors', '/corridors-and-legal', '/help', '/support', '/support-desk', '/request-status', '/request-guidance'],
+    items: [
+      {
+        id: 'help-how',
+        label: 'How It Works',
+        path: '/how-it-works',
+        description: '4-stage student journey overview',
+        iconName: 'Compass',
+      },
+      {
+        id: 'help-corridors',
+        label: 'Country Corridors',
+        path: '/country-corridors',
+        description: 'Statutory rules for Germany, France, Italy & Romania',
+        iconName: 'ShieldCheck',
+      },
+      {
+        id: 'help-centre',
+        label: 'Help Centre',
+        path: '/help',
+        description: 'Searchable procedural articles & FAQs',
+        iconName: 'CircleHelp',
+      },
+      {
+        id: 'help-desk',
+        label: 'Support Desk',
+        path: '/support-desk',
+        description: 'Guided admissions tickets & assistance',
+        iconName: 'MessageSquare',
+      },
+      {
+        id: 'help-status',
+        label: 'Request Status',
+        path: '/request-status',
+        description: 'Track your guidance review progress',
+        iconName: 'Clock',
+      },
+    ],
+  },
+  {
+    id: 'nav-contact',
+    label: 'Contact',
+    type: 'link',
+    path: '/contact',
+    iconName: 'Mail',
+  },
+];
+
 // 1. Visitor / Explorer Discovery Navigation
 export const DISCOVERY_NAV_GROUPS: NavGroupConfig[] = [
   {

@@ -35,6 +35,23 @@ export const StudentLayout: React.FC<StudentLayoutProps> = ({ currentRole, onRol
     });
   }, [currentRole]);
 
+  // Disable body scrolling only inside managed shell on desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = '';
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      document.body.style.overflow = '';
+    };
+  }, []);
+
   const toggleCollapse = () => {
     setCollapsed((prev) => {
       const next = !prev;
@@ -47,8 +64,17 @@ export const StudentLayout: React.FC<StudentLayoutProps> = ({ currentRole, onRol
     });
   };
 
+  const sidebarWidth = collapsed ? '76px' : '256px';
+
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--surface-canvas, #F6F8F5)' }}>
+    <div
+      className="workspace-shell"
+      style={
+        {
+          '--workspace-sidebar-width': sidebarWidth,
+        } as React.CSSProperties
+      }
+    >
       <SkipLink targetId="main-content" />
 
       {/* Persistent Desktop Sidebar */}
@@ -66,7 +92,7 @@ export const StudentLayout: React.FC<StudentLayoutProps> = ({ currentRole, onRol
       />
 
       {/* Main Workspace Column */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+      <div className="workspace-main-column">
         <Topbar
           currentRole={currentRole}
           userName={userName}
@@ -78,12 +104,8 @@ export const StudentLayout: React.FC<StudentLayoutProps> = ({ currentRole, onRol
         <main
           id="main-content"
           tabIndex={-1}
-          style={{
-            flex: 1,
-            padding: '1.5rem',
-            outline: 'none',
-          }}
-          className="pb-24 md:pb-6"
+          style={{ outline: 'none' }}
+          className="workspace-main-content"
         >
           <div style={{ maxWidth: '1280px', margin: '0 auto', width: '100%' }}>
             <ErrorBoundary>

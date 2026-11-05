@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api, formatUtcInTimezone } from '@/lib/api';
 import { Card } from '@/components/ui/Card';
@@ -174,7 +175,7 @@ export const SupportDeskPage: React.FC<SupportDeskPageProps> = () => {
           </p>
         </div>
 
-        {!isCreatingTicket && !selectedTicketId && (
+        {!isCreatingTicket && !selectedTicketId && currentUser?.role !== 'visitor' && (
           <Button
             variant="primary"
             onClick={() => setIsCreatingTicket(true)}
@@ -184,6 +185,249 @@ export const SupportDeskPage: React.FC<SupportDeskPageProps> = () => {
           </Button>
         )}
       </div>
+
+      {/* Visitor Experience: Rich Support Ecosystem */}
+      {currentUser?.role === 'visitor' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+          {/* Main Account Action Hero Card */}
+          <div
+            style={{
+              backgroundColor: 'var(--surface-card, #FFFFFF)',
+              border: '1px solid var(--border-subtle, #E1E8DE)',
+              borderRadius: 'var(--radius-card, 24px)',
+              padding: 'clamp(2rem, 5vw, 3rem)',
+              textAlign: 'center',
+              boxShadow: 'var(--shadow-sm)',
+              position: 'relative',
+              overflow: 'hidden',
+            }}
+          >
+            <div
+              style={{
+                width: '56px',
+                height: '56px',
+                borderRadius: '50%',
+                backgroundColor: 'rgba(36, 91, 66, 0.1)',
+                color: 'var(--action-primary, #245B42)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 1.25rem',
+              }}
+            >
+              <LifeBuoy size={28} aria-hidden="true" />
+            </div>
+
+            <h2
+              style={{
+                fontSize: 'clamp(1.5rem, 2.5vw, 1.85rem)',
+                fontWeight: 800,
+                color: 'var(--text-charcoal, #19261F)',
+                margin: '0 0 0.75rem',
+                letterSpacing: '-0.025em',
+              }}
+            >
+              Sign In to Submit & Track Dedicated Support Tickets
+            </h2>
+
+            <p
+              style={{
+                fontSize: '0.9375rem',
+                color: 'var(--text-muted, #58695E)',
+                maxWidth: '560px',
+                margin: '0 auto 2rem',
+                lineHeight: 1.6,
+              }}
+            >
+              Our admissions team tracks inquiries, procedural escalations, and technical assistance through authenticated
+              tickets tied directly to your account.
+            </p>
+
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+              <Link
+                to="/sign-in?returnUrl=/support-desk"
+                id="support-desk-signin-btn"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  padding: '0.75rem 2rem',
+                  borderRadius: 'var(--radius-pill, 9999px)',
+                  fontSize: '0.9375rem',
+                  fontWeight: 700,
+                  color: '#FFFFFF',
+                  backgroundColor: 'var(--action-primary, #245B42)',
+                  textDecoration: 'none',
+                  boxShadow: 'var(--shadow-sm)',
+                }}
+              >
+                <span>Sign in to Open Ticket</span>
+              </Link>
+              <Link
+                to="/sign-up?returnUrl=/support-desk"
+                id="support-desk-signup-btn"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  padding: '0.75rem 2rem',
+                  borderRadius: 'var(--radius-pill, 9999px)',
+                  fontSize: '0.9375rem',
+                  fontWeight: 600,
+                  color: 'var(--color-foreground, #19261F)',
+                  backgroundColor: 'var(--surface-canvas, #F6F8F5)',
+                  border: '1px solid var(--border-subtle, #E1E8DE)',
+                  textDecoration: 'none',
+                }}
+              >
+                <span>Create Free Account</span>
+              </Link>
+            </div>
+          </div>
+
+          {/* Support Categories Grid */}
+          <div>
+            <h3
+              style={{
+                fontSize: '1.25rem',
+                fontWeight: 800,
+                color: 'var(--text-charcoal, #19261F)',
+                margin: '0 0 1rem',
+              }}
+            >
+              Common Assistance Categories
+            </h3>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+                gap: '1rem',
+              }}
+            >
+              {[
+                {
+                  title: 'Admissions & Feasibility',
+                  desc: 'Questions regarding minimum HSSC / Bachelor’s GPA, degree recognition, and intake deadlines.',
+                  tag: 'Admissions',
+                },
+                {
+                  title: 'Document Attestation',
+                  desc: 'Assistance understanding BISE sealed envelopes, IBCC, HEC QR stamps, and MOFA legalization.',
+                  tag: 'Attestation',
+                },
+                {
+                  title: 'Technical & Account',
+                  desc: 'Help with magic login links, password setup, browser errors, or profile detail corrections.',
+                  tag: 'Technical',
+                },
+                {
+                  title: 'Casework & Status',
+                  desc: 'Inquiries on submitted managed guidance requests, intake evaluation stages, and advisor assignments.',
+                  tag: 'Casework',
+                },
+              ].map((cat) => (
+                <div
+                  key={cat.title}
+                  style={{
+                    backgroundColor: 'var(--surface-card, #FFFFFF)',
+                    border: '1px solid var(--border-subtle, #E1E8DE)',
+                    borderRadius: 'var(--radius-sm, 12px)',
+                    padding: '1.25rem',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.5rem',
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: '0.6875rem',
+                      fontWeight: 700,
+                      textTransform: 'uppercase',
+                      color: 'var(--action-primary, #245B42)',
+                      letterSpacing: '0.05em',
+                    }}
+                  >
+                    {cat.tag}
+                  </span>
+                  <h4 style={{ fontSize: '0.975rem', fontWeight: 700, color: 'var(--text-charcoal, #19261F)', margin: 0 }}>
+                    {cat.title}
+                  </h4>
+                  <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted, #58695E)', margin: 0, lineHeight: 1.5 }}>
+                    {cat.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Quick Resolution Alternatives */}
+          <div
+            style={{
+              backgroundColor: 'var(--surface-recessed, #EDF2E9)',
+              border: '1px solid var(--border-subtle, #E1E8DE)',
+              borderRadius: 'var(--radius-card, 24px)',
+              padding: '1.5rem',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1rem',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <ShieldCheck size={20} style={{ color: 'var(--action-primary, #245B42)' }} />
+              <strong style={{ fontSize: '0.9375rem', color: 'var(--text-charcoal, #19261F)' }}>
+                Looking for immediate self-service answers?
+              </strong>
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
+              <Link
+                to="/help"
+                style={{
+                  padding: '0.5rem 1rem',
+                  borderRadius: 'var(--radius-pill, 9999px)',
+                  backgroundColor: '#FFFFFF',
+                  border: '1px solid var(--border-subtle, #E1E8DE)',
+                  color: 'var(--text-charcoal, #19261F)',
+                  fontSize: '0.8125rem',
+                  fontWeight: 600,
+                  textDecoration: 'none',
+                }}
+              >
+                Browse Help Centre Articles →
+              </Link>
+              <Link
+                to="/request-status"
+                style={{
+                  padding: '0.5rem 1rem',
+                  borderRadius: 'var(--radius-pill, 9999px)',
+                  backgroundColor: '#FFFFFF',
+                  border: '1px solid var(--border-subtle, #E1E8DE)',
+                  color: 'var(--text-charcoal, #19261F)',
+                  fontSize: '0.8125rem',
+                  fontWeight: 600,
+                  textDecoration: 'none',
+                }}
+              >
+                Check Request Status →
+              </Link>
+              <Link
+                to="/contact"
+                style={{
+                  padding: '0.5rem 1rem',
+                  borderRadius: 'var(--radius-pill, 9999px)',
+                  backgroundColor: '#FFFFFF',
+                  border: '1px solid var(--border-subtle, #E1E8DE)',
+                  color: 'var(--text-charcoal, #19261F)',
+                  fontSize: '0.8125rem',
+                  fontWeight: 600,
+                  textDecoration: 'none',
+                }}
+              >
+                General Contact Form →
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Explorer Security Isolation Notice */}
       {isExplorer && (
@@ -438,7 +682,7 @@ export const SupportDeskPage: React.FC<SupportDeskPageProps> = () => {
       )}
 
       {/* View 3: Tickets Index Table */}
-      {!isCreatingTicket && !selectedTicketId && (
+      {!isCreatingTicket && !selectedTicketId && currentUser?.role !== 'visitor' && (
         <Card padding="lg">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
             <h2 style={{ fontSize: '1.125rem', fontWeight: 700, margin: 0 }}>

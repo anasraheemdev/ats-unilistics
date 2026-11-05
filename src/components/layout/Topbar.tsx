@@ -71,6 +71,7 @@ export const Topbar: React.FC<TopbarProps> = ({
 
   return (
     <header
+      className="workspace-topbar"
       style={{
         height: '64px',
         minHeight: '64px',
@@ -79,10 +80,8 @@ export const Topbar: React.FC<TopbarProps> = ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '0 1.25rem',
-        position: 'sticky',
-        top: 0,
-        zIndex: 30,
+        padding: '0 1.5rem',
+        boxSizing: 'border-box',
         fontFamily: 'var(--font-family-base, "DM Sans", sans-serif)',
         color: 'var(--color-foreground)',
       }}

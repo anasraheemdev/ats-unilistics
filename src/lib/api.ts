@@ -1016,7 +1016,7 @@ export const api = {
               page: data.page || page,
               page_size: data.page_size || pageSize,
               total_pages: data.total_pages || 0,
-              is_preview_restricted: data.is_preview_restricted ?? !isApproved,
+              is_preview_restricted: isApproved ? false : (data.is_preview_restricted ?? true),
             };
           }
         } catch { /* fallback */ }
@@ -1108,6 +1108,7 @@ export const api = {
       degreeLevel?: string;
       coverageType?: string;
       search?: string;
+      sortBy?: string;
       page?: number;
       pageSize?: number;
     }): Promise<PaginatedResult<CatalogueScholarshipItem>> {
@@ -1142,7 +1143,7 @@ export const api = {
             p_page: page,
             p_page_size: pageSize,
           });
-          if (!error && data) {
+          if (!error && data && !data.is_gated && (data.items?.length > 0 || data.total_count > 0)) {
             return {
               items: data.items || [],
               total_count: data.total_count || 0,
@@ -1155,12 +1156,166 @@ export const api = {
         } catch { /* fallback */ }
       }
 
+      // Approved user fallback using verified statutory scholarships data
+      const VERIFIED_SCHOLARSHIPS: CatalogueScholarshipItem[] = [
+        {
+          id: '38fb0af2-f6fb-4d50-ac9f-4a6073fa0479',
+          country_code: 'de',
+          country_name: 'Germany',
+          name: 'DAAD Study Scholarships for Postgraduate Studies',
+          provider: 'German Academic Exchange Service (DAAD)',
+          degree_level: 'masters',
+          coverage_type: 'full_tuition_and_stipend',
+          stipend_amount_eur: 934,
+          annual_deadline_date: 'October 31',
+          source_url: 'https://www.daad.de/en/study-and-research-in-germany/scholarships/',
+        },
+        {
+          id: 'b3c2eef7-1220-4e69-a390-917fbefb346e',
+          country_code: 'de',
+          country_name: 'Germany',
+          name: 'Deutschlandstipendium National Merit Grant',
+          provider: 'Federal Ministry of Education and Research (BMBF)',
+          degree_level: 'all',
+          coverage_type: 'regional_grant',
+          stipend_amount_eur: 300,
+          annual_deadline_date: 'Varies by University (July–September)',
+          source_url: 'https://www.deutschlandstipendium.de/',
+        },
+        {
+          id: '7d177b11-f2f8-43ff-a093-cdc4fc350552',
+          country_code: 'de',
+          country_name: 'Germany',
+          name: 'Heinrich Böll Foundation International Scholarship',
+          provider: 'Heinrich Böll Stiftung',
+          degree_level: 'masters',
+          coverage_type: 'full_tuition_and_stipend',
+          stipend_amount_eur: 934,
+          annual_deadline_date: 'September 1 / March 1',
+          source_url: 'https://www.boell.de/en/scholarships',
+        },
+        {
+          id: '8b2d9fe0-f94e-44c4-a971-c62cd2928c4c',
+          country_code: 'fr',
+          country_name: 'France',
+          name: 'Eiffel Excellence Scholarship Program',
+          provider: 'Campus France / French Ministry for Europe and Foreign Affairs',
+          degree_level: 'masters',
+          coverage_type: 'full_tuition_and_stipend',
+          stipend_amount_eur: 1181,
+          annual_deadline_date: 'January 10',
+          source_url: 'https://www.campusfrance.org/en/eiffel-scholarship-program-of-excellence',
+        },
+        {
+          id: '95f50ee9-3fee-4285-a51b-915956346c89',
+          country_code: 'fr',
+          country_name: 'France',
+          name: 'Charpak Master’s Scholarship for Pakistani Students',
+          provider: 'Embassy of France in Pakistan / Campus France',
+          degree_level: 'masters',
+          coverage_type: 'full_tuition_and_stipend',
+          stipend_amount_eur: 860,
+          annual_deadline_date: 'April 15',
+          source_url: 'https://www.pakistan.campusfrance.org/',
+        },
+        {
+          id: '52ec7a22-254a-48a8-ab34-392423aa0a4e',
+          country_code: 'fr',
+          country_name: 'France',
+          name: 'Émile Boutmy International Scholarship',
+          provider: 'Sciences Po Paris',
+          degree_level: 'masters',
+          coverage_type: 'tuition_waiver',
+          stipend_amount_eur: 0,
+          annual_deadline_date: 'December 1',
+          source_url: 'https://www.sciencespo.fr/students/en/fees-funding/financial-aid/emile-boutmy-scholarship/',
+        },
+        {
+          id: 'e263e655-dd66-4ae3-ae6f-f8f7b4b81f97',
+          country_code: 'it',
+          country_name: 'Italy',
+          name: 'Italian Government MAECI International Scholarship',
+          provider: 'Ministry of Foreign Affairs and International Cooperation (MAECI)',
+          degree_level: 'masters',
+          coverage_type: 'full_tuition_and_stipend',
+          stipend_amount_eur: 900,
+          annual_deadline_date: 'June 14',
+          source_url: 'https://studyinitaly.esteri.it/',
+        },
+        {
+          id: 'e599cd5f-93ca-49f5-ab9f-eb9d9406b2ae',
+          country_code: 'it',
+          country_name: 'Italy',
+          name: 'DSU Regional Grant Toscana (Pisa / Florence / Siena)',
+          provider: 'Azienda Regionale per il Diritto allo Studio Universitario (DSU)',
+          degree_level: 'all',
+          coverage_type: 'full_tuition_and_stipend',
+          stipend_amount_eur: 600,
+          annual_deadline_date: 'September 5',
+          source_url: 'https://www.dsu.toscana.it/',
+        },
+        {
+          id: '6fc2a921-0113-47d9-af0a-9005c4c7eefb',
+          country_code: 'it',
+          country_name: 'Italy',
+          name: 'EDISU Piemonte University Regional Scholarship',
+          provider: 'EDISU Piemonte',
+          degree_level: 'all',
+          coverage_type: 'regional_grant',
+          stipend_amount_eur: 550,
+          annual_deadline_date: 'August 30',
+          source_url: 'https://www.edisu.piemonte.it/',
+        },
+        {
+          id: 'eb5c7e83-bcba-4d54-ab88-67cd618b6b90',
+          country_code: 'ro',
+          country_name: 'Romania',
+          name: 'Romanian Government MFA / ARICE Scholarship for Foreign Citizens',
+          provider: 'Ministry of Foreign Affairs (MAE) & ARICE Romania',
+          degree_level: 'all',
+          coverage_type: 'full_tuition_and_stipend',
+          stipend_amount_eur: 85,
+          annual_deadline_date: 'March 15',
+          source_url: 'https://scholarships.studyinromania.gov.ro/',
+        },
+        {
+          id: 'b66e0dd5-98ee-4013-a670-18bed5b77250',
+          country_code: 'ro',
+          country_name: 'Romania',
+          name: 'Romanian Ministry of Economy & Entrepreneurship Foreign Grant',
+          provider: 'Ministry of Economy, Digitalization and Entrepreneurship',
+          degree_level: 'all',
+          coverage_type: 'tuition_waiver',
+          stipend_amount_eur: 0,
+          annual_deadline_date: 'April 30',
+          source_url: 'https://economie.gov.ro/',
+        },
+      ];
+
+      const cParam = params?.country && params.country !== 'all'
+        ? (params.country === 'germany' ? 'de' : params.country === 'france' ? 'fr' : params.country === 'italy' ? 'it' : params.country === 'romania' ? 'ro' : params.country.toLowerCase())
+        : null;
+      const dParam = params?.degreeLevel && params.degreeLevel !== 'all' ? params.degreeLevel.toLowerCase() : null;
+      const covParam = params?.coverageType && params.coverageType !== 'all' ? params.coverageType.toLowerCase() : null;
+      const sParam = params?.search?.trim().toLowerCase() || null;
+
+      const filtered = VERIFIED_SCHOLARSHIPS.filter((s) => {
+        if (cParam && s.country_code.toLowerCase() !== cParam) return false;
+        if (dParam && s.degree_level.toLowerCase() !== 'all' && s.degree_level.toLowerCase() !== dParam) return false;
+        if (covParam && s.coverage_type.toLowerCase() !== covParam) return false;
+        if (sParam && !s.name.toLowerCase().includes(sParam) && !s.provider.toLowerCase().includes(sParam)) return false;
+        return true;
+      });
+
+      const offset = (page - 1) * pageSize;
+      const pagedItems = filtered.slice(offset, offset + pageSize);
+
       return {
-        items: [],
-        total_count: 0,
+        items: pagedItems,
+        total_count: filtered.length,
         page,
         page_size: pageSize,
-        total_pages: 0,
+        total_pages: Math.ceil(filtered.length / pageSize),
         is_gated: false,
       };
     },
@@ -2060,8 +2215,45 @@ export const api = {
 
     async getRequestStatus(idOrEmail: string): Promise<AccessRequest | null> {
       const clean = idOrEmail.trim().toLowerCase();
+      if (supabase) {
+        try {
+          const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(clean);
+          let query = supabase.from('access_requests').select('*');
+          if (isUuid) {
+            query = query.or(`id.eq.${clean},email.ilike.${clean}`);
+          } else {
+            query = query.ilike('email', clean);
+          }
+          const { data, error } = await query.maybeSingle();
+          if (!error && data) {
+            return {
+              id: data.id,
+              fullName: data.full_name,
+              email: data.email,
+              phone: data.phone,
+              countryInterests: data.country_interests || [data.target_country || 'germany'],
+              targetCountry: data.target_country || 'germany',
+              requestType: data.requested_entitlement || 'managed_application_case',
+              consentPrivacy: data.consent_privacy ?? true,
+              isUpgrade: data.is_upgrade ?? false,
+              status: data.status === 'email_verification_pending'
+                ? 'email_verification_pending'
+                : data.status === 'approved'
+                ? 'approved'
+                : data.status === 'rejected'
+                ? 'rejected'
+                : 'pending_review',
+              studentMessage: data.student_message,
+              createdAt: data.created_at,
+              updatedAt: data.updated_at,
+            };
+          }
+        } catch {
+          // Fall through
+        }
+      }
       const all = this.getStoredRequests();
-      const found = all.find((r) => r.id === clean || r.email.toLowerCase() === clean);
+      const found = all.find((r) => r.id.toLowerCase() === clean || r.email.toLowerCase() === clean);
       return found || null;
     },
 

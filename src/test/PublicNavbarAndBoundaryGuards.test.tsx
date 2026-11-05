@@ -25,7 +25,9 @@ describe('Public Navbar & Access-Control Boundary Suite', () => {
 
       // Verify the allowed items are present
       expect(screen.getByRole('link', { name: /Unilistics Home/i })).toBeDefined();
-      expect(screen.getByRole('link', { name: /^Explore Universities$/i })).toBeDefined();
+      expect(screen.getByRole('link', { name: /^Home$/i })).toBeDefined();
+      expect(screen.getByRole('button', { name: /Explore/i })).toBeDefined();
+      expect(screen.getByRole('button', { name: /Help & Guidance/i })).toBeDefined();
       expect(screen.getByRole('link', { name: /^Contact$/i })).toBeDefined();
       expect(screen.getByRole('link', { name: /^Sign in$/i })).toBeDefined();
       expect(screen.getByRole('link', { name: /^Sign up$/i })).toBeDefined();

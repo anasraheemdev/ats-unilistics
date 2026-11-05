@@ -43,6 +43,18 @@ const RequestAccessPage = React.lazy(() =>
 const RequestStatusPage = React.lazy(() =>
   import('@/pages/public/RequestStatusPage').then((m) => ({ default: m.RequestStatusPage }))
 );
+const HowItWorksPage = React.lazy(() =>
+  import('@/pages/public/HowItWorksPage').then((m) => ({ default: m.HowItWorksPage }))
+);
+const SupportHubPage = React.lazy(() =>
+  import('@/pages/public/SupportHubPage').then((m) => ({ default: m.SupportHubPage }))
+);
+const RequestGuidancePage = React.lazy(() =>
+  import('@/pages/public/RequestGuidancePage').then((m) => ({ default: m.RequestGuidancePage }))
+);
+const CorridorsAndLegalPage = React.lazy(() =>
+  import('@/pages/public/CorridorsAndLegalPage').then((m) => ({ default: m.CorridorsAndLegalPage }))
+);
 
 // Code-split Discovery & Explorer pages
 const UniversitiesDiscoveryPage = React.lazy(() =>
@@ -71,9 +83,6 @@ const HelpCentrePage = React.lazy(() =>
 );
 const SupportDeskPage = React.lazy(() =>
   import('@/pages/support/SupportDeskPage').then((m) => ({ default: m.SupportDeskPage }))
-);
-const RequestSupportPage = React.lazy(() =>
-  import('@/pages/explorer/RequestSupportPage').then((m) => ({ default: m.RequestSupportPage }))
 );
 const ExplorerAccountPage = React.lazy(() =>
   import('@/pages/explorer/ExplorerAccountPage').then((m) => ({ default: m.ExplorerAccountPage }))
@@ -142,6 +151,15 @@ export const AppRoutes: React.FC<AppRoutesProps> = ({ currentRole, onRoleChange 
         {/* 1. Public Experience (Dedicated Homepage, Contact, Sign In, Sign Up, Legal) - Navbar/Footer Only */}
         <Route element={<PublicLayout currentRole={currentRole} onRoleChange={onRoleChange} />}>
           <Route path="/" element={<HomePage />} />
+          <Route path="/how-it-works" element={<HowItWorksPage />} />
+          <Route path="/support" element={<SupportHubPage />} />
+          <Route path="/support-desk" element={<SupportDeskPage />} />
+          <Route path="/request-guidance" element={<RequestGuidancePage />} />
+          <Route path="/request-access" element={<Navigate to="/request-guidance" replace />} />
+          <Route path="/request-support" element={<Navigate to="/request-guidance" replace />} />
+          <Route path="/request-status" element={<RequestStatusPage />} />
+          <Route path="/country-corridors" element={<CorridorsAndLegalPage />} />
+          <Route path="/corridors-and-legal" element={<CorridorsAndLegalPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/privacy" element={<PrivacyPolicyPage />} />
           <Route path="/terms" element={<TermsPage />} />
@@ -149,8 +167,6 @@ export const AppRoutes: React.FC<AppRoutesProps> = ({ currentRole, onRoleChange 
           <Route path="/sign-up" element={<SignUpPage onRoleChange={onRoleChange} />} />
           <Route path="/set-password" element={<SetPasswordPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-          <Route path="/request-access" element={<RequestAccessPage />} />
-          <Route path="/request-status" element={<RequestStatusPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
 
@@ -163,15 +179,16 @@ export const AppRoutes: React.FC<AppRoutesProps> = ({ currentRole, onRoleChange 
           <Route path="/scholarships" element={<ScholarshipsDiscoveryPage />} />
           <Route path="/scholarships/:id" element={<ScholarshipDetailPage />} />
           <Route path="/saved" element={<SavedDiscoveryPage />} />
-          <Route path="/request-support" element={<RequestSupportPage />} />
+          <Route path="/request-support" element={<Navigate to="/request-guidance" replace />} />
           <Route path="/help" element={<HelpCentrePage currentRole={currentRole} />} />
-          <Route path="/support" element={<SupportDeskPage />} />
+          <Route path="/support" element={<SupportHubPage />} />
+          <Route path="/support-desk" element={<SupportDeskPage />} />
 
           {/* Backward compatibility aliases for Explorer paths */}
           <Route path="/explorer" element={<Navigate to="/universities" replace />} />
           <Route path="/explorer/saved" element={<Navigate to="/saved" replace />} />
           <Route path="/explorer/help" element={<Navigate to="/help" replace />} />
-          <Route path="/explorer/request-support" element={<Navigate to="/request-support" replace />} />
+          <Route path="/explorer/request-support" element={<Navigate to="/request-guidance" replace />} />
           <Route path="/explorer/support" element={<Navigate to="/support" replace />} />
           <Route path="/explorer/account" element={<ExplorerAccountPage />} />
         </Route>
@@ -187,7 +204,10 @@ export const AppRoutes: React.FC<AppRoutesProps> = ({ currentRole, onRoleChange 
             <Route path="/student/tasks" element={<StudentTasksPage />} />
             <Route path="/student/messages" element={<StudentMessagesPage />} />
             <Route path="/student/explore" element={<UniversitiesDiscoveryPage />} />
+            <Route path="/student/programs" element={<ProgramsDiscoveryPage />} />
+            <Route path="/student/programs/:id" element={<ProgramDetailPage />} />
             <Route path="/student/scholarships" element={<ScholarshipsDiscoveryPage />} />
+            <Route path="/student/scholarships/:id" element={<ScholarshipDetailPage />} />
             <Route path="/student/saved" element={<SavedDiscoveryPage />} />
             <Route path="/student/help" element={<HelpCentrePage currentRole={currentRole} />} />
             <Route path="/student/support" element={<SupportDeskPage />} />
