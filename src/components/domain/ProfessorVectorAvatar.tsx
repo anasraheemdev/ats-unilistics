@@ -10,12 +10,14 @@ import {
 
 interface ProfessorVectorAvatarProps {
   professorId: string;
+  name?: string;
   size?: number;
   className?: string;
 }
 
 export const ProfessorVectorAvatar: React.FC<ProfessorVectorAvatarProps> = ({
   professorId,
+  name,
   size = 64,
   className = '',
 }) => {
@@ -134,6 +136,8 @@ export const ProfessorVectorAvatar: React.FC<ProfessorVectorAvatarProps> = ({
         viewBox="0 0 100 100"
         width={size}
         height={size}
+        role="img"
+        aria-label={name ? `${name} Vector Avatar` : 'Professor Vector Avatar'}
         style={{
           borderRadius: '50%',
           border: '2px solid rgba(36, 91, 66, 0.25)',
@@ -269,3 +273,4 @@ export const ProfessorVectorAvatar: React.FC<ProfessorVectorAvatarProps> = ({
     </div>
   );
 };
+
