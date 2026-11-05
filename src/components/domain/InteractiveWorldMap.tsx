@@ -146,8 +146,8 @@ export const InteractiveWorldMap: React.FC = () => {
     <section
       id="destinations-world-map"
       style={{
-        paddingTop: '6rem',
-        paddingBottom: '6rem',
+        paddingTop: '3.25rem',
+        paddingBottom: '3.5rem',
         paddingLeft: '1.25rem',
         paddingRight: '1.25rem',
         backgroundColor: 'var(--surface-canvas, #F7F6F2)',
@@ -164,7 +164,7 @@ export const InteractiveWorldMap: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-20px' }}
           transition={{ duration: 0.6 }}
-          style={{ textAlign: 'center', marginBottom: '3rem' }}
+          style={{ textAlign: 'center', marginBottom: '1.5rem' }}
         >
           <div
             style={{

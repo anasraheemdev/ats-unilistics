@@ -109,8 +109,8 @@ export const JourneyRoadmap: React.FC = () => {
     <section
       id="journey-roadmap-section"
       style={{
-        paddingTop: '6rem',
-        paddingBottom: '6.5rem',
+        paddingTop: '3.25rem',
+        paddingBottom: '3.5rem',
         paddingLeft: '1.25rem',
         paddingRight: '1.25rem',
         backgroundColor: 'var(--surface-canvas, #FAFCF9)',
@@ -155,7 +155,7 @@ export const JourneyRoadmap: React.FC = () => {
 
       <div style={{ maxWidth: '1180px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
         {/* Section Header */}
-        <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 4rem' }}>
+        <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 1.75rem' }}>
           <div
             style={{
               display: 'inline-flex',

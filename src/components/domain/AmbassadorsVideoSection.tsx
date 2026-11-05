@@ -46,7 +46,7 @@ export const AmbassadorsVideoSection: React.FC = () => {
       className="ambassadors-section-wrapper"
       aria-labelledby="ambassadors-section-heading"
       style={{
-        padding: '5.5rem 1.5rem',
+        padding: '3.25rem 1.25rem',
         backgroundColor: '#0E1A13', // Dark forest background matching Stitch Journey Dark theme
         color: '#FFFFFF',
         position: 'relative',
@@ -83,7 +83,7 @@ export const AmbassadorsVideoSection: React.FC = () => {
 
       <div style={{ maxWidth: '1240px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
         {/* Section Header */}
-        <div style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto 3.5rem' }}>
+        <div style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto 1.5rem' }}>
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -113,7 +113,7 @@ export const AmbassadorsVideoSection: React.FC = () => {
             <h2
               id="ambassadors-section-heading"
               style={{
-                fontSize: 'clamp(2rem, 3.2vw, 2.75rem)',
+                fontSize: 'clamp(1.5rem, 2.4vw, 2.1rem)',
                 fontWeight: 800,
                 lineHeight: 1.2,
                 color: '#FFFFFF',
@@ -129,7 +129,7 @@ export const AmbassadorsVideoSection: React.FC = () => {
 
             <p
               style={{
-                fontSize: 'clamp(0.95rem, 1.4vw, 1.0625rem)',
+                fontSize: '0.875rem',
                 color: 'rgba(255, 255, 255, 0.8)',
                 lineHeight: 1.6,
                 margin: '0 auto',

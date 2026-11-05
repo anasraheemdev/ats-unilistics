@@ -687,7 +687,7 @@ export const HomePage: React.FC = () => {
                 <HelpCircle size={24} />
               </div>
               <div>
-                <h4 style={{ margin: '0 0 0.25rem', fontSize: '1.0625rem', fontWeight: 700, color: 'var(--color-foreground, #19261F)' }}>
+                <h4 style={{ margin: '0 0 0.25rem', fontSize: '0.9375rem', fontWeight: 700, color: 'var(--color-foreground, #19261F)' }}>
                   Still have questions about your eligibility?
                 </h4>
                 <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--color-foreground-muted, #58695E)' }}>
@@ -842,7 +842,7 @@ export const HomePage: React.FC = () => {
 
             <h2
               style={{
-                fontSize: 'clamp(2.4rem, 4.2vw, 3.75rem)',
+                fontSize: 'clamp(1.75rem, 2.8vw, 2.25rem)',
                 fontWeight: 800,
                 lineHeight: 1.12,
                 letterSpacing: '-0.03em',
@@ -857,10 +857,10 @@ export const HomePage: React.FC = () => {
 
             <p
               style={{
-                fontSize: 'clamp(1.0625rem, 1.8vw, 1.25rem)',
+                fontSize: '0.95rem',
                 color: 'var(--color-foreground-muted, #58695E)',
                 lineHeight: 1.55,
-                margin: '0 0 2.25rem 0',
+                margin: '0 0 1.5rem 0',
                 maxWidth: '520px',
               }}
             >
@@ -875,11 +875,11 @@ export const HomePage: React.FC = () => {
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '0.625rem',
-                  padding: '0.9rem 2.25rem',
+                  padding: '0.75rem 1.75rem',
                   borderRadius: 'var(--radius-pill, 9999px)',
                   backgroundColor: 'var(--action-primary, #245B42)',
                   color: 'var(--color-on-primary, #FFFFFF)',
-                  fontSize: '1.0625rem',
+                  fontSize: '0.9375rem',
                   fontWeight: 700,
                   textDecoration: 'none',
                   boxShadow: '0 6px 20px rgba(36, 91, 66, 0.28)',
@@ -918,7 +918,7 @@ export const HomePage: React.FC = () => {
             <hr
               style={{
                 borderColor: 'var(--border-subtle, #E1E8DE)',
-                margin: '2.5rem 0 1.25rem 0',
+                margin: '1.5rem 0 1rem 0',
                 borderWidth: '1px 0 0 0',
                 borderStyle: 'solid',
                 opacity: 0.8,
@@ -979,7 +979,7 @@ export const HomePage: React.FC = () => {
               maxWidth: '520px',
               backgroundColor: 'var(--surface-card, #FFFFFF)',
               borderRadius: 'var(--radius-card, 24px)',
-              padding: '2rem',
+              padding: '1.5rem',
               boxShadow: 'var(--shadow-xl, 0 20px 25px -5px rgba(0, 0, 0, 0.1))',
               position: 'relative',
               border: '1px solid var(--border-subtle, #E1E8DE)',

@@ -592,15 +592,15 @@ export const ExploreOpportunitiesSection: React.FC = () => {
       className="explore-opportunities-wrapper"
       aria-labelledby="explore-opportunities-heading"
       style={{
-        padding: '5.5rem 1.5rem',
-        backgroundColor: '#FFFFFF',
+        padding: '3.25rem 1.25rem',
+        backgroundColor: 'var(--surface-canvas, #F6F8F5)',
         position: 'relative',
         overflow: 'hidden',
       }}
     >
       <div style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 0.5rem' }}>
         {/* Section Header */}
-        <div style={{ textAlign: 'center', maxWidth: '840px', margin: '0 auto 2.5rem' }}>
+        <div style={{ textAlign: 'center', maxWidth: '840px', margin: '0 auto 1.5rem' }}>
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -620,7 +620,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                 fontWeight: 700,
                 textTransform: 'uppercase',
                 letterSpacing: '0.08em',
-                marginBottom: '1rem',
+                marginBottom: '0.45rem',
               }}
             >
               <Building2 size={13} aria-hidden="true" />
@@ -630,11 +630,11 @@ export const ExploreOpportunitiesSection: React.FC = () => {
             <h2
               id="explore-opportunities-heading"
               style={{
-                fontSize: 'clamp(2.1rem, 3.4vw, 2.9rem)',
+                fontSize: 'clamp(1.5rem, 2.4vw, 2.1rem)',
                 fontWeight: 800,
                 lineHeight: 1.2,
                 color: 'var(--color-foreground, #19261F)',
-                margin: '0 0 1rem',
+                margin: '0 0 0.45rem',
                 letterSpacing: '-0.025em',
               }}
             >
@@ -646,7 +646,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
 
             <p
               style={{
-                fontSize: 'clamp(0.95rem, 1.4vw, 1.0625rem)',
+                fontSize: '0.875rem',
                 color: 'var(--color-foreground-muted, #58695E)',
                 lineHeight: 1.6,
                 margin: '0 auto',
@@ -662,14 +662,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
         <div
           role="tablist"
           aria-label="Explore Opportunities Sections"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '0.75rem',
-            flexWrap: 'wrap',
-            marginBottom: '1.5rem',
-          }}
+          className="opportunities-tabs-bar"
         >
           {tabs.map((tab) => {
             const Icon = tab.icon;
@@ -686,7 +679,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '0.55rem',
-                  padding: '0.6rem 1.2rem',
+                  padding: '0.45rem 1rem',
                   borderRadius: 'var(--radius-pill, 9999px)',
                   fontSize: '0.85rem',
                   fontWeight: 700,
@@ -720,16 +713,9 @@ export const ExploreOpportunitiesSection: React.FC = () => {
 
         {/* Secondary Country Filter Chips */}
         <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '0.45rem',
-            flexWrap: 'wrap',
-            marginBottom: '2rem',
-          }}
           role="tablist"
           aria-label="Filter opportunities by destination country"
+          className="opportunities-filter-chips"
         >
           {countryFilterOptions.map((opt) => (
             <button
@@ -745,7 +731,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                 fontWeight: 600,
                 border: '1px solid',
                 borderColor: selectedCountry === opt.id ? 'var(--action-primary, #245B42)' : 'var(--border-subtle, #E1E8DE)',
-                backgroundColor: selectedCountry === opt.id ? 'rgba(36, 91, 66, 0.1)' : '#FFFFFF',
+                backgroundColor: selectedCountry === opt.id ? 'rgba(36, 91, 66, 0.12)' : 'var(--surface-card, #FFFFFF)',
                 color: selectedCountry === opt.id ? 'var(--action-primary, #245B42)' : 'var(--color-foreground-muted, #58695E)',
                 cursor: 'pointer',
                 transition: 'all 140ms ease',
@@ -891,7 +877,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                                 fontWeight: 700,
                               }}
                             >
-                              <Landmark size={11} style={{ color: 'var(--action-primary, #245B42)' }} />
+                              <Landmark size={11} style={{ color: '#245B42' }} />
                               <span>{uni.institutionType}</span>
                             </span>
                             <CountryFlagIcon countryCode={uni.countryCode} width={15} height={10} />
@@ -935,7 +921,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                               boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
                               flexShrink: 0,
                               padding: '2px',
-                              border: '1px solid #E1E8DE',
+                              border: '1px solid var(--border-subtle, #E1E8DE)',
                               marginTop: '-14px',
                               position: 'relative',
                               zIndex: 3,
@@ -995,8 +981,8 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                         {/* Metrics Bar (Tuition & Programs) */}
                         <div
                           style={{
-                            backgroundColor: '#F6F9F7',
-                            border: '1px solid #E2EBE5',
+                            backgroundColor: 'var(--surface-recessed, #F6F9F7)',
+                            border: '1px solid var(--border-subtle, #E2EBE5)',
                             borderRadius: '8px',
                             padding: '0.35rem 0.5rem',
                             display: 'flex',
@@ -1006,21 +992,21 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                           }}
                         >
                           <div>
-                            <div style={{ fontSize: '0.58rem', color: '#58695E', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.03em' }}>
+                            <div style={{ fontSize: '0.58rem', color: 'var(--color-foreground-muted, #58695E)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.03em' }}>
                               Tuition
                             </div>
-                            <div style={{ fontSize: '0.8rem', fontWeight: 800, color: '#19261F', lineHeight: 1.2 }}>
+                            <div style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--color-foreground, #19261F)', lineHeight: 1.2 }}>
                               {uni.tuitionDisplay}
                             </div>
                           </div>
 
-                          <div style={{ width: '1px', height: '22px', backgroundColor: '#DDE7E1' }} />
+                          <div style={{ width: '1px', height: '22px', backgroundColor: 'var(--border-subtle, #DDE7E1)' }} />
 
                           <div>
-                            <div style={{ fontSize: '0.58rem', color: '#58695E', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.03em' }}>
+                            <div style={{ fontSize: '0.58rem', color: 'var(--color-foreground-muted, #58695E)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.03em' }}>
                               Programs
                             </div>
-                            <div style={{ fontSize: '0.8rem', fontWeight: 800, color: '#19261F', lineHeight: 1.2 }}>
+                            <div style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--color-foreground, #19261F)', lineHeight: 1.2 }}>
                               {uni.programsCount}
                             </div>
                           </div>
@@ -1045,11 +1031,11 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                                 gap: '0.25rem',
                                 padding: '0.12rem 0.4rem',
                                 borderRadius: 'var(--radius-pill, 9999px)',
-                                backgroundColor: '#EEF5EF',
+                                backgroundColor: 'var(--surface-recessed, #EEF5EF)',
                                 color: 'var(--color-foreground, #19261F)',
                                 fontSize: '0.64rem',
                                 fontWeight: 600,
-                                border: '1px solid #E1E8DE',
+                                border: '1px solid var(--border-subtle, #E1E8DE)',
                               }}
                             >
                               <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: '#8DBE3B', display: 'inline-block' }} />
@@ -1066,11 +1052,11 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                                 gap: '0.25rem',
                                 padding: '0.12rem 0.4rem',
                                 borderRadius: 'var(--radius-pill, 9999px)',
-                                backgroundColor: '#EEF5EF',
+                                backgroundColor: 'var(--surface-recessed, #EEF5EF)',
                                 color: 'var(--color-foreground, #19261F)',
                                 fontSize: '0.64rem',
                                 fontWeight: 600,
-                                border: '1px solid #E1E8DE',
+                                border: '1px solid var(--border-subtle, #E1E8DE)',
                               }}
                             >
                               <Globe size={10} style={{ color: '#58695E' }} />
@@ -1082,8 +1068,8 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                         {/* Advisory Callout Strip */}
                         <div
                           style={{
-                            backgroundColor: '#EFF6F2',
-                            border: '1px solid #DFECE3',
+                            backgroundColor: 'var(--surface-card-subtle, #EFF6F2)',
+                            border: '1px solid var(--border-subtle, #DFECE3)',
                             borderRadius: '8px',
                             padding: '0.35rem 0.45rem',
                             display: 'flex',
@@ -1093,7 +1079,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                           }}
                         >
                           <Info size={11} style={{ color: 'var(--action-primary, #245B42)', flexShrink: 0, marginTop: '0.15rem' }} />
-                          <div style={{ fontSize: '0.64rem', color: '#2B4838', lineHeight: 1.35, flex: 1 }}>
+                          <div style={{ fontSize: '0.64rem', color: 'var(--color-foreground, #2B4838)', lineHeight: 1.35, flex: 1 }}>
                             {uni.advisoryNote}
                           </div>
                           <ArrowUpRight size={11} style={{ color: '#245B42', flexShrink: 0, marginTop: '0.1rem' }} />
@@ -1108,7 +1094,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                         display: 'flex',
                         alignItems: 'center',
                         gap: '0.35rem',
-                        borderTop: '1px solid #F0F4EF',
+                        borderTop: '1px solid var(--border-subtle, #F0F4EF)',
                         marginTop: 'auto',
                       }}
                     >
@@ -1121,9 +1107,9 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                           width: '28px',
                           height: '28px',
                           borderRadius: '8px',
-                          border: '1px solid #E1E8DE',
-                          backgroundColor: isBookmarked ? 'rgba(36, 91, 66, 0.1)' : '#FFFFFF',
-                          color: isBookmarked ? 'var(--action-primary, #245B42)' : '#4A5D52',
+                          border: '1px solid var(--border-subtle, #E1E8DE)',
+                          backgroundColor: isBookmarked ? 'rgba(36, 91, 66, 0.15)' : 'var(--surface-recessed, #FFFFFF)',
+                          color: isBookmarked ? 'var(--action-primary, #245B42)' : 'var(--color-foreground-muted, #4A5D52)',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -1144,9 +1130,9 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                           width: '28px',
                           height: '28px',
                           borderRadius: '8px',
-                          border: '1px solid #E1E8DE',
-                          backgroundColor: isCopied ? 'rgba(36, 91, 66, 0.1)' : '#FFFFFF',
-                          color: isCopied ? 'var(--action-primary, #245B42)' : '#4A5D52',
+                          border: '1px solid var(--border-subtle, #E1E8DE)',
+                          backgroundColor: isCopied ? 'rgba(36, 91, 66, 0.15)' : 'var(--surface-recessed, #FFFFFF)',
+                          color: isCopied ? 'var(--action-primary, #245B42)' : 'var(--color-foreground-muted, #4A5D52)',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -1169,9 +1155,9 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                             width: '28px',
                             height: '28px',
                             borderRadius: '8px',
-                            border: '1px solid #E1E8DE',
-                            backgroundColor: '#FFFFFF',
-                            color: '#4A5D52',
+                            border: '1px solid var(--border-subtle, #E1E8DE)',
+                            backgroundColor: 'var(--surface-recessed, #FFFFFF)',
+                            color: 'var(--color-foreground-muted, #4A5D52)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -1339,7 +1325,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                               padding: '0.12rem 0.45rem',
                               borderRadius: 'var(--radius-pill, 9999px)',
                               backgroundColor: 'var(--brand-citron, #D7EE83)',
-                              color: '#19261F',
+                              color: 'var(--color-foreground, #19261F)',
                               fontSize: '0.6rem',
                               fontWeight: 800,
                               display: 'inline-flex',
@@ -1348,7 +1334,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                               whiteSpace: 'nowrap',
                             }}
                           >
-                            <Sparkles size={10} style={{ color: '#19261F' }} />
+                            <Sparkles size={10} style={{ color: 'var(--color-foreground, #19261F)' }} />
                             <span>{sch.fundingBadge}</span>
                           </span>
                         </div>
@@ -1439,7 +1425,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                         >
                           <div>
                             <div style={{ fontSize: '0.58rem', color: '#6A7D71', fontWeight: 600 }}>Tuition</div>
-                            <div style={{ fontSize: '0.72rem', fontWeight: 800, color: '#19261F', marginTop: '0.1rem' }}>
+                            <div style={{ fontSize: '0.72rem', fontWeight: 800, color: 'var(--color-foreground, #19261F)', marginTop: '0.1rem' }}>
                               {sch.tuitionCoverage}
                             </div>
                           </div>
@@ -1453,7 +1439,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
 
                           <div>
                             <div style={{ fontSize: '0.58rem', color: '#6A7D71', fontWeight: 600 }}>Travel</div>
-                            <div style={{ fontSize: '0.72rem', fontWeight: 800, color: '#19261F', marginTop: '0.1rem' }}>
+                            <div style={{ fontSize: '0.72rem', fontWeight: 800, color: 'var(--color-foreground, #19261F)', marginTop: '0.1rem' }}>
                               {sch.travelAllowance}
                             </div>
                           </div>
@@ -1466,7 +1452,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                             alignItems: 'center',
                             justifyContent: 'space-between',
                             backgroundColor: '#FFFFFF',
-                            border: '1px solid #E3ECE4',
+                            border: '1px solid var(--border-subtle, #E3ECE4)',
                             borderRadius: '8px',
                             padding: '0.35rem 0.5rem',
                             marginBottom: '0.45rem',
@@ -1475,7 +1461,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                         >
                           <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
                             <GraduationCap size={13} style={{ color: 'var(--action-primary, #245B42)' }} />
-                            <span style={{ fontWeight: 700, color: '#19261F' }}>{sch.targetLevel}</span>
+                            <span style={{ fontWeight: 700, color: 'var(--color-foreground, #19261F)' }}>{sch.targetLevel}</span>
                           </div>
                           <span style={{ fontWeight: 700, color: 'var(--action-primary, #245B42)' }}>
                             {sch.fundingValue}
@@ -1503,8 +1489,8 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                         {/* Next Deadline Strip */}
                         <div
                           style={{
-                            backgroundColor: '#FEF8EE',
-                            border: '1px solid #F5E3C8',
+                            backgroundColor: 'var(--surface-card-subtle, #FEF8EE)',
+                            border: '1px solid var(--border-subtle, #F5E3C8)',
                             borderRadius: '6px',
                             padding: '0.3rem 0.45rem',
                             display: 'flex',
@@ -1529,7 +1515,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                         display: 'flex',
                         alignItems: 'center',
                         gap: '0.35rem',
-                        borderTop: '1px solid #F0F4EF',
+                        borderTop: '1px solid var(--border-subtle, #F0F4EF)',
                         marginTop: 'auto',
                       }}
                     >
@@ -1542,9 +1528,9 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                           width: '28px',
                           height: '28px',
                           borderRadius: '8px',
-                          border: '1px solid #E1E8DE',
-                          backgroundColor: isBookmarked ? 'rgba(36, 91, 66, 0.1)' : '#FFFFFF',
-                          color: isBookmarked ? 'var(--action-primary, #245B42)' : '#4A5D52',
+                          border: '1px solid var(--border-subtle, #E1E8DE)',
+                          backgroundColor: isBookmarked ? 'rgba(36, 91, 66, 0.15)' : 'var(--surface-recessed, #FFFFFF)',
+                          color: isBookmarked ? 'var(--action-primary, #245B42)' : 'var(--color-foreground-muted, #4A5D52)',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -1565,9 +1551,9 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                           width: '28px',
                           height: '28px',
                           borderRadius: '8px',
-                          border: '1px solid #E1E8DE',
-                          backgroundColor: isCopied ? 'rgba(36, 91, 66, 0.1)' : '#FFFFFF',
-                          color: isCopied ? 'var(--action-primary, #245B42)' : '#4A5D52',
+                          border: '1px solid var(--border-subtle, #E1E8DE)',
+                          backgroundColor: isCopied ? 'rgba(36, 91, 66, 0.15)' : 'var(--surface-recessed, #FFFFFF)',
+                          color: isCopied ? 'var(--action-primary, #245B42)' : 'var(--color-foreground-muted, #4A5D52)',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -1590,9 +1576,9 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                             width: '28px',
                             height: '28px',
                             borderRadius: '8px',
-                            border: '1px solid #E1E8DE',
-                            backgroundColor: '#FFFFFF',
-                            color: '#4A5D52',
+                            border: '1px solid var(--border-subtle, #E1E8DE)',
+                            backgroundColor: 'var(--surface-recessed, #FFFFFF)',
+                            color: 'var(--color-foreground-muted, #4A5D52)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -1700,7 +1686,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                     fontWeight: 600,
                     border: '1px solid',
                     borderColor: selectedResearchTag === tag.id ? 'var(--action-primary, #245B42)' : 'var(--border-subtle, #E1E8DE)',
-                    backgroundColor: selectedResearchTag === tag.id ? 'var(--action-primary, #245B42)' : '#FFFFFF',
+                    backgroundColor: selectedResearchTag === tag.id ? 'var(--action-primary, #245B42)' : 'var(--surface-card, #FFFFFF)',
                     color: selectedResearchTag === tag.id ? '#FFFFFF' : 'var(--color-foreground-muted, #58695E)',
                     cursor: 'pointer',
                     transition: 'all 140ms ease',
@@ -1916,7 +1902,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                           }}
                         >
                           <FlaskConical size={13} style={{ color: 'var(--action-primary, #245B42)', flexShrink: 0 }} />
-                          <div style={{ fontSize: '0.66rem', fontWeight: 800, color: '#19261F', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          <div style={{ fontSize: '0.66rem', fontWeight: 800, color: 'var(--color-foreground, #19261F)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                             {prof.labName}
                           </div>
                         </div>
@@ -1928,13 +1914,13 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                             alignItems: 'center',
                             justifyContent: 'space-between',
                             backgroundColor: '#FFFFFF',
-                            border: '1px solid #E1E8DE',
+                            border: '1px solid var(--border-subtle, #E1E8DE)',
                             borderRadius: '8px',
                             padding: '0.35rem 0.5rem',
                             marginBottom: '0.45rem',
                           }}
                         >
-                          <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#19261F', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          <div style={{ fontSize: '0.68rem', fontWeight: 700, color: 'var(--color-foreground, #19261F)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                             {prof.specializationDisplay}
                           </div>
                           <span
@@ -1963,12 +1949,12 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                               alignItems: 'flex-start',
                               gap: '0.3rem',
                               fontSize: '0.66rem',
-                              color: '#26382E',
+                              color: 'var(--color-foreground, #26382E)',
                               lineHeight: 1.35,
-                              backgroundColor: '#F9FBF9',
+                              backgroundColor: 'var(--surface-recessed, #F9FBF9)',
                               padding: '0.35rem 0.45rem',
                               borderRadius: '6px',
-                              border: '1px solid #EAF0E9',
+                              border: '1px solid var(--border-subtle, #EAF0E9)',
                             }}
                           >
                             <BookOpen size={11} style={{ color: '#245B42', flexShrink: 0, marginTop: '0.1rem' }} />
@@ -1997,8 +1983,8 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                                 gap: '0.2rem',
                                 padding: '0.12rem 0.4rem',
                                 borderRadius: 'var(--radius-pill, 9999px)',
-                                backgroundColor: '#EEF5EF',
-                                color: '#19261F',
+                                backgroundColor: 'var(--surface-recessed, #EEF5EF)',
+                                color: 'var(--color-foreground, #19261F)',
                                 fontSize: '0.62rem',
                                 fontWeight: 600,
                               }}
@@ -2015,8 +2001,8 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                               gap: '0.2rem',
                               padding: '0.12rem 0.4rem',
                               borderRadius: 'var(--radius-pill, 9999px)',
-                              backgroundColor: '#EEF5EF',
-                              color: '#19261F',
+                              backgroundColor: 'var(--surface-recessed, #EEF5EF)',
+                              color: 'var(--color-foreground, #19261F)',
                               fontSize: '0.62rem',
                               fontWeight: 600,
                             }}
@@ -2035,7 +2021,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                         display: 'flex',
                         alignItems: 'center',
                         gap: '0.35rem',
-                        borderTop: '1px solid #F0F4EF',
+                        borderTop: '1px solid var(--border-subtle, #F0F4EF)',
                         marginTop: 'auto',
                       }}
                     >
@@ -2048,9 +2034,9 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                           width: '28px',
                           height: '28px',
                           borderRadius: '8px',
-                          border: '1px solid #E1E8DE',
-                          backgroundColor: isBookmarked ? 'rgba(36, 91, 66, 0.1)' : '#FFFFFF',
-                          color: isBookmarked ? 'var(--action-primary, #245B42)' : '#4A5D52',
+                          border: '1px solid var(--border-subtle, #E1E8DE)',
+                          backgroundColor: isBookmarked ? 'rgba(36, 91, 66, 0.15)' : 'var(--surface-recessed, #FFFFFF)',
+                          color: isBookmarked ? 'var(--action-primary, #245B42)' : 'var(--color-foreground-muted, #4A5D52)',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -2071,9 +2057,9 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                           width: '28px',
                           height: '28px',
                           borderRadius: '8px',
-                          border: '1px solid #E1E8DE',
-                          backgroundColor: isCopied ? 'rgba(36, 91, 66, 0.1)' : '#FFFFFF',
-                          color: isCopied ? 'var(--action-primary, #245B42)' : '#4A5D52',
+                          border: '1px solid var(--border-subtle, #E1E8DE)',
+                          backgroundColor: isCopied ? 'rgba(36, 91, 66, 0.15)' : 'var(--surface-recessed, #FFFFFF)',
+                          color: isCopied ? 'var(--action-primary, #245B42)' : 'var(--color-foreground-muted, #4A5D52)',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',

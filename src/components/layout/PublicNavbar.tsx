@@ -3,6 +3,7 @@ import { NavLink, Link, useLocation, useNavigate } from 'react-router-dom';
 import { UserRole, AccessRequest } from '@/types';
 import { ROUTES } from '@/config/routes';
 import { BrandWordmark } from '@/components/ui/BrandWordmark';
+import { useTheme } from '@/lib/theme';
 import { SearchDialog } from '@/components/domain/SearchDialog';
 import { api } from '@/lib/api';
 import { queryClient } from '@/lib/queryClient';
@@ -28,6 +29,8 @@ import {
   SlidersHorizontal,
   Settings,
   LogOut,
+  Sun,
+  Moon,
 } from 'lucide-react';
 
 interface PublicNavbarProps {
@@ -51,6 +54,8 @@ export const PublicNavbar: React.FC<PublicNavbarProps> = ({
 
   const location = useLocation();
   const navigate = useNavigate();
+  const { resolvedTheme, toggleTheme } = useTheme();
+
 
   const exploreRef = useRef<HTMLDivElement>(null);
   const helpRef = useRef<HTMLDivElement>(null);
@@ -718,6 +723,35 @@ export const PublicNavbar: React.FC<PublicNavbarProps> = ({
               >
                 ⌘K
               </kbd>
+            </button>
+
+            {/* Theme Toggle Button */}
+            <button
+              type="button"
+              id="theme-toggle-btn"
+              onClick={toggleTheme}
+              aria-label={resolvedTheme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+              title={resolvedTheme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '40px',
+                height: '40px',
+                borderRadius: 'var(--radius-pill, 9999px)',
+                backgroundColor: 'var(--surface-panel, #FFFFFF)',
+                border: '1px solid var(--border-subtle, #E1E8DE)',
+                color: 'var(--color-foreground, #19261F)',
+                cursor: 'pointer',
+                transition: 'all var(--transition-fast, 150ms ease)',
+                flexShrink: 0,
+              }}
+            >
+              {resolvedTheme === 'dark' ? (
+                <Sun size={17} strokeWidth={2} style={{ color: 'var(--brand-citron, #D7EE83)' }} aria-hidden="true" />
+              ) : (
+                <Moon size={17} strokeWidth={2} style={{ color: 'var(--action-primary, #245B42)' }} aria-hidden="true" />
+              )}
             </button>
 
             {/* Signed-out vs Signed-in actions */}
@@ -1699,6 +1733,54 @@ export const PublicNavbar: React.FC<PublicNavbarProps> = ({
                   </button>
                 </>
               )}
+              {/* Theme Toggle Switcher */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '0.625rem 0.875rem',
+                  borderRadius: 'var(--radius-control, 14px)',
+                  backgroundColor: 'var(--surface-card, #FFFFFF)',
+                  border: '1px solid var(--border-subtle, #E1E8DE)',
+                  marginTop: '0.5rem',
+                }}
+              >
+                <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--color-foreground, #19261F)' }}>
+                  Theme ({resolvedTheme === 'dark' ? 'Dark' : 'Light'})
+                </span>
+                <button
+                  type="button"
+                  id="mobile-theme-toggle-btn"
+                  onClick={toggleTheme}
+                  aria-label={resolvedTheme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    padding: '0.4rem 0.75rem',
+                    borderRadius: 'var(--radius-pill, 9999px)',
+                    backgroundColor: 'var(--surface-canvas, #F6F8F5)',
+                    border: '1px solid var(--border-subtle, #E1E8DE)',
+                    color: 'var(--color-foreground, #19261F)',
+                    fontSize: '0.75rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                  }}
+                >
+                  {resolvedTheme === 'dark' ? (
+                    <>
+                      <Sun size={14} style={{ color: 'var(--brand-citron, #D7EE83)' }} aria-hidden="true" />
+                      <span>Light</span>
+                    </>
+                  ) : (
+                    <>
+                      <Moon size={14} style={{ color: 'var(--action-primary, #245B42)' }} aria-hidden="true" />
+                      <span>Dark</span>
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         </div>

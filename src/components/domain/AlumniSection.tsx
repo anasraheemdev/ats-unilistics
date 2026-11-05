@@ -39,15 +39,15 @@ export const AlumniSection: React.FC = () => {
       className="alumni-section-wrapper"
       aria-labelledby="alumni-section-heading"
       style={{
-        padding: '5.5rem 1.5rem',
-        backgroundColor: 'var(--surface-canvas, #F6F8F5)',
+        padding: '3.25rem 1.25rem',
+        backgroundColor: 'var(--surface-recessed, #F6F8F5)',
         position: 'relative',
         overflow: 'hidden',
       }}
     >
       <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
         {/* Header */}
-        <div style={{ textAlign: 'center', maxWidth: '820px', margin: '0 auto 3rem' }}>
+        <div style={{ textAlign: 'center', maxWidth: '820px', margin: '0 auto 1.5rem' }}>
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -77,7 +77,7 @@ export const AlumniSection: React.FC = () => {
             <h2
               id="alumni-section-heading"
               style={{
-                fontSize: 'clamp(2rem, 3.2vw, 2.75rem)',
+                fontSize: 'clamp(1.5rem, 2.4vw, 2.1rem)',
                 fontWeight: 800,
                 lineHeight: 1.2,
                 color: 'var(--color-foreground, #19261F)',
@@ -93,7 +93,7 @@ export const AlumniSection: React.FC = () => {
 
             <p
               style={{
-                fontSize: 'clamp(0.95rem, 1.4vw, 1.0625rem)',
+                fontSize: '0.875rem',
                 color: 'var(--color-foreground-muted, #58695E)',
                 lineHeight: 1.6,
                 margin: '0 auto',
@@ -107,16 +107,9 @@ export const AlumniSection: React.FC = () => {
 
         {/* Corridor Filter Tabs */}
         <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '0.5rem',
-            flexWrap: 'wrap',
-            marginBottom: '2.5rem',
-          }}
           role="tablist"
           aria-label="Filter alumni by destination corridor"
+          className="alumni-corridor-tabs"
         >
           {countryFilters.map((tab) => (
             <button
@@ -126,7 +119,7 @@ export const AlumniSection: React.FC = () => {
               aria-selected={selectedCountry === tab.id}
               onClick={() => setSelectedCountry(tab.id)}
               style={{
-                padding: '0.5rem 1.15rem',
+                padding: '0.35rem 0.85rem',
                 borderRadius: 'var(--radius-pill, 9999px)',
                 fontSize: '0.8125rem',
                 fontWeight: 700,
@@ -179,7 +172,7 @@ export const AlumniSection: React.FC = () => {
                         overflow: 'hidden',
                         border: '2px solid var(--action-primary, #245B42)',
                         flexShrink: 0,
-                        backgroundColor: 'var(--surface-canvas, #F6F8F5)',
+                        backgroundColor: 'var(--surface-recessed, #F6F8F5)',
                       }}
                     >
                       <img
@@ -218,7 +211,7 @@ export const AlumniSection: React.FC = () => {
                   {/* University & Degree */}
                   <div
                     style={{
-                      backgroundColor: 'var(--surface-canvas, #F6F8F5)',
+                      backgroundColor: 'var(--surface-recessed, #F6F8F5)',
                       padding: '0.6rem 0.75rem',
                       borderRadius: '12px',
                       marginBottom: '0.85rem',
@@ -344,7 +337,7 @@ export const AlumniSection: React.FC = () => {
                     width: '100%',
                     padding: '0.55rem 0.85rem',
                     borderRadius: 'var(--radius-pill, 9999px)',
-                    backgroundColor: 'var(--surface-canvas, #F6F8F5)',
+                    backgroundColor: 'var(--surface-recessed, #F6F8F5)',
                     border: '1px solid var(--border-subtle, #E1E8DE)',
                     color: 'var(--action-primary, #245B42)',
                     fontSize: '0.78rem',
@@ -370,7 +363,7 @@ export const AlumniSection: React.FC = () => {
           style={{
             backgroundColor: 'var(--action-primary, #245B42)',
             borderRadius: 'var(--radius-card, 24px)',
-            padding: '2.5rem',
+            padding: '1.5rem 1.75rem',
             color: '#FFFFFF',
             display: 'flex',
             alignItems: 'center',
@@ -416,7 +409,7 @@ export const AlumniSection: React.FC = () => {
                 padding: '0.85rem 1.85rem',
                 borderRadius: 'var(--radius-pill, 9999px)',
                 backgroundColor: 'var(--brand-citron, #D7EE83)',
-                color: '#19261F',
+                color: 'var(--color-foreground, #19261F)',
                 fontSize: '0.9375rem',
                 fontWeight: 800,
                 textDecoration: 'none',
@@ -509,7 +502,7 @@ export const AlumniSection: React.FC = () => {
                   width: '36px',
                   height: '36px',
                   borderRadius: '50%',
-                  backgroundColor: 'var(--surface-canvas, #F6F8F5)',
+                  backgroundColor: 'var(--surface-recessed, #F6F8F5)',
                   border: '1px solid var(--border-subtle, #E1E8DE)',
                   display: 'flex',
                   alignItems: 'center',
@@ -577,7 +570,7 @@ export const AlumniSection: React.FC = () => {
                 <p style={{ margin: '0 0 1rem' }}>{expandedStory.fullStory}</p>
                 <div
                   style={{
-                    backgroundColor: 'var(--surface-canvas, #F6F8F5)',
+                    backgroundColor: 'var(--surface-recessed, #F6F8F5)',
                     padding: '1rem',
                     borderRadius: 'var(--radius-control, 16px)',
                     border: '1px solid var(--border-subtle, #E1E8DE)',
@@ -624,7 +617,7 @@ export const AlumniSection: React.FC = () => {
                   style={{
                     padding: '0.75rem 1.25rem',
                     borderRadius: 'var(--radius-pill, 9999px)',
-                    backgroundColor: 'var(--surface-canvas, #F6F8F5)',
+                    backgroundColor: 'var(--surface-recessed, #F6F8F5)',
                     border: '1px solid var(--border-subtle, #E1E8DE)',
                     color: 'var(--color-foreground, #19261F)',
                     fontSize: '0.875rem',

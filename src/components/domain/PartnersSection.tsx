@@ -10,7 +10,7 @@ export const PartnersSection: React.FC = () => {
       className="partners-section-wrapper"
       aria-labelledby="partners-section-heading"
       style={{
-        padding: '5rem 1.5rem',
+        padding: '2.75rem 1.25rem',
         backgroundColor: 'var(--surface-canvas, #F6F8F5)',
         borderTop: '1px solid var(--border-subtle, #E1E8DE)',
         borderBottom: '1px solid var(--border-subtle, #E1E8DE)',
@@ -20,7 +20,7 @@ export const PartnersSection: React.FC = () => {
     >
       <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
         {/* Section Header */}
-        <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 3rem' }}>
+        <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 1.5rem' }}>
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -50,11 +50,11 @@ export const PartnersSection: React.FC = () => {
             <h2
               id="partners-section-heading"
               style={{
-                fontSize: 'clamp(2rem, 3.2vw, 2.75rem)',
+                fontSize: 'clamp(1.45rem, 2.2vw, 1.95rem)',
                 fontWeight: 800,
                 lineHeight: 1.2,
                 color: 'var(--color-foreground, #19261F)',
-                margin: '0 0 1rem',
+                margin: '0 0 0.45rem',
                 letterSpacing: '-0.02em',
               }}
             >
@@ -66,7 +66,7 @@ export const PartnersSection: React.FC = () => {
 
             <p
               style={{
-                fontSize: 'clamp(0.95rem, 1.4vw, 1.0625rem)',
+                fontSize: '0.875rem',
                 color: 'var(--color-foreground-muted, #58695E)',
                 lineHeight: 1.6,
                 margin: '0 auto',
@@ -86,7 +86,7 @@ export const PartnersSection: React.FC = () => {
             position: 'relative',
             width: '100%',
             overflow: 'hidden',
-            padding: '1.25rem 0',
+            padding: '0.75rem 0',
             maskImage: 'linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)',
             WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)',
           }}
@@ -95,7 +95,7 @@ export const PartnersSection: React.FC = () => {
             className="partners-marquee-track"
             style={{
               display: 'flex',
-              gap: '3.5rem',
+              gap: '2.75rem',
               width: 'max-content',
               alignItems: 'center',
             }}
