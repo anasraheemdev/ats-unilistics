@@ -2170,34 +2170,104 @@ a {
   box-shadow: 0 4px 12px rgba(36, 91, 66, 0.22) !important;
 }
 
-/* 5. Opportunities Carousel Track */
-.opportunities-carousel-track {
-  display: flex;
-  flex-direction: row;
-  gap: 1.5rem;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  padding: 0.75rem 0.25rem 1.5rem;
+/* 5. Opportunities 6-Card Single Viewport Showcase */
+.opportunities-showcase-row {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.75rem;
+  padding: 0.5rem 0 1.25rem;
+  width: 100%;
 }
 
-.opportunities-carousel-track::-webkit-scrollbar {
-  display: none;
+.opportunities-card-compact {
+  background-color: #FFFFFF;
+  border-radius: 16px;
+  border: 1px solid #E1ECE5;
+  box-shadow: 0 2px 8px -2px rgba(18, 45, 32, 0.05), 0 1px 2px rgba(0, 0, 0, 0.02);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+  width: 100%;
+}
+
+.opportunities-card-compact:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 22px -4px rgba(18, 45, 32, 0.12), 0 2px 6px rgba(0, 0, 0, 0.03);
+  border-color: rgba(36, 91, 66, 0.3);
+}
+
+@media (max-width: 1199px) {
+  .opportunities-showcase-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.85rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .opportunities-showcase-row {
+    display: flex;
+    flex-direction: row;
+    gap: 0.85rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 0.5rem 0.25rem 1rem;
+  }
+  .opportunities-showcase-row::-webkit-scrollbar {
+    display: none;
+  }
+  .opportunities-card-compact {
+    flex: 0 0 270px;
+    width: 270px;
+    scroll-snap-align: start;
+  }
+}
+
+/* Backward compatibility aliases */
+.opportunities-carousel-track {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.75rem;
+  padding: 0.5rem 0 1.25rem;
+  width: 100%;
+}
+
+@media (max-width: 1199px) {
+  .opportunities-carousel-track {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.85rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .opportunities-carousel-track {
+    display: flex;
+    flex-direction: row;
+    gap: 0.85rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 0.5rem 0.25rem 1rem;
+  }
+  .opportunities-carousel-track::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .opportunities-carousel-card {
-  flex: 0 0 355px;
-  width: 355px;
-  scroll-snap-align: start;
+  width: 100%;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 640px) {
   .opportunities-carousel-card {
-    flex: 0 0 88vw;
-    width: 88vw;
+    flex: 0 0 270px;
+    width: 270px;
+    scroll-snap-align: start;
   }
 }
 

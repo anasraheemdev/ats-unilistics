@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
@@ -11,7 +11,6 @@ import {
   Trophy,
   Landmark,
   GraduationCap,
-  LayoutGrid,
   Globe,
   Info,
   ArrowUpRight,
@@ -24,9 +23,6 @@ import {
   CheckCircle,
   FlaskConical,
   BookOpen,
-  ChevronLeft,
-  ChevronRight,
-  ShieldCheck,
 } from 'lucide-react';
 import { ProfessorVectorAvatar } from './ProfessorVectorAvatar';
 import { UniversityLogoBadge } from './UniversityLogoBadge';
@@ -518,135 +514,15 @@ const PROFESSORS_OPPORTUNITIES: ProfessorResearchOpportunity[] = [
   },
 ];
 
-// Stylized Skyline Watermark Illustration
-const SkylineWatermark: React.FC = () => (
-  <svg
-    viewBox="0 0 140 45"
-    fill="currentColor"
-    aria-hidden="true"
-    style={{
-      position: 'absolute',
-      right: '24px',
-      bottom: 0,
-      height: '38px',
-      width: 'auto',
-      opacity: 0.16,
-      color: '#245B42',
-      pointerEvents: 'none',
-      zIndex: 0,
-    }}
-  >
-    <path d="M0,45 L0,32 L6,32 L6,25 L12,25 L12,38 L16,38 L16,20 L22,20 L22,14 L25,8 L28,14 L28,38 L34,38 L34,28 L40,28 L40,45 L46,45 L46,24 L52,24 L52,18 L56,12 L60,18 L60,38 L68,38 L68,26 L74,26 L74,45 L82,45 L82,16 L88,16 L88,10 L91,4 L94,10 L94,36 L100,36 L100,24 L106,24 L106,45 L114,45 L114,18 L122,18 L122,34 L130,34 L130,45 Z" />
-  </svg>
-);
-
-// Organic Wave Cutout at the bottom of the photo header
-const HeaderWaveTransition: React.FC = () => (
-  <svg
-    viewBox="0 0 500 36"
-    preserveAspectRatio="none"
-    aria-hidden="true"
-    style={{
-      position: 'absolute',
-      bottom: -1,
-      left: 0,
-      width: '100%',
-      height: '32px',
-      pointerEvents: 'none',
-      display: 'block',
-      zIndex: 2,
-    }}
-  >
-    <path
-      d="M0,20 C140,38 320,4 500,22 L500,36 L0,36 Z"
-      fill="#FFFFFF"
-    />
-  </svg>
-);
-
-// Organic decorative wave watermark inside the floating stats capsule
-const CapsuleWaveWatermark: React.FC = () => (
-  <svg
-    viewBox="0 0 160 80"
-    fill="none"
-    aria-hidden="true"
-    style={{
-      position: 'absolute',
-      right: '-10px',
-      bottom: '-10px',
-      width: '140px',
-      height: '70px',
-      opacity: 0.16,
-      pointerEvents: 'none',
-    }}
-  >
-    <path
-      d="M0,80 C40,40 100,20 160,50 L160,80 Z"
-      fill="url(#capsule-wave-grad)"
-    />
-    <defs>
-      <linearGradient id="capsule-wave-grad" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stopColor="#245B42" />
-        <stop offset="100%" stopColor="#D7EE83" />
-      </linearGradient>
-    </defs>
-  </svg>
-);
-
 export const ExploreOpportunitiesSection: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'universities' | 'scholarships' | 'professors'>('universities');
   const [selectedCountry, setSelectedCountry] = useState<string>('all');
   const [selectedResearchTag, setSelectedResearchTag] = useState<string>('all');
 
   // Carousel Refs & States for Smooth Horizontal Single-Row Scrolling
-  const universitiesCarouselRef = useRef<HTMLDivElement>(null);
-  const scholarshipsCarouselRef = useRef<HTMLDivElement>(null);
-  const professorsCarouselRef = useRef<HTMLDivElement>(null);
 
-  const [isPaused, setIsPaused] = useState(false);
-  const [activeUniIndex, setActiveUniIndex] = useState(0);
-  const [activeSchIndex, setActiveSchIndex] = useState(0);
-  const [activeProfIndex, setActiveProfIndex] = useState(0);
 
-  // Smooth scroll handler
-  const scrollTrack = (ref: React.RefObject<HTMLDivElement | null>, direction: 'left' | 'right') => {
-    if (!ref.current) return;
-    const cardWidth = 380;
-    const scrollAmount = direction === 'left' ? -cardWidth : cardWidth;
-    ref.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-  };
 
-  // Autoplay glide effect every 4.5 seconds when not hovered
-  useEffect(() => {
-    if (isPaused) return;
-
-    const interval = setInterval(() => {
-      let activeRef: React.RefObject<HTMLDivElement | null> | null = null;
-      if (activeTab === 'universities') activeRef = universitiesCarouselRef;
-      else if (activeTab === 'scholarships') activeRef = scholarshipsCarouselRef;
-      else if (activeTab === 'professors') activeRef = professorsCarouselRef;
-
-      if (!activeRef?.current) return;
-      const el = activeRef.current;
-      const maxScroll = el.scrollWidth - el.clientWidth;
-      if (el.scrollLeft >= maxScroll - 20) {
-        el.scrollTo({ left: 0, behavior: 'smooth' });
-      } else {
-        el.scrollBy({ left: 380, behavior: 'smooth' });
-      }
-    }, 4500);
-
-    return () => clearInterval(interval);
-  }, [activeTab, isPaused]);
-
-  // Track scroll position to update dot indicators
-  const handleScroll = (ref: React.RefObject<HTMLDivElement | null>, setIndex: (idx: number) => void) => {
-    if (!ref.current) return;
-    const scrollPos = ref.current.scrollLeft;
-    const cardWidth = 380;
-    const newIdx = Math.round(scrollPos / cardWidth);
-    setIndex(Math.max(0, Math.min(newIdx, 5)));
-  };
 
   // Interactive Saved / Share Toast State
   const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(new Set());
@@ -716,9 +592,9 @@ export const ExploreOpportunitiesSection: React.FC = () => {
         overflow: 'hidden',
       }}
     >
-      <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 0.5rem' }}>
         {/* Section Header */}
-        <div style={{ textAlign: 'center', maxWidth: '840px', margin: '0 auto 2.75rem' }}>
+        <div style={{ textAlign: 'center', maxWidth: '840px', margin: '0 auto 2.5rem' }}>
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -786,7 +662,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
             justifyContent: 'center',
             gap: '0.75rem',
             flexWrap: 'wrap',
-            marginBottom: '1.75rem',
+            marginBottom: '1.5rem',
           }}
         >
           {tabs.map((tab) => {
@@ -804,9 +680,9 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '0.55rem',
-                  padding: '0.65rem 1.25rem',
+                  padding: '0.6rem 1.2rem',
                   borderRadius: 'var(--radius-pill, 9999px)',
-                  fontSize: '0.875rem',
+                  fontSize: '0.85rem',
                   fontWeight: 700,
                   border: '1px solid',
                   borderColor: isActive ? 'var(--action-primary, #245B42)' : 'var(--border-subtle, #E1E8DE)',
@@ -817,7 +693,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                   boxShadow: isActive ? '0 4px 16px rgba(36, 91, 66, 0.22)' : 'none',
                 }}
               >
-                <Icon size={17} aria-hidden="true" />
+                <Icon size={16} aria-hidden="true" />
                 <span>{tab.label}</span>
                 <span
                   style={{
@@ -842,9 +718,9 @@ export const ExploreOpportunitiesSection: React.FC = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '0.5rem',
+            gap: '0.45rem',
             flexWrap: 'wrap',
-            marginBottom: '2.5rem',
+            marginBottom: '2rem',
           }}
           role="tablist"
           aria-label="Filter opportunities by destination country"
@@ -857,9 +733,9 @@ export const ExploreOpportunitiesSection: React.FC = () => {
               aria-selected={selectedCountry === opt.id}
               onClick={() => setSelectedCountry(opt.id)}
               style={{
-                padding: '0.35rem 0.95rem',
+                padding: '0.3rem 0.85rem',
                 borderRadius: 'var(--radius-pill, 9999px)',
-                fontSize: '0.8rem',
+                fontSize: '0.78rem',
                 fontWeight: 600,
                 border: '1px solid',
                 borderColor: selectedCountry === opt.id ? 'var(--action-primary, #245B42)' : 'var(--border-subtle, #E1E8DE)',
@@ -875,7 +751,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
         </div>
 
         {/* =========================================================================
-            TAB 1: UNIVERSITIES DISCOVERY EXPERIENCE (6 CARDS IN ONE ROW CAROUSEL)
+            TAB 1: UNIVERSITIES DISCOVERY EXPERIENCE (6 COMPACT CARDS SHOWN AT ONCE)
             ========================================================================= */}
         {activeTab === 'universities' && (
           <motion.div
@@ -885,122 +761,40 @@ export const ExploreOpportunitiesSection: React.FC = () => {
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.3 }}
           >
-            {/* Carousel Navigation Header */}
+            {/* Status Header */}
             <div
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                marginBottom: '1rem',
+                marginBottom: '0.9rem',
                 flexWrap: 'wrap',
-                gap: '0.75rem',
+                gap: '0.5rem',
                 padding: '0 0.25rem',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <span
                   style={{
-                    fontSize: '0.8rem',
+                    fontSize: '0.78rem',
                     fontWeight: 700,
                     color: 'var(--action-primary, #245B42)',
                     backgroundColor: 'rgba(36, 91, 66, 0.08)',
-                    padding: '0.25rem 0.8rem',
+                    padding: '0.22rem 0.75rem',
                     borderRadius: 'var(--radius-pill, 9999px)',
                   }}
                 >
                   Featured European Institutions (180,000 Indexed)
                 </span>
-                <span style={{ fontSize: '0.78rem', color: '#6A7D71', fontWeight: 500 }}>
-                  Swipe or use controls to browse all 6
+                <span style={{ fontSize: '0.74rem', color: '#6A7D71', fontWeight: 500 }}>
+                  All 6 accredited institutions displayed at a glance
                 </span>
-              </div>
-
-              {/* Controls: Indicators + Prev/Next buttons */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                  {filteredUniversities.map((_, dotIdx) => (
-                    <button
-                      key={dotIdx}
-                      type="button"
-                      aria-label={`Go to university ${dotIdx + 1}`}
-                      onClick={() => {
-                        universitiesCarouselRef.current?.scrollTo({
-                          left: dotIdx * 380,
-                          behavior: 'smooth',
-                        });
-                        setActiveUniIndex(dotIdx);
-                      }}
-                      style={{
-                        width: activeUniIndex === dotIdx ? '20px' : '8px',
-                        height: '8px',
-                        borderRadius: '9999px',
-                        backgroundColor: activeUniIndex === dotIdx ? 'var(--action-primary, #245B42)' : '#D0DCD2',
-                        border: 'none',
-                        cursor: 'pointer',
-                        padding: 0,
-                        transition: 'all 200ms ease',
-                      }}
-                    />
-                  ))}
-                </div>
-
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                  <button
-                    type="button"
-                    aria-label="Previous universities"
-                    onClick={() => scrollTrack(universitiesCarouselRef, 'left')}
-                    style={{
-                      width: '38px',
-                      height: '38px',
-                      borderRadius: '50%',
-                      backgroundColor: '#FFFFFF',
-                      border: '1px solid #D5E0D7',
-                      color: '#19261F',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      cursor: 'pointer',
-                      boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
-                      transition: 'all 150ms ease',
-                    }}
-                  >
-                    <ChevronLeft size={18} />
-                  </button>
-
-                  <button
-                    type="button"
-                    aria-label="Next universities"
-                    onClick={() => scrollTrack(universitiesCarouselRef, 'right')}
-                    style={{
-                      width: '38px',
-                      height: '38px',
-                      borderRadius: '50%',
-                      backgroundColor: '#FFFFFF',
-                      border: '1px solid #D5E0D7',
-                      color: '#19261F',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      cursor: 'pointer',
-                      boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
-                      transition: 'all 150ms ease',
-                    }}
-                  >
-                    <ChevronRight size={18} />
-                  </button>
-                </div>
               </div>
             </div>
 
-            {/* 6 Cards in ONE Horizontal Carousel Row */}
+            {/* 6 Cards in Single Row Grid */}
             <div
-              ref={universitiesCarouselRef}
-              className="opportunities-carousel-track"
-              onMouseEnter={() => setIsPaused(true)}
-              onMouseLeave={() => setIsPaused(false)}
-              onTouchStart={() => setIsPaused(true)}
-              onTouchEnd={() => setIsPaused(false)}
-              onScroll={() => handleScroll(universitiesCarouselRef, setActiveUniIndex)}
+              className="opportunities-showcase-row"
             >
               {filteredUniversities.map((uni) => {
                 const isBookmarked = bookmarkedIds.has(uni.id);
@@ -1009,177 +803,149 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                 return (
                   <div
                     key={uni.id}
-                    className="opportunities-carousel-card opportunity-card-hover"
-                    style={{
-                      backgroundColor: '#FFFFFF',
-                      borderRadius: '28px',
-                      border: '1px solid #E5EBE3',
-                      boxShadow: '0 12px 36px -10px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.03)',
-                      overflow: 'hidden',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'space-between',
-                      position: 'relative',
-                      transition: 'all 240ms ease',
-                    }}
+                    className="opportunities-card-compact opportunity-card-hover"
                   >
-                    {/* Top Architectural Photo Header with Landmark & Badges */}
-                    <div
-                      style={{
-                        position: 'relative',
-                        height: '240px',
-                        overflow: 'hidden',
-                        backgroundColor: '#0C2F24',
-                      }}
-                    >
-                      <img
-                        src={uni.backgroundImage}
-                        alt={`${uni.name} campus architecture in ${uni.city}, ${uni.country}`}
-                        loading="lazy"
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover',
-                          transition: 'transform 450ms ease',
-                        }}
-                        className="opportunity-card-img"
-                      />
-
-                      {/* Dark Gradient Overlay for optimal contrast */}
+                    <div>
+                      {/* Architectural Photo Header (Height: 110px) */}
                       <div
                         style={{
-                          position: 'absolute',
-                          inset: 0,
-                          background: 'linear-gradient(180deg, rgba(8, 28, 20, 0.45) 0%, rgba(8, 28, 20, 0.15) 30%, rgba(8, 28, 20, 0.8) 75%, rgba(6, 24, 18, 0.96) 100%)',
-                        }}
-                      />
-
-                      {/* Top Badges Row: Trophy/QS Rank, Public, and Verified */}
-                      <div
-                        style={{
-                          position: 'absolute',
-                          top: '0.95rem',
-                          left: '1rem',
-                          right: '1rem',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          gap: '0.5rem',
-                          zIndex: 3,
+                          position: 'relative',
+                          height: '110px',
+                          overflow: 'hidden',
+                          backgroundColor: '#0C2F24',
                         }}
                       >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+                        <img
+                          src={uni.backgroundImage}
+                          alt={`${uni.name} campus architecture in ${uni.city}, ${uni.country}`}
+                          loading="lazy"
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            transition: 'transform 350ms ease',
+                          }}
+                          className="opportunity-card-img"
+                        />
+
+                        {/* Dark Scrim Overlay */}
+                        <div
+                          style={{
+                            position: 'absolute',
+                            inset: 0,
+                            background: 'linear-gradient(180deg, rgba(8, 28, 20, 0.45) 0%, rgba(8, 28, 20, 0.1) 40%, rgba(6, 24, 18, 0.88) 100%)',
+                          }}
+                        />
+
+                        {/* Top Badges Row */}
+                        <div
+                          style={{
+                            position: 'absolute',
+                            top: '0.45rem',
+                            left: '0.5rem',
+                            right: '0.5rem',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            gap: '0.3rem',
+                            zIndex: 2,
+                          }}
+                        >
                           <span
                             style={{
                               display: 'inline-flex',
                               alignItems: 'center',
-                              gap: '0.35rem',
-                              padding: '0.32rem 0.7rem',
+                              gap: '0.2rem',
+                              padding: '0.15rem 0.45rem',
                               borderRadius: 'var(--radius-pill, 9999px)',
-                              backgroundColor: 'rgba(12, 38, 28, 0.72)',
-                              backdropFilter: 'blur(10px)',
-                              WebkitBackdropFilter: 'blur(10px)',
-                              border: '1px solid rgba(255, 255, 255, 0.15)',
+                              backgroundColor: 'rgba(12, 38, 28, 0.78)',
+                              backdropFilter: 'blur(8px)',
                               color: '#FFFFFF',
-                              fontSize: '0.78rem',
+                              fontSize: '0.62rem',
                               fontWeight: 700,
-                              boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+                              border: '1px solid rgba(255, 255, 255, 0.18)',
                             }}
                           >
-                            <Trophy size={13} style={{ color: '#E8D466' }} />
+                            <Trophy size={11} style={{ color: '#E8D466' }} />
                             <span>{uni.qsRank}</span>
                           </span>
 
-                          <span
-                            style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: '0.35rem',
-                              padding: '0.32rem 0.7rem',
-                              borderRadius: 'var(--radius-pill, 9999px)',
-                              backgroundColor: 'rgba(255, 255, 255, 0.94)',
-                              backdropFilter: 'blur(10px)',
-                              WebkitBackdropFilter: 'blur(10px)',
-                              color: '#19261F',
-                              fontSize: '0.78rem',
-                              fontWeight: 700,
-                              boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-                            }}
-                          >
-                            <Landmark size={13} style={{ color: 'var(--action-primary, #245B42)' }} />
-                            <span>{uni.institutionType}</span>
-                          </span>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                            <span
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '0.2rem',
+                                padding: '0.15rem 0.45rem',
+                                borderRadius: 'var(--radius-pill, 9999px)',
+                                backgroundColor: 'rgba(255, 255, 255, 0.94)',
+                                color: '#19261F',
+                                fontSize: '0.62rem',
+                                fontWeight: 700,
+                              }}
+                            >
+                              <Landmark size={11} style={{ color: 'var(--action-primary, #245B42)' }} />
+                              <span>{uni.institutionType}</span>
+                            </span>
+                            <CountryFlagIcon countryCode={uni.countryCode} width={15} height={10} />
+                          </div>
                         </div>
 
-                        <span
+                        {/* Verified Pill on Image */}
+                        <div
                           style={{
+                            position: 'absolute',
+                            bottom: '0.35rem',
+                            right: '0.5rem',
                             display: 'inline-flex',
                             alignItems: 'center',
-                            gap: '0.35rem',
-                            padding: '0.32rem 0.7rem',
-                            borderRadius: 'var(--radius-pill, 9999px)',
-                            backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                            backdropFilter: 'blur(10px)',
-                            WebkitBackdropFilter: 'blur(10px)',
-                            color: '#19261F',
-                            fontSize: '0.78rem',
-                            fontWeight: 700,
-                            boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                            gap: '0.25rem',
+                            fontSize: '0.6rem',
+                            color: '#FFFFFF',
+                            fontWeight: 600,
+                            textShadow: '0 1px 3px rgba(0,0,0,0.6)',
+                            zIndex: 2,
                           }}
                         >
-                          <CheckCircle2 size={13} style={{ color: 'var(--action-primary, #245B42)' }} />
+                          <CheckCircle2 size={11} style={{ color: 'var(--brand-citron, #D7EE83)' }} />
                           <span>Verified</span>
-                          <span
-                            style={{
-                              width: '6px',
-                              height: '6px',
-                              borderRadius: '50%',
-                              backgroundColor: '#8DBE3B',
-                              display: 'inline-block',
-                            }}
-                          />
-                        </span>
+                        </div>
                       </div>
 
-                      {/* University Identity (Logo, Name, Country, Tagline) */}
-                      <div
-                        style={{
-                          position: 'absolute',
-                          bottom: '1.25rem',
-                          left: '1.15rem',
-                          right: '1.15rem',
-                          zIndex: 3,
-                        }}
-                      >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.95rem' }}>
+                      {/* Card Body with Compact Density */}
+                      <div style={{ padding: '0.65rem 0.7rem 0.55rem' }}>
+                        {/* University Emblem + Name + Location */}
+                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.45rem', marginBottom: '0.35rem' }}>
                           <div
                             style={{
-                              width: '64px',
-                              height: '64px',
-                              borderRadius: '16px',
+                              width: '32px',
+                              height: '32px',
+                              borderRadius: '8px',
                               backgroundColor: '#FFFFFF',
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'center',
-                              boxShadow: '0 6px 18px rgba(0, 0, 0, 0.25)',
+                              boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
                               flexShrink: 0,
-                              padding: '4px',
-                              border: '1px solid rgba(255,255,255,0.8)',
+                              padding: '2px',
+                              border: '1px solid #E1E8DE',
+                              marginTop: '-14px',
+                              position: 'relative',
+                              zIndex: 3,
                             }}
                           >
-                            <UniversityLogoBadge universityId={uni.id} name={uni.name} size={50} />
+                            <UniversityLogoBadge universityId={uni.id} name={uni.name} size={26} />
                           </div>
 
-                          <div style={{ overflow: 'hidden' }}>
+                          <div style={{ flex: 1, minWidth: 0 }}>
                             <h3
                               style={{
-                                fontSize: '1.28rem',
+                                fontSize: '0.84rem',
                                 fontWeight: 800,
-                                color: '#FFFFFF',
-                                lineHeight: 1.2,
-                                margin: '0 0 0.25rem',
-                                letterSpacing: '-0.02em',
-                                textShadow: '0 2px 6px rgba(0,0,0,0.5)',
+                                color: 'var(--color-foreground, #19261F)',
+                                lineHeight: 1.25,
+                                margin: '0 0 0.1rem',
+                                letterSpacing: '-0.015em',
                               }}
                             >
                               {uni.name}
@@ -1189,151 +955,66 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                               style={{
                                 display: 'flex',
                                 alignItems: 'center',
-                                gap: '0.45rem',
-                                color: '#FFFFFF',
-                                fontSize: '0.875rem',
-                                fontWeight: 600,
-                                textShadow: '0 1px 4px rgba(0,0,0,0.5)',
+                                gap: '0.25rem',
+                                color: '#58695E',
+                                fontSize: '0.68rem',
+                                fontWeight: 500,
                               }}
                             >
-                              <MapPin size={14} style={{ color: '#FFFFFF' }} />
-                              <span>{uni.city}, {uni.country}</span>
-                              <CountryFlagIcon countryCode={uni.countryCode} width={20} height={14} />
+                              <MapPin size={10} style={{ color: 'var(--action-primary, #245B42)', flexShrink: 0 }} />
+                              <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                {uni.city}, {uni.country}
+                              </span>
                             </div>
                           </div>
                         </div>
 
-                        {/* Citron Accent Line & Tagline */}
-                        <div style={{ marginTop: '0.55rem' }}>
-                          <div
-                            style={{
-                              width: '32px',
-                              height: '2.5px',
-                              backgroundColor: 'var(--brand-citron, #D7EE83)',
-                              borderRadius: '2px',
-                              marginBottom: '0.35rem',
-                            }}
-                          />
-                          <p
-                            style={{
-                              fontSize: '0.8rem',
-                              color: 'rgba(255, 255, 255, 0.92)',
-                              margin: 0,
-                              fontWeight: 500,
-                              lineHeight: 1.3,
-                              textShadow: '0 1px 3px rgba(0,0,0,0.5)',
-                            }}
-                          >
-                            {uni.motto}
-                          </p>
-                        </div>
-                      </div>
-
-                      <HeaderWaveTransition />
-                    </div>
-
-                    {/* Card Body */}
-                    <div
-                      style={{
-                        padding: '1.25rem 1.35rem 1.35rem',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        flex: 1,
-                        justifyContent: 'space-between',
-                      }}
-                    >
-                      <div>
-                        {/* Floating Stats Capsule (Tuition & Programmes) */}
+                        {/* Tagline / Motto */}
                         <div
                           style={{
-                            backgroundColor: '#FFFFFF',
-                            border: '1px solid #E1E8DE',
-                            borderRadius: '20px',
-                            padding: '0.85rem 1.25rem',
+                            fontSize: '0.65rem',
+                            color: '#687B70',
+                            fontStyle: 'italic',
+                            lineHeight: 1.3,
+                            marginBottom: '0.45rem',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                          }}
+                        >
+                          "{uni.motto}"
+                        </div>
+
+                        {/* Metrics Bar (Tuition & Programs) */}
+                        <div
+                          style={{
+                            backgroundColor: '#F6F9F7',
+                            border: '1px solid #E2EBE5',
+                            borderRadius: '8px',
+                            padding: '0.35rem 0.5rem',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'space-between',
-                            position: 'relative',
-                            overflow: 'hidden',
-                            boxShadow: '0 4px 14px rgba(0, 0, 0, 0.04)',
-                            marginBottom: '1rem',
+                            marginBottom: '0.45rem',
                           }}
                         >
-                          <CapsuleWaveWatermark />
-
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', zIndex: 1 }}>
-                            <div
-                              style={{
-                                width: '38px',
-                                height: '38px',
-                                borderRadius: '10px',
-                                backgroundColor: 'rgba(36, 91, 66, 0.08)',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                color: 'var(--action-primary, #245B42)',
-                              }}
-                            >
-                              <GraduationCap size={22} />
+                          <div>
+                            <div style={{ fontSize: '0.58rem', color: '#58695E', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.03em' }}>
+                              Tuition
                             </div>
-                            <div>
-                              <div style={{ fontSize: '0.78rem', color: '#5E7266', fontWeight: 600 }}>
-                                Tuition
-                              </div>
-                              <div
-                                style={{
-                                  fontSize: '1.18rem',
-                                  fontWeight: 800,
-                                  color: 'var(--color-foreground, #19261F)',
-                                  letterSpacing: '-0.02em',
-                                  lineHeight: 1.2,
-                                }}
-                              >
-                                {uni.tuitionDisplay}
-                              </div>
+                            <div style={{ fontSize: '0.8rem', fontWeight: 800, color: '#19261F', lineHeight: 1.2 }}>
+                              {uni.tuitionDisplay}
                             </div>
                           </div>
 
-                          <div
-                            style={{
-                              width: '1px',
-                              height: '36px',
-                              backgroundColor: '#E1E8DE',
-                              margin: '0 0.5rem',
-                              zIndex: 1,
-                            }}
-                          />
+                          <div style={{ width: '1px', height: '22px', backgroundColor: '#DDE7E1' }} />
 
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', zIndex: 1 }}>
-                            <div
-                              style={{
-                                width: '38px',
-                                height: '38px',
-                                borderRadius: '10px',
-                                backgroundColor: 'rgba(36, 91, 66, 0.08)',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                color: 'var(--action-primary, #245B42)',
-                              }}
-                            >
-                              <LayoutGrid size={20} />
+                          <div>
+                            <div style={{ fontSize: '0.58rem', color: '#58695E', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.03em' }}>
+                              Programs
                             </div>
-                            <div>
-                              <div style={{ fontSize: '0.78rem', color: '#5E7266', fontWeight: 600 }}>
-                                Programmes
-                              </div>
-                              <div
-                                style={{
-                                  fontSize: '1.18rem',
-                                  fontWeight: 800,
-                                  color: 'var(--color-foreground, #19261F)',
-                                  letterSpacing: '-0.02em',
-                                  lineHeight: 1.2,
-                                }}
-                              >
-                                {uni.programsCount}
-                              </div>
+                            <div style={{ fontSize: '0.8rem', fontWeight: 800, color: '#19261F', lineHeight: 1.2 }}>
+                              {uni.programsCount}
                             </div>
                           </div>
                         </div>
@@ -1343,224 +1024,183 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                           style={{
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '0.5rem',
+                            gap: '0.25rem',
                             flexWrap: 'wrap',
-                            marginBottom: '1rem',
+                            marginBottom: '0.45rem',
                           }}
                         >
-                          {uni.degreeLevels.map((lvl, lIdx) => (
+                          {uni.degreeLevels.slice(0, 1).map((lvl, lIdx) => (
                             <span
                               key={lIdx}
                               style={{
                                 display: 'inline-flex',
                                 alignItems: 'center',
-                                gap: '0.35rem',
-                                padding: '0.32rem 0.8rem',
+                                gap: '0.25rem',
+                                padding: '0.12rem 0.4rem',
                                 borderRadius: 'var(--radius-pill, 9999px)',
                                 backgroundColor: '#EEF5EF',
                                 color: 'var(--color-foreground, #19261F)',
-                                fontSize: '0.8rem',
+                                fontSize: '0.64rem',
                                 fontWeight: 600,
                                 border: '1px solid #E1E8DE',
                               }}
                             >
-                              <span
-                                style={{
-                                  width: '7px',
-                                  height: '7px',
-                                  borderRadius: '50%',
-                                  backgroundColor: '#8DBE3B',
-                                  display: 'inline-block',
-                                }}
-                              />
+                              <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: '#8DBE3B', display: 'inline-block' }} />
                               <span>{lvl}</span>
                             </span>
                           ))}
 
-                          {uni.languages.map((lang, gIdx) => (
+                          {uni.languages.slice(0, 1).map((lang, gIdx) => (
                             <span
                               key={gIdx}
                               style={{
                                 display: 'inline-flex',
                                 alignItems: 'center',
-                                gap: '0.35rem',
-                                padding: '0.32rem 0.8rem',
+                                gap: '0.25rem',
+                                padding: '0.12rem 0.4rem',
                                 borderRadius: 'var(--radius-pill, 9999px)',
                                 backgroundColor: '#EEF5EF',
                                 color: 'var(--color-foreground, #19261F)',
-                                fontSize: '0.8rem',
+                                fontSize: '0.64rem',
                                 fontWeight: 600,
                                 border: '1px solid #E1E8DE',
                               }}
                             >
-                              <Globe size={13} style={{ color: '#58695E' }} />
+                              <Globe size={10} style={{ color: '#58695E' }} />
                               <span>{lang}</span>
                             </span>
                           ))}
                         </div>
 
-                        {/* Information / Advisory Callout Box (Unclipped, Full Text Display) */}
+                        {/* Advisory Callout Strip */}
                         <div
                           style={{
-                            backgroundColor: '#EDF5EE',
-                            borderRadius: '16px',
-                            padding: '0.85rem 1rem',
+                            backgroundColor: '#EFF6F2',
+                            border: '1px solid #DFECE3',
+                            borderRadius: '8px',
+                            padding: '0.35rem 0.45rem',
                             display: 'flex',
                             alignItems: 'flex-start',
-                            gap: '0.75rem',
-                            position: 'relative',
-                            overflow: 'hidden',
-                            marginBottom: '1.25rem',
-                            minHeight: '68px',
+                            gap: '0.35rem',
+                            marginBottom: '0.55rem',
                           }}
                         >
-                          <SkylineWatermark />
-
-                          <div
-                            style={{
-                              width: '24px',
-                              height: '24px',
-                              borderRadius: '50%',
-                              backgroundColor: 'var(--action-primary, #245B42)',
-                              color: '#FFFFFF',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              flexShrink: 0,
-                              marginTop: '0.1rem',
-                              zIndex: 1,
-                            }}
-                          >
-                            <Info size={14} />
+                          <Info size={11} style={{ color: 'var(--action-primary, #245B42)', flexShrink: 0, marginTop: '0.15rem' }} />
+                          <div style={{ fontSize: '0.64rem', color: '#2B4838', lineHeight: 1.35, flex: 1 }}>
+                            {uni.advisoryNote}
                           </div>
-
-                          <div style={{ flex: 1, zIndex: 1, paddingRight: '2.5rem' }}>
-                            <p
-                              style={{
-                                fontSize: '0.8rem',
-                                color: '#314438',
-                                lineHeight: 1.45,
-                                margin: 0,
-                                fontWeight: 500,
-                              }}
-                            >
-                              {uni.advisoryNote}
-                            </p>
-                          </div>
-
-                          <div style={{ zIndex: 1, flexShrink: 0, color: 'var(--action-primary, #245B42)', marginTop: '0.1rem' }}>
-                            <ArrowUpRight size={16} />
-                          </div>
+                          <ArrowUpRight size={11} style={{ color: '#245B42', flexShrink: 0, marginTop: '0.1rem' }} />
                         </div>
                       </div>
+                    </div>
 
-                      {/* Bottom Action Bar */}
-                      <div
+                    {/* Bottom Action Bar */}
+                    <div
+                      style={{
+                        padding: '0.45rem 0.7rem 0.65rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.35rem',
+                        borderTop: '1px solid #F0F4EF',
+                        marginTop: 'auto',
+                      }}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => toggleBookmark(uni.id)}
+                        aria-label={`Bookmark ${uni.name}`}
+                        title={isBookmarked ? 'Saved to bookmarks' : 'Bookmark university'}
                         style={{
+                          width: '28px',
+                          height: '28px',
+                          borderRadius: '8px',
+                          border: '1px solid #E1E8DE',
+                          backgroundColor: isBookmarked ? 'rgba(36, 91, 66, 0.1)' : '#FFFFFF',
+                          color: isBookmarked ? 'var(--action-primary, #245B42)' : '#4A5D52',
                           display: 'flex',
                           alignItems: 'center',
-                          justifyContent: 'space-between',
-                          gap: '0.75rem',
-                          paddingTop: '0.5rem',
-                          borderTop: '1px solid #F0F4EF',
+                          justifyContent: 'center',
+                          cursor: 'pointer',
+                          transition: 'all 140ms ease',
+                          flexShrink: 0,
                         }}
                       >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-                          <button
-                            type="button"
-                            onClick={() => toggleBookmark(uni.id)}
-                            aria-label={`Bookmark ${uni.name}`}
-                            title={isBookmarked ? 'Saved to bookmarks' : 'Bookmark university'}
-                            style={{
-                              width: '42px',
-                              height: '42px',
-                              borderRadius: '14px',
-                              border: '1px solid #E1E8DE',
-                              backgroundColor: isBookmarked ? 'rgba(36, 91, 66, 0.1)' : '#FFFFFF',
-                              color: isBookmarked ? 'var(--action-primary, #245B42)' : '#4A5D52',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              cursor: 'pointer',
-                              transition: 'all 150ms ease',
-                            }}
-                          >
-                            <Bookmark size={17} fill={isBookmarked ? 'var(--action-primary, #245B42)' : 'none'} />
-                          </button>
+                        <Bookmark size={13} fill={isBookmarked ? 'var(--action-primary, #245B42)' : 'none'} />
+                      </button>
 
-                          <button
-                            type="button"
-                            onClick={() => handleShare(uni.id, uni.name)}
-                            aria-label={`Share ${uni.name}`}
-                            title={isCopied ? 'Link copied!' : 'Share link'}
-                            style={{
-                              width: '42px',
-                              height: '42px',
-                              borderRadius: '14px',
-                              border: '1px solid #E1E8DE',
-                              backgroundColor: isCopied ? 'rgba(36, 91, 66, 0.1)' : '#FFFFFF',
-                              color: isCopied ? 'var(--action-primary, #245B42)' : '#4A5D52',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              cursor: 'pointer',
-                              transition: 'all 150ms ease',
-                            }}
-                          >
-                            {isCopied ? <Check size={16} /> : <Share2 size={17} />}
-                          </button>
+                      <button
+                        type="button"
+                        onClick={() => handleShare(uni.id, uni.name)}
+                        aria-label={`Share ${uni.name}`}
+                        title={isCopied ? 'Link copied!' : 'Share link'}
+                        style={{
+                          width: '28px',
+                          height: '28px',
+                          borderRadius: '8px',
+                          border: '1px solid #E1E8DE',
+                          backgroundColor: isCopied ? 'rgba(36, 91, 66, 0.1)' : '#FFFFFF',
+                          color: isCopied ? 'var(--action-primary, #245B42)' : '#4A5D52',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          cursor: 'pointer',
+                          transition: 'all 140ms ease',
+                          flexShrink: 0,
+                        }}
+                      >
+                        {isCopied ? <Check size={12} /> : <Share2 size={13} />}
+                      </button>
 
-                          {uni.officialPortalUrl && (
-                            <a
-                              href={uni.officialPortalUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              aria-label={`Visit official website for ${uni.name}`}
-                              title="Visit official institution portal"
-                              style={{
-                                width: '42px',
-                                height: '42px',
-                                borderRadius: '14px',
-                                border: '1px solid #E1E8DE',
-                                backgroundColor: '#FFFFFF',
-                                color: '#4A5D52',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                textDecoration: 'none',
-                                transition: 'all 150ms ease',
-                              }}
-                            >
-                              <ExternalLink size={17} />
-                            </a>
-                          )}
-                        </div>
-
-                        <div style={{ width: '1px', height: '28px', backgroundColor: '#E1E8DE' }} />
-
-                        <Link
-                          to={`${ROUTES.UNIVERSITIES}?country=${encodeURIComponent(uni.country)}`}
+                      {uni.officialPortalUrl && (
+                        <a
+                          href={uni.officialPortalUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`Visit official website for ${uni.name}`}
+                          title="Visit official institution portal"
                           style={{
-                            display: 'inline-flex',
+                            width: '28px',
+                            height: '28px',
+                            borderRadius: '8px',
+                            border: '1px solid #E1E8DE',
+                            backgroundColor: '#FFFFFF',
+                            color: '#4A5D52',
+                            display: 'flex',
                             alignItems: 'center',
-                            gap: '0.6rem',
-                            padding: '0.75rem 1.5rem',
-                            borderRadius: 'var(--radius-pill, 9999px)',
-                            backgroundColor: '#0C3826',
-                            color: '#FFFFFF',
-                            fontSize: '0.9rem',
-                            fontWeight: 700,
+                            justifyContent: 'center',
                             textDecoration: 'none',
-                            boxShadow: '0 4px 14px rgba(12, 56, 38, 0.28)',
-                            transition: 'all 180ms ease',
-                            whiteSpace: 'nowrap',
+                            transition: 'all 140ms ease',
+                            flexShrink: 0,
                           }}
-                          className="opportunity-cta-btn"
                         >
-                          <span>View Details</span>
-                          <ArrowRight size={15} />
-                        </Link>
-                      </div>
+                          <ExternalLink size={13} />
+                        </a>
+                      )}
+
+                      <Link
+                        to={`${ROUTES.UNIVERSITIES}?country=${encodeURIComponent(uni.country)}`}
+                        style={{
+                          flex: 1,
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '0.25rem',
+                          padding: '0.4rem 0.55rem',
+                          borderRadius: 'var(--radius-pill, 9999px)',
+                          backgroundColor: '#0C3826',
+                          color: '#FFFFFF',
+                          fontSize: '0.72rem',
+                          fontWeight: 700,
+                          textDecoration: 'none',
+                          boxShadow: '0 2px 8px rgba(12, 56, 38, 0.2)',
+                          transition: 'all 160ms ease',
+                          whiteSpace: 'nowrap',
+                        }}
+                        className="opportunity-cta-btn"
+                      >
+                        <span>View Details</span>
+                        <ArrowRight size={12} />
+                      </Link>
                     </div>
                   </div>
                 );
@@ -1575,11 +1215,11 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '0.625rem',
-                  padding: '0.85rem 2.25rem',
+                  padding: '0.8rem 2.25rem',
                   borderRadius: 'var(--radius-pill, 9999px)',
                   backgroundColor: 'var(--action-primary, #245B42)',
                   color: '#FFFFFF',
-                  fontSize: '0.95rem',
+                  fontSize: '0.92rem',
                   fontWeight: 700,
                   textDecoration: 'none',
                   boxShadow: '0 4px 16px rgba(36, 91, 66, 0.25)',
@@ -1594,7 +1234,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
         )}
 
         {/* =========================================================================
-            TAB 2: SCHOLARSHIPS DISCOVERY (6 CARDS IN ONE ROW CAROUSEL)
+            TAB 2: SCHOLARSHIPS DISCOVERY (6 COMPACT CARDS SHOWN AT ONCE)
             ========================================================================= */}
         {activeTab === 'scholarships' && (
           <motion.div
@@ -1604,121 +1244,40 @@ export const ExploreOpportunitiesSection: React.FC = () => {
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.3 }}
           >
-            {/* Carousel Navigation Header */}
+            {/* Status Header */}
             <div
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                marginBottom: '1rem',
+                marginBottom: '0.9rem',
                 flexWrap: 'wrap',
-                gap: '0.75rem',
+                gap: '0.5rem',
                 padding: '0 0.25rem',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <span
                   style={{
-                    fontSize: '0.8rem',
+                    fontSize: '0.78rem',
                     fontWeight: 700,
                     color: 'var(--action-primary, #245B42)',
                     backgroundColor: 'rgba(36, 91, 66, 0.08)',
-                    padding: '0.25rem 0.8rem',
+                    padding: '0.22rem 0.75rem',
                     borderRadius: 'var(--radius-pill, 9999px)',
                   }}
                 >
                   Verified European Grants &amp; Scholarships
                 </span>
-                <span style={{ fontSize: '0.78rem', color: '#6A7D71', fontWeight: 500 }}>
-                  Swipe or use controls to browse all 6
+                <span style={{ fontSize: '0.74rem', color: '#6A7D71', fontWeight: 500 }}>
+                  Showing all 6 prestigious government &amp; merit grants
                 </span>
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                  {filteredScholarships.map((_, dotIdx) => (
-                    <button
-                      key={dotIdx}
-                      type="button"
-                      aria-label={`Go to scholarship ${dotIdx + 1}`}
-                      onClick={() => {
-                        scholarshipsCarouselRef.current?.scrollTo({
-                          left: dotIdx * 380,
-                          behavior: 'smooth',
-                        });
-                        setActiveSchIndex(dotIdx);
-                      }}
-                      style={{
-                        width: activeSchIndex === dotIdx ? '20px' : '8px',
-                        height: '8px',
-                        borderRadius: '9999px',
-                        backgroundColor: activeSchIndex === dotIdx ? 'var(--action-primary, #245B42)' : '#D0DCD2',
-                        border: 'none',
-                        cursor: 'pointer',
-                        padding: 0,
-                        transition: 'all 200ms ease',
-                      }}
-                    />
-                  ))}
-                </div>
-
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                  <button
-                    type="button"
-                    aria-label="Previous scholarships"
-                    onClick={() => scrollTrack(scholarshipsCarouselRef, 'left')}
-                    style={{
-                      width: '38px',
-                      height: '38px',
-                      borderRadius: '50%',
-                      backgroundColor: '#FFFFFF',
-                      border: '1px solid #D5E0D7',
-                      color: '#19261F',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      cursor: 'pointer',
-                      boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
-                      transition: 'all 150ms ease',
-                    }}
-                  >
-                    <ChevronLeft size={18} />
-                  </button>
-
-                  <button
-                    type="button"
-                    aria-label="Next scholarships"
-                    onClick={() => scrollTrack(scholarshipsCarouselRef, 'right')}
-                    style={{
-                      width: '38px',
-                      height: '38px',
-                      borderRadius: '50%',
-                      backgroundColor: '#FFFFFF',
-                      border: '1px solid #D5E0D7',
-                      color: '#19261F',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      cursor: 'pointer',
-                      boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
-                      transition: 'all 150ms ease',
-                    }}
-                  >
-                    <ChevronRight size={18} />
-                  </button>
-                </div>
               </div>
             </div>
 
-            {/* 6 Cards in ONE Horizontal Carousel Row */}
+            {/* 6 Cards in Single Row Grid */}
             <div
-              ref={scholarshipsCarouselRef}
-              className="opportunities-carousel-track"
-              onMouseEnter={() => setIsPaused(true)}
-              onMouseLeave={() => setIsPaused(false)}
-              onTouchStart={() => setIsPaused(true)}
-              onTouchEnd={() => setIsPaused(false)}
-              onScroll={() => handleScroll(scholarshipsCarouselRef, setActiveSchIndex)}
+              className="opportunities-showcase-row"
             >
               {filteredScholarships.map((sch) => {
                 const isBookmarked = bookmarkedIds.has(sch.id);
@@ -1727,51 +1286,77 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                 return (
                   <div
                     key={sch.id}
-                    className="opportunities-carousel-card opportunity-card-hover"
-                    style={{
-                      backgroundColor: '#FFFFFF',
-                      borderRadius: '24px',
-                      border: '1px solid #DFE7DD',
-                      boxShadow: '0 10px 30px -8px rgba(36, 91, 66, 0.08), 0 3px 10px rgba(0, 0, 0, 0.02)',
-                      overflow: 'hidden',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'space-between',
-                      position: 'relative',
-                      transition: 'all 240ms ease',
-                    }}
+                    className="opportunities-card-compact opportunity-card-hover"
                   >
-                    {/* Prestigious Grant Authority Certificate Header */}
-                    <div
-                      style={{
-                        padding: '1.4rem 1.4rem 1.15rem',
-                        background: 'linear-gradient(135deg, #F2F8F4 0%, #FFFFFF 100%)',
-                        borderBottom: '1px solid #E4EDE2',
-                        position: 'relative',
-                      }}
-                    >
+                    <div>
+                      {/* Grant Authority Header */}
                       <div
                         style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          gap: '0.75rem',
-                          marginBottom: '1rem',
+                          padding: '0.7rem 0.7rem 0.6rem',
+                          background: 'linear-gradient(135deg, #103423 0%, #17452E 100%)',
+                          color: '#FFFFFF',
                         }}
                       >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        {/* Top Badges Row */}
+                        <div
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            gap: '0.35rem',
+                            marginBottom: '0.45rem',
+                          }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                            <span
+                              style={{
+                                padding: '0.12rem 0.4rem',
+                                borderRadius: 'var(--radius-pill, 9999px)',
+                                backgroundColor: 'rgba(255, 255, 255, 0.14)',
+                                color: '#FFFFFF',
+                                fontSize: '0.58rem',
+                                fontWeight: 700,
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.03em',
+                              }}
+                            >
+                              {sch.authorityType}
+                            </span>
+                            <CountryFlagIcon countryCode={sch.countryCode} width={15} height={10} />
+                          </div>
+
+                          <span
+                            style={{
+                              padding: '0.12rem 0.45rem',
+                              borderRadius: 'var(--radius-pill, 9999px)',
+                              backgroundColor: 'var(--brand-citron, #D7EE83)',
+                              color: '#19261F',
+                              fontSize: '0.6rem',
+                              fontWeight: 800,
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '0.2rem',
+                              whiteSpace: 'nowrap',
+                            }}
+                          >
+                            <Sparkles size={10} style={{ color: '#19261F' }} />
+                            <span>{sch.fundingBadge}</span>
+                          </span>
+                        </div>
+
+                        {/* Grant Name & Provider */}
+                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.4rem' }}>
                           <div
                             style={{
-                              width: '52px',
-                              height: '52px',
-                              borderRadius: '14px',
+                              width: '28px',
+                              height: '28px',
+                              borderRadius: '6px',
                               backgroundColor: '#FFFFFF',
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'center',
-                              boxShadow: '0 3px 10px rgba(0, 0, 0, 0.08)',
-                              padding: '5px',
-                              border: '1px solid #E1E8DE',
+                              boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
+                              padding: '2px',
                               flexShrink: 0,
                             }}
                           >
@@ -1780,140 +1365,92 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                                 src={sch.partnerLogo}
                                 alt={`${sch.provider} emblem`}
                                 style={{
-                                  maxHeight: '38px',
-                                  maxWidth: '44px',
+                                  maxHeight: '20px',
+                                  maxWidth: '24px',
                                   width: 'auto',
                                   height: 'auto',
                                   objectFit: 'contain',
                                 }}
                               />
                             ) : (
-                              <Award size={26} style={{ color: 'var(--action-primary, #245B42)' }} />
+                              <Award size={16} style={{ color: 'var(--action-primary, #245B42)' }} />
                             )}
                           </div>
 
-                          <div>
-                            <div
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <h3
                               style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.35rem',
-                                fontSize: '0.75rem',
-                                fontWeight: 700,
-                                color: 'var(--action-primary, #245B42)',
-                                textTransform: 'uppercase',
-                                letterSpacing: '0.04em',
+                                fontSize: '0.82rem',
+                                fontWeight: 800,
+                                color: '#FFFFFF',
+                                lineHeight: 1.25,
+                                margin: '0 0 0.1rem',
+                                letterSpacing: '-0.015em',
                               }}
                             >
-                              <span>{sch.authorityType}</span>
-                              <span>•</span>
-                              <CountryFlagIcon countryCode={sch.countryCode} width={16} height={11} />
-                            </div>
-                            <div style={{ fontSize: '0.82rem', color: '#58695E', fontWeight: 600 }}>
-                              {sch.country}
+                              {sch.name}
+                            </h3>
+                            <div style={{ fontSize: '0.65rem', color: 'rgba(255, 255, 255, 0.85)', lineHeight: 1.25 }}>
+                              {sch.provider}
                             </div>
                           </div>
                         </div>
 
-                        <span
+                        <div
                           style={{
-                            padding: '0.35rem 0.8rem',
-                            borderRadius: 'var(--radius-pill, 9999px)',
-                            backgroundColor: 'var(--brand-citron, #D7EE83)',
-                            color: '#19261F',
-                            fontSize: '0.75rem',
-                            fontWeight: 800,
-                            boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '0.3rem',
+                            fontSize: '0.64rem',
+                            color: 'rgba(255, 255, 255, 0.85)',
+                            fontStyle: 'italic',
+                            margin: '0.35rem 0 0',
+                            lineHeight: 1.3,
                             whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
                           }}
                         >
-                          <Sparkles size={12} style={{ color: '#19261F' }} />
-                          <span>{sch.fundingBadge}</span>
-                        </span>
+                          "{sch.motto}"
+                        </div>
                       </div>
 
-                      <h3
-                        style={{
-                          fontSize: '1.18rem',
-                          fontWeight: 800,
-                          color: 'var(--color-foreground, #19261F)',
-                          lineHeight: 1.3,
-                          margin: '0 0 0.4rem',
-                          letterSpacing: '-0.015em',
-                        }}
-                      >
-                        {sch.name}
-                      </h3>
-
-                      <p
-                        style={{
-                          fontSize: '0.82rem',
-                          color: '#58695E',
-                          margin: 0,
-                          lineHeight: 1.45,
-                        }}
-                      >
-                        {sch.motto}
-                      </p>
-                    </div>
-
-                    {/* Scholarship Distinct Body */}
-                    <div
-                      style={{
-                        padding: '1.25rem 1.4rem 1.4rem',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        flex: 1,
-                        justifyContent: 'space-between',
-                      }}
-                    >
-                      <div>
-                        {/* Financial Coverage Matrix Strip */}
+                      {/* Compact Body */}
+                      <div style={{ padding: '0.65rem 0.7rem 0.55rem' }}>
+                        {/* 3-Column Financial Matrix */}
                         <div
                           style={{
                             backgroundColor: '#F6F9F6',
                             border: '1px solid #E1EAE0',
-                            borderRadius: '16px',
-                            padding: '0.85rem 1rem',
+                            borderRadius: '8px',
+                            padding: '0.35rem 0.45rem',
                             display: 'grid',
                             gridTemplateColumns: '1fr 1fr 1fr',
-                            gap: '0.5rem',
+                            gap: '0.25rem',
                             textAlign: 'center',
-                            marginBottom: '1.15rem',
+                            marginBottom: '0.45rem',
                           }}
                         >
                           <div>
-                            <div style={{ fontSize: '0.72rem', color: '#6A7D71', fontWeight: 600 }}>
-                              Tuition
-                            </div>
-                            <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#19261F', marginTop: '0.15rem' }}>
+                            <div style={{ fontSize: '0.58rem', color: '#6A7D71', fontWeight: 600 }}>Tuition</div>
+                            <div style={{ fontSize: '0.72rem', fontWeight: 800, color: '#19261F', marginTop: '0.1rem' }}>
                               {sch.tuitionCoverage}
                             </div>
                           </div>
 
                           <div style={{ borderLeft: '1px solid #E1E8DE', borderRight: '1px solid #E1E8DE' }}>
-                            <div style={{ fontSize: '0.72rem', color: '#6A7D71', fontWeight: 600 }}>
-                              Stipend
-                            </div>
-                            <div style={{ fontSize: '0.88rem', fontWeight: 800, color: 'var(--action-primary, #245B42)', marginTop: '0.15rem' }}>
+                            <div style={{ fontSize: '0.58rem', color: '#6A7D71', fontWeight: 600 }}>Stipend</div>
+                            <div style={{ fontSize: '0.72rem', fontWeight: 800, color: 'var(--action-primary, #245B42)', marginTop: '0.1rem' }}>
                               {sch.monthlyStipend}
                             </div>
                           </div>
 
                           <div>
-                            <div style={{ fontSize: '0.72rem', color: '#6A7D71', fontWeight: 600 }}>
-                              Travel
-                            </div>
-                            <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#19261F', marginTop: '0.15rem' }}>
+                            <div style={{ fontSize: '0.58rem', color: '#6A7D71', fontWeight: 600 }}>Travel</div>
+                            <div style={{ fontSize: '0.72rem', fontWeight: 800, color: '#19261F', marginTop: '0.1rem' }}>
                               {sch.travelAllowance}
                             </div>
                           </div>
                         </div>
 
-                        {/* Grant Target Level */}
+                        {/* Target Level & Value */}
                         <div
                           style={{
                             display: 'flex',
@@ -1921,182 +1458,168 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                             justifyContent: 'space-between',
                             backgroundColor: '#FFFFFF',
                             border: '1px solid #E3ECE4',
-                            borderRadius: '12px',
-                            padding: '0.65rem 0.9rem',
-                            marginBottom: '1rem',
+                            borderRadius: '8px',
+                            padding: '0.35rem 0.5rem',
+                            marginBottom: '0.45rem',
+                            fontSize: '0.66rem',
                           }}
                         >
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-                            <GraduationCap size={16} style={{ color: 'var(--action-primary, #245B42)' }} />
-                            <span style={{ fontSize: '0.82rem', fontWeight: 700, color: '#19261F' }}>
-                              {sch.targetLevel}
-                            </span>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                            <GraduationCap size={13} style={{ color: 'var(--action-primary, #245B42)' }} />
+                            <span style={{ fontWeight: 700, color: '#19261F' }}>{sch.targetLevel}</span>
                           </div>
-
-                          <span
-                            style={{
-                              fontSize: '0.78rem',
-                              fontWeight: 700,
-                              color: 'var(--action-primary, #245B42)',
-                            }}
-                          >
+                          <span style={{ fontWeight: 700, color: 'var(--action-primary, #245B42)' }}>
                             {sch.fundingValue}
                           </span>
                         </div>
 
-                        {/* Statutory Criteria Bullet List */}
-                        <div style={{ marginBottom: '1.15rem' }}>
-                          <div style={{ fontSize: '0.74rem', fontWeight: 700, color: '#58695E', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '0.45rem' }}>
-                            Eligibility Criteria
-                          </div>
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                            {sch.keyCriteria.map((crit, cIdx) => (
-                              <div
-                                key={cIdx}
-                                style={{
-                                  display: 'flex',
-                                  alignItems: 'flex-start',
-                                  gap: '0.45rem',
-                                  fontSize: '0.78rem',
-                                  color: '#384C40',
-                                  lineHeight: 1.4,
-                                }}
-                              >
-                                <CheckCircle size={13} style={{ color: '#245B42', flexShrink: 0, marginTop: '0.15rem' }} />
-                                <span>{crit}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-
-                        {/* Annual Deadline Warning Strip */}
+                        {/* Statutory Criteria Bullet */}
                         <div
                           style={{
                             display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.5rem',
-                            padding: '0.6rem 0.85rem',
-                            borderRadius: '10px',
-                            backgroundColor: '#FFF8E6',
-                            border: '1px solid #F5E5B8',
-                            color: '#7A5400',
-                            fontSize: '0.78rem',
-                            fontWeight: 600,
-                            marginBottom: '1.25rem',
+                            alignItems: 'flex-start',
+                            gap: '0.3rem',
+                            fontSize: '0.64rem',
+                            color: '#455A4E',
+                            lineHeight: 1.35,
+                            marginBottom: '0.45rem',
                           }}
                         >
-                          <Calendar size={14} style={{ color: '#996B00', flexShrink: 0 }} />
-                          <span>Next Application Deadline: <strong>{sch.annualDeadline}</strong></span>
+                          <CheckCircle size={11} style={{ color: 'var(--action-primary, #245B42)', flexShrink: 0, marginTop: '0.1rem' }} />
+                          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
+                            {sch.keyCriteria[0]}
+                          </span>
+                        </div>
+
+                        {/* Next Deadline Strip */}
+                        <div
+                          style={{
+                            backgroundColor: '#FEF8EE',
+                            border: '1px solid #F5E3C8',
+                            borderRadius: '6px',
+                            padding: '0.3rem 0.45rem',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.3rem',
+                            fontSize: '0.64rem',
+                            color: '#8A5200',
+                            fontWeight: 600,
+                            marginBottom: '0.55rem',
+                          }}
+                        >
+                          <Calendar size={11} />
+                          <span>Deadline: {sch.annualDeadline}</span>
                         </div>
                       </div>
+                    </div>
 
-                      {/* Bottom Action Bar */}
-                      <div
+                    {/* Action Bar */}
+                    <div
+                      style={{
+                        padding: '0.45rem 0.7rem 0.65rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.35rem',
+                        borderTop: '1px solid #F0F4EF',
+                        marginTop: 'auto',
+                      }}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => toggleBookmark(sch.id)}
+                        aria-label={`Bookmark ${sch.name}`}
+                        title={isBookmarked ? 'Saved to bookmarks' : 'Bookmark grant'}
                         style={{
+                          width: '28px',
+                          height: '28px',
+                          borderRadius: '8px',
+                          border: '1px solid #E1E8DE',
+                          backgroundColor: isBookmarked ? 'rgba(36, 91, 66, 0.1)' : '#FFFFFF',
+                          color: isBookmarked ? 'var(--action-primary, #245B42)' : '#4A5D52',
                           display: 'flex',
                           alignItems: 'center',
-                          justifyContent: 'space-between',
-                          gap: '0.75rem',
-                          paddingTop: '0.65rem',
-                          borderTop: '1px solid #F0F4EF',
+                          justifyContent: 'center',
+                          cursor: 'pointer',
+                          transition: 'all 140ms ease',
+                          flexShrink: 0,
                         }}
                       >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-                          <button
-                            type="button"
-                            onClick={() => toggleBookmark(sch.id)}
-                            aria-label={`Bookmark ${sch.name}`}
-                            title={isBookmarked ? 'Saved to bookmarks' : 'Bookmark grant'}
-                            style={{
-                              width: '42px',
-                              height: '42px',
-                              borderRadius: '14px',
-                              border: '1px solid #E1E8DE',
-                              backgroundColor: isBookmarked ? 'rgba(36, 91, 66, 0.1)' : '#FFFFFF',
-                              color: isBookmarked ? 'var(--action-primary, #245B42)' : '#4A5D52',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              cursor: 'pointer',
-                              transition: 'all 150ms ease',
-                            }}
-                          >
-                            <Bookmark size={17} fill={isBookmarked ? 'var(--action-primary, #245B42)' : 'none'} />
-                          </button>
+                        <Bookmark size={13} fill={isBookmarked ? 'var(--action-primary, #245B42)' : 'none'} />
+                      </button>
 
-                          <button
-                            type="button"
-                            onClick={() => handleShare(sch.id, sch.name)}
-                            aria-label={`Share ${sch.name}`}
-                            title={isCopied ? 'Link copied!' : 'Share grant'}
-                            style={{
-                              width: '42px',
-                              height: '42px',
-                              borderRadius: '14px',
-                              border: '1px solid #E1E8DE',
-                              backgroundColor: isCopied ? 'rgba(36, 91, 66, 0.1)' : '#FFFFFF',
-                              color: isCopied ? 'var(--action-primary, #245B42)' : '#4A5D52',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              cursor: 'pointer',
-                              transition: 'all 150ms ease',
-                            }}
-                          >
-                            {isCopied ? <Check size={16} /> : <Share2 size={17} />}
-                          </button>
+                      <button
+                        type="button"
+                        onClick={() => handleShare(sch.id, sch.name)}
+                        aria-label={`Share ${sch.name}`}
+                        title={isCopied ? 'Link copied!' : 'Share grant'}
+                        style={{
+                          width: '28px',
+                          height: '28px',
+                          borderRadius: '8px',
+                          border: '1px solid #E1E8DE',
+                          backgroundColor: isCopied ? 'rgba(36, 91, 66, 0.1)' : '#FFFFFF',
+                          color: isCopied ? 'var(--action-primary, #245B42)' : '#4A5D52',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          cursor: 'pointer',
+                          transition: 'all 140ms ease',
+                          flexShrink: 0,
+                        }}
+                      >
+                        {isCopied ? <Check size={12} /> : <Share2 size={13} />}
+                      </button>
 
-                          {sch.officialPortalUrl && (
-                            <a
-                              href={sch.officialPortalUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              aria-label={`Visit official portal for ${sch.name}`}
-                              title="Visit official authority portal"
-                              style={{
-                                width: '42px',
-                                height: '42px',
-                                borderRadius: '14px',
-                                border: '1px solid #E1E8DE',
-                                backgroundColor: '#FFFFFF',
-                                color: '#4A5D52',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                textDecoration: 'none',
-                                transition: 'all 150ms ease',
-                              }}
-                            >
-                              <ExternalLink size={17} />
-                            </a>
-                          )}
-                        </div>
-
-                        <div style={{ width: '1px', height: '28px', backgroundColor: '#E1E8DE' }} />
-
-                        <Link
-                          to={`${ROUTES.SCHOLARSHIPS}?country=${encodeURIComponent(sch.country)}`}
+                      {sch.officialPortalUrl && (
+                        <a
+                          href={sch.officialPortalUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`Visit official authority for ${sch.name}`}
+                          title="Visit official authority portal"
                           style={{
-                            display: 'inline-flex',
+                            width: '28px',
+                            height: '28px',
+                            borderRadius: '8px',
+                            border: '1px solid #E1E8DE',
+                            backgroundColor: '#FFFFFF',
+                            color: '#4A5D52',
+                            display: 'flex',
                             alignItems: 'center',
-                            gap: '0.6rem',
-                            padding: '0.75rem 1.5rem',
-                            borderRadius: 'var(--radius-pill, 9999px)',
-                            backgroundColor: '#0C3826',
-                            color: '#FFFFFF',
-                            fontSize: '0.9rem',
-                            fontWeight: 700,
+                            justifyContent: 'center',
                             textDecoration: 'none',
-                            boxShadow: '0 4px 14px rgba(12, 56, 38, 0.28)',
-                            transition: 'all 180ms ease',
-                            whiteSpace: 'nowrap',
+                            transition: 'all 140ms ease',
+                            flexShrink: 0,
                           }}
-                          className="opportunity-cta-btn"
                         >
-                          <span>Explore Grant</span>
-                          <ArrowRight size={15} />
-                        </Link>
-                      </div>
+                          <ExternalLink size={13} />
+                        </a>
+                      )}
+
+                      <Link
+                        to={ROUTES.SCHOLARSHIPS}
+                        style={{
+                          flex: 1,
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '0.25rem',
+                          padding: '0.4rem 0.55rem',
+                          borderRadius: 'var(--radius-pill, 9999px)',
+                          backgroundColor: 'var(--action-primary, #245B42)',
+                          color: '#FFFFFF',
+                          fontSize: '0.72rem',
+                          fontWeight: 700,
+                          textDecoration: 'none',
+                          boxShadow: '0 2px 8px rgba(36, 91, 66, 0.2)',
+                          transition: 'all 160ms ease',
+                          whiteSpace: 'nowrap',
+                        }}
+                        className="opportunity-cta-btn"
+                      >
+                        <span>Explore Grant</span>
+                        <ArrowRight size={12} />
+                      </Link>
                     </div>
                   </div>
                 );
@@ -2111,11 +1634,11 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '0.625rem',
-                  padding: '0.85rem 2.25rem',
+                  padding: '0.8rem 2.25rem',
                   borderRadius: 'var(--radius-pill, 9999px)',
                   backgroundColor: 'var(--action-primary, #245B42)',
                   color: '#FFFFFF',
-                  fontSize: '0.95rem',
+                  fontSize: '0.92rem',
                   fontWeight: 700,
                   textDecoration: 'none',
                   boxShadow: '0 4px 16px rgba(36, 91, 66, 0.25)',
@@ -2130,7 +1653,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
         )}
 
         {/* =========================================================================
-            TAB 3: PROFESSORS & RESEARCH (6 CARDS IN ONE ROW EXECUTIVE CAROUSEL)
+            TAB 3: PROFESSORS & RESEARCH (6 COMPACT CARDS SHOWN AT ONCE)
             ========================================================================= */}
         {activeTab === 'professors' && (
           <motion.div
@@ -2146,9 +1669,9 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '0.5rem',
+                gap: '0.45rem',
                 flexWrap: 'wrap',
-                marginBottom: '1.75rem',
+                marginBottom: '1.5rem',
               }}
               role="tablist"
               aria-label="Filter professors by research specialization"
@@ -2161,9 +1684,9 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                   aria-selected={selectedResearchTag === tag.id}
                   onClick={() => setSelectedResearchTag(tag.id)}
                   style={{
-                    padding: '0.35rem 0.95rem',
+                    padding: '0.3rem 0.85rem',
                     borderRadius: 'var(--radius-pill, 9999px)',
-                    fontSize: '0.8rem',
+                    fontSize: '0.78rem',
                     fontWeight: 600,
                     border: '1px solid',
                     borderColor: selectedResearchTag === tag.id ? 'var(--action-primary, #245B42)' : 'var(--border-subtle, #E1E8DE)',
@@ -2178,121 +1701,40 @@ export const ExploreOpportunitiesSection: React.FC = () => {
               ))}
             </div>
 
-            {/* Carousel Navigation Header */}
+            {/* Status Header */}
             <div
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                marginBottom: '1rem',
+                marginBottom: '0.9rem',
                 flexWrap: 'wrap',
-                gap: '0.75rem',
+                gap: '0.5rem',
                 padding: '0 0.25rem',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <span
                   style={{
-                    fontSize: '0.8rem',
+                    fontSize: '0.78rem',
                     fontWeight: 700,
                     color: 'var(--action-primary, #245B42)',
                     backgroundColor: 'rgba(36, 91, 66, 0.08)',
-                    padding: '0.25rem 0.8rem',
+                    padding: '0.22rem 0.75rem',
                     borderRadius: 'var(--radius-pill, 9999px)',
                   }}
                 >
                   European Research Chairs &amp; Faculty Supervision
                 </span>
-                <span style={{ fontSize: '0.78rem', color: '#6A7D71', fontWeight: 500 }}>
-                  Swipe or use controls to browse all 6
+                <span style={{ fontSize: '0.74rem', color: '#6A7D71', fontWeight: 500 }}>
+                  Showing all 6 research directors &amp; doctoral supervisors
                 </span>
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                  {filteredProfessors.map((_, dotIdx) => (
-                    <button
-                      key={dotIdx}
-                      type="button"
-                      aria-label={`Go to faculty ${dotIdx + 1}`}
-                      onClick={() => {
-                        professorsCarouselRef.current?.scrollTo({
-                          left: dotIdx * 380,
-                          behavior: 'smooth',
-                        });
-                        setActiveProfIndex(dotIdx);
-                      }}
-                      style={{
-                        width: activeProfIndex === dotIdx ? '20px' : '8px',
-                        height: '8px',
-                        borderRadius: '9999px',
-                        backgroundColor: activeProfIndex === dotIdx ? 'var(--action-primary, #245B42)' : '#D0DCD2',
-                        border: 'none',
-                        cursor: 'pointer',
-                        padding: 0,
-                        transition: 'all 200ms ease',
-                      }}
-                    />
-                  ))}
-                </div>
-
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                  <button
-                    type="button"
-                    aria-label="Previous faculty"
-                    onClick={() => scrollTrack(professorsCarouselRef, 'left')}
-                    style={{
-                      width: '38px',
-                      height: '38px',
-                      borderRadius: '50%',
-                      backgroundColor: '#FFFFFF',
-                      border: '1px solid #D5E0D7',
-                      color: '#19261F',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      cursor: 'pointer',
-                      boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
-                      transition: 'all 150ms ease',
-                    }}
-                  >
-                    <ChevronLeft size={18} />
-                  </button>
-
-                  <button
-                    type="button"
-                    aria-label="Next faculty"
-                    onClick={() => scrollTrack(professorsCarouselRef, 'right')}
-                    style={{
-                      width: '38px',
-                      height: '38px',
-                      borderRadius: '50%',
-                      backgroundColor: '#FFFFFF',
-                      border: '1px solid #D5E0D7',
-                      color: '#19261F',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      cursor: 'pointer',
-                      boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
-                      transition: 'all 150ms ease',
-                    }}
-                  >
-                    <ChevronRight size={18} />
-                  </button>
-                </div>
               </div>
             </div>
 
-            {/* 6 Cards in ONE Horizontal Carousel Row */}
+            {/* 6 Cards in Single Row Grid */}
             <div
-              ref={professorsCarouselRef}
-              className="opportunities-carousel-track"
-              onMouseEnter={() => setIsPaused(true)}
-              onMouseLeave={() => setIsPaused(false)}
-              onTouchStart={() => setIsPaused(true)}
-              onTouchEnd={() => setIsPaused(false)}
-              onScroll={() => handleScroll(professorsCarouselRef, setActiveProfIndex)}
+              className="opportunities-showcase-row"
             >
               {filteredProfessors.map((prof) => {
                 const isBookmarked = bookmarkedIds.has(prof.id);
@@ -2301,215 +1743,174 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                 return (
                   <div
                     key={prof.id}
-                    className="opportunities-carousel-card opportunity-card-hover"
-                    style={{
-                      backgroundColor: '#FFFFFF',
-                      borderRadius: '26px',
-                      border: '1px solid #DCE6DA',
-                      boxShadow: '0 12px 32px -8px rgba(22, 54, 38, 0.08), 0 3px 12px rgba(0, 0, 0, 0.03)',
-                      overflow: 'hidden',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'space-between',
-                      position: 'relative',
-                      transition: 'all 240ms ease',
-                    }}
+                    className="opportunities-card-compact opportunity-card-hover"
                   >
-                    {/* Faculty Chair Header with Executive Academic Crest */}
-                    <div
-                      style={{
-                        padding: '1.45rem 1.4rem 1.25rem',
-                        background: 'linear-gradient(145deg, #092015 0%, #133926 50%, #0C281B 100%)',
-                        color: '#FFFFFF',
-                        position: 'relative',
-                        boxShadow: 'inset 0 -1px 0 rgba(255,255,255,0.08)',
-                      }}
-                    >
-                      {/* Top Badges Row */}
+                    <div>
+                      {/* Faculty Chair Header with Executive Crest */}
                       <div
                         style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          gap: '0.5rem',
-                          marginBottom: '1.1rem',
+                          padding: '0.7rem 0.7rem 0.6rem',
+                          background: 'linear-gradient(135deg, #091F14 0%, #123724 100%)',
+                          color: '#FFFFFF',
                         }}
                       >
-                        <span
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '0.35rem',
-                            padding: '0.3rem 0.75rem',
-                            borderRadius: 'var(--radius-pill, 9999px)',
-                            backgroundColor: 'rgba(215, 238, 131, 0.14)',
-                            border: '1px solid rgba(215, 238, 131, 0.35)',
-                            color: 'var(--brand-citron, #D7EE83)',
-                            fontSize: '0.76rem',
-                            fontWeight: 700,
-                            letterSpacing: '0.02em',
-                          }}
-                        >
-                          <Atom size={13} />
-                          <span>{prof.disciplineBadge}</span>
-                        </span>
-
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                          <span
-                            style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: '0.3rem',
-                              padding: '0.28rem 0.65rem',
-                              borderRadius: 'var(--radius-pill, 9999px)',
-                              backgroundColor: 'rgba(255, 255, 255, 0.14)',
-                              backdropFilter: 'blur(8px)',
-                              color: '#FFFFFF',
-                              fontSize: '0.72rem',
-                              fontWeight: 700,
-                            }}
-                          >
-                            <ShieldCheck size={12} style={{ color: 'var(--brand-citron, #D7EE83)' }} />
-                            <span>{prof.roleBadge}</span>
-                          </span>
-                          <CountryFlagIcon countryCode={prof.countryCode} width={18} height={12} />
-                        </div>
-                      </div>
-
-                      {/* Professor Profile: Medallion Avatar + Name + University */}
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                        {/* Luxury Double-Ringed Avatar Medallion */}
+                        {/* Top Badges Row */}
                         <div
                           style={{
-                            width: '72px',
-                            height: '72px',
-                            borderRadius: '50%',
-                            background: 'linear-gradient(135deg, #D7EE83 0%, #245B42 100%)',
-                            padding: '2.5px',
-                            boxShadow: '0 6px 18px rgba(0, 0, 0, 0.32)',
-                            flexShrink: 0,
                             display: 'flex',
                             alignItems: 'center',
-                            justifyContent: 'center',
+                            justifyContent: 'space-between',
+                            gap: '0.35rem',
+                            marginBottom: '0.45rem',
                           }}
                         >
+                          <span
+                            style={{
+                              padding: '0.12rem 0.4rem',
+                              borderRadius: 'var(--radius-pill, 9999px)',
+                              backgroundColor: 'rgba(215, 238, 131, 0.15)',
+                              border: '1px solid rgba(215, 238, 131, 0.3)',
+                              color: 'var(--brand-citron, #D7EE83)',
+                              fontSize: '0.58rem',
+                              fontWeight: 700,
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '0.2rem',
+                            }}
+                          >
+                            <Atom size={10} />
+                            <span>{prof.disciplineBadge}</span>
+                          </span>
+
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                            <span
+                              style={{
+                                padding: '0.12rem 0.4rem',
+                                borderRadius: 'var(--radius-pill, 9999px)',
+                                backgroundColor: 'rgba(255, 255, 255, 0.14)',
+                                color: '#FFFFFF',
+                                fontSize: '0.58rem',
+                                fontWeight: 700,
+                              }}
+                            >
+                              {prof.roleBadge}
+                            </span>
+                            <CountryFlagIcon countryCode={prof.countryCode} width={15} height={10} />
+                          </div>
+                        </div>
+
+                        {/* Professor Profile: Medallion + Name + University */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                           <div
                             style={{
-                              width: '100%',
-                              height: '100%',
+                              width: '38px',
+                              height: '38px',
                               borderRadius: '50%',
-                              backgroundColor: '#FFFFFF',
+                              background: 'linear-gradient(135deg, #D7EE83 0%, #245B42 100%)',
+                              padding: '2px',
+                              boxShadow: '0 3px 10px rgba(0, 0, 0, 0.3)',
+                              flexShrink: 0,
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'center',
-                              overflow: 'hidden',
                             }}
                           >
-                            <ProfessorVectorAvatar professorId={prof.id} name={prof.professorName} size={66} />
+                            <div
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                                borderRadius: '50%',
+                                backgroundColor: '#FFFFFF',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                overflow: 'hidden',
+                              }}
+                            >
+                              <ProfessorVectorAvatar professorId={prof.id} name={prof.professorName} size={34} />
+                            </div>
+                          </div>
+
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <h3
+                              style={{
+                                fontSize: '0.84rem',
+                                fontWeight: 800,
+                                color: '#FFFFFF',
+                                lineHeight: 1.2,
+                                margin: 0,
+                                letterSpacing: '-0.015em',
+                              }}
+                            >
+                              {prof.professorName}
+                            </h3>
+
+                            <div
+                              style={{
+                                fontSize: '0.67rem',
+                                color: 'var(--brand-citron, #D7EE83)',
+                                fontWeight: 700,
+                                marginTop: '0.1rem',
+                                lineHeight: 1.2,
+                              }}
+                            >
+                              {prof.title}
+                            </div>
+
+                            <div
+                              style={{
+                                fontSize: '0.64rem',
+                                color: 'rgba(255, 255, 255, 0.85)',
+                                marginTop: '0.1rem',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                              }}
+                            >
+                              {prof.university} • {prof.city}
+                            </div>
                           </div>
                         </div>
 
-                        <div style={{ overflow: 'hidden' }}>
-                          <h3
-                            style={{
-                              fontSize: '1.26rem',
-                              fontWeight: 800,
-                              color: '#FFFFFF',
-                              lineHeight: 1.2,
-                              margin: '0 0 0.2rem',
-                              letterSpacing: '-0.02em',
-                            }}
-                          >
-                            {prof.professorName}
-                          </h3>
-
-                          <div
-                            style={{
-                              fontSize: '0.84rem',
-                              color: 'var(--brand-citron, #D7EE83)',
-                              fontWeight: 700,
-                              lineHeight: 1.25,
-                              marginBottom: '0.2rem',
-                            }}
-                          >
-                            {prof.title}
-                          </div>
-
-                          <div
-                            style={{
-                              fontSize: '0.78rem',
-                              color: 'rgba(255, 255, 255, 0.85)',
-                              lineHeight: 1.3,
-                              fontWeight: 500,
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '0.3rem',
-                            }}
-                          >
-                            <MapPin size={12} style={{ color: 'var(--brand-citron, #D7EE83)', flexShrink: 0 }} />
-                            <span>{prof.university} • {prof.city}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Tagline / Research Mission */}
-                      <div style={{ marginTop: '0.85rem', paddingTop: '0.75rem', borderTop: '1px solid rgba(255, 255, 255, 0.12)' }}>
-                        <p style={{ margin: 0, fontSize: '0.79rem', color: 'rgba(255, 255, 255, 0.92)', fontStyle: 'italic', lineHeight: 1.4 }}>
+                        {/* Quoted Motto */}
+                        <div
+                          style={{
+                            fontSize: '0.64rem',
+                            color: 'rgba(255, 255, 255, 0.88)',
+                            fontStyle: 'italic',
+                            margin: '0.35rem 0 0',
+                            lineHeight: 1.3,
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                          }}
+                        >
                           "{prof.motto}"
-                        </p>
+                        </div>
                       </div>
-                    </div>
 
-                    {/* Professor Distinct Body */}
-                    <div
-                      style={{
-                        padding: '1.25rem 1.4rem 1.4rem',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        flex: 1,
-                        justifyContent: 'space-between',
-                      }}
-                    >
-                      <div>
+                      {/* Compact Body */}
+                      <div style={{ padding: '0.65rem 0.7rem 0.55rem' }}>
                         {/* Laboratory Callout Strip */}
                         <div
                           style={{
                             backgroundColor: '#F3F8F5',
                             border: '1px solid #DFEDE5',
-                            borderRadius: '14px',
-                            padding: '0.75rem 0.95rem',
+                            borderRadius: '8px',
+                            padding: '0.35rem 0.5rem',
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '0.65rem',
-                            marginBottom: '1.1rem',
+                            gap: '0.35rem',
+                            marginBottom: '0.45rem',
                           }}
                         >
-                          <div
-                            style={{
-                              width: '34px',
-                              height: '34px',
-                              borderRadius: '10px',
-                              backgroundColor: 'rgba(36, 91, 66, 0.12)',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              color: 'var(--action-primary, #245B42)',
-                              flexShrink: 0,
-                            }}
-                          >
-                            <FlaskConical size={18} />
-                          </div>
-                          <div style={{ overflow: 'hidden' }}>
-                            <div style={{ fontSize: '0.7rem', color: '#58695E', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                              Research Lab
-                            </div>
-                            <div style={{ fontSize: '0.84rem', fontWeight: 800, color: '#19261F', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                              {prof.labName}
-                            </div>
+                          <FlaskConical size={13} style={{ color: 'var(--action-primary, #245B42)', flexShrink: 0 }} />
+                          <div style={{ fontSize: '0.66rem', fontWeight: 800, color: '#19261F', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            {prof.labName}
                           </div>
                         </div>
 
-                        {/* Specialization & Open Topics Count Badge */}
+                        {/* Specialization & Open Tracks Badge */}
                         <div
                           style={{
                             display: 'flex',
@@ -2517,21 +1918,21 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                             justifyContent: 'space-between',
                             backgroundColor: '#FFFFFF',
                             border: '1px solid #E1E8DE',
-                            borderRadius: '12px',
-                            padding: '0.65rem 0.9rem',
-                            marginBottom: '1rem',
+                            borderRadius: '8px',
+                            padding: '0.35rem 0.5rem',
+                            marginBottom: '0.45rem',
                           }}
                         >
-                          <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#19261F' }}>
+                          <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#19261F', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                             {prof.specializationDisplay}
                           </div>
                           <span
                             style={{
-                              fontSize: '0.72rem',
+                              fontSize: '0.62rem',
                               fontWeight: 800,
                               color: 'var(--action-primary, #245B42)',
                               backgroundColor: 'rgba(36, 91, 66, 0.08)',
-                              padding: '0.22rem 0.6rem',
+                              padding: '0.12rem 0.4rem',
                               borderRadius: 'var(--radius-pill, 9999px)',
                               whiteSpace: 'nowrap',
                             }}
@@ -2541,61 +1942,57 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                         </div>
 
                         {/* Active Open Research Topics */}
-                        <div style={{ marginBottom: '1.15rem' }}>
-                          <div style={{ fontSize: '0.74rem', fontWeight: 700, color: '#58695E', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '0.45rem' }}>
-                            Active Supervision Topics
+                        <div style={{ marginBottom: '0.45rem' }}>
+                          <div style={{ fontSize: '0.62rem', fontWeight: 700, color: '#58695E', textTransform: 'uppercase', letterSpacing: '0.03em', marginBottom: '0.2rem' }}>
+                            Active Supervision Topic
                           </div>
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                            {prof.openTopics.map((top, tIdx) => (
-                              <div
-                                key={tIdx}
-                                style={{
-                                  display: 'flex',
-                                  alignItems: 'flex-start',
-                                  gap: '0.45rem',
-                                  fontSize: '0.78rem',
-                                  color: '#26382E',
-                                  lineHeight: 1.35,
-                                  backgroundColor: '#F9FBF9',
-                                  padding: '0.4rem 0.65rem',
-                                  borderRadius: '8px',
-                                  border: '1px solid #EAF0E9',
-                                  fontWeight: 500,
-                                }}
-                              >
-                                <BookOpen size={13} style={{ color: '#245B42', flexShrink: 0, marginTop: '0.15rem' }} />
-                                <span>{top}</span>
-                              </div>
-                            ))}
+                          <div
+                            style={{
+                              display: 'flex',
+                              alignItems: 'flex-start',
+                              gap: '0.3rem',
+                              fontSize: '0.66rem',
+                              color: '#26382E',
+                              lineHeight: 1.35,
+                              backgroundColor: '#F9FBF9',
+                              padding: '0.35rem 0.45rem',
+                              borderRadius: '6px',
+                              border: '1px solid #EAF0E9',
+                            }}
+                          >
+                            <BookOpen size={11} style={{ color: '#245B42', flexShrink: 0, marginTop: '0.1rem' }} />
+                            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
+                              {prof.openTopics[0]}
+                            </span>
                           </div>
                         </div>
 
-                        {/* Supervision Terms & Advisory Strip */}
+                        {/* Degree levels and supervision conditions */}
                         <div
                           style={{
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '0.45rem',
+                            gap: '0.25rem',
                             flexWrap: 'wrap',
-                            marginBottom: '1.25rem',
+                            marginBottom: '0.55rem',
                           }}
                         >
-                          {prof.degreeLevels.map((lvl, lIdx) => (
+                          {prof.degreeLevels.slice(0, 1).map((lvl, lIdx) => (
                             <span
                               key={lIdx}
                               style={{
                                 display: 'inline-flex',
                                 alignItems: 'center',
-                                gap: '0.3rem',
-                                padding: '0.25rem 0.65rem',
+                                gap: '0.2rem',
+                                padding: '0.12rem 0.4rem',
                                 borderRadius: 'var(--radius-pill, 9999px)',
                                 backgroundColor: '#EEF5EF',
                                 color: '#19261F',
-                                fontSize: '0.75rem',
+                                fontSize: '0.62rem',
                                 fontWeight: 600,
                               }}
                             >
-                              <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#8DBE3B' }} />
+                              <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: '#8DBE3B' }} />
                               <span>{lvl}</span>
                             </span>
                           ))}
@@ -2604,103 +2001,103 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                             style={{
                               display: 'inline-flex',
                               alignItems: 'center',
-                              gap: '0.3rem',
-                              padding: '0.25rem 0.65rem',
+                              gap: '0.2rem',
+                              padding: '0.12rem 0.4rem',
                               borderRadius: 'var(--radius-pill, 9999px)',
                               backgroundColor: '#EEF5EF',
                               color: '#19261F',
-                              fontSize: '0.75rem',
+                              fontSize: '0.62rem',
                               fontWeight: 600,
                             }}
                           >
-                            <Globe size={12} style={{ color: '#58695E' }} />
+                            <Globe size={10} style={{ color: '#58695E' }} />
                             <span>{prof.languages[0]}</span>
                           </span>
                         </div>
                       </div>
+                    </div>
 
-                      {/* Bottom Action Bar */}
-                      <div
+                    {/* Bottom Action Bar */}
+                    <div
+                      style={{
+                        padding: '0.45rem 0.7rem 0.65rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.35rem',
+                        borderTop: '1px solid #F0F4EF',
+                        marginTop: 'auto',
+                      }}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => toggleBookmark(prof.id)}
+                        aria-label={`Bookmark ${prof.professorName}`}
+                        title={isBookmarked ? 'Saved to bookmarks' : 'Bookmark faculty'}
                         style={{
+                          width: '28px',
+                          height: '28px',
+                          borderRadius: '8px',
+                          border: '1px solid #E1E8DE',
+                          backgroundColor: isBookmarked ? 'rgba(36, 91, 66, 0.1)' : '#FFFFFF',
+                          color: isBookmarked ? 'var(--action-primary, #245B42)' : '#4A5D52',
                           display: 'flex',
                           alignItems: 'center',
-                          justifyContent: 'space-between',
-                          gap: '0.75rem',
-                          paddingTop: '0.65rem',
-                          borderTop: '1px solid #F0F4EF',
+                          justifyContent: 'center',
+                          cursor: 'pointer',
+                          transition: 'all 140ms ease',
+                          flexShrink: 0,
                         }}
                       >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-                          <button
-                            type="button"
-                            onClick={() => toggleBookmark(prof.id)}
-                            aria-label={`Bookmark ${prof.professorName}`}
-                            title={isBookmarked ? 'Saved to bookmarks' : 'Bookmark faculty'}
-                            style={{
-                              width: '42px',
-                              height: '42px',
-                              borderRadius: '14px',
-                              border: '1px solid #E1E8DE',
-                              backgroundColor: isBookmarked ? 'rgba(36, 91, 66, 0.1)' : '#FFFFFF',
-                              color: isBookmarked ? 'var(--action-primary, #245B42)' : '#4A5D52',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              cursor: 'pointer',
-                              transition: 'all 150ms ease',
-                            }}
-                          >
-                            <Bookmark size={17} fill={isBookmarked ? 'var(--action-primary, #245B42)' : 'none'} />
-                          </button>
+                        <Bookmark size={13} fill={isBookmarked ? 'var(--action-primary, #245B42)' : 'none'} />
+                      </button>
 
-                          <button
-                            type="button"
-                            onClick={() => handleShare(prof.id, prof.professorName)}
-                            aria-label={`Share ${prof.professorName}`}
-                            title={isCopied ? 'Link copied!' : 'Share profile'}
-                            style={{
-                              width: '42px',
-                              height: '42px',
-                              borderRadius: '14px',
-                              border: '1px solid #E1E8DE',
-                              backgroundColor: isCopied ? 'rgba(36, 91, 66, 0.1)' : '#FFFFFF',
-                              color: isCopied ? 'var(--action-primary, #245B42)' : '#4A5D52',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              cursor: 'pointer',
-                              transition: 'all 150ms ease',
-                            }}
-                          >
-                            {isCopied ? <Check size={16} /> : <Share2 size={17} />}
-                          </button>
-                        </div>
+                      <button
+                        type="button"
+                        onClick={() => handleShare(prof.id, prof.professorName)}
+                        aria-label={`Share ${prof.professorName}`}
+                        title={isCopied ? 'Link copied!' : 'Share profile'}
+                        style={{
+                          width: '28px',
+                          height: '28px',
+                          borderRadius: '8px',
+                          border: '1px solid #E1E8DE',
+                          backgroundColor: isCopied ? 'rgba(36, 91, 66, 0.1)' : '#FFFFFF',
+                          color: isCopied ? 'var(--action-primary, #245B42)' : '#4A5D52',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          cursor: 'pointer',
+                          transition: 'all 140ms ease',
+                          flexShrink: 0,
+                        }}
+                      >
+                        {isCopied ? <Check size={12} /> : <Share2 size={13} />}
+                      </button>
 
-                        <div style={{ width: '1px', height: '28px', backgroundColor: '#E1E8DE' }} />
-
-                        <Link
-                          to={`${ROUTES.PROGRAMS}?country=${encodeURIComponent(prof.country)}`}
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '0.6rem',
-                            padding: '0.75rem 1.5rem',
-                            borderRadius: 'var(--radius-pill, 9999px)',
-                            backgroundColor: '#0C3826',
-                            color: '#FFFFFF',
-                            fontSize: '0.9rem',
-                            fontWeight: 700,
-                            textDecoration: 'none',
-                            boxShadow: '0 4px 14px rgba(12, 56, 38, 0.28)',
-                            transition: 'all 180ms ease',
-                            whiteSpace: 'nowrap',
-                          }}
-                          className="opportunity-cta-btn"
-                        >
-                          <span>Explore Faculty</span>
-                          <ArrowRight size={15} />
-                        </Link>
-                      </div>
+                      <Link
+                        to={`${ROUTES.PROGRAMS}?country=${encodeURIComponent(prof.country)}`}
+                        style={{
+                          flex: 1,
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '0.25rem',
+                          padding: '0.4rem 0.55rem',
+                          borderRadius: 'var(--radius-pill, 9999px)',
+                          backgroundColor: '#0C3826',
+                          color: '#FFFFFF',
+                          fontSize: '0.72rem',
+                          fontWeight: 700,
+                          textDecoration: 'none',
+                          boxShadow: '0 2px 8px rgba(12, 56, 38, 0.2)',
+                          transition: 'all 160ms ease',
+                          whiteSpace: 'nowrap',
+                        }}
+                        className="opportunity-cta-btn"
+                      >
+                        <span>Explore Faculty</span>
+                        <ArrowRight size={12} />
+                      </Link>
                     </div>
                   </div>
                 );
@@ -2715,11 +2112,11 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '0.625rem',
-                  padding: '0.85rem 2.25rem',
+                  padding: '0.8rem 2.25rem',
                   borderRadius: 'var(--radius-pill, 9999px)',
                   backgroundColor: 'var(--action-primary, #245B42)',
                   color: '#FFFFFF',
-                  fontSize: '0.95rem',
+                  fontSize: '0.92rem',
                   fontWeight: 700,
                   textDecoration: 'none',
                   boxShadow: '0 4px 16px rgba(36, 91, 66, 0.25)',
