@@ -21,13 +21,12 @@
       rel="stylesheet"
     />
 
-    <!-- Pre-paint appearance initialization script: prevents flash of wrong theme -->
+    <!-- Pre-paint appearance initialization script: default theme is light -->
     <script>
       (function() {
         try {
           var stored = localStorage.getItem('unilistics-theme') || localStorage.getItem('theme');
-          var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-          var theme = (stored === 'dark' || stored === 'light') ? stored : (systemDark ? 'dark' : 'light');
+          var theme = (stored === 'dark') ? 'dark' : 'light';
           document.documentElement.setAttribute('data-theme', theme);
           if (theme === 'dark') {
             document.documentElement.classList.add('dark');

@@ -22,16 +22,16 @@ function getSystemTheme(): ResolvedTheme {
 }
 
 function getStoredTheme(): ThemePreference {
-  if (typeof window === 'undefined') return 'system';
+  if (typeof window === 'undefined') return 'light';
   try {
     const stored = (localStorage.getItem(STORAGE_KEY) || localStorage.getItem('theme')) as ThemePreference | null;
-    if (stored === 'light' || stored === 'dark' || stored === 'system') {
+    if (stored === 'light' || stored === 'dark') {
       return stored;
     }
   } catch {
     // Storage access denied in private browsing
   }
-  return 'system';
+  return 'light'; // Default theme is explicitly light
 }
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -108,11 +108,10 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 export function useTheme(): ThemeContextValue {
   const context = useContext(ThemeContext);
   if (!context) {
-    // Return sensible defaults if rendered outside provider
-    const sys = getSystemTheme();
+    // Return sensible defaults if rendered outside provider (defaulting to light theme)
     return {
-      theme: 'system',
-      resolvedTheme: sys,
+      theme: 'light',
+      resolvedTheme: 'light',
       setTheme: () => {},
       toggleTheme: () => {},
     };
