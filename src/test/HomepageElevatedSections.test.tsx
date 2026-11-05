@@ -10,7 +10,7 @@ import { ROUTES } from '@/config/routes';
 
 describe('Homepage Elevated Sections Test Suite', () => {
   describe('1. Partners & Institutional Network Section', () => {
-    it('renders section heading, marquee pills, and statutory disclaimer', () => {
+    it('renders section heading and infinite marquee of partner logos without text names or disclaimers', () => {
       render(
         <MemoryRouter>
           <PartnersSection />
@@ -19,44 +19,43 @@ describe('Homepage Elevated Sections Test Suite', () => {
 
       expect(screen.getByRole('heading', { level: 2, name: /Collaborating with Leading European Academic Bodies/i })).toBeDefined();
       expect(screen.getByText(/Institutional Network & Credential Pathways/i)).toBeDefined();
-      expect(screen.getAllByText(/DAAD/i).length).toBeGreaterThan(0);
-      expect(screen.getAllByText(/uni-assist/i).length).toBeGreaterThan(0);
-      expect(screen.getAllByText(/Campus France/i).length).toBeGreaterThan(0);
-      expect(screen.getAllByText(/CIMEA/i).length).toBeGreaterThan(0);
-      expect(screen.getByText(/Procedural Notice & Representative Institutions:/i)).toBeDefined();
+
+      // Verify presence of partner logos with proper alt attributes
+      const daadLogos = screen.getAllByAltText(/DAAD/i);
+      expect(daadLogos.length).toBeGreaterThan(0);
+      expect(daadLogos[0]).toHaveAttribute('src', '/images/partners/Daad.png');
+
+      const uniAssistLogos = screen.getAllByAltText(/uni-assist/i);
+      expect(uniAssistLogos.length).toBeGreaterThan(0);
+      expect(uniAssistLogos[0]).toHaveAttribute('src', '/images/partners/uniAssist.png');
+
+      const campusFranceLogos = screen.getAllByAltText(/Campus France/i);
+      expect(campusFranceLogos.length).toBeGreaterThan(0);
+      expect(campusFranceLogos[0]).toHaveAttribute('src', '/images/partners/logo-campus-france.png');
+
+      const hecLogos = screen.getAllByAltText(/Higher Education Commission Pakistan/i);
+      expect(hecLogos.length).toBeGreaterThan(0);
+      expect(hecLogos[0]).toHaveAttribute('src', '/images/partners/higher-education-commission-pakistan-logo.png');
+
+      // Verify removal of category tabs, card grid, procedural links, and disclaimer
+      expect(screen.queryByText(/Procedural Notice & Representative Institutions:/i)).toBeNull();
+      expect(screen.queryByRole('tab', { name: /^Credential Evaluation$/i })).toBeNull();
+      expect(screen.queryByText(/View Procedural Role/i)).toBeNull();
     });
 
-    it('filters partner institutions by category tab', () => {
-      render(
+    it('renders duplicated logo track for continuous infinite animation', () => {
+      const { container } = render(
         <MemoryRouter>
           <PartnersSection />
         </MemoryRouter>
       );
 
-      const evaluationTab = screen.getByRole('tab', { name: /^Credential Evaluation$/i });
-      fireEvent.click(evaluationTab);
+      const marqueeTrack = container.querySelector('.partners-marquee-track');
+      expect(marqueeTrack).toBeDefined();
 
-      expect(screen.getAllByText(/uni-assist/i).length).toBeGreaterThan(0);
-      expect(screen.getAllByText(/CIMEA/i).length).toBeGreaterThan(0);
-      expect(screen.getAllByText(/CNRED/i).length).toBeGreaterThan(0);
-    });
-
-    it('opens partner detail modal on card click and displays official statutory role', async () => {
-      render(
-        <MemoryRouter>
-          <PartnersSection />
-        </MemoryRouter>
-      );
-
-      const daadCard = screen.getByLabelText(/Inspect German Academic Exchange Service/i);
-      fireEvent.click(daadCard);
-
-      expect(screen.getByRole('dialog')).toBeDefined();
-      expect(screen.getByText(/Statutory Role in Pakistani Dossiers/i)).toBeDefined();
-      expect(screen.getByRole('link', { name: /Visit Official Portal/i })).toHaveAttribute('href', 'https://www.daad.de');
-
-      const closeBtn = screen.getByLabelText(/Close dialog/i);
-      fireEvent.click(closeBtn);
+      const logoCards = container.querySelectorAll('.partner-logo-card');
+      // 13 partner logos duplicated = 26 cards
+      expect(logoCards.length).toBe(26);
     });
   });
 

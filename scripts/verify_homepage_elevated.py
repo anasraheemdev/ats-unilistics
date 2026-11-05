@@ -52,15 +52,11 @@ def run_verification():
         page.screenshot(path=os.path.join(OUTPUT_DIR, "04_partners_marquee_desktop.png"))
         print("Captured 04_partners_marquee_desktop.png")
         
-        # Open partner inspection modal (e.g., DAAD) - use dispatch_event('click') because marquee ticker scrolls horizontally
-        daad_card = page.locator("button:has-text('DAAD')").first
-        if daad_card.is_visible():
-            daad_card.dispatch_event('click')
-            time.sleep(0.6)
-            page.screenshot(path=os.path.join(OUTPUT_DIR, "05_partner_modal_daad.png"))
-            print("Captured 05_partner_modal_daad.png")
-            page.keyboard.press("Escape")
-            time.sleep(0.5)
+        # Verify partner logos are rendered in the marquee
+        logo_imgs = page.locator(".partner-logo-img")
+        count = logo_imgs.count()
+        print(f"Verified {count} partner logo instances rendered in marquee track")
+        assert count > 0, "No partner logos found in marquee"
             
         # 4. Alumni Stories Section
         alumni_section = page.locator("#alumni-success-section")

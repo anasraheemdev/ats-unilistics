@@ -2088,10 +2088,16 @@ a {
   animation-play-state: paused;
 }
 
-.partner-marquee-pill:hover {
+.partner-marquee-pill:hover,
+.partner-logo-card:hover {
   border-color: var(--action-primary, #245B42) !important;
   transform: translateY(-2px);
   box-shadow: 0 4px 14px rgba(36, 91, 66, 0.12) !important;
+}
+
+.partner-logo-card:hover .partner-logo-img {
+  filter: grayscale(0%) opacity(1) !important;
+  transform: scale(1.05);
 }
 
 .partner-card-hoverable:hover {
@@ -2139,6 +2145,7 @@ a {
   }
   .alumni-card-hoverable:hover,
   .partner-card-hoverable:hover,
+  .partner-logo-card:hover,
   .supporting-video-card:hover,
   .opportunity-card-hover:hover {
     transform: none !important;
