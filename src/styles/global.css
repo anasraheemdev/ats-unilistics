@@ -2155,8 +2155,19 @@ a {
 /* 4. Explore Opportunities Cards */
 .opportunity-card-hover:hover {
   border-color: var(--action-primary, #245B42) !important;
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(36, 91, 66, 0.08) !important;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(36, 91, 66, 0.1) !important;
+}
+
+.opportunity-card-hover:hover .opportunity-card-img {
+  transform: scale(1.06);
+}
+
+.opportunity-card-hover:hover .opportunity-cta-btn {
+  background-color: var(--action-primary, #245B42) !important;
+  color: #FFFFFF !important;
+  border-color: var(--action-primary, #245B42) !important;
+  box-shadow: 0 4px 12px rgba(36, 91, 66, 0.22) !important;
 }
 
 /* Respect Reduced Motion */

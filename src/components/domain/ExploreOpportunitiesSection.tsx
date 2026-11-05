@@ -10,7 +10,9 @@ import {
   Check,
   Building2,
   Atom,
+  MapPin,
 } from 'lucide-react';
+import { ProfessorVectorAvatar } from './ProfessorVectorAvatar';
 import { ROUTES } from '@/config/routes';
 
 interface UniversityOpportunity {
@@ -20,6 +22,8 @@ interface UniversityOpportunity {
   country: string;
   countryCode: 'de' | 'fr' | 'it' | 'ro';
   countryFlag: string;
+  regionName: string;
+  backgroundImage: string;
   tuitionModel: string;
   tuitionType: 'free' | 'subsidized' | 'grant' | 'fixed';
   popularFields: string[];
@@ -34,6 +38,9 @@ interface ScholarshipOpportunity {
   country: string;
   countryCode: 'de' | 'fr' | 'it' | 'ro' | 'eu';
   countryFlag: string;
+  university?: string;
+  backgroundImage: string;
+  partnerLogo?: string;
   fundingType: 'full_tuition_and_stipend' | 'regional_grant' | 'tuition_waiver';
   fundingLabel: string;
   amountText: string;
@@ -66,9 +73,11 @@ const UNIVERSITIES_OPPORTUNITIES: UniversityOpportunity[] = [
     country: 'Germany',
     countryCode: 'de',
     countryFlag: '🇩🇪',
+    regionName: 'Bavaria',
+    backgroundImage: '/images/hero_student_europe.jpg',
     tuitionModel: '€0 Statutory Tuition (€152 semester fee)',
     tuitionType: 'free',
-    popularFields: ['Informatics & AI', 'Mechanical Engineering', 'Data Engineering'],
+    popularFields: ['Informatics & AI', 'Mechanical Eng.', 'Data Systems'],
     programsCount: 182,
     highlightTag: 'Top 30 Worldwide • TU9 Alliance',
   },
@@ -79,9 +88,11 @@ const UNIVERSITIES_OPPORTUNITIES: UniversityOpportunity[] = [
     country: 'France',
     countryCode: 'fr',
     countryFlag: '🇫🇷',
+    regionName: 'Île-de-France',
+    backgroundImage: '/images/university_facade_polaroid.jpg',
     tuitionModel: 'State Subsidized (€243–€380 / year)',
     tuitionType: 'subsidized',
-    popularFields: ['Applied Mathematics', 'Physics & Quantum', 'Computer Science'],
+    popularFields: ['Applied Mathematics', 'Quantum Physics', 'Computer Science'],
     programsCount: 145,
     highlightTag: 'Historic Prestige • Eiffel Eligible',
   },
@@ -92,9 +103,11 @@ const UNIVERSITIES_OPPORTUNITIES: UniversityOpportunity[] = [
     country: 'Italy',
     countryCode: 'it',
     countryFlag: '🇮🇹',
+    regionName: 'Lombardy',
+    backgroundImage: '/images/student_campus_portrait.jpg',
     tuitionModel: '€0–€3,890 / year (DSU Grant Eligible)',
     tuitionType: 'grant',
-    popularFields: ['Automotive Engineering', 'Architecture & Design', 'Biomedical'],
+    popularFields: ['Automotive Eng.', 'Architecture & Design', 'Biomedical'],
     programsCount: 110,
     highlightTag: '#1 Politecnico in Italy • DSU Lodging',
   },
@@ -105,9 +118,11 @@ const UNIVERSITIES_OPPORTUNITIES: UniversityOpportunity[] = [
     country: 'Romania',
     countryCode: 'ro',
     countryFlag: '🇷🇴',
+    regionName: 'Bucharest-Ilfov',
+    backgroundImage: '/images/guidance_intro_visual.jpg',
     tuitionModel: '€2,400–€3,800 / year (Fixed Rate)',
     tuitionType: 'fixed',
-    popularFields: ['General Medicine', 'Software Engineering', 'Cybersecurity'],
+    popularFields: ['General Medicine', 'Software Eng.', 'Cybersecurity'],
     programsCount: 94,
     highlightTag: 'Direct Ministry Letter • English Tracks',
   },
@@ -118,9 +133,11 @@ const UNIVERSITIES_OPPORTUNITIES: UniversityOpportunity[] = [
     country: 'Germany',
     countryCode: 'de',
     countryFlag: '🇩🇪',
+    regionName: 'North Rhine-Westphalia',
+    backgroundImage: '/images/student_library_explorer.jpg',
     tuitionModel: '€0 Statutory Tuition (€310 transit ticket)',
     tuitionType: 'free',
-    popularFields: ['Electrical Engineering', 'Renewable Energy', 'Automotive'],
+    popularFields: ['Electrical Eng.', 'Renewable Energy', 'Automotive Systems'],
     programsCount: 160,
     highlightTag: 'Engineering Capital • NRW Transit Pass',
   },
@@ -131,9 +148,11 @@ const UNIVERSITIES_OPPORTUNITIES: UniversityOpportunity[] = [
     country: 'France',
     countryCode: 'fr',
     countryFlag: '🇫🇷',
+    regionName: 'Paris Centre',
+    backgroundImage: '/images/contact_office_warm.jpg',
     tuitionModel: 'Merit-Exempt & Subsidized Schemes',
     tuitionType: 'subsidized',
-    popularFields: ['Public Policy', 'International Development', 'Economics'],
+    popularFields: ['Public Policy', 'Global Development', 'International Economics'],
     programsCount: 78,
     highlightTag: '#3 Global in Politics • Émile Boutmy',
   },
@@ -147,9 +166,11 @@ const SCHOLARSHIPS_OPPORTUNITIES: ScholarshipOpportunity[] = [
     country: 'Germany',
     countryCode: 'de',
     countryFlag: '🇩🇪',
+    backgroundImage: '/images/hero_student_europe.jpg',
+    partnerLogo: '/images/partners/Daad.png',
     fundingType: 'full_tuition_and_stipend',
-    fundingLabel: 'Full Tuition & Monthly Stipend',
-    amountText: '€934 / month + Health Insurance & Travel Allowance',
+    fundingLabel: 'Full Tuition & Living Grant',
+    amountText: '€934 / month + Health Insurance & Travel',
     targetLevel: 'Master & PhD',
     annualDeadline: 'October 31',
     eligibilityNote: 'Bachelor degree completed within the last 6 years with strong academic standing.',
@@ -161,6 +182,8 @@ const SCHOLARSHIPS_OPPORTUNITIES: ScholarshipOpportunity[] = [
     country: 'France',
     countryCode: 'fr',
     countryFlag: '🇫🇷',
+    backgroundImage: '/images/university_facade_polaroid.jpg',
+    partnerLogo: '/images/partners/logo-campus-france.png',
     fundingType: 'full_tuition_and_stipend',
     fundingLabel: 'Full Tuition & Monthly Stipend',
     amountText: '€1,181 / month + Return Flight & Housing Subsidy',
@@ -175,9 +198,11 @@ const SCHOLARSHIPS_OPPORTUNITIES: ScholarshipOpportunity[] = [
     country: 'Italy',
     countryCode: 'it',
     countryFlag: '🇮🇹',
+    backgroundImage: '/images/student_campus_portrait.jpg',
+    partnerLogo: '/images/partners/MUR-logo.png',
     fundingType: 'regional_grant',
     fundingLabel: 'Tuition Waiver & Living Subsidy',
-    amountText: '€5,500–€7,200 / year + Free University Canteen Meals',
+    amountText: '€5,500–€7,200 / year + Free University Meals',
     targetLevel: 'Bachelor & Master',
     annualDeadline: 'August 30',
     eligibilityNote: 'Based on family economic indicator (ISEE Parificato) and certified sworn translation.',
@@ -189,9 +214,11 @@ const SCHOLARSHIPS_OPPORTUNITIES: ScholarshipOpportunity[] = [
     country: 'Romania',
     countryCode: 'ro',
     countryFlag: '🇷🇴',
+    backgroundImage: '/images/guidance_intro_visual.jpg',
+    partnerLogo: '/images/partners/Sigiliu-guvernamental-si-identitate-ministeriala-RO.png',
     fundingType: 'full_tuition_and_stipend',
     fundingLabel: 'Full Tuition Waiver & Dormitory',
-    amountText: '100% Tuition Waiver + Free Dormitory Housing + Monthly Allowance',
+    amountText: '100% Tuition Waiver + Free Dormitory Housing + Stipend',
     targetLevel: 'Bachelor, Master & PhD',
     annualDeadline: 'March 15',
     eligibilityNote: 'Open to all non-EU citizens with accredited secondary or bachelor certificates.',
@@ -203,6 +230,8 @@ const SCHOLARSHIPS_OPPORTUNITIES: ScholarshipOpportunity[] = [
     country: 'Germany',
     countryCode: 'de',
     countryFlag: '🇩🇪',
+    backgroundImage: '/images/student_library_explorer.jpg',
+    partnerLogo: '/images/partners/Daad.png',
     fundingType: 'full_tuition_and_stipend',
     fundingLabel: 'Full Living Grant',
     amountText: '€934 / month + Individual Study Allowance',
@@ -214,9 +243,12 @@ const SCHOLARSHIPS_OPPORTUNITIES: ScholarshipOpportunity[] = [
     id: 'sch-boutmy',
     name: 'Émile Boutmy International Scholarship',
     provider: 'Sciences Po Paris',
+    university: 'Sciences Po Paris',
     country: 'France',
     countryCode: 'fr',
     countryFlag: '🇫🇷',
+    backgroundImage: '/images/contact_office_warm.jpg',
+    partnerLogo: '/images/partners/logo-campus-france.png',
     fundingType: 'tuition_waiver',
     fundingLabel: 'Tuition Grant Co-Financed',
     amountText: 'Up to €14,210 / year in Direct Tuition Coverage',
@@ -239,7 +271,7 @@ const PROFESSORS_OPPORTUNITIES: ProfessorResearchOpportunity[] = [
     countryFlag: '🇩🇪',
     researchArea: 'Artificial Intelligence & Computer Vision',
     categoryTag: 'ai',
-    openTopics: ['Autonomous Perception Systems', 'Multimodal LLM Reasoning', 'Edge Neural Networks'],
+    openTopics: ['Autonomous Perception Systems', 'Multimodal LLM Reasoning'],
     labName: 'Munich AI & Robotics Perception Lab',
   },
   {
@@ -254,7 +286,7 @@ const PROFESSORS_OPPORTUNITIES: ProfessorResearchOpportunity[] = [
     countryFlag: '🇮🇹',
     researchArea: 'Electric Powertrains & Automotive Systems',
     categoryTag: 'automotive',
-    openTopics: ['Battery Thermal Optimization', 'Vehicle Stability Control', 'Lightweight Composites'],
+    openTopics: ['Battery Thermal Optimization', 'Vehicle Stability Control'],
     labName: 'PoliMi Meccatronica Research Group',
   },
   {
@@ -269,14 +301,14 @@ const PROFESSORS_OPPORTUNITIES: ProfessorResearchOpportunity[] = [
     countryFlag: '🇫🇷',
     researchArea: 'Data Science & Quantitative Algorithms',
     categoryTag: 'ai',
-    openTopics: ['Stochastic Optimization', 'Statistical Machine Learning', 'Climate Simulation Models'],
+    openTopics: ['Stochastic Optimization', 'Statistical Machine Learning'],
     labName: 'Laboratoire de Probabilités et Modèles Aléatoires',
   },
   {
     id: 'prof-becker',
     professorName: 'Prof. Dr. Ingrid Becker',
     title: 'Chair of Sustainable Grid Integration',
-    department: 'Faculty of Electrical Engineering & Information Technology',
+    department: 'Faculty of Electrical Engineering & Information Tech',
     university: 'RWTH Aachen University',
     city: 'Aachen',
     country: 'Germany',
@@ -284,7 +316,7 @@ const PROFESSORS_OPPORTUNITIES: ProfessorResearchOpportunity[] = [
     countryFlag: '🇩🇪',
     researchArea: 'Clean Energy & Power Electronics',
     categoryTag: 'energy',
-    openTopics: ['Green Hydrogen Electrolyzer Control', 'Decentralized Smart Microgrids', 'HVDC Transmission'],
+    openTopics: ['Green Hydrogen Electrolyzer Control', 'Decentralized Smart Microgrids'],
     labName: 'Institute for Power Generation & Energy Systems',
   },
   {
@@ -299,7 +331,7 @@ const PROFESSORS_OPPORTUNITIES: ProfessorResearchOpportunity[] = [
     countryFlag: '🇷🇴',
     researchArea: 'Cybersecurity & Cloud Architectures',
     categoryTag: 'ai',
-    openTopics: ['Zero-Trust Cloud Virtualization', 'Cryptographic Protocols', 'Critical Infrastructure Defense'],
+    openTopics: ['Zero-Trust Cloud Virtualization', 'Cryptographic Protocols'],
     labName: 'Centre for Advanced Distributed Technologies',
   },
   {
@@ -314,7 +346,7 @@ const PROFESSORS_OPPORTUNITIES: ProfessorResearchOpportunity[] = [
     countryFlag: '🇫🇷',
     researchArea: 'International Economics & Health Systems',
     categoryTag: 'economics',
-    openTopics: ['European Healthcare Subsidies', 'Development Finance in South Asia', 'Cross-Border Labor Policy'],
+    openTopics: ['European Healthcare Subsidies', 'Cross-Border Labor Policy'],
     labName: 'Centre for Economic Studies & Policy',
   },
 ];
@@ -354,13 +386,12 @@ export const ExploreOpportunitiesSection: React.FC = () => {
     ? SCHOLARSHIPS_OPPORTUNITIES
     : SCHOLARSHIPS_OPPORTUNITIES.filter((s) => s.countryCode === selectedCountry);
 
-  const filteredProfessors = (selectedCountry === 'all' && selectedResearchTag === 'all')
-    ? PROFESSORS_OPPORTUNITIES
-    : PROFESSORS_OPPORTUNITIES.filter((p) => {
-        const matchesCountry = selectedCountry === 'all' || p.countryCode === selectedCountry;
-        const matchesTag = selectedResearchTag === 'all' || p.categoryTag === selectedResearchTag;
-        return matchesCountry && matchesTag;
-      });
+  const filteredProfessors = PROFESSORS_OPPORTUNITIES
+    .filter((p) => {
+      const matchesCountry = selectedCountry === 'all' || p.countryCode === selectedCountry;
+      const matchesTag = selectedResearchTag === 'all' || p.categoryTag === selectedResearchTag;
+      return matchesCountry && matchesTag;
+    });
 
   return (
     <section
@@ -368,7 +399,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
       className="explore-opportunities-wrapper"
       aria-labelledby="explore-opportunities-heading"
       style={{
-        padding: '5.5rem 1.5rem',
+        padding: '5rem 1.5rem',
         backgroundColor: '#FFFFFF',
         position: 'relative',
         overflow: 'hidden',
@@ -376,7 +407,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
     >
       <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
         {/* Section Header */}
-        <div style={{ textAlign: 'center', maxWidth: '840px', margin: '0 auto 3rem' }}>
+        <div style={{ textAlign: 'center', maxWidth: '840px', margin: '0 auto 2.75rem' }}>
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -428,24 +459,24 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                 margin: '0 auto',
               }}
             >
-              Access our unified discovery directory: compare accredited European universities,
-              uncover verified national scholarship funds, and connect with faculty research departments.
+              Access our unified discovery directory: compare accredited European universities, uncover verified
+              national scholarship funds, and connect with faculty research departments.
             </p>
           </motion.div>
         </div>
 
-        {/* Master Segmented Interactive Tabs */}
+        {/* Master Three-Way Experience Navigation Tabs */}
         <div
           style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             gap: '0.75rem',
-            marginBottom: '2.5rem',
             flexWrap: 'wrap',
+            marginBottom: '1.75rem',
           }}
           role="tablist"
-          aria-label="Explore Opportunities Sections"
+          aria-label="Discovery experience selection"
         >
           {tabs.map((tab) => {
             const Icon = tab.icon;
@@ -456,14 +487,14 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                 type="button"
                 role="tab"
                 aria-selected={isActive}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => setActiveTab(tab.id as 'universities' | 'scholarships' | 'professors')}
                 style={{
-                  display: 'flex',
+                  display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '0.65rem',
-                  padding: '0.85rem 1.65rem',
+                  gap: '0.55rem',
+                  padding: '0.7rem 1.35rem',
                   borderRadius: 'var(--radius-pill, 9999px)',
-                  fontSize: '0.9375rem',
+                  fontSize: '0.875rem',
                   fontWeight: 700,
                   border: '1.5px solid',
                   borderColor: isActive ? 'var(--action-primary, #245B42)' : 'var(--border-subtle, #E1E8DE)',
@@ -474,12 +505,12 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                   boxShadow: isActive ? '0 4px 16px rgba(36, 91, 66, 0.22)' : 'none',
                 }}
               >
-                <Icon size={18} aria-hidden="true" />
+                <Icon size={17} aria-hidden="true" />
                 <span>{tab.label}</span>
                 <span
                   style={{
-                    fontSize: '0.7rem',
-                    padding: '0.15rem 0.5rem',
+                    fontSize: '0.68rem',
+                    padding: '0.12rem 0.5rem',
                     borderRadius: 'var(--radius-pill, 9999px)',
                     backgroundColor: isActive ? 'var(--brand-citron, #D7EE83)' : 'rgba(0, 0, 0, 0.06)',
                     color: isActive ? '#19261F' : 'var(--color-foreground-muted, #718578)',
@@ -501,7 +532,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
             justifyContent: 'center',
             gap: '0.5rem',
             flexWrap: 'wrap',
-            marginBottom: '2.5rem',
+            marginBottom: '2.25rem',
           }}
           role="tablist"
           aria-label="Filter opportunities by destination country"
@@ -514,9 +545,9 @@ export const ExploreOpportunitiesSection: React.FC = () => {
               aria-selected={selectedCountry === opt.id}
               onClick={() => setSelectedCountry(opt.id)}
               style={{
-                padding: '0.4rem 1rem',
+                padding: '0.35rem 0.95rem',
                 borderRadius: 'var(--radius-pill, 9999px)',
-                fontSize: '0.8125rem',
+                fontSize: '0.8rem',
                 fontWeight: 600,
                 border: '1px solid',
                 borderColor: selectedCountry === opt.id ? 'var(--action-primary, #245B42)' : 'var(--border-subtle, #E1E8DE)',
@@ -543,134 +574,223 @@ export const ExploreOpportunitiesSection: React.FC = () => {
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
                 gap: '1.5rem',
-                marginBottom: '3rem',
+                marginBottom: '2.5rem',
               }}
             >
               {filteredUniversities.map((uni) => (
                 <div
                   key={uni.id}
                   style={{
-                    backgroundColor: 'var(--surface-canvas, #F6F8F5)',
+                    backgroundColor: '#FFFFFF',
                     border: '1px solid var(--border-subtle, #E1E8DE)',
-                    borderRadius: 'var(--radius-card, 24px)',
-                    padding: '1.75rem',
+                    borderRadius: '20px',
+                    overflow: 'hidden',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
                     transition: 'all 200ms ease',
-                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.02)',
+                    boxShadow: '0 4px 18px rgba(0, 0, 0, 0.04)',
                   }}
                   className="opportunity-card-hover"
                 >
-                  <div>
-                    {/* Header */}
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-                        <span style={{ fontSize: '1.25rem' }}>{uni.countryFlag}</span>
-                        <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--color-foreground-muted, #58695E)' }}>
-                          {uni.city}, {uni.country}
-                        </span>
-                      </div>
+                  {/* Top Image Banner with Country Picture & Overlays */}
+                  <div
+                    style={{
+                      position: 'relative',
+                      height: '135px',
+                      overflow: 'hidden',
+                      backgroundColor: '#19261F',
+                    }}
+                  >
+                    <img
+                      src={uni.backgroundImage}
+                      alt={`${uni.name} campus in ${uni.city}, ${uni.country}`}
+                      loading="lazy"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        transition: 'transform 300ms ease',
+                      }}
+                      className="opportunity-card-img"
+                    />
+                    {/* Gradient Overlay for high contrast */}
+                    <div
+                      style={{
+                        position: 'absolute',
+                        inset: 0,
+                        background: 'linear-gradient(to top, rgba(18, 30, 23, 0.94) 0%, rgba(18, 30, 23, 0.35) 55%, rgba(18, 30, 23, 0.6) 100%)',
+                      }}
+                    />
+
+                    {/* Top Row: Country Logo Glass Pill + Program Count */}
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: '0.75rem',
+                        left: '0.85rem',
+                        right: '0.85rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: '0.5rem',
+                      }}
+                    >
+                      {/* Country Logo & Flag Glass Badge */}
                       <span
                         style={{
-                          fontSize: '0.7rem',
-                          fontWeight: 700,
-                          color: 'var(--action-primary, #245B42)',
-                          backgroundColor: 'rgba(36, 91, 66, 0.08)',
-                          padding: '0.2rem 0.55rem',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.35rem',
+                          padding: '0.22rem 0.6rem',
                           borderRadius: 'var(--radius-pill, 9999px)',
+                          backgroundColor: 'rgba(255, 255, 255, 0.96)',
+                          backdropFilter: 'blur(8px)',
+                          color: '#19261F',
+                          fontSize: '0.72rem',
+                          fontWeight: 800,
+                          boxShadow: '0 2px 6px rgba(0,0,0,0.18)',
+                        }}
+                      >
+                        <span style={{ fontSize: '0.95rem', lineHeight: 1 }}>{uni.countryFlag}</span>
+                        <span>{uni.country}</span>
+                      </span>
+
+                      <span
+                        style={{
+                          fontSize: '0.68rem',
+                          fontWeight: 700,
+                          color: '#0E1A13',
+                          backgroundColor: 'var(--brand-citron, #D7EE83)',
+                          padding: '0.22rem 0.55rem',
+                          borderRadius: 'var(--radius-pill, 9999px)',
+                          boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
                         }}
                       >
                         {uni.programsCount} Programs
                       </span>
                     </div>
 
-                    <h3
-                      style={{
-                        fontSize: '1.25rem',
-                        fontWeight: 800,
-                        color: 'var(--color-foreground, #19261F)',
-                        lineHeight: 1.3,
-                        margin: '0 0 0.5rem',
-                      }}
-                    >
-                      {uni.name}
-                    </h3>
-
+                    {/* City & Region Bottom Banner Overlay */}
                     <div
                       style={{
-                        fontSize: '0.75rem',
-                        fontWeight: 700,
-                        color: 'var(--action-primary, #245B42)',
-                        marginBottom: '1rem',
-                      }}
-                    >
-                      {uni.highlightTag}
-                    </div>
-
-                    {/* Tuition Model Pill */}
-                    <div
-                      style={{
-                        backgroundColor: '#FFFFFF',
-                        border: '1px solid var(--border-subtle, #E1E8DE)',
-                        padding: '0.65rem 0.85rem',
-                        borderRadius: '12px',
+                        position: 'absolute',
+                        bottom: '0.6rem',
+                        left: '0.85rem',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '0.5rem',
-                        marginBottom: '1rem',
-                        fontSize: '0.8125rem',
+                        gap: '0.35rem',
+                        color: '#FFFFFF',
+                        fontSize: '0.78rem',
                         fontWeight: 600,
-                        color: 'var(--color-foreground, #19261F)',
+                        textShadow: '0 1px 3px rgba(0,0,0,0.6)',
                       }}
                     >
-                      <Euro size={15} style={{ color: 'var(--action-primary, #245B42)', flexShrink: 0 }} />
-                      <span>{uni.tuitionModel}</span>
-                    </div>
-
-                    {/* Popular Disciplines */}
-                    <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', marginBottom: '1.25rem' }}>
-                      {uni.popularFields.map((field, fIdx) => (
-                        <span
-                          key={fIdx}
-                          style={{
-                            fontSize: '0.72rem',
-                            fontWeight: 500,
-                            backgroundColor: '#FFFFFF',
-                            border: '1px solid var(--border-subtle, #E1E8DE)',
-                            padding: '0.2rem 0.55rem',
-                            borderRadius: '6px',
-                            color: 'var(--color-foreground-muted, #58695E)',
-                          }}
-                        >
-                          {field}
-                        </span>
-                      ))}
+                      <MapPin size={13} style={{ color: 'var(--brand-citron, #D7EE83)' }} />
+                      <span>{uni.city}, {uni.regionName}</span>
                     </div>
                   </div>
 
-                  <Link
-                    to={`${ROUTES.UNIVERSITIES}?country=${encodeURIComponent(uni.country)}`}
+                  {/* Body Content (Optimized Space, Zero Waste) */}
+                  <div
                     style={{
+                      padding: '1.15rem 1.25rem',
                       display: 'flex',
-                      alignItems: 'center',
+                      flexDirection: 'column',
+                      flex: 1,
                       justifyContent: 'space-between',
-                      padding: '0.75rem 1rem',
-                      borderRadius: 'var(--radius-pill, 9999px)',
-                      backgroundColor: '#FFFFFF',
-                      border: '1px solid var(--border-subtle, #E1E8DE)',
-                      color: 'var(--action-primary, #245B42)',
-                      fontSize: '0.8125rem',
-                      fontWeight: 700,
-                      textDecoration: 'none',
-                      transition: 'all 160ms ease',
                     }}
                   >
-                    <span>View University Offerings</span>
-                    <ArrowRight size={14} />
-                  </Link>
+                    <div>
+                      <h3
+                        style={{
+                          fontSize: '1.125rem',
+                          fontWeight: 800,
+                          color: 'var(--color-foreground, #19261F)',
+                          lineHeight: 1.25,
+                          margin: '0 0 0.3rem',
+                        }}
+                      >
+                        {uni.name}
+                      </h3>
+
+                      <div
+                        style={{
+                          fontSize: '0.72rem',
+                          fontWeight: 700,
+                          color: 'var(--action-primary, #245B42)',
+                          marginBottom: '0.75rem',
+                          letterSpacing: '0.01em',
+                        }}
+                      >
+                        {uni.highlightTag}
+                      </div>
+
+                      {/* Compact Tuition Strip */}
+                      <div
+                        style={{
+                          backgroundColor: 'var(--surface-canvas, #F6F8F5)',
+                          border: '1px solid var(--border-subtle, #E1E8DE)',
+                          padding: '0.45rem 0.75rem',
+                          borderRadius: '10px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.45rem',
+                          marginBottom: '0.75rem',
+                          fontSize: '0.78rem',
+                          fontWeight: 600,
+                          color: 'var(--color-foreground, #19261F)',
+                        }}
+                      >
+                        <Euro size={14} style={{ color: 'var(--action-primary, #245B42)', flexShrink: 0 }} />
+                        <span>{uni.tuitionModel}</span>
+                      </div>
+
+                      {/* Popular Disciplines Tags */}
+                      <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap', marginBottom: '1.1rem' }}>
+                        {uni.popularFields.map((field, fIdx) => (
+                          <span
+                            key={fIdx}
+                            style={{
+                              fontSize: '0.68rem',
+                              fontWeight: 600,
+                              backgroundColor: '#FFFFFF',
+                              border: '1px solid var(--border-subtle, #E1E8DE)',
+                              padding: '0.18rem 0.5rem',
+                              borderRadius: '6px',
+                              color: 'var(--color-foreground-muted, #58695E)',
+                            }}
+                          >
+                            {field}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <Link
+                      to={`${ROUTES.UNIVERSITIES}?country=${encodeURIComponent(uni.country)}`}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '0.6rem 0.95rem',
+                        borderRadius: 'var(--radius-pill, 9999px)',
+                        backgroundColor: 'var(--surface-canvas, #F6F8F5)',
+                        border: '1px solid var(--border-subtle, #E1E8DE)',
+                        color: 'var(--action-primary, #245B42)',
+                        fontSize: '0.8rem',
+                        fontWeight: 700,
+                        textDecoration: 'none',
+                        transition: 'all 160ms ease',
+                      }}
+                      className="opportunity-cta-btn"
+                    >
+                      <span>View University Offerings</span>
+                      <ArrowRight size={14} />
+                    </Link>
+                  </div>
                 </div>
               ))}
             </div>
@@ -684,11 +804,11 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '0.625rem',
-                  padding: '0.9rem 2.25rem',
+                  padding: '0.85rem 2.25rem',
                   borderRadius: 'var(--radius-pill, 9999px)',
                   backgroundColor: 'var(--action-primary, #245B42)',
                   color: '#FFFFFF',
-                  fontSize: '1rem',
+                  fontSize: '0.95rem',
                   fontWeight: 700,
                   textDecoration: 'none',
                   boxShadow: '0 4px 16px rgba(36, 91, 66, 0.25)',
@@ -714,114 +834,240 @@ export const ExploreOpportunitiesSection: React.FC = () => {
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
                 gap: '1.5rem',
-                marginBottom: '3rem',
+                marginBottom: '2.5rem',
               }}
             >
               {filteredScholarships.map((sch) => (
                 <div
                   key={sch.id}
                   style={{
-                    backgroundColor: 'var(--surface-canvas, #F6F8F5)',
+                    backgroundColor: '#FFFFFF',
                     border: '1px solid var(--border-subtle, #E1E8DE)',
-                    borderRadius: 'var(--radius-card, 24px)',
-                    padding: '1.75rem',
+                    borderRadius: '20px',
+                    overflow: 'hidden',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
-                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.02)',
+                    boxShadow: '0 4px 18px rgba(0, 0, 0, 0.04)',
                     transition: 'all 200ms ease',
                   }}
                   className="opportunity-card-hover"
                 >
-                  <div>
-                    {/* Header */}
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-                        <span style={{ fontSize: '1.25rem' }}>{sch.countryFlag}</span>
-                        <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--color-foreground-muted, #58695E)' }}>
-                          {sch.country}
-                        </span>
-                      </div>
+                  {/* Top Image Banner with Country Picture & Overlays */}
+                  <div
+                    style={{
+                      position: 'relative',
+                      height: '135px',
+                      overflow: 'hidden',
+                      backgroundColor: '#19261F',
+                    }}
+                  >
+                    <img
+                      src={sch.backgroundImage}
+                      alt={`${sch.name} in ${sch.country}`}
+                      loading="lazy"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        transition: 'transform 300ms ease',
+                      }}
+                      className="opportunity-card-img"
+                    />
+                    <div
+                      style={{
+                        position: 'absolute',
+                        inset: 0,
+                        background: 'linear-gradient(to top, rgba(18, 30, 23, 0.94) 0%, rgba(18, 30, 23, 0.35) 55%, rgba(18, 30, 23, 0.6) 100%)',
+                      }}
+                    />
+
+                    {/* Top Row: Country Logo Glass Pill + Funding Label */}
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: '0.75rem',
+                        left: '0.85rem',
+                        right: '0.85rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: '0.5rem',
+                      }}
+                    >
+                      {/* Country Logo & Flag Glass Badge */}
                       <span
                         style={{
-                          fontSize: '0.7rem',
-                          fontWeight: 700,
-                          color: '#19261F',
-                          backgroundColor: 'var(--brand-citron, #D7EE83)',
-                          padding: '0.2rem 0.6rem',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.35rem',
+                          padding: '0.22rem 0.6rem',
                           borderRadius: 'var(--radius-pill, 9999px)',
+                          backgroundColor: 'rgba(255, 255, 255, 0.96)',
+                          backdropFilter: 'blur(8px)',
+                          color: '#19261F',
+                          fontSize: '0.72rem',
+                          fontWeight: 800,
+                          boxShadow: '0 2px 6px rgba(0,0,0,0.18)',
+                        }}
+                      >
+                        <span style={{ fontSize: '0.95rem', lineHeight: 1 }}>{sch.countryFlag}</span>
+                        <span>{sch.country}</span>
+                      </span>
+
+                      <span
+                        style={{
+                          fontSize: '0.68rem',
+                          fontWeight: 700,
+                          color: '#0E1A13',
+                          backgroundColor: 'var(--brand-citron, #D7EE83)',
+                          padding: '0.22rem 0.55rem',
+                          borderRadius: 'var(--radius-pill, 9999px)',
+                          boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
                         }}
                       >
                         {sch.fundingLabel}
                       </span>
                     </div>
 
-                    <h3
-                      style={{
-                        fontSize: '1.1875rem',
-                        fontWeight: 800,
-                        color: 'var(--color-foreground, #19261F)',
-                        lineHeight: 1.3,
-                        margin: '0 0 0.35rem',
-                      }}
-                    >
-                      {sch.name}
-                    </h3>
-
-                    <div style={{ fontSize: '0.8125rem', color: 'var(--color-foreground-muted, #718578)', marginBottom: '1rem' }}>
-                      Provided by {sch.provider}
-                    </div>
-
-                    {/* Amount & Allowance Box */}
+                    {/* Bottom Banner Row: Target Level & Partner Logo */}
                     <div
                       style={{
-                        backgroundColor: '#FFFFFF',
-                        border: '1px solid var(--border-subtle, #E1E8DE)',
-                        padding: '0.85rem 1rem',
-                        borderRadius: '12px',
-                        marginBottom: '1rem',
+                        position: 'absolute',
+                        bottom: '0.6rem',
+                        left: '0.85rem',
+                        right: '0.85rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
                       }}
                     >
-                      <div style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--action-primary, #245B42)', textTransform: 'uppercase', marginBottom: '0.2rem' }}>
-                        Coverage &amp; Monthly Stipend
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.35rem',
+                          color: '#FFFFFF',
+                          fontSize: '0.75rem',
+                          fontWeight: 600,
+                          textShadow: '0 1px 3px rgba(0,0,0,0.6)',
+                        }}
+                      >
+                        <Award size={13} style={{ color: 'var(--brand-citron, #D7EE83)' }} />
+                        <span>{sch.targetLevel}</span>
+                        {sch.university && (
+                          <span style={{ color: 'var(--brand-citron, #D7EE83)', fontWeight: 700 }}>
+                            • {sch.university}
+                          </span>
+                        )}
                       </div>
-                      <div style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--color-foreground, #19261F)', lineHeight: 1.35 }}>
-                        {sch.amountText}
-                      </div>
-                    </div>
 
-                    {/* Deadline and Eligibility */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.75rem', color: 'var(--color-foreground-muted, #58695E)', marginBottom: '0.5rem' }}>
-                      <Calendar size={13} style={{ color: 'var(--action-primary, #245B42)' }} />
-                      <span><strong>Annual Deadline:</strong> {sch.annualDeadline}</span>
+                      {/* Partner Logo Emblem in Banner */}
+                      {sch.partnerLogo && (
+                        <div
+                          style={{
+                            width: '42px',
+                            height: '24px',
+                            borderRadius: '4px',
+                            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                            padding: '2px 4px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+                          }}
+                          title={`Administered by ${sch.provider}`}
+                        >
+                          <img
+                            src={sch.partnerLogo}
+                            alt={sch.provider}
+                            style={{ maxHeight: '20px', maxWidth: '36px', objectFit: 'contain' }}
+                          />
+                        </div>
+                      )}
                     </div>
-
-                    <p style={{ fontSize: '0.78rem', color: 'var(--color-foreground-muted, #718578)', lineHeight: 1.45, margin: '0 0 1.25rem' }}>
-                      {sch.eligibilityNote}
-                    </p>
                   </div>
 
-                  <Link
-                    to={ROUTES.SCHOLARSHIPS}
+                  {/* Body Content (Optimized Space, Zero Waste) */}
+                  <div
                     style={{
+                      padding: '1.15rem 1.25rem',
                       display: 'flex',
-                      alignItems: 'center',
+                      flexDirection: 'column',
+                      flex: 1,
                       justifyContent: 'space-between',
-                      padding: '0.75rem 1rem',
-                      borderRadius: 'var(--radius-pill, 9999px)',
-                      backgroundColor: '#FFFFFF',
-                      border: '1px solid var(--border-subtle, #E1E8DE)',
-                      color: 'var(--action-primary, #245B42)',
-                      fontSize: '0.8125rem',
-                      fontWeight: 700,
-                      textDecoration: 'none',
                     }}
                   >
-                    <span>View Grant Specifications</span>
-                    <ArrowRight size={14} />
-                  </Link>
+                    <div>
+                      <h3
+                        style={{
+                          fontSize: '1.05rem',
+                          fontWeight: 800,
+                          color: 'var(--color-foreground, #19261F)',
+                          lineHeight: 1.25,
+                          margin: '0 0 0.25rem',
+                        }}
+                      >
+                        {sch.name}
+                      </h3>
+
+                      <div style={{ fontSize: '0.72rem', color: 'var(--color-foreground-muted, #58695E)', marginBottom: '0.75rem', fontWeight: 500 }}>
+                        Authority: <strong>{sch.provider}</strong>
+                      </div>
+
+                      {/* Coverage & Stipend Strip */}
+                      <div
+                        style={{
+                          backgroundColor: 'var(--surface-canvas, #F6F8F5)',
+                          border: '1px solid var(--border-subtle, #E1E8DE)',
+                          padding: '0.55rem 0.8rem',
+                          borderRadius: '10px',
+                          marginBottom: '0.75rem',
+                        }}
+                      >
+                        <div style={{ fontSize: '0.66rem', fontWeight: 800, color: 'var(--action-primary, #245B42)', textTransform: 'uppercase', letterSpacing: '0.03em', marginBottom: '0.15rem' }}>
+                          Coverage &amp; Monthly Stipend
+                        </div>
+                        <div style={{ fontSize: '0.8125rem', fontWeight: 800, color: 'var(--color-foreground, #19261F)', lineHeight: 1.3 }}>
+                          {sch.amountText}
+                        </div>
+                      </div>
+
+                      {/* Deadline & Brief Eligibility */}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.72rem', color: 'var(--color-foreground, #19261F)', marginBottom: '0.35rem', fontWeight: 600 }}>
+                        <Calendar size={13} style={{ color: 'var(--action-primary, #245B42)', flexShrink: 0 }} />
+                        <span>Annual Deadline: <strong>{sch.annualDeadline}</strong></span>
+                      </div>
+
+                      <p style={{ fontSize: '0.72rem', color: 'var(--color-foreground-muted, #58695E)', lineHeight: 1.4, margin: '0 0 1rem' }}>
+                        {sch.eligibilityNote}
+                      </p>
+                    </div>
+
+                    <Link
+                      to={ROUTES.SCHOLARSHIPS}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '0.6rem 0.95rem',
+                        borderRadius: 'var(--radius-pill, 9999px)',
+                        backgroundColor: 'var(--surface-canvas, #F6F8F5)',
+                        border: '1px solid var(--border-subtle, #E1E8DE)',
+                        color: 'var(--action-primary, #245B42)',
+                        fontSize: '0.8rem',
+                        fontWeight: 700,
+                        textDecoration: 'none',
+                        transition: 'all 160ms ease',
+                      }}
+                      className="opportunity-cta-btn"
+                    >
+                      <span>View Grant Specifications</span>
+                      <ArrowRight size={14} />
+                    </Link>
+                  </div>
                 </div>
               ))}
             </div>
@@ -835,11 +1081,11 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '0.625rem',
-                  padding: '0.9rem 2.25rem',
+                  padding: '0.85rem 2.25rem',
                   borderRadius: 'var(--radius-pill, 9999px)',
                   backgroundColor: 'var(--action-primary, #245B42)',
                   color: '#FFFFFF',
-                  fontSize: '1rem',
+                  fontSize: '0.95rem',
                   fontWeight: 700,
                   textDecoration: 'none',
                   boxShadow: '0 4px 16px rgba(36, 91, 66, 0.25)',
@@ -870,7 +1116,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                 justifyContent: 'center',
                 gap: '0.5rem',
                 flexWrap: 'wrap',
-                marginBottom: '2rem',
+                marginBottom: '1.75rem',
               }}
               role="tablist"
               aria-label="Filter professors by research field"
@@ -883,7 +1129,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                   aria-selected={selectedResearchTag === tag.id}
                   onClick={() => setSelectedResearchTag(tag.id)}
                   style={{
-                    padding: '0.4rem 0.95rem',
+                    padding: '0.35rem 0.9rem',
                     borderRadius: 'var(--radius-pill, 9999px)',
                     fontSize: '0.78rem',
                     fontWeight: 700,
@@ -900,110 +1146,129 @@ export const ExploreOpportunitiesSection: React.FC = () => {
               ))}
             </div>
 
-            {/* Professors Grid */}
+            {/* Professors Grid (Modern, Space-Optimized with Vector Portraits) */}
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
                 gap: '1.5rem',
-                marginBottom: '3rem',
+                marginBottom: '2.5rem',
               }}
             >
               {filteredProfessors.map((prof) => (
                 <div
                   key={prof.id}
                   style={{
-                    backgroundColor: 'var(--surface-canvas, #F6F8F5)',
+                    backgroundColor: '#FFFFFF',
                     border: '1px solid var(--border-subtle, #E1E8DE)',
-                    borderRadius: 'var(--radius-card, 24px)',
-                    padding: '1.75rem',
+                    borderRadius: '20px',
+                    padding: '1.25rem',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
-                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.02)',
+                    boxShadow: '0 4px 18px rgba(0, 0, 0, 0.04)',
                     transition: 'all 200ms ease',
                   }}
                   className="opportunity-card-hover"
                 >
                   <div>
-                    {/* Header */}
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-                        <span style={{ fontSize: '1.25rem' }}>{prof.countryFlag}</span>
-                        <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--color-foreground-muted, #58695E)' }}>
-                          {prof.city}, {prof.country}
-                        </span>
+                    {/* Header Row: Vector Portrait + Identity */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem', marginBottom: '0.85rem' }}>
+                      <ProfessorVectorAvatar professorId={prof.id} size={64} />
+
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', marginBottom: '0.15rem' }}>
+                          <span style={{ fontSize: '0.9rem', lineHeight: 1 }}>{prof.countryFlag}</span>
+                          <span style={{ fontSize: '0.68rem', fontWeight: 700, color: 'var(--action-primary, #245B42)', textTransform: 'uppercase' }}>
+                            {prof.country} • {prof.city}
+                          </span>
+                        </div>
+
+                        <h3
+                          style={{
+                            fontSize: '1.05rem',
+                            fontWeight: 800,
+                            color: 'var(--color-foreground, #19261F)',
+                            lineHeight: 1.25,
+                            margin: '0 0 0.15rem',
+                          }}
+                        >
+                          {prof.professorName}
+                        </h3>
+
+                        <div
+                          style={{
+                            fontSize: '0.72rem',
+                            fontWeight: 700,
+                            color: 'var(--color-foreground-muted, #58695E)',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                          }}
+                        >
+                          {prof.title}
+                        </div>
                       </div>
-                      <span
-                        style={{
-                          fontSize: '0.7rem',
-                          fontWeight: 700,
-                          color: 'var(--action-primary, #245B42)',
-                          backgroundColor: 'rgba(36, 91, 66, 0.08)',
-                          padding: '0.2rem 0.6rem',
-                          borderRadius: 'var(--radius-pill, 9999px)',
-                        }}
-                      >
-                        {prof.university}
-                      </span>
                     </div>
 
-                    <h3
+                    {/* University & Department Bar */}
+                    <div
                       style={{
-                        fontSize: '1.1875rem',
-                        fontWeight: 800,
-                        color: 'var(--color-foreground, #19261F)',
-                        lineHeight: 1.3,
-                        margin: '0 0 0.25rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.4rem',
+                        fontSize: '0.72rem',
+                        color: 'var(--color-foreground-muted, #58695E)',
+                        backgroundColor: 'var(--surface-canvas, #F6F8F5)',
+                        border: '1px solid var(--border-subtle, #E1E8DE)',
+                        padding: '0.35rem 0.65rem',
+                        borderRadius: '8px',
+                        marginBottom: '0.75rem',
                       }}
                     >
-                      {prof.professorName}
-                    </h3>
-
-                    <div style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--action-primary, #245B42)', marginBottom: '0.35rem' }}>
-                      {prof.title}
-                    </div>
-
-                    <div style={{ fontSize: '0.78rem', color: 'var(--color-foreground-muted, #718578)', marginBottom: '1rem' }}>
-                      {prof.department}
+                      <Building2 size={13} style={{ color: 'var(--action-primary, #245B42)', flexShrink: 0 }} />
+                      <span style={{ fontWeight: 700, color: 'var(--color-foreground, #19261F)' }}>{prof.university}</span>
+                      <span>—</span>
+                      <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{prof.department}</span>
                     </div>
 
                     {/* Research Focus Box */}
                     <div
                       style={{
-                        backgroundColor: '#FFFFFF',
-                        border: '1px solid var(--border-subtle, #E1E8DE)',
-                        padding: '0.85rem 1rem',
-                        borderRadius: '12px',
-                        marginBottom: '1rem',
+                        backgroundColor: 'rgba(36, 91, 66, 0.04)',
+                        border: '1px solid rgba(36, 91, 66, 0.15)',
+                        padding: '0.65rem 0.85rem',
+                        borderRadius: '10px',
+                        marginBottom: '0.75rem',
                       }}
                     >
-                      <div style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--action-primary, #245B42)', textTransform: 'uppercase', marginBottom: '0.2rem' }}>
-                        Specialization &amp; Research Focus
+                      <div style={{ fontSize: '0.66rem', fontWeight: 800, color: 'var(--action-primary, #245B42)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '0.15rem' }}>
+                        Research Specialization
                       </div>
-                      <div style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--color-foreground, #19261F)' }}>
+                      <div style={{ fontSize: '0.8125rem', fontWeight: 800, color: 'var(--color-foreground, #19261F)', lineHeight: 1.25 }}>
                         {prof.researchArea}
                       </div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--color-foreground-muted, #718578)', marginTop: '0.25rem' }}>
-                        Laboratory: {prof.labName}
+                      <div style={{ fontSize: '0.7rem', color: 'var(--color-foreground-muted, #718578)', marginTop: '0.2rem' }}>
+                        Lab: {prof.labName}
                       </div>
                     </div>
 
-                    {/* Open Thesis / Master Research Topics */}
-                    <div style={{ marginBottom: '1.25rem' }}>
-                      <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--color-foreground-muted, #58695E)', textTransform: 'uppercase', marginBottom: '0.4rem' }}>
+                    {/* Active Academic Thesis Topics (Compact) */}
+                    <div style={{ marginBottom: '1rem' }}>
+                      <div style={{ fontSize: '0.66rem', fontWeight: 800, color: 'var(--color-foreground-muted, #718578)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '0.35rem' }}>
                         Active Academic Thesis Topics:
                       </div>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
-                        {prof.openTopics.map((topic, tIdx) => (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                        {prof.openTopics.slice(0, 2).map((topic, tIdx) => (
                           <div
                             key={tIdx}
                             style={{
                               display: 'flex',
                               alignItems: 'center',
-                              gap: '0.4rem',
-                              fontSize: '0.78rem',
+                              gap: '0.35rem',
+                              fontSize: '0.72rem',
                               color: 'var(--color-foreground, #19261F)',
+                              lineHeight: 1.3,
                             }}
                           >
                             <Check size={12} style={{ color: 'var(--action-primary, #245B42)', flexShrink: 0 }} />
@@ -1014,21 +1279,24 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                     </div>
                   </div>
 
+                  {/* Action CTA */}
                   <Link
                     to={ROUTES.PROGRAMS}
                     style={{
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between',
-                      padding: '0.75rem 1rem',
+                      padding: '0.6rem 0.95rem',
                       borderRadius: 'var(--radius-pill, 9999px)',
-                      backgroundColor: '#FFFFFF',
+                      backgroundColor: 'var(--surface-canvas, #F6F8F5)',
                       border: '1px solid var(--border-subtle, #E1E8DE)',
                       color: 'var(--action-primary, #245B42)',
-                      fontSize: '0.8125rem',
+                      fontSize: '0.8rem',
                       fontWeight: 700,
                       textDecoration: 'none',
+                      transition: 'all 160ms ease',
                     }}
+                    className="opportunity-cta-btn"
                   >
                     <span>Explore Department Degrees</span>
                     <ArrowRight size={14} />
@@ -1046,11 +1314,11 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '0.625rem',
-                  padding: '0.9rem 2.25rem',
+                  padding: '0.85rem 2.25rem',
                   borderRadius: 'var(--radius-pill, 9999px)',
                   backgroundColor: 'var(--action-primary, #245B42)',
                   color: '#FFFFFF',
-                  fontSize: '1rem',
+                  fontSize: '0.95rem',
                   fontWeight: 700,
                   textDecoration: 'none',
                   boxShadow: '0 4px 16px rgba(36, 91, 66, 0.25)',
