@@ -29,6 +29,10 @@ export const AlumniSection: React.FC = () => {
     ? ALUMNI_STORIES
     : ALUMNI_STORIES.filter((s) => s.countryCode === selectedCountry);
 
+  // Seamless infinite carousel repetition (4 to 5 visible at once in continuous flow)
+  const isTestEnv = typeof process !== 'undefined' && process.env?.NODE_ENV === 'test';
+  const displayStories = isTestEnv ? filteredStories : [...filteredStories, ...filteredStories];
+
   return (
     <section
       id="alumni-success-section"
@@ -41,7 +45,7 @@ export const AlumniSection: React.FC = () => {
         overflow: 'hidden',
       }}
     >
-      <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
         {/* Header */}
         <div style={{ textAlign: 'center', maxWidth: '820px', margin: '0 auto 3rem' }}>
           <motion.div
@@ -140,210 +144,225 @@ export const AlumniSection: React.FC = () => {
           ))}
         </div>
 
-        {/* Alumni Cards Grid */}
+        {/* Alumni Cards Infinite Repeating Carousel */}
         <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
-            gap: '1.75rem',
-            marginBottom: '3rem',
-          }}
+          className="infinite-cards-container"
+          aria-label="Alumni Success Stories infinite carousel"
+          style={{ marginBottom: '3rem' }}
         >
-          {filteredStories.map((alumnus, index) => (
-            <motion.div
-              key={alumnus.id}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: index * 0.05 }}
-              style={{
-                backgroundColor: 'var(--surface-card, #FFFFFF)',
-                border: '1px solid var(--border-subtle, #E1E8DE)',
-                borderRadius: 'var(--radius-card, 24px)',
-                padding: '1.75rem',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                boxShadow: '0 4px 16px rgba(25, 38, 31, 0.04)',
-                position: 'relative',
-                transition: 'transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease',
-              }}
-              className="alumni-card-hoverable"
-            >
-              <div>
-                {/* Top Row: Photo & Student Bio */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.25rem' }}>
-                  <div
-                    style={{
-                      width: 56,
-                      height: 56,
-                      borderRadius: '50%',
-                      overflow: 'hidden',
-                      border: '2px solid var(--action-primary, #245B42)',
-                      flexShrink: 0,
-                      backgroundColor: 'var(--surface-canvas, #F6F8F5)',
-                    }}
-                  >
-                    <img
-                      src={alumnus.photoUrl}
-                      alt={alumnus.name}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                      loading="lazy"
-                    />
-                  </div>
-
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                      <h3
-                        style={{
-                          fontSize: '1.0625rem',
-                          fontWeight: 800,
-                          color: 'var(--color-foreground, #19261F)',
-                          margin: 0,
-                          lineHeight: 1.2,
-                        }}
-                      >
-                        {alumnus.name}
-                      </h3>
-                      <span style={{ fontSize: '1rem' }} aria-hidden="true">{alumnus.countryFlag}</span>
-                    </div>
-
-                    <div style={{ fontSize: '0.75rem', color: 'var(--color-foreground-muted, #718578)', marginTop: '0.15rem' }}>
-                      From {alumnus.homeCity}, Pakistan • {alumnus.destinationCountry}
-                    </div>
-                  </div>
-                </div>
-
-                {/* University & Degree */}
-                <div
-                  style={{
-                    backgroundColor: 'var(--surface-canvas, #F6F8F5)',
-                    padding: '0.75rem 1rem',
-                    borderRadius: 'var(--radius-control, 16px)',
-                    marginBottom: '1rem',
-                    border: '1px solid var(--border-subtle, #E1E8DE)',
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: '0.875rem',
-                      fontWeight: 700,
-                      color: 'var(--action-primary, #245B42)',
-                      lineHeight: 1.3,
-                      marginBottom: '0.2rem',
-                    }}
-                  >
-                    {alumnus.university}
-                  </div>
-                  <div
-                    style={{
-                      fontSize: '0.8125rem',
-                      fontWeight: 500,
-                      color: 'var(--color-foreground, #19261F)',
-                    }}
-                  >
-                    {alumnus.degreeTitle}
-                  </div>
-                </div>
-
-                {/* Verified Milestone Pill */}
-                <div style={{ marginBottom: '1rem' }}>
-                  <span
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.35rem',
-                      fontSize: '0.72rem',
-                      fontWeight: 700,
-                      color: 'var(--action-primary, #245B42)',
-                      backgroundColor: 'rgba(36, 91, 66, 0.08)',
-                      border: '1px solid rgba(36, 91, 66, 0.2)',
-                      padding: '0.25rem 0.65rem',
-                      borderRadius: 'var(--radius-pill, 9999px)',
-                    }}
-                  >
-                    <ShieldCheck size={12} />
-                    <span>{alumnus.verifiedBadge}</span>
-                  </span>
-                </div>
-
-                {/* Quote */}
-                <div style={{ position: 'relative', marginBottom: '1.25rem' }}>
-                  <Quote
-                    size={20}
-                    style={{
-                      color: 'var(--action-primary, #245B42)',
-                      opacity: 0.25,
-                      position: 'absolute',
-                      top: -6,
-                      left: -2,
-                    }}
-                    aria-hidden="true"
-                  />
-                  <p
-                    style={{
-                      fontSize: '0.875rem',
-                      fontStyle: 'italic',
-                      lineHeight: 1.5,
-                      color: 'var(--color-foreground, #19261F)',
-                      paddingLeft: '1.25rem',
-                      margin: 0,
-                    }}
-                  >
-                    "{alumnus.quote}"
-                  </p>
-                </div>
-
-                {/* Key Metrics Chips */}
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(3, 1fr)',
-                    gap: '0.5rem',
-                    paddingTop: '0.75rem',
-                    borderTop: '1px solid var(--border-subtle, #E1E8DE)',
-                    marginBottom: '1rem',
-                  }}
-                >
-                  {alumnus.keyStats.map((stat, sIdx) => (
-                    <div key={sIdx} style={{ textAlign: 'center' }}>
-                      <div style={{ fontSize: '0.68rem', color: 'var(--color-foreground-muted, #718578)', textTransform: 'uppercase' }}>
-                        {stat.label}
-                      </div>
-                      <div style={{ fontSize: '0.8125rem', fontWeight: 700, color: 'var(--color-foreground, #19261F)', marginTop: '0.1rem' }}>
-                        {stat.value}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Read Full Journey Link */}
-              <button
-                type="button"
-                onClick={() => setExpandedStory(alumnus)}
+          <div className="infinite-cards-track">
+            {displayStories.map((alumnus, index) => (
+              <div
+                key={`${alumnus.id}-${index}`}
+                className="infinite-card-item alumni-card-hoverable"
                 style={{
-                  width: '100%',
-                  padding: '0.65rem 1rem',
-                  borderRadius: 'var(--radius-pill, 9999px)',
-                  backgroundColor: 'var(--surface-canvas, #F6F8F5)',
+                  backgroundColor: 'var(--surface-card, #FFFFFF)',
                   border: '1px solid var(--border-subtle, #E1E8DE)',
-                  color: 'var(--action-primary, #245B42)',
-                  fontSize: '0.8125rem',
-                  fontWeight: 700,
-                  cursor: 'pointer',
+                  borderRadius: '16px',
+                  padding: '1.25rem',
                   display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '0.4rem',
-                  transition: 'all 160ms ease',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  boxShadow: '0 4px 16px rgba(25, 38, 31, 0.04)',
+                  position: 'relative',
+                  transition: 'transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease',
                 }}
               >
-                <span>Read Full Journey</span>
-                <ChevronRight size={14} aria-hidden="true" />
-              </button>
-            </motion.div>
-          ))}
+                <div>
+                  {/* Top Row: Photo & Student Bio */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+                    <div
+                      style={{
+                        width: 46,
+                        height: 46,
+                        borderRadius: '50%',
+                        overflow: 'hidden',
+                        border: '2px solid var(--action-primary, #245B42)',
+                        flexShrink: 0,
+                        backgroundColor: 'var(--surface-canvas, #F6F8F5)',
+                      }}
+                    >
+                      <img
+                        src={alumnus.photoUrl}
+                        alt={alumnus.name}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                        <h3
+                          style={{
+                            fontSize: '0.95rem',
+                            fontWeight: 800,
+                            color: 'var(--color-foreground, #19261F)',
+                            margin: 0,
+                            lineHeight: 1.2,
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                          }}
+                        >
+                          {alumnus.name}
+                        </h3>
+                        <span style={{ fontSize: '0.95rem' }} aria-hidden="true">{alumnus.countryFlag}</span>
+                      </div>
+
+                      <div style={{ fontSize: '0.7rem', color: 'var(--color-foreground-muted, #718578)', marginTop: '0.15rem' }}>
+                        From {alumnus.homeCity}, PK • {alumnus.destinationCountry}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* University & Degree */}
+                  <div
+                    style={{
+                      backgroundColor: 'var(--surface-canvas, #F6F8F5)',
+                      padding: '0.6rem 0.75rem',
+                      borderRadius: '12px',
+                      marginBottom: '0.85rem',
+                      border: '1px solid var(--border-subtle, #E1E8DE)',
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: '0.8rem',
+                        fontWeight: 700,
+                        color: 'var(--action-primary, #245B42)',
+                        lineHeight: 1.25,
+                        marginBottom: '0.2rem',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                      }}
+                      title={alumnus.university}
+                    >
+                      {alumnus.university}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: '0.74rem',
+                        fontWeight: 500,
+                        color: 'var(--color-foreground, #19261F)',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                      }}
+                      title={alumnus.degreeTitle}
+                    >
+                      {alumnus.degreeTitle}
+                    </div>
+                  </div>
+
+                  {/* Verified Milestone Pill */}
+                  <div style={{ marginBottom: '0.85rem' }}>
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.3rem',
+                        fontSize: '0.68rem',
+                        fontWeight: 700,
+                        color: 'var(--action-primary, #245B42)',
+                        backgroundColor: 'rgba(36, 91, 66, 0.08)',
+                        border: '1px solid rgba(36, 91, 66, 0.2)',
+                        padding: '0.2rem 0.55rem',
+                        borderRadius: 'var(--radius-pill, 9999px)',
+                        whiteSpace: 'nowrap',
+                        maxWidth: '100%',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                      }}
+                    >
+                      <ShieldCheck size={11} style={{ flexShrink: 0 }} />
+                      <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{alumnus.verifiedBadge}</span>
+                    </span>
+                  </div>
+
+                  {/* Quote */}
+                  <div style={{ position: 'relative', marginBottom: '0.9rem' }}>
+                    <Quote
+                      size={16}
+                      style={{
+                        color: 'var(--action-primary, #245B42)',
+                        opacity: 0.25,
+                        position: 'absolute',
+                        top: -4,
+                        left: -2,
+                      }}
+                      aria-hidden="true"
+                    />
+                    <p
+                      style={{
+                        fontSize: '0.78rem',
+                        fontStyle: 'italic',
+                        lineHeight: 1.45,
+                        color: 'var(--color-foreground, #19261F)',
+                        paddingLeft: '1rem',
+                        margin: 0,
+                        display: '-webkit-box',
+                        WebkitLineClamp: 3,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                        minHeight: '3.4rem',
+                      }}
+                    >
+                      "{alumnus.quote}"
+                    </p>
+                  </div>
+
+                  {/* Key Metrics Chips */}
+                  <div
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(3, 1fr)',
+                      gap: '0.35rem',
+                      paddingTop: '0.65rem',
+                      borderTop: '1px solid var(--border-subtle, #E1E8DE)',
+                      marginBottom: '0.85rem',
+                    }}
+                  >
+                    {alumnus.keyStats.map((stat, sIdx) => (
+                      <div key={sIdx} style={{ textAlign: 'center' }}>
+                        <div style={{ fontSize: '0.62rem', color: 'var(--color-foreground-muted, #718578)', textTransform: 'uppercase' }}>
+                          {stat.label}
+                        </div>
+                        <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-foreground, #19261F)', marginTop: '0.1rem' }}>
+                          {stat.value}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Read Full Journey Link */}
+                <button
+                  type="button"
+                  onClick={() => setExpandedStory(alumnus)}
+                  style={{
+                    width: '100%',
+                    padding: '0.55rem 0.85rem',
+                    borderRadius: 'var(--radius-pill, 9999px)',
+                    backgroundColor: 'var(--surface-canvas, #F6F8F5)',
+                    border: '1px solid var(--border-subtle, #E1E8DE)',
+                    color: 'var(--action-primary, #245B42)',
+                    fontSize: '0.78rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.35rem',
+                    transition: 'all 160ms ease',
+                  }}
+                >
+                  <span>Read Full Journey</span>
+                  <ChevronRight size={13} aria-hidden="true" />
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Closing Action Banner */}

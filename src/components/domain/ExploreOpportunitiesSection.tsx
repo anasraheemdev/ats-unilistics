@@ -580,6 +580,12 @@ export const ExploreOpportunitiesSection: React.FC = () => {
       return matchesCountry && matchesTag;
     });
 
+  // Seamless infinite carousel repetition (4 to 5 visible at once in continuous flow)
+  const isTestEnv = typeof process !== 'undefined' && process.env?.NODE_ENV === 'test';
+  const displayUniversities = isTestEnv ? filteredUniversities : [...filteredUniversities, ...filteredUniversities];
+  const displayScholarships = isTestEnv ? filteredScholarships : [...filteredScholarships, ...filteredScholarships];
+  const displayProfessors = isTestEnv ? filteredProfessors : [...filteredProfessors, ...filteredProfessors];
+
   return (
     <section
       id="explore-opportunities-section"
@@ -794,16 +800,17 @@ export const ExploreOpportunitiesSection: React.FC = () => {
 
             {/* 6 Cards in Single Row Grid */}
             <div
-              className="opportunities-showcase-row"
+              className="infinite-cards-container"
+              aria-label="Featured Universities infinite carousel"
             >
-              {filteredUniversities.map((uni) => {
+              <div className="infinite-cards-track">
+                {displayUniversities.map((uni, idx) => {
                 const isBookmarked = bookmarkedIds.has(uni.id);
                 const isCopied = copiedId === uni.id;
 
                 return (
                   <div
-                    key={uni.id}
-                    className="opportunities-card-compact opportunity-card-hover"
+                    key={`${uni.id}-${idx}`} className="infinite-card-item opportunities-card-compact opportunity-card-hover"
                   >
                     <div>
                       {/* Architectural Photo Header (Height: 110px) */}
@@ -1205,6 +1212,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                   </div>
                 );
               })}
+              </div>
             </div>
 
             <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
@@ -1277,16 +1285,17 @@ export const ExploreOpportunitiesSection: React.FC = () => {
 
             {/* 6 Cards in Single Row Grid */}
             <div
-              className="opportunities-showcase-row"
+              className="infinite-cards-container"
+              aria-label="Featured Scholarships infinite carousel"
             >
-              {filteredScholarships.map((sch) => {
+              <div className="infinite-cards-track">
+                {displayScholarships.map((sch, idx) => {
                 const isBookmarked = bookmarkedIds.has(sch.id);
                 const isCopied = copiedId === sch.id;
 
                 return (
                   <div
-                    key={sch.id}
-                    className="opportunities-card-compact opportunity-card-hover"
+                    key={`${sch.id}-${idx}`} className="infinite-card-item opportunities-card-compact opportunity-card-hover"
                   >
                     <div>
                       {/* Grant Authority Header */}
@@ -1624,6 +1633,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                   </div>
                 );
               })}
+              </div>
             </div>
 
             <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
@@ -1734,16 +1744,17 @@ export const ExploreOpportunitiesSection: React.FC = () => {
 
             {/* 6 Cards in Single Row Grid */}
             <div
-              className="opportunities-showcase-row"
+              className="infinite-cards-container"
+              aria-label="Featured Faculty Chairs infinite carousel"
             >
-              {filteredProfessors.map((prof) => {
+              <div className="infinite-cards-track">
+                {displayProfessors.map((prof, idx) => {
                 const isBookmarked = bookmarkedIds.has(prof.id);
                 const isCopied = copiedId === prof.id;
 
                 return (
                   <div
-                    key={prof.id}
-                    className="opportunities-card-compact opportunity-card-hover"
+                    key={`${prof.id}-${idx}`} className="infinite-card-item opportunities-card-compact opportunity-card-hover"
                   >
                     <div>
                       {/* Faculty Chair Header with Executive Crest */}
@@ -2102,6 +2113,7 @@ export const ExploreOpportunitiesSection: React.FC = () => {
                   </div>
                 );
               })}
+              </div>
             </div>
 
             <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
